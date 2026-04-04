@@ -6,48 +6,60 @@
 
 <title>Catálogo de Flores</title>
 
-<!-- FONTE POPPINS -->
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
 
 <style>
 body {
   font-family: 'Poppins', sans-serif;
-  background: #f2e6da; /* NOVO FUNDO */
+  background: #f2e6da;
   margin: 0;
-  text-align: center;
   padding-bottom: 100px;
 }
 
-/* HEADER COM LOGO */
+/* HEADER ESTILO INSTAGRAM */
 .header {
-  padding: 20px 10px 10px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 15px;
+  max-width: 600px;
+  margin: auto;
 }
 
 .logo img {
-  width: 140px;
-  height: 140px;
+  width: 70px;
+  height: 70px;
   object-fit: contain;
-  border-radius: 50%;
-  background: white;
-  padding: 10px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
 }
 
-h1 {
-  margin: 15px 10px 5px;
-  font-size: 24px;
+.info-topo {
+  text-align: left;
+}
+
+.info-topo h1 {
+  margin: 0;
+  font-size: 18px;
   font-weight: 600;
 }
 
-.instrucao {
-  max-width: 600px;
-  margin: 0 auto 15px;
-  padding: 0 15px;
-  font-size: 15px;
-  color: #444;
-  line-height: 1.5;
+.subtitulo {
+  margin: 2px 0 0;
+  font-size: 13px;
+  color: #777;
 }
 
+/* TEXTO */
+.instrucao {
+  max-width: 600px;
+  margin: 10px auto 15px;
+  padding: 0 15px;
+  font-size: 14px;
+  color: #444;
+  line-height: 1.5;
+  text-align: center;
+}
+
+/* CATÁLOGO */
 .catalogo {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
@@ -85,8 +97,10 @@ img, video {
   font-weight: 500;
   font-size: 14px;
   margin: 8px 0 0;
+  text-align: center;
 }
 
+/* BOTÃO */
 .botao-whatsapp {
   position: fixed;
   bottom: 20px;
@@ -112,28 +126,22 @@ img, video {
 .botao-whatsapp:active {
   transform: scale(0.97);
 }
-
-.subtitulo {
-  margin: 0 10px 10px;
-  font-size: 14px;
-  color: #777;
-  font-weight: 400;
-}
 </style>
 
 </head>
 <body>
 
-<!-- LOGO -->
+<!-- TOPO ESTILO INSTAGRAM -->
 <div class="header">
   <div class="logo">
     <img src="logo.jpg" alt="Logo">
   </div>
+
+  <div class="info-topo">
+    <h1>Gravatá Rosas do Deserto</h1>
+    <p class="subtitulo">Enxertos de Adenium Obesum</p>
+  </div>
 </div>
-
-<h1>🌸 Catálogo de Identificação das Flores</h1>
-
-<p class="subtitulo">Enxertos de Adenium Obesum</p>
 
 <p class="instrucao">
 Escolha as ID(s) das flores que você gostou e envie sua seleção pelo WhatsApp para consultar valores, disponibilidade, fotos atualizadas e condições de envio dos enxertos.<br><br>
