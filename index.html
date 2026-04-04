@@ -141,7 +141,7 @@ function enviarWhatsApp() {
     return;
   }
 
-  let mensagem = "Oi! Estou interessado(a) nessas ID's: " + ids.join(", ") + " gostaria de mais informações";
+  let mensagem = "Oi! Estou interessado(a) nessa(s) ID(s): " + ids.join(", ") + " gostaria de mais informações";
 
   let telefone = "5581992665421";
   let url = "https://wa.me/" + telefone + "?text=" + encodeURIComponent(mensagem);
