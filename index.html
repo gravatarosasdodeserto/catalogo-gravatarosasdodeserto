@@ -13,10 +13,10 @@ body {
   font-family: 'Poppins', sans-serif;
   background: #f2e6da;
   margin: 0;
-  padding-bottom: 120px;
+  padding-bottom: 140px;
 }
 
-/* HEADER ESCURO */
+/* HEADER */
 .topbar {
   background: #3a3618;
   padding: 12px 0;
@@ -51,31 +51,24 @@ body {
   color: #d6d6d6;
 }
 
-/* BUSCA + LIMPAR */
+/* BUSCA */
 .busca-container {
   max-width: 600px;
   margin: 10px auto;
   padding: 0 15px;
   display: flex;
-  gap: 10px;
+  justify-content: center;
 }
 
 .busca {
-  flex: 1;
+  width: 100%;
+  max-width: 500px;
   padding: 10px 15px;
   border-radius: 25px;
-  border: 1px solid #ccc;
+  border: 1px solid #ddd;
   font-size: 14px;
-}
-
-.limpar {
-  padding: 10px 15px;
-  border-radius: 25px;
-  border: none;
-  background: #3a3618;
-  color: white;
-  font-size: 13px;
-  cursor: pointer;
+  background: #f2e6da;
+  box-sizing: border-box;
 }
 
 /* TEXTO */
@@ -128,14 +121,21 @@ img, video {
   text-align: center;
 }
 
-/* BOTÃO WHATSAPP */
-.botao-whatsapp {
+/* BOTÕES FLUTUANTES */
+.botoes-acoes {
   position: fixed;
   bottom: 20px;
   right: 20px;
   left: 20px;
   max-width: 400px;
   margin: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.botao-whatsapp {
+  width: 100%;
   padding: 15px;
   font-size: 16px;
   background: #3a3618;
@@ -153,6 +153,17 @@ img, video {
 
 .botao-whatsapp:active {
   transform: scale(0.97);
+}
+
+.botao-limpar {
+  padding: 12px;
+  font-size: 14px;
+  background: transparent;
+  color: #3a3618;
+  border: 2px solid #3a3618;
+  border-radius: 50px;
+  cursor: pointer;
+  font-weight: 500;
 }
 </style>
 
@@ -173,8 +184,7 @@ img, video {
 </div>
 
 <div class="busca-container">
-  <input type="text" id="busca" class="busca" placeholder="🔎 Buscar por nome da flor...">
-  <button class="limpar" onclick="limparSelecao()">Limpar</button>
+  <input type="text" id="busca" class="busca" placeholder="Buscar por nome da flor...">
 </div>
 
 <p class="instrucao">
@@ -183,12 +193,18 @@ Escolha as ID(s) das flores que você gostou e envie sua seleção pelo WhatsApp
 
 <div class="catalogo" id="catalogo"></div>
 
-<button class="botao-whatsapp" onclick="enviarWhatsApp()">
-Ver disponibilidade no WhatsApp (<span id="contador">0</span>)
-</button>
+<div class="botoes-acoes">
+  <button class="botao-whatsapp" onclick="enviarWhatsApp()">
+    Ver disponibilidade no WhatsApp (<span id="contador">0</span>)
+  </button>
+
+  <button class="botao-limpar" onclick="limparSelecao()">
+    Limpar seleção
+  </button>
+</div>
 
 <script>
-const flores = [/* ORIGINAL */ 
+const flores = [/* ORIGINAL */
 "AÇUCENA (MUTANTE)","AKACHI","AMATTA","ARYA","BLOODY MARY","BP-116",
 "BRANCA DE NEVE","BRIDAL BOUQUET","CANAN 55","CANAN 170","CAPIXABA",
 "CÉU ESTRELADO","CÉU ESTRELADO VARIEGATA","COPENHAGEN","DAFNE","COCA-COLA",
