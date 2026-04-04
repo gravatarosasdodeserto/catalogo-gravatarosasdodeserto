@@ -62,7 +62,12 @@ img {
   width: 100%;
   border-radius: 8px;
 }
-
+  
+video {
+  width: 100%;
+  border-radius: 8px;
+}
+  
 .botao-whatsapp {
   position: fixed;
   bottom: 20px;
@@ -159,10 +164,19 @@ flores.forEach(nome => {
     .replace(/ /g, "-")
     .replace(/[()]/g, "");
 
+  if (nome === "AÇUCENA (MUTANTE)") {
+  div.innerHTML = `
+    <video autoplay muted loop playsinline>
+      <source src="imagens/${nomeImagem}.mp4" type="video/mp4">
+    </video>
+    <p>${nome}</p>
+  `;
+} else {
   div.innerHTML = `
     <img src="imagens/${nomeImagem}.jpg" alt="${nome}">
     <p>${nome}</p>
   `;
+}
 
   catalogo.appendChild(div);
 });
