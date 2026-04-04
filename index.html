@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Catálogo de Flores</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      font-family: Arial;
+      padding: 20px;
+    }
+    .item {
+      border: 1px solid #ccc;
+      padding: 10px;
+      margin: 10px 0;
+    }
+    button {
+      padding: 15px;
+      background: green;
+      color: white;
+      border: none;
+      width: 100%;
+      font-size: 18px;
+    }
+  </style>
+</head>
+<body>
+
+<h2>🌸 Catálogo de Flores</h2>
+
+<div class="item">
+  <label><input type="checkbox" value="001"> Rosa (ID 001)</label>
+</div>
+
+<div class="item">
+  <label><input type="checkbox" value="002"> Lírio (ID 002)</label>
+</div>
+
+<div class="item">
+  <label><input type="checkbox" value="003"> Tulipa (ID 003)</label>
+</div>
+
+<br>
+
+<button onclick="enviarWhats()">Enviar pedido no WhatsApp</button>
+
+<script>
+function enviarWhats() {
+  let selecionados = [];
+
+  document.querySelectorAll('input[type=checkbox]:checked').forEach(el => {
+    selecionados.push(el.value);
+  });
+
+  if(selecionados.length === 0){
+    alert("Selecione pelo menos uma flor!");
+    return;
+  }
+
+  let mensagem = "Oi, estou interessado em adquirir essas ID's: " + selecionados.join(", ");
+  let url = "https://wa.me/5581992665421?text=" + encodeURIComponent(mensagem);
+
+  window.open(url, '_blank');
+}
+</script>
+
+</body>
+</html>
