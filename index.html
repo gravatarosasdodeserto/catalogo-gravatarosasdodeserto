@@ -79,8 +79,9 @@ img {
 </head>
 <body>
 
-<h1>🌸CATÁLOGO DE IDENTIFICAÇÃO  DAS FLORES (ID’s)</h1>
-<p ENXERTOS ADENIUM OBESUM /p>
+<h1>🌸 Catálogo de Identificação das Flores</h1>
+
+<p class="subtitulo">Enxertos de Adenium Obesum</p>
 
 <p class="instrucao">
 Escolha as ID(s) das flores que você gostou e envie sua seleção pelo WhatsApp para consultar valores, disponibilidade, fotos atualizadas e condições de envio dos enxertos.<br><br>
@@ -164,9 +165,17 @@ function enviarWhatsApp() {
     return;
   }
 
-  let mensagem = "Olá! 😊\n\nTenho interesse em adquirir enxertos da(s) seguinte(s) flor(es):\n\n- " 
+  let textoInicial = "";
+
+  if (ids.length === 1) {
+    textoInicial = "Tenho interesse no enxerto da seguinte flor:\n\n- ";
+  } else {
+    textoInicial = "Tenho interesse nos enxertos das seguintes flores:\n\n- ";
+  }
+
+  let mensagem = "Olá! 😊\n\n" + textoInicial 
   + ids.join("\n- ") + 
-  "\n\nPoderia me passar mais informações?";
+  "\n\nPoderia me passar mais informações sobre valores, disponibilidade e envio?";
 
   let telefone = "5581992665421";
   let url = "https://wa.me/" + telefone + "?text=" + encodeURIComponent(mensagem);
