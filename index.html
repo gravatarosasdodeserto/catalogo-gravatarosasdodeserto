@@ -35,22 +35,25 @@ h1 {
   padding: 15px;
 }
 
+/* MELHORIA 2 (transição suave) */
 .item {
   background: white;
   padding: 10px;
   border-radius: 12px;
   cursor: pointer;
   border: 2px solid transparent;
-  transition: 0.2s;
+  transition: all 0.2s ease;
 }
 
 .item:hover {
   transform: scale(1.03);
 }
 
+/* MELHORIA 1 (seleção mais visível) */
 .item.selecionado {
   border: 2px solid #25D366;
   background: #eaffea;
+  transform: scale(1.05);
 }
 
 img {
@@ -74,7 +77,13 @@ img {
   cursor: pointer;
   box-shadow: 0 4px 10px rgba(0,0,0,0.3);
 }
-  .subtitulo {
+
+/* MELHORIA 3 (efeito ao clicar no botão) */
+.botao-whatsapp:active {
+  transform: scale(0.97);
+}
+
+.subtitulo {
   margin: 0 10px 10px;
   font-size: 14px;
   color: #777;
@@ -175,7 +184,8 @@ function enviarWhatsApp() {
   if (ids.length === 1) {
     textoInicial = "Tenho interesse no enxerto da seguinte flor:\n\n- ";
   } else {
-    textoInicial = "Tenho interesse nos enxertos das seguintes flores:\n\n- ";
+    /* MELHORIA 4 (texto mais natural) */
+    textoInicial = "Tenho interesse nos enxertos das seguintes variedades:\n\n- ";
   }
 
   let mensagem = "Olá! 😊\n\n" + textoInicial 
@@ -184,6 +194,9 @@ function enviarWhatsApp() {
 
   let telefone = "5581992665421";
   let url = "https://wa.me/" + telefone + "?text=" + encodeURIComponent(mensagem);
+
+  /* MELHORIA 5 (feedback ao clicar) */
+  alert("Abrindo WhatsApp com sua seleção...");
 
   window.open(url, "_blank");
 }
