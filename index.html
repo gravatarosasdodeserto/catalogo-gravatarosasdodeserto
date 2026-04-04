@@ -23,20 +23,6 @@ body {
   box-shadow: 0 2px 8px rgba(0,0,0,0.2);
 }
 
-.info-topo h1 {
-  margin: 0;
-  font-size: 18px;
-  font-weight: 600;
-  color: white;
-}
-
-.subtitulo {
-  margin: 2px 0 0;
-  font-size: 13px;
-  color: #ddd;
-}
-  
-/* HEADER ESTILO INSTAGRAM */
 .header {
   display: flex;
   align-items: center;
@@ -56,44 +42,39 @@ body {
   margin: 0;
   font-size: 18px;
   font-weight: 600;
+  color: white;
 }
 
 .subtitulo {
   margin: 2px 0 0;
   font-size: 13px;
-  color: #777;
+  color: #d6d6d6;
 }
 
-/* BUSCA */
+/* BUSCA + LIMPAR */
 .busca-container {
   max-width: 600px;
   margin: 10px auto;
   padding: 0 15px;
   display: flex;
-  justify-content: center;
+  gap: 10px;
 }
 
 .busca {
-  width: 100%;
-  max-width: 500px;
+  flex: 1;
   padding: 10px 15px;
   border-radius: 25px;
   border: 1px solid #ccc;
   font-size: 14px;
-  box-sizing: border-box;
-}
-
-/* BOTÃO LIMPAR */
-.limpar-container {
-  text-align: center;
-  margin-top: 10px;
 }
 
 .limpar {
-  background: transparent;
+  padding: 10px 15px;
+  border-radius: 25px;
   border: none;
-  color: #3a3618;
-  font-weight: 500;
+  background: #3a3618;
+  color: white;
+  font-size: 13px;
   cursor: pointer;
 }
 
@@ -121,7 +102,7 @@ body {
   padding: 10px;
   border-radius: 12px;
   cursor: pointer;
-  border: 2px solid transparent;
+  border: 1px solid transparent;
   transition: all 0.2s ease;
 }
 
@@ -130,10 +111,9 @@ body {
 }
 
 .item.selecionado {
-  border: 3px solid #3a3618;
-  padding: 12px;
-  transform: scale(1.05);
-  box-shadow: 0 0 0 2px #3a3618, 0 6px 15px rgba(0,0,0,0.2);
+  border: 2px solid #3a3618;
+  transform: scale(1.04);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
 }
 
 img, video {
@@ -186,7 +166,7 @@ img, video {
     </div>
 
     <div class="info-topo">
-      <h1>Gravatá Rosas do Deserto 🌸</h1>
+      <h1>Gravatá Rosas do Deserto</h1>
       <p class="subtitulo">Enxertos de Adenium Obesum</p>
     </div>
   </div>
@@ -194,10 +174,7 @@ img, video {
 
 <div class="busca-container">
   <input type="text" id="busca" class="busca" placeholder="🔎 Buscar por nome da flor...">
-</div>
-
-<div class="limpar-container">
-  <button class="limpar" onclick="limparSelecao()">Limpar seleção</button>
+  <button class="limpar" onclick="limparSelecao()">Limpar</button>
 </div>
 
 <p class="instrucao">
@@ -207,11 +184,11 @@ Escolha as ID(s) das flores que você gostou e envie sua seleção pelo WhatsApp
 <div class="catalogo" id="catalogo"></div>
 
 <button class="botao-whatsapp" onclick="enviarWhatsApp()">
-🌸 Ver disponibilidade no WhatsApp (<span id="contador">0</span>)
+Ver disponibilidade no WhatsApp (<span id="contador">0</span>)
 </button>
 
 <script>
-const flores = [/* MANTIDO ORIGINAL */
+const flores = [/* ORIGINAL */ 
 "AÇUCENA (MUTANTE)","AKACHI","AMATTA","ARYA","BLOODY MARY","BP-116",
 "BRANCA DE NEVE","BRIDAL BOUQUET","CANAN 55","CANAN 170","CAPIXABA",
 "CÉU ESTRELADO","CÉU ESTRELADO VARIEGATA","COPENHAGEN","DAFNE","COCA-COLA",
@@ -287,14 +264,12 @@ function renderCatalogo(lista) {
 
 renderCatalogo(flores);
 
-/* BUSCA */
 document.getElementById("busca").addEventListener("input", function() {
   let termo = this.value.toLowerCase();
   let filtradas = flores.filter(f => f.toLowerCase().includes(termo));
   renderCatalogo(filtradas);
 });
 
-/* LIMPAR */
 function limparSelecao() {
   document.querySelectorAll(".item.selecionado").forEach(item => {
     item.classList.remove("selecionado");
@@ -307,7 +282,6 @@ function atualizarContador() {
   document.getElementById("contador").innerText = total;
 }
 
-/* WHATSAPP ORIGINAL */
 function enviarWhatsApp() {
   let selecionados = document.querySelectorAll(".item.selecionado");
   let ids = [];
