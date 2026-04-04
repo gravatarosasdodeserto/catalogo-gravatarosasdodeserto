@@ -13,7 +13,16 @@ body {
   font-family: 'Poppins', sans-serif;
   background: #f2e6da;
   margin: 0;
-  padding-bottom: 100px;
+  padding-bottom: 120px;
+}
+
+/* HEADER ESCURO */
+.topbar {
+  background: #3a3618;
+  color: white;
+  padding: 10px 15px;
+  text-align: center;
+  font-size: 14px;
 }
 
 /* HEADER ESTILO INSTAGRAM */
@@ -32,10 +41,6 @@ body {
   object-fit: contain;
 }
 
-.info-topo {
-  text-align: left;
-}
-
 .info-topo h1 {
   margin: 0;
   font-size: 18px;
@@ -46,6 +51,35 @@ body {
   margin: 2px 0 0;
   font-size: 13px;
   color: #777;
+}
+
+/* BUSCA */
+.busca-container {
+  max-width: 600px;
+  margin: 10px auto;
+  padding: 0 15px;
+}
+
+.busca {
+  width: 100%;
+  padding: 10px 15px;
+  border-radius: 25px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+/* BOTÃO LIMPAR */
+.limpar-container {
+  text-align: center;
+  margin-top: 10px;
+}
+
+.limpar {
+  background: transparent;
+  border: none;
+  color: #3a3618;
+  font-weight: 500;
+  cursor: pointer;
 }
 
 /* TEXTO */
@@ -74,7 +108,6 @@ body {
   cursor: pointer;
   border: 2px solid transparent;
   transition: all 0.2s ease;
-  box-sizing: border-box;
 }
 
 .item:hover {
@@ -84,8 +117,8 @@ body {
 .item.selecionado {
   border: 3px solid #3a3618;
   padding: 12px;
-  background: white;
   transform: scale(1.05);
+  box-shadow: 0 0 0 2px #3a3618, 0 6px 15px rgba(0,0,0,0.2);
 }
 
 img, video {
@@ -100,7 +133,7 @@ img, video {
   text-align: center;
 }
 
-/* BOTÃO */
+/* BOTÃO WHATSAPP */
 .botao-whatsapp {
   position: fixed;
   bottom: 20px;
@@ -131,31 +164,41 @@ img, video {
 </head>
 <body>
 
-<!-- TOPO ESTILO INSTAGRAM -->
+<div class="topbar">
+🌸 Catálogo disponível | Atendimento via WhatsApp
+</div>
+
 <div class="header">
   <div class="logo">
     <img src="logo.jpg" alt="Logo">
   </div>
 
   <div class="info-topo">
-    <h1>Gravatá Rosas do Deserto</h1>
+    <h1>Gravatá Rosas do Deserto 🌸</h1>
     <p class="subtitulo">Enxertos de Adenium Obesum</p>
   </div>
 </div>
 
+<div class="busca-container">
+  <input type="text" id="busca" class="busca" placeholder="🔎 Buscar por nome da flor...">
+</div>
+
+<div class="limpar-container">
+  <button class="limpar" onclick="limparSelecao()">Limpar seleção</button>
+</div>
+
 <p class="instrucao">
-Escolha as ID(s) das flores que você gostou e envie sua seleção pelo WhatsApp para consultar valores, disponibilidade, fotos atualizadas e condições de envio dos enxertos.<br><br>
-📲 Atendimento rápido e direto pelo WhatsApp.
+Escolha as ID(s) das flores que você gostou e envie sua seleção pelo WhatsApp para consultar valores, disponibilidade, fotos atualizadas e condições de envio dos enxertos.
 </p>
 
 <div class="catalogo" id="catalogo"></div>
 
 <button class="botao-whatsapp" onclick="enviarWhatsApp()">
-📲 Solicitar informações (<span id="contador">0</span>)
+🌸 Ver disponibilidade no WhatsApp (<span id="contador">0</span>)
 </button>
 
 <script>
-const flores = [
+const flores = [/* MANTIDO ORIGINAL */
 "AÇUCENA (MUTANTE)","AKACHI","AMATTA","ARYA","BLOODY MARY","BP-116",
 "BRANCA DE NEVE","BRIDAL BOUQUET","CANAN 55","CANAN 170","CAPIXABA",
 "CÉU ESTRELADO","CÉU ESTRELADO VARIEGATA","COPENHAGEN","DAFNE","COCA-COLA",
@@ -187,45 +230,71 @@ const floresComVideo = [
 
 const catalogo = document.getElementById("catalogo");
 
-flores.forEach(nome => {
-  let div = document.createElement("div");
-  div.className = "item";
-  div.setAttribute("data-id", nome);
+function renderCatalogo(lista) {
+  catalogo.innerHTML = "";
 
-  div.onclick = function() {
-    div.classList.toggle("selecionado");
-    atualizarContador();
-  };
+  lista.forEach(nome => {
+    let div = document.createElement("div");
+    div.className = "item";
+    div.setAttribute("data-id", nome);
 
-  let nomeImagem = nome
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/ /g, "-")
-    .replace(/[()]/g, "");
+    div.onclick = function() {
+      div.classList.toggle("selecionado");
+      atualizarContador();
 
-  if (floresComVideo.includes(nome)) {
-    div.innerHTML = `
-      <video autoplay muted loop playsinline>
-        <source src="imagens/${nomeImagem}.mp4" type="video/mp4">
-      </video>
-      <p>${nome} 🎥</p>
-    `;
-  } else {
-    div.innerHTML = `
-      <img src="imagens/${nomeImagem}.jpg" alt="${nome}">
-      <p>${nome}</p>
-    `;
-  }
+      if (navigator.vibrate) {
+        navigator.vibrate(50);
+      }
+    };
 
-  catalogo.appendChild(div);
+    let nomeImagem = nome
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/ /g, "-")
+      .replace(/[()]/g, "");
+
+    if (floresComVideo.includes(nome)) {
+      div.innerHTML = `
+        <video autoplay muted loop playsinline>
+          <source src="imagens/${nomeImagem}.mp4" type="video/mp4">
+        </video>
+        <p>${nome} 🎥</p>
+      `;
+    } else {
+      div.innerHTML = `
+        <img loading="lazy" src="imagens/${nomeImagem}.jpg" alt="${nome}">
+        <p>${nome}</p>
+      `;
+    }
+
+    catalogo.appendChild(div);
+  });
+}
+
+renderCatalogo(flores);
+
+/* BUSCA */
+document.getElementById("busca").addEventListener("input", function() {
+  let termo = this.value.toLowerCase();
+  let filtradas = flores.filter(f => f.toLowerCase().includes(termo));
+  renderCatalogo(filtradas);
 });
+
+/* LIMPAR */
+function limparSelecao() {
+  document.querySelectorAll(".item.selecionado").forEach(item => {
+    item.classList.remove("selecionado");
+  });
+  atualizarContador();
+}
 
 function atualizarContador() {
   let total = document.querySelectorAll(".item.selecionado").length;
   document.getElementById("contador").innerText = total;
 }
 
+/* WHATSAPP ORIGINAL */
 function enviarWhatsApp() {
   let selecionados = document.querySelectorAll(".item.selecionado");
   let ids = [];
