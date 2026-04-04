@@ -19,10 +19,7 @@ body {
 /* HEADER ESCURO */
 .topbar {
   background: #3a3618;
-  color: white;
-  padding: 10px 15px;
-  text-align: center;
-  font-size: 14px;
+  padding: 10px 0;
 }
 
 /* HEADER ESTILO INSTAGRAM */
@@ -30,9 +27,9 @@ body {
   display: flex;
   align-items: center;
   gap: 15px;
-  padding: 15px;
   max-width: 600px;
   margin: auto;
+  padding: 0 15px;
 }
 
 .logo img {
@@ -58,14 +55,18 @@ body {
   max-width: 600px;
   margin: 10px auto;
   padding: 0 15px;
+  display: flex;
+  justify-content: center;
 }
 
 .busca {
   width: 100%;
+  max-width: 500px;
   padding: 10px 15px;
   border-radius: 25px;
   border: 1px solid #ccc;
   font-size: 14px;
+  box-sizing: border-box;
 }
 
 /* BOTÃO LIMPAR */
@@ -165,17 +166,15 @@ img, video {
 <body>
 
 <div class="topbar">
-🌸 Catálogo disponível | Atendimento via WhatsApp
-</div>
+  <div class="header">
+    <div class="logo">
+      <img src="logo.jpg" alt="Logo">
+    </div>
 
-<div class="header">
-  <div class="logo">
-    <img src="logo.jpg" alt="Logo">
-  </div>
-
-  <div class="info-topo">
-    <h1>Gravatá Rosas do Deserto 🌸</h1>
-    <p class="subtitulo">Enxertos de Adenium Obesum</p>
+    <div class="info-topo">
+      <h1>Gravatá Rosas do Deserto 🌸</h1>
+      <p class="subtitulo">Enxertos de Adenium Obesum</p>
+    </div>
   </div>
 </div>
 
