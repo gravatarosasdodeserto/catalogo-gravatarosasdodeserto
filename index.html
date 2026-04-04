@@ -65,7 +65,7 @@ body {
   max-width: 500px;
   padding: 10px 15px;
   border-radius: 25px;
-  border: 1px solid #ddd;
+  border: 2px solid #3a3618;
   font-size: 14px;
   background: #f2e6da;
   box-sizing: border-box;
@@ -155,15 +155,20 @@ img, video {
   transform: scale(0.97);
 }
 
+/* BOTÃO LIMPAR (CLARO) */
 .botao-limpar {
   padding: 12px;
   font-size: 14px;
-  background: transparent;
+  background: white;
   color: #3a3618;
   border: 2px solid #3a3618;
   border-radius: 50px;
   cursor: pointer;
   font-weight: 500;
+}
+
+.botao-limpar:hover {
+  background: #f7f7f7;
 }
 </style>
 
@@ -199,7 +204,7 @@ Escolha as ID(s) das flores que você gostou e envie sua seleção pelo WhatsApp
   </button>
 
   <button class="botao-limpar" onclick="limparSelecao()">
-    Limpar seleção
+    Limpar ID(s) selecionadas
   </button>
 </div>
 
