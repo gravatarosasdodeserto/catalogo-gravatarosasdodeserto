@@ -1,65 +1,109 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
 <head>
-  <title>Catálogo de Flores</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <style>
-    body {
-      font-family: Arial;
-      padding: 20px;
-    }
-    .item {
-      border: 1px solid #ccc;
-      padding: 10px;
-      margin: 10px 0;
-    }
-    button {
-      padding: 15px;
-      background: green;
-      color: white;
-      border: none;
-      width: 100%;
-      font-size: 18px;
-    }
-  </style>
+<meta charset="UTF-8">
+<title>Catálogo de Flores</title>
+
+<style>
+body {
+  font-family: Arial;
+  background: #f5f5f5;
+  text-align: center;
+}
+
+h1 {
+  margin-top: 20px;
+}
+
+.catalogo {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 15px;
+  padding: 20px;
+}
+
+.item {
+  background: white;
+  padding: 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  border: 2px solid transparent;
+}
+
+.item.selecionado {
+  border: 2px solid green;
+  background: #eaffea;
+}
+
+img {
+  width: 100%;
+  border-radius: 8px;
+}
+
+button {
+  padding: 15px 25px;
+  font-size: 16px;
+  background: green;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+</style>
+
 </head>
 <body>
 
-<h2>🌸 Catálogo de Flores</h2>
+<h1>🌸 Catálogo de Flores</h1>
 
-<div class="item">
-  <label><input type="checkbox" value="001"> Rosa (ID 001)</label>
+<div class="catalogo">
+
+  <div class="item" onclick="selecionar(this)" data-id="RF-001">
+    <img src="imagens/rf001.jpg">
+    <p>RF-001 GRAPE CHOCOLATE</p>
+  </div>
+
+  <div class="item" onclick="selecionar(this)" data-id="SATURNO">
+    <img src="imagens/saturno.jpg">
+    <p>SATURNO</p>
+  </div>
+
+  <div class="item" onclick="selecionar(this)" data-id="GTA-RED STORM">
+    <img src="imagens/redstorm.jpg">
+    <p>GTA-RED STORM</p>
+  </div>
+
 </div>
 
-<div class="item">
-  <label><input type="checkbox" value="002"> Lírio (ID 002)</label>
-</div>
+<br><br>
 
-<div class="item">
-  <label><input type="checkbox" value="003"> Tulipa (ID 003)</label>
-</div>
-
-<br>
-
-<button onclick="enviarWhats()">Enviar pedido no WhatsApp</button>
+<button onclick="enviarWhatsApp()">Enviar seleção no WhatsApp</button>
 
 <script>
-function enviarWhats() {
-  let selecionados = [];
+function selecionar(el) {
+  el.classList.toggle("selecionado");
+}
 
-  document.querySelectorAll('input[type=checkbox]:checked').forEach(el => {
-    selecionados.push(el.value);
+function enviarWhatsApp() {
+  let selecionados = document.querySelectorAll(".item.selecionado");
+  let ids = [];
+
+  selecionados.forEach(item => {
+    ids.push(item.getAttribute("data-id"));
   });
 
-  if(selecionados.length === 0){
+  if (ids.length === 0) {
     alert("Selecione pelo menos uma flor!");
     return;
   }
 
-  let mensagem = "Oi, estou interessado em adquirir essas ID's: " + selecionados.join(", ");
-  let url = "https://wa.me/5581992665421?text=" + encodeURIComponent(mensagem);
+  let mensagem = "Oi! Estou interessado(a) nessas ID's: " + ids.join(", ") + " gostaria de mais informações";
 
-  window.open(url, '_blank');
+  let telefone = "5581992665421";
+
+  let url = "https://wa.me/" + telefone + "?text=" + encodeURIComponent(mensagem);
+
+  window.open(url, "_blank");
 }
 </script>
 
