@@ -8,30 +8,38 @@
 body {
   font-family: Arial;
   background: #f5f5f5;
+  margin: 0;
   text-align: center;
 }
 
 h1 {
-  margin-top: 20px;
+  margin: 20px 0;
 }
 
+/* GRID DO CATÁLOGO */
 .catalogo {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
   gap: 15px;
   padding: 20px;
 }
 
+/* CARD DA FLOR */
 .item {
   background: white;
   padding: 10px;
-  border-radius: 10px;
+  border-radius: 12px;
   cursor: pointer;
   border: 2px solid transparent;
+  transition: 0.2s;
+}
+
+.item:hover {
+  transform: scale(1.03);
 }
 
 .item.selecionado {
-  border: 2px solid green;
+  border: 2px solid #25D366;
   background: #eaffea;
 }
 
@@ -40,14 +48,19 @@ img {
   border-radius: 8px;
 }
 
-button {
-  padding: 15px 25px;
+/* BOTÃO FIXO */
+.botao-whatsapp {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  padding: 15px 20px;
   font-size: 16px;
-  background: green;
+  background: #25D366;
   color: white;
   border: none;
-  border-radius: 10px;
+  border-radius: 50px;
   cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
 }
 </style>
 
@@ -58,30 +71,46 @@ button {
 
 <div class="catalogo">
 
+  <!-- ITEM 1 -->
   <div class="item" onclick="selecionar(this)" data-id="RF-001">
     <img src="imagens/rf001.jpg">
     <p>RF-001 GRAPE CHOCOLATE</p>
   </div>
 
+  <!-- ITEM 2 -->
   <div class="item" onclick="selecionar(this)" data-id="SATURNO">
     <img src="imagens/saturno.jpg">
     <p>SATURNO</p>
   </div>
 
+  <!-- ITEM 3 -->
   <div class="item" onclick="selecionar(this)" data-id="GTA-RED STORM">
     <img src="imagens/redstorm.jpg">
     <p>GTA-RED STORM</p>
   </div>
 
+  <!-- ITEM 4 -->
+  <div class="item" onclick="selecionar(this)" data-id="MIDNIGHT">
+    <img src="imagens/midnight.jpg">
+    <p>MIDNIGHT</p>
+  </div>
+
 </div>
 
-<br><br>
-
-<button onclick="enviarWhatsApp()">Enviar seleção no WhatsApp</button>
+<!-- BOTÃO FIXO -->
+<button class="botao-whatsapp" onclick="enviarWhatsApp()">
+  📲 Enviar (<span id="contador">0</span>)
+</button>
 
 <script>
 function selecionar(el) {
   el.classList.toggle("selecionado");
+  atualizarContador();
+}
+
+function atualizarContador() {
+  let total = document.querySelectorAll(".item.selecionado").length;
+  document.getElementById("contador").innerText = total;
 }
 
 function enviarWhatsApp() {
