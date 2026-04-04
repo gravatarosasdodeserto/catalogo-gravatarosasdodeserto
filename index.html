@@ -35,7 +35,6 @@ h1 {
   padding: 15px;
 }
 
-/* MELHORIA 2 (transição suave) */
 .item {
   background: white;
   padding: 10px;
@@ -50,24 +49,18 @@ h1 {
   transform: scale(1.03);
 }
 
-/* MELHORIA 1 (seleção mais visível) */
 .item.selecionado {
   border: 3px solid #3a3618;
-  padding: 12px; /* cria espaço interno */
+  padding: 12px;
   background: white;
   transform: scale(1.05);
 }
 
-img {
+img, video {
   width: 100%;
   border-radius: 8px;
 }
-  
-video {
-  width: 100%;
-  border-radius: 8px;
-}
-  
+
 .botao-whatsapp {
   position: fixed;
   bottom: 20px;
@@ -77,7 +70,7 @@ video {
   margin: auto;
   padding: 15px;
   font-size: 16px;
-  background: #3a3618; /* COR ALTERADA */
+  background: #3a3618;
   color: white;
   border: none;
   border-radius: 50px;
@@ -88,8 +81,7 @@ video {
 .botao-whatsapp:hover {
   opacity: 0.9;
 }
-  
-/* MELHORIA 3 (efeito ao clicar no botão) */
+
 .botao-whatsapp:active {
   transform: scale(0.97);
 }
@@ -123,7 +115,7 @@ Escolha as ID(s) das flores que você gostou e envie sua seleção pelo WhatsApp
 const flores = [
 "AÇUCENA (MUTANTE)","AKACHI","AMATTA","ARYA","BLOODY MARY","BP-116",
 "BRANCA DE NEVE","BRIDAL BOUQUET","CANAN 55","CANAN 170","CAPIXABA",
-"CEU ESTRELADO","CEU ESTRELADO VARIEGATA","COPENHAGEN","DAFNE", "COCA-COLA",
+"CÉU ESTRELADO","CÉU ESTRELADO VARIEGATA","COPENHAGEN","DAFNE","COCA-COLA",
 "DOUBLE STAR","DUQUESA","EGG ROLL","ELARA","ELLIE","EV19-XANADÚ",
 "FERRARI","GOLDEN FAITH","GOLDEN PINK","GRAPE CHOCOLATE","GUARÁ",
 "GTA-AIKA","GTA-BOLD","GTA-CANDY CRUSH","GTA-CÓSMICA","GTA-CREPÚSCULO",
@@ -145,6 +137,12 @@ const flores = [
 "VIÚVA NEGRA","VOLCANO","W59","YÚ JIǍO"
 ];
 
+/* LISTA DE FLORES COM VÍDEO */
+const floresComVideo = [
+  "AÇUCENA (MUTANTE)",
+  "LILAC FROST (MUTANTE)"
+];
+
 const catalogo = document.getElementById("catalogo");
 
 flores.forEach(nome => {
@@ -164,19 +162,19 @@ flores.forEach(nome => {
     .replace(/ /g, "-")
     .replace(/[()]/g, "");
 
-  if (nome === "AÇUCENA (MUTANTE)") {
-  div.innerHTML = `
-    <video autoplay muted loop playsinline>
-      <source src="imagens/${nomeImagem}.mp4" type="video/mp4">
-    </video>
-    <p>${nome}</p>
-  `;
-} else {
-  div.innerHTML = `
-    <img src="imagens/${nomeImagem}.jpg" alt="${nome}">
-    <p>${nome}</p>
-  `;
-}
+  if (floresComVideo.includes(nome)) {
+    div.innerHTML = `
+      <video autoplay muted loop playsinline>
+        <source src="imagens/${nomeImagem}.mp4" type="video/mp4">
+      </video>
+      <p>${nome} 🎥</p>
+    `;
+  } else {
+    div.innerHTML = `
+      <img src="imagens/${nomeImagem}.jpg" alt="${nome}">
+      <p>${nome}</p>
+    `;
+  }
 
   catalogo.appendChild(div);
 });
@@ -204,7 +202,6 @@ function enviarWhatsApp() {
   if (ids.length === 1) {
     textoInicial = "Tenho interesse no enxerto da seguinte flor:\n\n- ";
   } else {
-    /* MELHORIA 4 (texto mais natural) */
     textoInicial = "Tenho interesse nos enxertos das seguintes variedades:\n\n- ";
   }
 
@@ -215,7 +212,6 @@ function enviarWhatsApp() {
   let telefone = "5581992665421";
   let url = "https://wa.me/" + telefone + "?text=" + encodeURIComponent(mensagem);
 
-  /* MELHORIA 5 (feedback ao clicar) */
   alert("Abrindo WhatsApp com sua seleção...");
 
   window.open(url, "_blank");
