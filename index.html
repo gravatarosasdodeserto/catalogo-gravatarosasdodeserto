@@ -42,11 +42,13 @@ body {
 
 .info-topo h1 {
   margin: 0;
+  margin-bottom: 2px; /* controla espaço abaixo do título */
   color: white;
   font-size: 18px;
 }
 
 .subtitulo {
+  margin: 0; /* remove espaço padrão */
   font-size: 13px;
   color: #d6d6d6;
 }
@@ -217,7 +219,7 @@ img, video {
 </div>
 
 <p class="instrucao">
-Escolha as ID(s) das flores que você mais gostou 🌸<br><br>
+Escolha as ID(s) das flores que você mais gostou<br><br>
 Depois é só clicar em <strong>“Ver disponibilidade”</strong> para falar direto no WhatsApp e receber informações de valores, fotos atualizadas e envio dos enxertos.
 </p>
 
@@ -395,7 +397,7 @@ function enviarWhatsApp(){
     : "Tenho interesse nos enxertos das seguintes variedades:\n\n- ";
 
   let mensagem = [
-  "Olá! 😊",
+  "Olá!",
   "",
   texto + ids.join("\n- "),
   "",
