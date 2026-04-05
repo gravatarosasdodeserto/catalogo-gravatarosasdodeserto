@@ -12,15 +12,10 @@
 body {
   font-family: 'Poppins', sans-serif;
   margin: 0;
-
-  /* FUNDO LIMPO (SEM IMAGEM) */
   background: #f8f5f0;
-
-  /* ESPAÇO PARA OS BOTÕES */
   padding-bottom: 180px;
 }
 
-/* AJUSTE PARA CELULAR */
 @media (max-width: 480px) {
   body {
     padding-bottom: 230px;
@@ -102,21 +97,31 @@ body {
   box-shadow: 0 2px 6px rgba(0,0,0,0.05);
 }
 
+/* PREVIEW IDS */
+.preview {
+  max-width: 600px;
+  margin: 5px auto 0;
+  padding: 0 15px;
+  font-size: 13px;
+  color: #555;
+  text-align: center;
+}
+
 /* CATÁLOGO */
 .catalogo {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: 15px;
+  gap: 18px;
   padding: 15px;
 }
 
 .item {
   background: white;
   padding: 10px;
-  border-radius: 12px;
+  border-radius: 14px;
   cursor: pointer;
   border: 1px solid #eee;
-  transition: all 0.2s ease;
+  transition: all 0.25s cubic-bezier(.2,.8,.2,1);
   box-shadow: 0 2px 6px rgba(0,0,0,0.05);
 }
 
@@ -154,7 +159,7 @@ img, video {
   margin: auto;
 
   padding: 10px 15px;
-  display: flex;
+  display: none; /* ESCONDE INICIALMENTE */
   flex-direction: column;
   gap: 10px;
 
@@ -175,10 +180,6 @@ img, video {
   font-weight: 500;
 }
 
-.botao-whatsapp:hover {
-  opacity: 0.9;
-}
-
 .botao-limpar {
   width: 100%;
   padding: 12px;
@@ -189,10 +190,6 @@ img, video {
   border-radius: 50px;
   cursor: pointer;
   font-weight: 500;
-}
-
-.botao-limpar:hover {
-  background: #f7f7f7;
 }
 </style>
 
@@ -217,12 +214,14 @@ img, video {
 </div>
 
 <p class="instrucao">
-Escolha as ID(s) das flores que você gostou e envie sua seleção pelo WhatsApp para consultar valores, disponibilidade, fotos atualizadas e condições de envio dos enxertos.
+Selecione as flores desejadas e consulte disponibilidade diretamente no WhatsApp.
 </p>
+
+<div class="preview" id="preview"></div>
 
 <div class="catalogo" id="catalogo"></div>
 
-<div class="botoes-acoes">
+<div class="botoes-acoes" id="acoes">
   <button class="botao-whatsapp" onclick="enviarWhatsApp()">
     Ver disponibilidade no WhatsApp (<span id="contador">0</span>)
   </button>
@@ -233,26 +232,60 @@ Escolha as ID(s) das flores que você gostou e envie sua seleção pelo WhatsApp
 </div>
 
 <script>
-const flores = [/* mantido igual */ "AÇUCENA (MUTANTE)","AKACHI","AMATTA","ARYA","BLOODY MARY","BP-116","BRANCA DE NEVE","BRIDAL BOUQUET","CANAN 55","CANAN 170","CAPIXABA","CÉU ESTRELADO","CÉU ESTRELADO VARIEGATA","COPENHAGEN","DAFNE","COCA-COLA","DOUBLE STAR","DUQUESA","EGG ROLL","ELARA","ELLIE","EV19-XANADÚ","FERRARI","GOLDEN FAITH","GOLDEN PINK","GRAPE CHOCOLATE","GUARÁ","GTA-AIKA","GTA-BOLD","GTA-CANDY CRUSH","GTA-CÓSMICA","GTA-CREPÚSCULO","GTA-DESERT DOLL","GTA-DIANA","GTA-EMMA FROST","GTA-FAY","GTA-FLORZINHA","GTA-FLUTTERSHY","GTA-FRACTA","GTA-GOLDEN PINK","GTA-ICE DRAGON","GTA-KIMBERLY","GTA-LITTLE KISS","GTA-LOLLIPOP BLACK","GTA-LYSSA","GTA-LYTA","GTA-MISS GRAVATÁ","GTA-NYX","GTA-PERONA","GTA-PINK VENOM","GTA-PINKIE PIE","GTA-RED COMETS","GTA-RED STORM","GTA-RED WIDOW","GTA-SANSA","GTA-SHE HA","GTA-SUN CLUSTER","GTA-SWEET BLUSH","GTA-TRINITY","GTA-TRUE FAITH","GTA-YUNA","HELENA","INDIGO GLAZE","INFINITY","JHULLY","JULIUS CAESAR","KING OF KINGS","KINDLY","L-06","LAILA","LILAC FROST (MUTANTE)","LM-440","LM-50","LM2","LUNA","MAGNIFICAT","MARIA","MIDNIGHT","MỘNG CẦM","MORAN","NANCY","NEMO","NORALINE","NUSA","P-200","PATHUMMA","PEONY","PHARAOH","PURPLE BLUE","QUEEN RAY","RF-001","RF-002","RIHANNA","ROMANTIC EDGE","SANTA CLAUS","SATURNO","SENNA","SIENA","SOCHI","SOPHIA","STAR CLUSTER","SWALLOW","TC-04","THAMIRES","THE SECRET OF VICTORIA","TRIPLE WISH","TROPICAL","TS-69","TS-222","TS-330","TW4","UNPARALLELED","VARIEGATA","VAMPIRA","VIÚVA NEGRA","VOLCANO","W59","YÚ JIǍO"];
+const flores = [
+"AÇUCENA (MUTANTE)","AKACHI","AMATTA","ARYA","BLOODY MARY","BP-116",
+"BRANCA DE NEVE","BRIDAL BOUQUET","CANAN 55","CANAN 170","CAPIXABA",
+"CÉU ESTRELADO","CÉU ESTRELADO VARIEGATA","COPENHAGEN","DAFNE","COCA-COLA",
+"DOUBLE STAR","DUQUESA","EGG ROLL","ELARA","ELLIE","EV19-XANADÚ",
+"FERRARI","GOLDEN FAITH","GOLDEN PINK","GRAPE CHOCOLATE","GUARÁ",
+"GTA-AIKA","GTA-BOLD","GTA-CANDY CRUSH","GTA-CÓSMICA","GTA-CREPÚSCULO",
+"GTA-DESERT DOLL","GTA-DIANA","GTA-EMMA FROST","GTA-FAY","GTA-FLORZINHA",
+"GTA-FLUTTERSHY","GTA-FRACTA","GTA-GOLDEN PINK","GTA-ICE DRAGON",
+"GTA-KIMBERLY","GTA-LITTLE KISS","GTA-LOLLIPOP BLACK","GTA-LYSSA",
+"GTA-LYTA","GTA-MISS GRAVATÁ","GTA-NYX","GTA-PERONA","GTA-PINK VENOM",
+"GTA-PINKIE PIE","GTA-RED COMETS","GTA-RED STORM","GTA-RED WIDOW",
+"GTA-SANSA","GTA-SHE HA","GTA-SUN CLUSTER","GTA-SWEET BLUSH",
+"GTA-TRINITY","GTA-TRUE FAITH","GTA-YUNA","HELENA","INDIGO GLAZE",
+"INFINITY","JHULLY","JULIUS CAESAR","KING OF KINGS","KINDLY","L-06",
+"LAILA","LILAC FROST (MUTANTE)","LM-440","LM-50","LM2","LUNA",
+"MAGNIFICAT","MARIA","MIDNIGHT","MỘNG CẦM","MORAN","NANCY","NEMO",
+"NORALINE","NUSA","P-200","PATHUMMA","PEONY","PHARAOH","PURPLE BLUE",
+"QUEEN RAY","RF-001","RF-002","RIHANNA","ROMANTIC EDGE","SANTA CLAUS",
+"SATURNO","SENNA","SIENA","SOCHI","SOPHIA","STAR CLUSTER","SWALLOW",
+"TC-04","THAMIRES","THE SECRET OF VICTORIA","TRIPLE WISH","TROPICAL","TS-69",
+"TS-222","TS-330","TW4","UNPARALLELED","VARIEGATA","VAMPIRA",
+"VIÚVA NEGRA","VOLCANO","W59","YÚ JIǍO"
+];
 
-const floresComVideo = ["AÇUCENA (MUTANTE)","LILAC FROST (MUTANTE)"];
+const floresComVideo = [
+  "AÇUCENA (MUTANTE)",
+  "LILAC FROST (MUTANTE)"
+];
 
 const catalogo = document.getElementById("catalogo");
 
+function normalizar(texto) {
+  return texto.toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+}
+
 function renderCatalogo(lista) {
   catalogo.innerHTML = "";
+
   lista.forEach(nome => {
     let div = document.createElement("div");
     div.className = "item";
-    div.setAttribute("data-id", nome);
+    div.dataset.id = nome;
 
     div.onclick = function() {
       div.classList.toggle("selecionado");
       atualizarContador();
+
       if (navigator.vibrate) navigator.vibrate(50);
     };
 
-    let nomeImagem = nome.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/ /g,"-").replace(/[()]/g,"");
+    let nomeImagem = normalizar(nome).replace(/ /g, "-").replace(/[()]/g, "");
 
     div.innerHTML = floresComVideo.includes(nome)
       ? `<video autoplay muted loop playsinline><source src="imagens/${nomeImagem}.mp4"></video><p>${nome}</p>`
@@ -264,29 +297,39 @@ function renderCatalogo(lista) {
 
 renderCatalogo(flores);
 
+/* BUSCA MELHORADA */
 document.getElementById("busca").addEventListener("input", function() {
-  let termo = this.value.toLowerCase();
-  renderCatalogo(flores.filter(f => f.toLowerCase().includes(termo)));
+  let termo = normalizar(this.value);
+  renderCatalogo(flores.filter(f => normalizar(f).includes(termo)));
 });
+
+function atualizarContador() {
+  let selecionados = document.querySelectorAll(".item.selecionado");
+  let ids = [...selecionados].map(i => i.dataset.id);
+
+  document.getElementById("contador").innerText = ids.length;
+  document.getElementById("preview").innerText = ids.join(", ");
+
+  document.getElementById("acoes").style.display =
+    ids.length > 0 ? "flex" : "none";
+}
 
 function limparSelecao() {
   document.querySelectorAll(".item.selecionado").forEach(i => i.classList.remove("selecionado"));
   atualizarContador();
 }
 
-function atualizarContador() {
-  document.getElementById("contador").innerText = document.querySelectorAll(".item.selecionado").length;
-}
-
 function enviarWhatsApp() {
   let ids = [...document.querySelectorAll(".item.selecionado")].map(i => i.dataset.id);
+
   if (!ids.length) return alert("Selecione pelo menos uma flor!");
 
   let textoInicial = ids.length === 1
     ? "Tenho interesse no enxerto da seguinte flor:\n\n- "
     : "Tenho interesse nos enxertos das seguintes variedades:\n\n- ";
 
-  let mensagem = "Olá!\n\n" + textoInicial + ids.join("\n- ") + "\n\nPoderia me passar mais informações sobre valores, disponibilidade e envio?";
+  let mensagem = "Olá!\n\n" + textoInicial + ids.join("\n- ") +
+    "\n\nPoderia me passar mais informações sobre valores, disponibilidade e envio?";
 
   window.open("https://wa.me/5581992665421?text=" + encodeURIComponent(mensagem), "_blank");
 }
