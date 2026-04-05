@@ -119,7 +119,7 @@ img, video { width: 100%; border-radius: 8px; }
   box-shadow: 0 2px 0 #222;
 }
 
-/* Caixa de seleção transparente */
+/* Caixa de seleção transparente e alinhada à esquerda */
 .caixa-selecao {
   display: none;
   border: none;
@@ -140,7 +140,7 @@ img, video { width: 100%; border-radius: 8px; }
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
-  justify-content: center;
+  justify-content: flex-start; /* alinhamento à esquerda */
   margin-top: 8px;
 }
 .tag {
@@ -285,10 +285,7 @@ function renderCatalogo(){
       } else {
         selecionados.add(nome);
       }
-
-      // Vibração suave
       if (navigator.vibrate) { navigator.vibrate(10); }
-
       atualizar();
     });
 
