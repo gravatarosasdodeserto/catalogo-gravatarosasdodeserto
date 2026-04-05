@@ -64,7 +64,7 @@ body {
 /* Card selecionado: tom levemente mais escuro, destaque discreto */
 .item.selecionado {
   border: 2px solid #3a3618;
-  background: #f3edd7; /* tom claro, só para indicar seleção */
+  background: #f3edd7; /* tom claro para indicar seleção */
   box-shadow: 0 6px 14px rgba(58,54,24,0.15);
 }
 
@@ -233,6 +233,8 @@ function renderCatalogo(){
     let div = document.createElement("div");
     div.className = "item";
     div.dataset.id = nome;
+
+    // Mantém selecionados com o destaque
     if(selecionados.has(nome)) div.classList.add("selecionado");
 
     let arquivo = gerarNomeArquivo(nome);
@@ -243,10 +245,13 @@ function renderCatalogo(){
     }
 
     div.addEventListener("click", ()=>{
+      // Adiciona ao Set sem remover outros
       selecionados.add(nome);
       atualizar();
-      buscaInput.value = "";
-      mostrarTodasIDs();
+      buscaInput.value = ""; 
+      mostrarTodasIDs(); 
+      // Atualiza a classe visual
+      renderCatalogo();
     });
 
     catalogo.appendChild(div);
