@@ -117,10 +117,25 @@ img, video {
   margin-bottom: 10px;
 }
 
+.topo-caixa {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .caixa-selecao h3 {
-  margin: 0 0 8px;
+  margin: 0;
   font-size: 14px;
-  text-align: center;
+}
+
+/* BOTÃO LIMPAR DENTRO */
+.btn-limpar-tudo {
+  background: none;
+  border: none;
+  color: #3a3618;
+  font-size: 12px;
+  cursor: pointer;
+  font-weight: 500;
 }
 
 /* TAGS */
@@ -129,6 +144,7 @@ img, video {
   flex-wrap: wrap;
   gap: 6px;
   justify-content: center;
+  margin-top: 8px;
 }
 
 .tag {
@@ -150,7 +166,7 @@ img, video {
   color: #3a3618;
 }
 
-/* BOTÕES */
+/* BOTÃO WHATSAPP */
 .botao-whatsapp {
   width: 100%;
   padding: 15px;
@@ -158,14 +174,6 @@ img, video {
   color: white;
   border: none;
   border-radius: 50px;
-  margin-bottom: 5px;
-}
-
-.botao-limpar {
-  width: 100%;
-  padding: 12px;
-  background: white;
-  border: 2px solid #3a3618;
 }
 </style>
 </head>
@@ -197,16 +205,17 @@ Escolha as ID(s) das flores e envie pelo WhatsApp.
 <div class="botoes-acoes">
 
   <div class="caixa-selecao">
-    <h3>ID's selecionadas:</h3>
+    
+    <div class="topo-caixa">
+      <h3>ID's selecionadas:</h3>
+      <button class="btn-limpar-tudo" onclick="limparSelecao()">Limpar tudo</button>
+    </div>
+
     <div id="listaSelecionadas"></div>
   </div>
 
   <button class="botao-whatsapp" onclick="enviarWhatsApp()">
     Ver disponibilidade (<span id="contador">0</span>)
-  </button>
-
-  <button class="botao-limpar" onclick="limparSelecao()">
-    Limpar ID(s)
   </button>
 
 </div>
