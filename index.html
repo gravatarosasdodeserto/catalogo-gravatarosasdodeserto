@@ -18,10 +18,9 @@ body {
   background: #f8f5f0;
   margin: 0;
   padding-bottom: 200px;
-  overflow-x: hidden; /* REMOVE LARGURA EXTRA */
+  overflow-x: hidden;
 }
 
-/* HEADER */
 .topbar {
   background: #3a3618;
   padding: 12px 0;
@@ -42,7 +41,7 @@ body {
 
 .info-topo h1 {
   margin: 0;
-  margin-bottom: 2px; /* controla espaço abaixo do título */
+  margin-bottom: 2px;
   color: white;
   font-size: 18px;
 }
@@ -53,7 +52,6 @@ body {
   color: #d6d6d6;
 }
 
-/* BUSCA */
 .busca-container {
   max-width: 600px;
   margin: 12px auto;
@@ -72,7 +70,6 @@ body {
   font-size: 14px;
 }
 
-/* INSTRUÇÃO */
 .instrucao {
   max-width: 600px;
   margin: 15px auto;
@@ -85,7 +82,6 @@ body {
   color: #444;
 }
 
-/* CATÁLOGO */
 .catalogo {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
@@ -105,7 +101,6 @@ body {
   border: 2px solid #3a3618;
 }
 
-/* IMAGENS */
 img, video {
   width: 100%;
   border-radius: 8px;
@@ -127,7 +122,6 @@ box-shadow: 0 6px 14px rgba(0,0,0,0.12);
 transform: scale(0.97);
 }
 
-/* BOTÕES FIXOS */
 .botoes-acoes {
   position: fixed;
   bottom: 0;
@@ -138,7 +132,6 @@ transform: scale(0.97);
   box-shadow: 0 -4px 10px rgba(0,0,0,0.1);
 }
 
-/* CAIXA DE SELEÇÃO */
 .caixa-selecao {
   display: none;
   border: 2px solid #3a3618;
@@ -159,7 +152,6 @@ transform: scale(0.97);
   font-size: 14px;
 }
 
-/* BOTÃO LIMPAR */
 .btn-limpar-tudo {
   background: none;
   border: none;
@@ -169,7 +161,6 @@ transform: scale(0.97);
   font-weight: 500;
 }
 
-/* TAGS */
 #listaSelecionadas {
   display: flex;
   flex-wrap: wrap;
@@ -197,7 +188,6 @@ transform: scale(0.97);
   color: #3a3618;
 }
 
-/* BOTÃO WHATSAPP */
 .botao-whatsapp {
   width: 100%;
   padding: 15px;
@@ -304,28 +294,27 @@ function renderCatalogo(lista){
 
     let arquivo = gerarNomeArquivo(nome);
 
-    /* AQUI ESTÁ A CORREÇÃO */
     if(floresComVideo.includes(nome)){
       div.innerHTML = `
-        <video autoplay muted loop playsinline>
+        <video autoplay muted loop playsinline preload="metadata">
           <source src="imagens/${arquivo}.mp4" type="video/mp4">
         </video>
         <p>${nome}</p>
       `;
     } else {
       div.innerHTML = `
-        <img src="imagens/${arquivo}.jpg">
-        <p>${nome}</p>
+      <img loading="lazy" src="imagens/${arquivo}.jpg">
+      <p>${nome}</p>
       `;
-    }
     
   div.onclick = () => {
   div.classList.toggle("selecionado");
   atualizar();
 
   if (navigator.vibrate) {
-    navigator.vibrate(50);
+  navigator.vibrate([30, 20, 30]);
   }
+    
 };
 
     catalogo.appendChild(div);
@@ -389,13 +378,12 @@ document.getElementById("busca").addEventListener("input", function(){
   renderCatalogo(filtradas);
 });
 
-/* FUNÇÃO DE NORMALIZAÇÃO */
 function normalizarTexto(texto){
   return texto
     .toLowerCase()
     .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "") // remove acentos
-    .replace(/[^a-z0-9 ]/g, ""); // remove símbolos e vírgulas
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9 ]/g, "");
 }
 
 function enviarWhatsApp(){
