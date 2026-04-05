@@ -318,11 +318,15 @@ function renderCatalogo(lista){
         <p>${nome}</p>
       `;
     }
+    
+  div.onclick = () => {
+  div.classList.toggle("selecionado");
+  atualizar();
 
-    div.onclick = () => {
-      div.classList.toggle("selecionado");
-      atualizar();
-    };
+  if (navigator.vibrate) {
+    navigator.vibrate(50);
+  }
+};
 
     catalogo.appendChild(div);
   });
