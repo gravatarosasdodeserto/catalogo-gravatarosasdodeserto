@@ -52,24 +52,6 @@ body {
   color: #d6d6d6;
 }
 
-.busca-container {
-  max-width: 600px;
-  margin: 12px auto;
-  padding: 0 15px;
-  display: flex;
-  justify-content: center;
-}
-
-.busca {
-  width: 100%;
-  max-width: 500px;
-  padding: 12px;
-  border-radius: 25px;
-  border: 2px solid #3a3618;
-  background: #f8f5f0;
-  font-size: 14px;
-}
-
 .instrucao {
   max-width: 600px;
   margin: 15px auto;
@@ -104,8 +86,8 @@ body {
 img, video {
   width: 100%;
   border-radius: 8px;
-  
 }
+
 .item p {
   text-align: center;
   font-size: 14px;
@@ -114,12 +96,12 @@ img, video {
 }
 
 .item:hover {
-transform: translateY(-3px);
-box-shadow: 0 6px 14px rgba(0,0,0,0.12);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 14px rgba(0,0,0,0.12);
 }
 
 .item:active {
-transform: scale(0.97);
+  transform: scale(0.97);
 }
 
 .botoes-acoes {
@@ -127,9 +109,12 @@ transform: scale(0.97);
   bottom: 0;
   left: 0;
   right: 0;
-  padding: 10px;
+  padding: 10px 15px 15px 15px;
   background: #f8f5f0;
   box-shadow: 0 -4px 10px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .caixa-selecao {
@@ -138,7 +123,6 @@ transform: scale(0.97);
   border-radius: 16px;
   padding: 10px;
   background: #f8f5f0;
-  margin-bottom: 10px;
 }
 
 .topo-caixa {
@@ -198,6 +182,21 @@ transform: scale(0.97);
   font-weight: 600;
   letter-spacing: 0.3px;
 }
+
+.busca-container {
+  display: flex;
+  justify-content: center;
+}
+
+.busca {
+  width: 100%;
+  max-width: 500px;
+  padding: 12px;
+  border-radius: 25px;
+  border: 2px solid #3a3618;
+  background: #f8f5f0;
+  font-size: 14px;
+}
 </style>
 </head>
 
@@ -213,10 +212,6 @@ transform: scale(0.97);
       <p class="subtitulo">Enxertos de Adenium Obesum</p>
     </div>
   </div>
-</div>
-
-<div class="busca-container">
-  <input type="text" id="busca" class="busca" placeholder="Buscar por nome da flor...">
 </div>
 
 <p class="instrucao">
@@ -236,6 +231,10 @@ Depois é só clicar em <strong>“Ver disponibilidade”</strong> para falar di
     <div id="listaSelecionadas"></div>
   </div>
 
+  <div class="busca-container">
+    <input type="text" id="busca" class="busca" placeholder="Buscar por nome da flor...">
+  </div>
+
   <button class="botao-whatsapp" onclick="enviarWhatsApp()">
     Ver disponibilidade (<span id="contador">0</span>)
   </button>
@@ -243,7 +242,7 @@ Depois é só clicar em <strong>“Ver disponibilidade”</strong> para falar di
 </div>
 
 <script>
-const flores = [/* MANTIDO COMPLETO */
+const flores = [
 "AÇUCENA (MUTANTE)","AKACHI","AMATTA","ARYA","BLOODY MARY","BP-116",
 "BRANCA DE NEVE","BRIDAL BOUQUET","CANAN 55","CANAN 170","CAPIXABA",
 "CÉU ESTRELADO","CÉU ESTRELADO VARIEGATA","COPENHAGEN","DAFNE","DIỆU CHÂU","COCA-COLA",
@@ -278,7 +277,6 @@ function gerarNomeArquivo(nome){
     .replace(/[()]/g, "");
 }
 
-/* FLORES COM VÍDEO */
 const floresComVideo = [
   "AÇUCENA (MUTANTE)",
   "LILAC FROST (MUTANTE)"
@@ -295,30 +293,29 @@ function renderCatalogo(lista){
     let arquivo = gerarNomeArquivo(nome);
 
     if(floresComVideo.includes(nome)){
-  div.innerHTML = `
-    <video autoplay muted loop playsinline preload="metadata">
-      <source src="imagens/${arquivo}.mp4" type="video/mp4">
-    </video>
-    <p>${nome}</p>
-  `;
-} else {
-  div.innerHTML = `
-    <img loading="lazy" 
-     src="imagens/${arquivo}.jpg" 
-     onerror="this.onerror=null; this.src='imagens/sem-foto.jpg'">
-    <p>${nome}</p>
-  `;
-}
+      div.innerHTML = `
+        <video autoplay muted loop playsinline preload="metadata">
+          <source src="imagens/${arquivo}.mp4" type="video/mp4">
+        </video>
+        <p>${nome}</p>
+      `;
+    } else {
+      div.innerHTML = `
+        <img loading="lazy" 
+         src="imagens/${arquivo}.jpg" 
+         onerror="this.onerror=null; this.src='imagens/sem-foto.jpg'">
+        <p>${nome}</p>
+      `;
+    }
 
-/* CLICK FORA DO IF (vale pra ambos) */
-div.onclick = () => {
-  div.classList.toggle("selecionado");
-  atualizar();
+    div.onclick = () => {
+      div.classList.toggle("selecionado");
+      atualizar();
 
-  if (navigator.vibrate) {
-    navigator.vibrate([30, 20, 30]);
-  }
-};
+      if (navigator.vibrate) {
+        navigator.vibrate([30, 20, 30]);
+      }
+    };
     catalogo.appendChild(div);
   });
 }
