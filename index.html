@@ -117,7 +117,16 @@ img, video {
   margin-top: 8px;
   font-weight: 500;
 }
-  
+
+.item:hover {
+transform: translateY(-3px);
+box-shadow: 0 6px 14px rgba(0,0,0,0.12);
+}
+
+.item:active {
+transform: scale(0.97);
+}
+
 /* BOTÕES FIXOS */
 .botoes-acoes {
   position: fixed;
@@ -196,6 +205,8 @@ img, video {
   color: white;
   border: none;
   border-radius: 50px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
 }
 </style>
 </head>
