@@ -30,10 +30,7 @@ body {
   padding: 0 15px;
 }
 .logo img { width: 70px; }
-.info-topo h1 {
-  margin: 0; margin-bottom: 2px;
-  color: white; font-size: 18px;
-}
+.info-topo h1 { margin: 0; margin-bottom: 2px; color: white; font-size: 18px; }
 .subtitulo { margin: 0; font-size: 13px; color: #d6d6d6; }
 .instrucao {
   max-width: 600px;
@@ -61,12 +58,7 @@ body {
 }
 .item.selecionado { border: 2px solid #3a3618; }
 img, video { width: 100%; border-radius: 8px; }
-.item p {
-  text-align: center;
-  font-size: 14px;
-  margin-top: 8px;
-  font-weight: 500;
-}
+.item p { text-align: center; font-size: 14px; margin-top: 8px; font-weight: 500; }
 .item:hover { transform: translateY(-3px); box-shadow: 0 6px 14px rgba(0,0,0,0.12); }
 .item:active { transform: scale(0.97); }
 
@@ -89,11 +81,7 @@ img, video { width: 100%; border-radius: 8px; }
   padding: 10px;
   background: #f8f5f0;
 }
-.topo-caixa {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
+.topo-caixa { display: flex; justify-content: space-between; align-items: center; }
 .caixa-selecao h3 { margin: 0; font-size: 14px; }
 .btn-limpar-tudo {
   background: none;
@@ -137,10 +125,7 @@ img, video { width: 100%; border-radius: 8px; }
   font-weight: 600;
   letter-spacing: 0.3px;
 }
-.busca-container {
-  display: flex;
-  justify-content: center;
-}
+.busca-container { display: flex; justify-content: center; }
 .busca {
   width: 100%;
   max-width: 500px;
@@ -223,6 +208,9 @@ const flores = [
 
 const catalogo = document.getElementById("catalogo");
 const buscaInput = document.getElementById("busca");
+const floresComVideo = ["AÇUCENA (MUTANTE)","LILAC FROST (MUTANTE)"];
+
+let selecionados = new Set();
 
 function gerarNomeArquivo(nome){
   return nome.toLowerCase()
@@ -232,72 +220,41 @@ function gerarNomeArquivo(nome){
     .replace(/[()]/g, "");
 }
 
-const floresComVideo = [
-  "AÇUCENA (MUTANTE)",
-  "LILAC FROST (MUTANTE)"
-];
-
-function renderCatalogo(lista){
+function renderCatalogo(){
   catalogo.innerHTML = "";
-  lista.forEach(nome=>{
+  flores.forEach(nome=>{
     let div = document.createElement("div");
     div.className = "item";
     div.dataset.id = nome;
+    if(selecionados.has(nome)) div.classList.add("selecionado");
 
     let arquivo = gerarNomeArquivo(nome);
-
     if(floresComVideo.includes(nome)){
-      div.innerHTML = `
-        <video autoplay muted loop playsinline preload="metadata">
-          <source src="imagens/${arquivo}.mp4" type="video/mp4">
-        </video>
-        <p>${nome}</p>
-      `;
+      div.innerHTML = `<video autoplay muted loop playsinline preload="metadata"><source src="imagens/${arquivo}.mp4" type="video/mp4"></video><p>${nome}</p>`;
     } else {
-      div.innerHTML = `
-        <img loading="lazy" src="imagens/${arquivo}.jpg" 
-        onerror="this.onerror=null; this.src='imagens/sem-foto.jpg'">
-        <p>${nome}</p>
-      `;
+      div.innerHTML = `<img loading="lazy" src="imagens/${arquivo}.jpg" onerror="this.onerror=null; this.src='imagens/sem-foto.jpg'"><p>${nome}</p>`;
     }
 
-    div.addEventListener("click", () => {
-      div.classList.toggle("selecionado");
+    div.addEventListener("click", ()=>{
+      selecionados.add(nome);
       atualizar();
-      buscaInput.value = ""; // limpa o texto de busca
+      buscaInput.value = ""; // limpa busca
+      mostrarTodasIDs(); // volta a mostrar todas
     });
 
     catalogo.appendChild(div);
   });
-
-  // Após renderizar, manter os itens selecionados que estavam previamente selecionados
-  const selecionadosAtuais = JSON.parse(localStorage.getItem("selecionados") || "[]");
-  document.querySelectorAll(".item").forEach(div=>{
-    if(selecionadosAtuais.includes(div.dataset.id)){
-      div.classList.add("selecionado");
-    }
-  });
-  atualizar();
 }
 
-// Mantém seleção no localStorage
 function atualizar(){
-  let selecionados = document.querySelectorAll(".item.selecionado");
-  let total = selecionados.length;
-  document.getElementById("contador").innerText = total;
+  const caixa = document.querySelector(".caixa-selecao");
+  const lista = document.getElementById("listaSelecionadas");
 
-  let caixa = document.querySelector(".caixa-selecao");
-  let lista = document.getElementById("listaSelecionadas");
-
-  const idsSelecionados = [...selecionados].map(i=>i.dataset.id);
-  localStorage.setItem("selecionados", JSON.stringify(idsSelecionados));
-
-  if(total > 0){
+  if(selecionados.size>0){
     caixa.style.display = "block";
     lista.innerHTML = "";
-    selecionados.forEach(item=>{
-      let nome = item.dataset.id;
-      let tag = document.createElement("div");
+    selecionados.forEach(nome=>{
+      const tag = document.createElement("div");
       tag.className = "tag";
       tag.innerHTML = `${nome} <button onclick="removerItem('${nome}')">✕</button>`;
       lista.appendChild(tag);
@@ -305,58 +262,48 @@ function atualizar(){
   } else {
     caixa.style.display = "none";
   }
+
+  document.getElementById("contador").innerText = selecionados.size;
 }
 
 function removerItem(nome){
-  document.querySelectorAll(".item").forEach(item=>{
-    if(item.dataset.id === nome){
-      item.classList.remove("selecionado");
-    }
-  });
+  selecionados.delete(nome);
   atualizar();
+  renderCatalogo();
 }
 
 function limparSelecao(){
-  document.querySelectorAll(".item.selecionado").forEach(i=>i.classList.remove("selecionado"));
+  selecionados.clear();
   atualizar();
+  renderCatalogo();
 }
 
-buscaInput.addEventListener("input", function(){
-  const termo = normalizarTexto(this.value);
-  const filtradas = flores.filter(f => normalizarTexto(f).includes(termo));
+function mostrarTodasIDs(){
+  document.querySelectorAll(".item").forEach(div=>div.style.display="block");
+}
+
+buscaInput.addEventListener("input", ()=>{
+  const termo = normalizarTexto(buscaInput.value);
   document.querySelectorAll(".item").forEach(div=>{
-    div.style.display = filtradas.includes(div.dataset.id) ? "block" : "none";
+    div.style.display = normalizarTexto(div.dataset.id).includes(termo) ? "block" : "none";
   });
 });
 
 function normalizarTexto(texto){
-  return texto.toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/[^a-z0-9 ]/g, "");
+  return texto.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9 ]/g,"");
 }
 
 function enviarWhatsApp(){
-  let selecionados = document.querySelectorAll(".item.selecionado");
-  let ids = [...selecionados].map(i=>i.dataset.id);
-
-  if(ids.length === 0){
-    alert("Selecione pelo menos uma flor!");
-    return;
-  }
-
-  let texto = ids.length === 1
-    ? "Tenho interesse no enxerto da seguinte flor:\n\n- "
-    : "Tenho interesse nos enxertos das seguintes variedades:\n\n- ";
-
+  if(selecionados.size===0){ alert("Selecione pelo menos uma flor!"); return; }
+  let ids = Array.from(selecionados);
+  let texto = ids.length===1 ? "Tenho interesse no enxerto da seguinte flor:\n\n- " : "Tenho interesse nos enxertos das seguintes variedades:\n\n- ";
   let mensagem = ["Olá!","",""+texto+ids.join("\n- "),"","Poderia me informar valores, disponibilidade e condições de envio?"].join("\n");
-
   let url = "https://wa.me/5581992665421?text=" + encodeURIComponent(mensagem);
   window.open(url, "_blank");
 }
 
-// Inicializa catálogo
-renderCatalogo(flores);
+renderCatalogo();
+atualizar();
 </script>
 
 </body>
