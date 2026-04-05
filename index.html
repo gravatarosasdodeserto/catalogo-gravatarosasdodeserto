@@ -24,7 +24,6 @@ body {
   position: relative;
 }
 
-/* Linhas decorativas dentro da barra escura */
 .topbar::after {
   content: '';
   position: absolute;
@@ -267,6 +266,7 @@ function renderCatalogo(){
       else selecionados.add(nome);
 
       atualizar();
+      buscaInput.value = ""; // limpa busca após seleção/deseleção
       if(navigator.vibrate) navigator.vibrate([30,20,30]);
     });
 
@@ -298,11 +298,13 @@ function atualizar(){
 function removerItem(nome){
   selecionados.delete(nome);
   atualizar();
+  buscaInput.value = ""; // limpa busca também ao remover da lista
 }
 
 function limparSelecao(){
   selecionados.clear();
   atualizar();
+  buscaInput.value = ""; // limpa busca
 }
 
 buscaInput.addEventListener("input", ()=>{
