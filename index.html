@@ -55,12 +55,19 @@ body {
   border-radius: 12px;
   border: 1px solid #eee;
   cursor: pointer;
+  transition: all 0.2s ease;
 }
-.item.selecionado { border: 2px solid #3a3618; }
-img, video { width: 100%; border-radius: 8px; }
 .item p { text-align: center; font-size: 14px; margin-top: 8px; font-weight: 500; }
 .item:hover { transform: translateY(-3px); box-shadow: 0 6px 14px rgba(0,0,0,0.12); }
 .item:active { transform: scale(0.97); }
+
+.item.selecionado {
+  border: 2px solid #3a3618;
+  background: rgba(58, 54, 24, 0.1);
+  box-shadow: 0 6px 14px rgba(58,54,24,0.2);
+}
+
+img, video { width: 100%; border-radius: 8px; }
 
 .botoes-acoes {
   position: fixed;
@@ -209,7 +216,6 @@ const flores = [
 const catalogo = document.getElementById("catalogo");
 const buscaInput = document.getElementById("busca");
 const floresComVideo = ["AÇUCENA (MUTANTE)","LILAC FROST (MUTANTE)"];
-
 let selecionados = new Set();
 
 function gerarNomeArquivo(nome){
@@ -238,8 +244,8 @@ function renderCatalogo(){
     div.addEventListener("click", ()=>{
       selecionados.add(nome);
       atualizar();
-      buscaInput.value = ""; // limpa busca
-      mostrarTodasIDs(); // volta a mostrar todas
+      buscaInput.value = ""; 
+      mostrarTodasIDs(); 
     });
 
     catalogo.appendChild(div);
