@@ -47,7 +47,7 @@ body {
 }
 
 .subtitulo {
-  margin: 0; /* remove espaço padrão */
+  margin: 0;
   font-size: 13px;
   color: #d6d6d6;
 }
@@ -313,7 +313,8 @@ function renderCatalogo(lista){
     div.onclick = () => {
       div.classList.toggle("selecionado");
       atualizar();
-      buscaInput.value = ""; // limpa a busca após selecionar
+      buscaInput.value = ""; // limpa a busca
+      renderCatalogo(flores); // volta a mostrar tudo
 
       if (navigator.vibrate) {
         navigator.vibrate([30, 20, 30]);
@@ -362,14 +363,16 @@ function removerItem(nome){
     }
   });
   atualizar();
-  buscaInput.value = ""; // limpa a busca ao remover
+  buscaInput.value = ""; 
+  renderCatalogo(flores); // volta a mostrar tudo
 }
 
 function limparSelecao(){
   document.querySelectorAll(".item.selecionado")
     .forEach(i=>i.classList.remove("selecionado"));
   atualizar();
-  buscaInput.value = ""; // limpa a busca ao limpar tudo
+  buscaInput.value = ""; 
+  renderCatalogo(flores); // volta a mostrar tudo
 }
 
 buscaInput.addEventListener("input", function(){
