@@ -13,23 +13,14 @@ body {
   font-family: 'Poppins', sans-serif;
   margin: 0;
   padding-bottom: 140px;
-
-  background: url('imagens/fundo.jpg');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+  background: url('imagens/fundo.jpg') center/cover no-repeat;
 }
 
-/* HEADER PREMIUM */
+/* HEADER */
 .topbar {
   background: rgba(58,54,24,0.95);
   backdrop-filter: blur(6px);
   padding: 12px 0;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.25);
-  border-bottom: 1px solid rgba(255,255,255,0.1);
-
-  position: relative;
-  z-index: 10;
 }
 
 .header {
@@ -50,7 +41,6 @@ body {
 .info-topo h1 {
   margin: 0;
   font-size: 18px;
-  font-weight: 600;
   color: white;
 }
 
@@ -65,25 +55,14 @@ body {
   max-width: 600px;
   margin: 10px auto;
   padding: 0 15px;
-  display: flex;
-  justify-content: center;
 }
 
 .busca {
   width: 100%;
-  max-width: 500px;
   padding: 10px 15px;
   border-radius: 25px;
   border: 2px solid #3a3618;
-  font-size: 14px;
   background: #f8f5f0;
-  box-sizing: border-box;
-}
-
-.busca:focus {
-  outline: none;
-  border-color: #3a3618;
-  box-shadow: 0 0 0 3px rgba(58,54,24,0.15);
 }
 
 /* TEXTO */
@@ -91,14 +70,9 @@ body {
   max-width: 600px;
   margin: 15px auto;
   padding: 15px;
-  font-size: 14px;
-  color: #444;
-  line-height: 1.5;
   text-align: center;
   background: white;
   border-radius: 12px;
-  border: 1px solid #e5e5e5;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
 }
 
 /* CATÁLOGO */
@@ -115,96 +89,63 @@ body {
   border-radius: 12px;
   cursor: pointer;
   border: 1px solid #eee;
-  transition: all 0.2s ease;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  transition: 0.2s;
 }
 
 .item:hover {
-  transform: translateY(-3px) scale(1.02);
-  box-shadow: 0 6px 14px rgba(0,0,0,0.12);
+  transform: scale(1.03);
 }
 
 .item.selecionado {
   border: 2px solid #3a3618;
-  transform: scale(1.04);
-  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
 }
 
 img, video {
   width: 100%;
   border-radius: 8px;
-}
-
-.item p {
-  font-weight: 500;
-  font-size: 14px;
-  margin: 8px 0 0;
-  text-align: center;
 }
 
 /* BOTÕES */
 .botoes-acoes {
   position: fixed;
   bottom: 20px;
-  right: 20px;
   left: 20px;
+  right: 20px;
   max-width: 400px;
   margin: auto;
   display: flex;
   flex-direction: column;
   gap: 10px;
-
-  background: rgba(255,255,255,0.9);
+  background: rgba(255,255,255,0.95);
   padding: 10px;
   border-radius: 16px;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
-  backdrop-filter: blur(6px);
 }
 
 .botao-whatsapp {
-  width: 100%;
   padding: 15px;
-  font-size: 16px;
   background: #3a3618;
   color: white;
   border: none;
   border-radius: 50px;
   cursor: pointer;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-  font-weight: 500;
-}
-
-.botao-whatsapp:hover {
-  transform: translateY(-2px);
-}
-
-.botao-whatsapp:active {
-  transform: scale(0.97);
 }
 
 .botao-limpar {
   padding: 12px;
-  font-size: 14px;
   background: white;
-  color: #3a3618;
   border: 2px solid #3a3618;
   border-radius: 50px;
   cursor: pointer;
-  font-weight: 500;
-}
-
-.botao-limpar:hover {
-  background: #f7f7f7;
 }
 </style>
-
 </head>
+
 <body>
 
 <div class="topbar">
   <div class="header">
     <div class="logo">
-      <img src="logo.jpg" alt="Logo">
+      <img src="logo.jpg">
     </div>
 
     <div class="info-topo">
@@ -219,228 +160,23 @@ img, video {
 </div>
 
 <p class="instrucao">
-Escolha as ID(s) das flores que você gostou e envie sua seleção pelo WhatsApp para consultar valores, disponibilidade, fotos atualizadas e condições de envio dos enxertos.
+Escolha as ID(s) das flores e envie pelo WhatsApp para consultar valores e disponibilidade.
 </p>
 
 <div class="catalogo" id="catalogo"></div>
 
 <div class="botoes-acoes">
   <button class="botao-whatsapp" onclick="enviarWhatsApp()">
-    Ver disponibilidade no WhatsApp (<span id="contador">0</span>)
+    WhatsApp (<span id="contador">0</span>)
   </button>
 
   <button class="botao-limpar" onclick="limparSelecao()">
-    Limpar ID(s) selecionadas
+    Limpar seleção
   </button>
 </div>
 
 <script>
-// (seu JS original permanece igual)
-</script>
-
-</body>
-</html>  padding: 0 15px;
-}
-
-.logo img {
-  width: 70px;
-  height: 70px;
-  object-fit: contain;
-}
-
-.info-topo h1 {
-  margin: 0;
-  font-size: 18px;
-  font-weight: 600;
-  color: white;
-}
-
-.subtitulo {
-  margin: 2px 0 0;
-  font-size: 13px;
-  color: #d6d6d6;
-}
-
-/* BUSCA */
-.busca-container {
-  max-width: 600px;
-  margin: 10px auto;
-  padding: 0 15px;
-  display: flex;
-  justify-content: center;
-}
-
-.busca {
-  width: 100%;
-  max-width: 500px;
-  padding: 10px 15px;
-  border-radius: 25px;
-  border: 2px solid #3a3618;
-  font-size: 14px;
-  background: #f8f5f0;
-  box-sizing: border-box;
-}
-
-.busca:focus {
-  outline: none;
-  border-color: #3a3618;
-  box-shadow: 0 0 0 3px rgba(58,54,24,0.15);
-}
-
-/* TEXTO */
-.instrucao {
-  max-width: 600px;
-  margin: 15px auto;
-  padding: 15px;
-  font-size: 14px;
-  color: #444;
-  line-height: 1.5;
-  text-align: center;
-  background: white;
-  border-radius: 12px;
-  border: 1px solid #e5e5e5;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-}
-
-/* CATÁLOGO */
-.catalogo {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: 15px;
-  padding: 15px;
-}
-
-.item {
-  background: white;
-  padding: 10px;
-  border-radius: 12px;
-  cursor: pointer;
-  border: 1px solid #eee;
-  transition: all 0.2s ease;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-  backdrop-filter: blur(2px);
-}
-
-.item:hover {
-  transform: translateY(-3px) scale(1.02);
-  box-shadow: 0 6px 14px rgba(0,0,0,0.12);
-}
-
-.item.selecionado {
-  border: 2px solid #3a3618;
-  transform: scale(1.04);
-  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-}
-
-img, video {
-  width: 100%;
-  border-radius: 8px;
-}
-
-.item p {
-  font-weight: 500;
-  font-size: 14px;
-  margin: 8px 0 0;
-  text-align: center;
-}
-
-/* BOTÕES FLUTUANTES */
-.botoes-acoes {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  left: 20px;
-  max-width: 400px;
-  margin: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-
-  background: rgba(248,245,240,0.92); /* FUNDO */
-  padding: 10px;
-  border-radius: 16px;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
-  backdrop-filter: blur(6px);
-}
-
-.botao-whatsapp {
-  width: 100%;
-  padding: 15px;
-  font-size: 16px;
-  background: #3a3618;
-  color: white;
-  border: none;
-  border-radius: 50px;
-  cursor: pointer;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-  font-weight: 500;
-  transition: all 0.2s ease;
-}
-
-.botao-whatsapp:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 14px rgba(0,0,0,0.35);
-}
-
-.botao-whatsapp:active {
-  transform: scale(0.97);
-}
-
-/* BOTÃO LIMPAR */
-.botao-limpar {
-  padding: 12px;
-  font-size: 14px;
-  background: white;
-  color: #3a3618;
-  border: 2px solid #3a3618;
-  border-radius: 50px;
-  cursor: pointer;
-  font-weight: 500;
-}
-
-.botao-limpar:hover {
-  background: #f7f7f7;
-}
-</style>
-
-</head>
-<body>
-
-<div class="topbar">
-  <div class="header">
-    <div class="logo">
-      <img src="logo.jpg" alt="Logo">
-    </div>
-
-    <div class="info-topo">
-      <h1>Gravatá Rosas do Deserto</h1>
-      <p class="subtitulo">Enxertos de Adenium Obesum</p>
-    </div>
-  </div>
-</div>
-
-<div class="busca-container">
-  <input type="text" id="busca" class="busca" placeholder="Buscar por nome da flor...">
-</div>
-
-<p class="instrucao">
-Escolha as ID(s) das flores que você gostou e envie sua seleção pelo WhatsApp para consultar valores, disponibilidade, fotos atualizadas e condições de envio dos enxertos.
-</p>
-
-<div class="catalogo" id="catalogo"></div>
-
-<div class="botoes-acoes">
-  <button class="botao-whatsapp" onclick="enviarWhatsApp()">
-    Ver disponibilidade no WhatsApp (<span id="contador">0</span>)
-  </button>
-
-  <button class="botao-limpar" onclick="limparSelecao()">
-    Limpar ID(s) selecionadas
-  </button>
-</div>
-
-<script>
-const flores = [/* ORIGINAL */
+const flores = [
 "AÇUCENA (MUTANTE)","AKACHI","AMATTA","ARYA","BLOODY MARY","BP-116",
 "BRANCA DE NEVE","BRIDAL BOUQUET","CANAN 55","CANAN 170","CAPIXABA",
 "CÉU ESTRELADO","CÉU ESTRELADO VARIEGATA","COPENHAGEN","DAFNE","COCA-COLA",
@@ -466,8 +202,8 @@ const flores = [/* ORIGINAL */
 ];
 
 const floresComVideo = [
-  "AÇUCENA (MUTANTE)",
-  "LILAC FROST (MUTANTE)"
+"AÇUCENA (MUTANTE)",
+"LILAC FROST (MUTANTE)"
 ];
 
 const catalogo = document.getElementById("catalogo");
@@ -483,10 +219,7 @@ function renderCatalogo(lista) {
     div.onclick = function() {
       div.classList.toggle("selecionado");
       atualizarContador();
-
-      if (navigator.vibrate) {
-        navigator.vibrate(50);
-      }
+      if (navigator.vibrate) navigator.vibrate(50);
     };
 
     let nomeImagem = nome
@@ -505,7 +238,7 @@ function renderCatalogo(lista) {
       `;
     } else {
       div.innerHTML = `
-        <img loading="lazy" src="imagens/${nomeImagem}.jpg" alt="${nome}">
+        <img loading="lazy" src="imagens/${nomeImagem}.jpg">
         <p>${nome}</p>
       `;
     }
@@ -523,7 +256,7 @@ document.getElementById("busca").addEventListener("input", function() {
 });
 
 function limparSelecao() {
-  document.querySelectorAll(".item.selecionado").forEach(item => {
+  document.querySelectorAll(".item").forEach(item => {
     item.classList.remove("selecionado");
   });
   atualizarContador();
@@ -555,10 +288,7 @@ function enviarWhatsApp() {
   + ids.join("\n- ") + 
   "\n\nPoderia me passar mais informações sobre valores, disponibilidade e envio?";
 
-  let telefone = "5581992665421";
-  let url = "https://wa.me/" + telefone + "?text=" + encodeURIComponent(mensagem);
-
-  alert("Abrindo WhatsApp com sua seleção...");
+  let url = "https://wa.me/5581992665421?text=" + encodeURIComponent(mensagem);
   window.open(url, "_blank");
 }
 </script>
