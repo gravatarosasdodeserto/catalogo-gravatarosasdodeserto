@@ -9,10 +9,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
 
 <style>
-* {
-  box-sizing: border-box;
-}
-
+* { box-sizing: border-box; }
 body {
   font-family: 'Poppins', sans-serif;
   background: #f8f5f0;
@@ -20,12 +17,10 @@ body {
   padding-bottom: 200px;
   overflow-x: hidden;
 }
-
 .topbar {
   background: #3a3618;
   padding: 12px 0;
 }
-
 .header {
   display: flex;
   align-items: center;
@@ -34,24 +29,12 @@ body {
   margin: auto;
   padding: 0 15px;
 }
-
-.logo img {
-  width: 70px;
-}
-
+.logo img { width: 70px; }
 .info-topo h1 {
-  margin: 0;
-  margin-bottom: 2px;
-  color: white;
-  font-size: 18px;
+  margin: 0; margin-bottom: 2px;
+  color: white; font-size: 18px;
 }
-
-.subtitulo {
-  margin: 0;
-  font-size: 13px;
-  color: #d6d6d6;
-}
-
+.subtitulo { margin: 0; font-size: 13px; color: #d6d6d6; }
 .instrucao {
   max-width: 600px;
   margin: 15px auto;
@@ -63,14 +46,12 @@ body {
   line-height: 1.5;
   color: #444;
 }
-
 .catalogo {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
   gap: 15px;
   padding: 15px;
 }
-
 .item {
   background: white;
   padding: 10px;
@@ -78,31 +59,16 @@ body {
   border: 1px solid #eee;
   cursor: pointer;
 }
-
-.item.selecionado {
-  border: 2px solid #3a3618;
-}
-
-img, video {
-  width: 100%;
-  border-radius: 8px;
-}
-
+.item.selecionado { border: 2px solid #3a3618; }
+img, video { width: 100%; border-radius: 8px; }
 .item p {
   text-align: center;
   font-size: 14px;
   margin-top: 8px;
   font-weight: 500;
 }
-
-.item:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 6px 14px rgba(0,0,0,0.12);
-}
-
-.item:active {
-  transform: scale(0.97);
-}
+.item:hover { transform: translateY(-3px); box-shadow: 0 6px 14px rgba(0,0,0,0.12); }
+.item:active { transform: scale(0.97); }
 
 .botoes-acoes {
   position: fixed;
@@ -116,7 +82,6 @@ img, video {
   flex-direction: column;
   gap: 10px;
 }
-
 .caixa-selecao {
   display: none;
   border: 2px solid #3a3618;
@@ -124,18 +89,12 @@ img, video {
   padding: 10px;
   background: #f8f5f0;
 }
-
 .topo-caixa {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
-
-.caixa-selecao h3 {
-  margin: 0;
-  font-size: 14px;
-}
-
+.caixa-selecao h3 { margin: 0; font-size: 14px; }
 .btn-limpar-tudo {
   background: none;
   border: none;
@@ -144,7 +103,6 @@ img, video {
   cursor: pointer;
   font-weight: 500;
 }
-
 #listaSelecionadas {
   display: flex;
   flex-wrap: wrap;
@@ -152,7 +110,6 @@ img, video {
   justify-content: center;
   margin-top: 8px;
 }
-
 .tag {
   background: white;
   border: 1px solid #3a3618;
@@ -163,7 +120,6 @@ img, video {
   align-items: center;
   gap: 6px;
 }
-
 .tag button {
   background: none;
   border: none;
@@ -171,7 +127,6 @@ img, video {
   font-size: 12px;
   color: #3a3618;
 }
-
 .botao-whatsapp {
   width: 100%;
   padding: 15px;
@@ -182,12 +137,10 @@ img, video {
   font-weight: 600;
   letter-spacing: 0.3px;
 }
-
 .busca-container {
   display: flex;
   justify-content: center;
 }
-
 .busca {
   width: 100%;
   max-width: 500px;
@@ -286,7 +239,6 @@ const floresComVideo = [
 
 function renderCatalogo(lista){
   catalogo.innerHTML = "";
-
   lista.forEach(nome=>{
     let div = document.createElement("div");
     div.className = "item";
@@ -303,49 +255,53 @@ function renderCatalogo(lista){
       `;
     } else {
       div.innerHTML = `
-        <img loading="lazy" 
-         src="imagens/${arquivo}.jpg" 
-         onerror="this.onerror=null; this.src='imagens/sem-foto.jpg'">
+        <img loading="lazy" src="imagens/${arquivo}.jpg" 
+        onerror="this.onerror=null; this.src='imagens/sem-foto.jpg'">
         <p>${nome}</p>
       `;
     }
 
-    div.onclick = () => {
+    div.addEventListener("click", () => {
       div.classList.toggle("selecionado");
       atualizar();
-      buscaInput.value = ""; // apenas limpa o texto da busca, não altera seleção
-    };
+      buscaInput.value = ""; // limpa o texto de busca
+    });
+
     catalogo.appendChild(div);
   });
+
+  // Após renderizar, manter os itens selecionados que estavam previamente selecionados
+  const selecionadosAtuais = JSON.parse(localStorage.getItem("selecionados") || "[]");
+  document.querySelectorAll(".item").forEach(div=>{
+    if(selecionadosAtuais.includes(div.dataset.id)){
+      div.classList.add("selecionado");
+    }
+  });
+  atualizar();
 }
 
+// Mantém seleção no localStorage
 function atualizar(){
   let selecionados = document.querySelectorAll(".item.selecionado");
   let total = selecionados.length;
-
   document.getElementById("contador").innerText = total;
 
   let caixa = document.querySelector(".caixa-selecao");
   let lista = document.getElementById("listaSelecionadas");
 
+  const idsSelecionados = [...selecionados].map(i=>i.dataset.id);
+  localStorage.setItem("selecionados", JSON.stringify(idsSelecionados));
+
   if(total > 0){
     caixa.style.display = "block";
     lista.innerHTML = "";
-
     selecionados.forEach(item=>{
       let nome = item.dataset.id;
-
       let tag = document.createElement("div");
       tag.className = "tag";
-
-      tag.innerHTML = `
-        ${nome}
-        <button onclick="removerItem('${nome}')">✕</button>
-      `;
-
+      tag.innerHTML = `${nome} <button onclick="removerItem('${nome}')">✕</button>`;
       lista.appendChild(tag);
     });
-
   } else {
     caixa.style.display = "none";
   }
@@ -361,24 +317,20 @@ function removerItem(nome){
 }
 
 function limparSelecao(){
-  document.querySelectorAll(".item.selecionado")
-    .forEach(i=>i.classList.remove("selecionado"));
+  document.querySelectorAll(".item.selecionado").forEach(i=>i.classList.remove("selecionado"));
   atualizar();
 }
 
 buscaInput.addEventListener("input", function(){
-  let termo = normalizarTexto(this.value);
-
-  let filtradas = flores.filter(f => 
-    normalizarTexto(f).includes(termo)
-  );
-
-  renderCatalogo(filtradas);
+  const termo = normalizarTexto(this.value);
+  const filtradas = flores.filter(f => normalizarTexto(f).includes(termo));
+  document.querySelectorAll(".item").forEach(div=>{
+    div.style.display = filtradas.includes(div.dataset.id) ? "block" : "none";
+  });
 });
 
 function normalizarTexto(texto){
-  return texto
-    .toLowerCase()
+  return texto.toLowerCase()
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
     .replace(/[^a-z0-9 ]/g, "");
@@ -397,19 +349,13 @@ function enviarWhatsApp(){
     ? "Tenho interesse no enxerto da seguinte flor:\n\n- "
     : "Tenho interesse nos enxertos das seguintes variedades:\n\n- ";
 
-  let mensagem = [
-  "Olá!",
-  "",
-  texto + ids.join("\n- "),
-  "",
-  "Poderia me informar valores, disponibilidade e condições de envio?"
-  ].join("\n");
+  let mensagem = ["Olá!","",""+texto+ids.join("\n- "),"","Poderia me informar valores, disponibilidade e condições de envio?"].join("\n");
 
   let url = "https://wa.me/5581992665421?text=" + encodeURIComponent(mensagem);
-
   window.open(url, "_blank");
 }
 
+// Inicializa catálogo
 renderCatalogo(flores);
 </script>
 
