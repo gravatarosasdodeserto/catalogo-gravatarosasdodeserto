@@ -196,6 +196,7 @@ img, video {
   border: 2px solid #3a3618;
   background: #f8f5f0;
   font-size: 14px;
+  text-align: center;
 }
 </style>
 </head>
@@ -232,7 +233,7 @@ Depois é só clicar em <strong>“Ver disponibilidade”</strong> para falar di
   </div>
 
   <div class="busca-container">
-    <input type="text" id="busca" class="busca" placeholder="Buscar por nome da flor...">
+    <input type="text" id="busca" class="busca" placeholder="Buscar por ID da flor...">
   </div>
 
   <button class="botao-whatsapp" onclick="enviarWhatsApp()">
@@ -268,6 +269,7 @@ const flores = [
 ];
 
 const catalogo = document.getElementById("catalogo");
+const buscaInput = document.getElementById("busca");
 
 function gerarNomeArquivo(nome){
   return nome.toLowerCase()
@@ -311,6 +313,7 @@ function renderCatalogo(lista){
     div.onclick = () => {
       div.classList.toggle("selecionado");
       atualizar();
+      buscaInput.value = ""; // limpa a busca após selecionar
 
       if (navigator.vibrate) {
         navigator.vibrate([30, 20, 30]);
@@ -359,15 +362,17 @@ function removerItem(nome){
     }
   });
   atualizar();
+  buscaInput.value = ""; // limpa a busca ao remover
 }
 
 function limparSelecao(){
   document.querySelectorAll(".item.selecionado")
     .forEach(i=>i.classList.remove("selecionado"));
   atualizar();
+  buscaInput.value = ""; // limpa a busca ao limpar tudo
 }
 
-document.getElementById("busca").addEventListener("input", function(){
+buscaInput.addEventListener("input", function(){
   let termo = normalizarTexto(this.value);
 
   let filtradas = flores.filter(f => 
