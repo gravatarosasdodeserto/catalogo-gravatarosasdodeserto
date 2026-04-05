@@ -43,7 +43,7 @@ body {
 /* Linhas decorativas no cabeçalho */
 .linha-cabecalho {
   position: absolute;
-  bottom: 6px;
+  top: 0;
   left: 0;
   width: 100%;
   display: flex;
@@ -83,15 +83,15 @@ body {
   border: 1px solid #eee;
   cursor: pointer;
   transition: all 0.2s ease;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08); /* sombra externa */
 }
 .item p { text-align: center; font-size: 14px; margin-top: 8px; font-weight: 500; }
 .item:hover { transform: translateY(-3px); box-shadow: 0 6px 14px rgba(0,0,0,0.12); }
 .item:active { transform: scale(0.97); }
 
 .item.selecionado {
-  box-shadow: inset 0 4px 10px rgba(58,54,24,0.2);
-  background: rgba(58, 54, 24, 0.08);
+  box-shadow: inset 0 4px 10px rgba(58,54,24,0.2); /* sombra interna */
+  background: rgba(58, 54, 24, 0.08); /* leve escurecimento */
 }
 
 img, video { width: 100%; border-radius: 8px; }
@@ -107,6 +107,7 @@ img, video { width: 100%; border-radius: 8px; }
   display: flex;
   flex-direction: column;
   gap: 10px;
+  z-index: 5;
 }
 
 /* Linhas decorativas do rodapé */
