@@ -303,7 +303,7 @@ function renderCatalogo(lista){
   `;
 } else {
   div.innerHTML = `
-    <img loading="lazy" src="imagens/${arquivo}.jpg">
+    <img loading="lazy" src="imagens/${arquivo}.jpg" onerror="this.src='imagens/${arquivo}.png'">
     <p>${nome}</p>
   `;
 }
