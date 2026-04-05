@@ -18,23 +18,12 @@ body {
   overflow-x: hidden;
 }
 
+/* Topbar / Header */
 .topbar {
   background: #3a3618;
   padding: 12px 0;
   position: relative;
 }
-
-/* Linhas decorativas claras abaixo do topo */
-.topbar::after {
-  content: "";
-  display: block;
-  width: 100%;
-  height: 1px;
-  background-color: rgba(255,255,255,0.4);
-  box-shadow: 0 1px 0 rgba(255,255,255,0.3);
-  margin-top: 4px;
-}
-
 .header {
   display: flex;
   align-items: center;
@@ -47,6 +36,17 @@ body {
 .info-topo h1 { margin: 0; margin-bottom: 2px; color: white; font-size: 18px; }
 .subtitulo { margin: 0; font-size: 13px; color: #d6d6d6; }
 
+/* Linhas decorativas finas no header */
+.topbar::after {
+  content: "";
+  display: block;
+  height: 2px;
+  background: linear-gradient(to bottom, #4a4a4a 50%, #3a3618 50%);
+  margin: 8px 15px 0 15px;
+  border-radius: 2px;
+}
+
+/* Instrução */
 .instrucao {
   max-width: 600px;
   margin: 15px auto;
@@ -59,6 +59,7 @@ body {
   color: #444;
 }
 
+/* Catálogo de flores */
 .catalogo {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
@@ -73,20 +74,21 @@ body {
   border: 1px solid #eee;
   cursor: pointer;
   transition: all 0.2s ease;
-  box-shadow: 0 6px 14px rgba(58,80,30,0.15); /* sombra externa padrão */
+  box-shadow: 0 6px 10px rgba(0,0,0,0.08); /* sombra externa por padrão */
 }
 .item p { text-align: center; font-size: 14px; margin-top: 8px; font-weight: 500; }
-.item:hover { transform: translateY(-3px); box-shadow: 0 6px 14px rgba(58,80,30,0.2); }
+.item:hover { transform: translateY(-3px); box-shadow: 0 6px 14px rgba(0,0,0,0.12); }
 .item:active { transform: scale(0.97); }
 
-/* Card selecionado: sombra interna e fundo levemente escuro */
 .item.selecionado {
-  background: rgba(58, 80, 30, 0.15);
-  box-shadow: inset 0 0 8px rgba(0,0,0,0.2);
+  box-shadow: inset 0 4px 8px rgba(0,0,0,0.15); /* sombra interna */
+  background: rgba(58, 54, 24, 0.15); /* tom levemente mais escuro */
+  border: none; /* remove borda escura */
 }
 
 img, video { width: 100%; border-radius: 8px; }
 
+/* Botões e caixa inferior */
 .botoes-acoes {
   position: fixed;
   bottom: 0;
@@ -98,30 +100,17 @@ img, video { width: 100%; border-radius: 8px; }
   display: flex;
   flex-direction: column;
   gap: 10px;
-  z-index: 10;
 }
 
-/* Linhas decorativas escuras acima da base */
-.botoes-acoes::before {
-  content: "";
-  display: block;
-  width: 100%;
-  height: 1px;
-  background-color: rgba(0,0,0,0.4);
-  box-shadow: 0 1px 0 rgba(0,0,0,0.3);
-  margin-bottom: 8px;
-}
-
+/* Caixa de IDs selecionadas transparente */
 .caixa-selecao {
   display: none;
   border: none;
-  border-radius: 16px;
-  padding: 10px;
-  background: rgba(58, 80, 30, 0.15);
-  z-index: 5;
+  background: transparent;
+  padding: 0;
 }
 .topo-caixa { display: flex; justify-content: space-between; align-items: center; }
-.caixa-selecao h3 { margin: 0; font-size: 14px; }
+.caixa-selecao h3 { margin: 0; font-size: 14px; color: #3a3618; }
 .btn-limpar-tudo {
   background: none;
   border: none;
@@ -130,6 +119,7 @@ img, video { width: 100%; border-radius: 8px; }
   cursor: pointer;
   font-weight: 500;
 }
+
 #listaSelecionadas {
   display: flex;
   flex-wrap: wrap;
@@ -138,14 +128,13 @@ img, video { width: 100%; border-radius: 8px; }
   margin-top: 8px;
 }
 .tag {
-  background: rgba(58, 80, 30, 0.15);
+  background: transparent;
   border: none;
-  border-radius: 20px;
-  padding: 5px 10px;
   font-size: 12px;
   display: flex;
   align-items: center;
   gap: 6px;
+  color: #3a3618;
 }
 .tag button {
   background: none;
@@ -155,6 +144,7 @@ img, video { width: 100%; border-radius: 8px; }
   color: #3a3618;
 }
 
+/* Botão WhatsApp */
 .botao-whatsapp {
   width: 100%;
   padding: 15px;
@@ -166,6 +156,7 @@ img, video { width: 100%; border-radius: 8px; }
   letter-spacing: 0.3px;
 }
 
+/* Barra de busca */
 .busca-container { display: flex; justify-content: center; }
 .busca {
   width: 100%;
@@ -176,6 +167,16 @@ img, video { width: 100%; border-radius: 8px; }
   background: #f8f5f0;
   font-size: 14px;
   text-align: center;
+}
+
+/* Linhas decorativas finas na base do site */
+.botoes-acoes::before {
+  content:"";
+  display:block;
+  height:2px;
+  background: linear-gradient(to bottom, #3a3618 50%, #4a4a4a 50%);
+  margin-bottom: 8px;
+  border-radius: 2px;
 }
 </style>
 </head>
@@ -282,9 +283,6 @@ function renderCatalogo(){
         selecionados.add(nome);
       }
       atualizar();
-      renderCatalogo();
-      buscaInput.value = "";
-      mostrarTodasIDs();
     });
 
     catalogo.appendChild(div);
@@ -309,22 +307,17 @@ function atualizar(){
   }
 
   document.getElementById("contador").innerText = selecionados.size;
+  renderCatalogo();
 }
 
 function removerItem(nome){
   selecionados.delete(nome);
   atualizar();
-  renderCatalogo();
 }
 
 function limparSelecao(){
   selecionados.clear();
   atualizar();
-  renderCatalogo();
-}
-
-function mostrarTodasIDs(){
-  document.querySelectorAll(".item").forEach(div=>div.style.display="block");
 }
 
 buscaInput.addEventListener("input", ()=>{
