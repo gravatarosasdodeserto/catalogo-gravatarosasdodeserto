@@ -13,11 +13,14 @@ body {
   font-family: 'Poppins', sans-serif;
   margin: 0;
 
-  /* ESPAÇO DINÂMICO PRA NÃO COBRIR ITENS */
+  /* FUNDO LIMPO (SEM IMAGEM) */
+  background: #f8f5f0;
+
+  /* ESPAÇO PARA OS BOTÕES */
   padding-bottom: 180px;
 }
 
-/* AJUSTE EXTRA PARA CELULAR */
+/* AJUSTE PARA CELULAR */
 @media (max-width: 480px) {
   body {
     padding-bottom: 230px;
@@ -140,10 +143,10 @@ img, video {
   text-align: center;
 }
 
-/* BOTÕES FLUTUANTES */
+/* BOTÕES */
 .botoes-acoes {
   position: fixed;
-  bottom: 0; /* colado no fundo */
+  bottom: 0;
   left: 0;
   right: 0;
 
@@ -160,7 +163,6 @@ img, video {
   box-shadow: 0 -4px 12px rgba(0,0,0,0.08);
 }
 
-/* BOTÃO WHATSAPP */
 .botao-whatsapp {
   width: 100%;
   padding: 15px;
@@ -177,7 +179,6 @@ img, video {
   opacity: 0.9;
 }
 
-/* BOTÃO LIMPAR */
 .botao-limpar {
   width: 100%;
   padding: 12px;
@@ -232,41 +233,14 @@ Escolha as ID(s) das flores que você gostou e envie sua seleção pelo WhatsApp
 </div>
 
 <script>
-const flores = [
-"AÇUCENA (MUTANTE)","AKACHI","AMATTA","ARYA","BLOODY MARY","BP-116",
-"BRANCA DE NEVE","BRIDAL BOUQUET","CANAN 55","CANAN 170","CAPIXABA",
-"CÉU ESTRELADO","CÉU ESTRELADO VARIEGATA","COPENHAGEN","DAFNE","COCA-COLA",
-"DOUBLE STAR","DUQUESA","EGG ROLL","ELARA","ELLIE","EV19-XANADÚ",
-"FERRARI","GOLDEN FAITH","GOLDEN PINK","GRAPE CHOCOLATE","GUARÁ",
-"GTA-AIKA","GTA-BOLD","GTA-CANDY CRUSH","GTA-CÓSMICA","GTA-CREPÚSCULO",
-"GTA-DESERT DOLL","GTA-DIANA","GTA-EMMA FROST","GTA-FAY","GTA-FLORZINHA",
-"GTA-FLUTTERSHY","GTA-FRACTA","GTA-GOLDEN PINK","GTA-ICE DRAGON",
-"GTA-KIMBERLY","GTA-LITTLE KISS","GTA-LOLLIPOP BLACK","GTA-LYSSA",
-"GTA-LYTA","GTA-MISS GRAVATÁ","GTA-NYX","GTA-PERONA","GTA-PINK VENOM",
-"GTA-PINKIE PIE","GTA-RED COMETS","GTA-RED STORM","GTA-RED WIDOW",
-"GTA-SANSA","GTA-SHE HA","GTA-SUN CLUSTER","GTA-SWEET BLUSH",
-"GTA-TRINITY","GTA-TRUE FAITH","GTA-YUNA","HELENA","INDIGO GLAZE",
-"INFINITY","JHULLY","JULIUS CAESAR","KING OF KINGS","KINDLY","L-06",
-"LAILA","LILAC FROST (MUTANTE)","LM-440","LM-50","LM2","LUNA",
-"MAGNIFICAT","MARIA","MIDNIGHT","MỘNG CẦM","MORAN","NANCY","NEMO",
-"NORALINE","NUSA","P-200","PATHUMMA","PEONY","PHARAOH","PURPLE BLUE",
-"QUEEN RAY","RF-001","RF-002","RIHANNA","ROMANTIC EDGE","SANTA CLAUS",
-"SATURNO","SENNA","SIENA","SOCHI","SOPHIA","STAR CLUSTER","SWALLOW",
-"TC-04","THAMIRES","THE SECRET OF VICTORIA","TRIPLE WISH","TROPICAL","TS-69",
-"TS-222","TS-330","TW4","UNPARALLELED","VARIEGATA","VAMPIRA",
-"VIÚVA NEGRA","VOLCANO","W59","YÚ JIǍO"
-];
+const flores = [/* mantido igual */ "AÇUCENA (MUTANTE)","AKACHI","AMATTA","ARYA","BLOODY MARY","BP-116","BRANCA DE NEVE","BRIDAL BOUQUET","CANAN 55","CANAN 170","CAPIXABA","CÉU ESTRELADO","CÉU ESTRELADO VARIEGATA","COPENHAGEN","DAFNE","COCA-COLA","DOUBLE STAR","DUQUESA","EGG ROLL","ELARA","ELLIE","EV19-XANADÚ","FERRARI","GOLDEN FAITH","GOLDEN PINK","GRAPE CHOCOLATE","GUARÁ","GTA-AIKA","GTA-BOLD","GTA-CANDY CRUSH","GTA-CÓSMICA","GTA-CREPÚSCULO","GTA-DESERT DOLL","GTA-DIANA","GTA-EMMA FROST","GTA-FAY","GTA-FLORZINHA","GTA-FLUTTERSHY","GTA-FRACTA","GTA-GOLDEN PINK","GTA-ICE DRAGON","GTA-KIMBERLY","GTA-LITTLE KISS","GTA-LOLLIPOP BLACK","GTA-LYSSA","GTA-LYTA","GTA-MISS GRAVATÁ","GTA-NYX","GTA-PERONA","GTA-PINK VENOM","GTA-PINKIE PIE","GTA-RED COMETS","GTA-RED STORM","GTA-RED WIDOW","GTA-SANSA","GTA-SHE HA","GTA-SUN CLUSTER","GTA-SWEET BLUSH","GTA-TRINITY","GTA-TRUE FAITH","GTA-YUNA","HELENA","INDIGO GLAZE","INFINITY","JHULLY","JULIUS CAESAR","KING OF KINGS","KINDLY","L-06","LAILA","LILAC FROST (MUTANTE)","LM-440","LM-50","LM2","LUNA","MAGNIFICAT","MARIA","MIDNIGHT","MỘNG CẦM","MORAN","NANCY","NEMO","NORALINE","NUSA","P-200","PATHUMMA","PEONY","PHARAOH","PURPLE BLUE","QUEEN RAY","RF-001","RF-002","RIHANNA","ROMANTIC EDGE","SANTA CLAUS","SATURNO","SENNA","SIENA","SOCHI","SOPHIA","STAR CLUSTER","SWALLOW","TC-04","THAMIRES","THE SECRET OF VICTORIA","TRIPLE WISH","TROPICAL","TS-69","TS-222","TS-330","TW4","UNPARALLELED","VARIEGATA","VAMPIRA","VIÚVA NEGRA","VOLCANO","W59","YÚ JIǍO"];
 
-const floresComVideo = [
-  "AÇUCENA (MUTANTE)",
-  "LILAC FROST (MUTANTE)"
-];
+const floresComVideo = ["AÇUCENA (MUTANTE)","LILAC FROST (MUTANTE)"];
 
 const catalogo = document.getElementById("catalogo");
 
 function renderCatalogo(lista) {
   catalogo.innerHTML = "";
-
   lista.forEach(nome => {
     let div = document.createElement("div");
     div.className = "item";
@@ -275,32 +249,14 @@ function renderCatalogo(lista) {
     div.onclick = function() {
       div.classList.toggle("selecionado");
       atualizarContador();
-
-      if (navigator.vibrate) {
-        navigator.vibrate(50);
-      }
+      if (navigator.vibrate) navigator.vibrate(50);
     };
 
-    let nomeImagem = nome
-      .toLowerCase()
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "")
-      .replace(/ /g, "-")
-      .replace(/[()]/g, "");
+    let nomeImagem = nome.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/ /g,"-").replace(/[()]/g,"");
 
-    if (floresComVideo.includes(nome)) {
-      div.innerHTML = `
-        <video autoplay muted loop playsinline>
-          <source src="imagens/${nomeImagem}.mp4" type="video/mp4">
-        </video>
-        <p>${nome}</p>
-      `;
-    } else {
-      div.innerHTML = `
-        <img loading="lazy" src="imagens/${nomeImagem}.jpg" alt="${nome}">
-        <p>${nome}</p>
-      `;
-    }
+    div.innerHTML = floresComVideo.includes(nome)
+      ? `<video autoplay muted loop playsinline><source src="imagens/${nomeImagem}.mp4"></video><p>${nome}</p>`
+      : `<img loading="lazy" src="imagens/${nomeImagem}.jpg"><p>${nome}</p>`;
 
     catalogo.appendChild(div);
   });
@@ -310,48 +266,29 @@ renderCatalogo(flores);
 
 document.getElementById("busca").addEventListener("input", function() {
   let termo = this.value.toLowerCase();
-  let filtradas = flores.filter(f => f.toLowerCase().includes(termo));
-  renderCatalogo(filtradas);
+  renderCatalogo(flores.filter(f => f.toLowerCase().includes(termo)));
 });
 
 function limparSelecao() {
-  document.querySelectorAll(".item.selecionado").forEach(item => {
-    item.classList.remove("selecionado");
-  });
+  document.querySelectorAll(".item.selecionado").forEach(i => i.classList.remove("selecionado"));
   atualizarContador();
 }
 
 function atualizarContador() {
-  let total = document.querySelectorAll(".item.selecionado").length;
-  document.getElementById("contador").innerText = total;
+  document.getElementById("contador").innerText = document.querySelectorAll(".item.selecionado").length;
 }
 
 function enviarWhatsApp() {
-  let selecionados = document.querySelectorAll(".item.selecionado");
-  let ids = [];
-
-  selecionados.forEach(item => {
-    ids.push(item.getAttribute("data-id"));
-  });
-
-  if (ids.length === 0) {
-    alert("Selecione pelo menos uma flor!");
-    return;
-  }
+  let ids = [...document.querySelectorAll(".item.selecionado")].map(i => i.dataset.id);
+  if (!ids.length) return alert("Selecione pelo menos uma flor!");
 
   let textoInicial = ids.length === 1
     ? "Tenho interesse no enxerto da seguinte flor:\n\n- "
     : "Tenho interesse nos enxertos das seguintes variedades:\n\n- ";
 
-  let mensagem = "Olá!\n\n" + textoInicial 
-  + ids.join("\n- ") + 
-  "\n\nPoderia me passar mais informações sobre valores, disponibilidade e envio?";
+  let mensagem = "Olá!\n\n" + textoInicial + ids.join("\n- ") + "\n\nPoderia me passar mais informações sobre valores, disponibilidade e envio?";
 
-  let telefone = "5581992665421";
-  let url = "https://wa.me/" + telefone + "?text=" + encodeURIComponent(mensagem);
-
-  alert("Abrindo WhatsApp com sua seleção...");
-  window.open(url, "_blank");
+  window.open("https://wa.me/5581992665421?text=" + encodeURIComponent(mensagem), "_blank");
 }
 </script>
 
