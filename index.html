@@ -61,12 +61,11 @@ body {
 .item:hover { transform: translateY(-3px); box-shadow: 0 6px 14px rgba(0,0,0,0.12); }
 .item:active { transform: scale(0.97); }
 
-/* Card selecionado: tom levemente mais escuro, destaque discreto */
 .item.selecionado {
-  border: 2px solid #3a3618;
   background: #fdf9ef; /* tom bem claro, leve destaque */
   box-shadow: 0 4px 10px rgba(58,54,24,0.1);
   transition: background 0.3s, box-shadow 0.3s;
+  border: 1px solid #eee; /* mantém a borda padrão, sem escurecer */
 }
 
 img, video { width: 100%; border-radius: 8px; }
@@ -85,7 +84,7 @@ img, video { width: 100%; border-radius: 8px; }
 }
 .caixa-selecao {
   display: none;
-  border: 2px solid #3a3618;
+  border: none; /* remove a borda */
   border-radius: 16px;
   padding: 10px;
   background: #f8f5f0;
