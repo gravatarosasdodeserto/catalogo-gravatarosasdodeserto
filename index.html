@@ -363,10 +363,23 @@ function limparSelecao(){
 }
 
 document.getElementById("busca").addEventListener("input", function(){
-  let termo = this.value.toLowerCase();
-  let filtradas = flores.filter(f => f.toLowerCase().includes(termo));
+  let termo = normalizarTexto(this.value);
+
+  let filtradas = flores.filter(f => 
+    normalizarTexto(f).includes(termo)
+  );
+
   renderCatalogo(filtradas);
 });
+
+/* FUNÇÃO DE NORMALIZAÇÃO */
+function normalizarTexto(texto){
+  return texto
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "") // remove acentos
+    .replace(/[^a-z0-9 ]/g, ""); // remove símbolos e vírgulas
+}
 
 function enviarWhatsApp(){
   let selecionados = document.querySelectorAll(".item.selecionado");
