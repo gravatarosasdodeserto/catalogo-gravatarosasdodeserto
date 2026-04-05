@@ -108,6 +108,7 @@ img, video {
   border-radius: 16px;
   padding: 10px;
   background: #f8f5f0;
+  display: none;
 }
 
 .caixa-selecao h3 {
@@ -259,10 +260,20 @@ function renderCatalogo(lista){
 
 function atualizar(){
   let selecionados = document.querySelectorAll(".item.selecionado");
-  document.getElementById("contador").innerText = selecionados.length;
+  let total = selecionados.length;
 
-  document.getElementById("listaSelecionadas").innerHTML =
-    [...selecionados].map(i=>i.dataset.id).join("<br>");
+  document.getElementById("contador").innerText = total;
+
+  let caixa = document.querySelector(".caixa-selecao");
+
+  if(total > 0){
+    caixa.style.display = "block";
+
+    document.getElementById("listaSelecionadas").innerHTML =
+      [...selecionados].map(i=>i.dataset.id).join("<br>");
+  } else {
+    caixa.style.display = "none";
+  }
 }
 
 function limparSelecao(){
