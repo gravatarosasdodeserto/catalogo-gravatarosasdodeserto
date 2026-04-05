@@ -15,7 +15,7 @@ body {
   font-family: 'Poppins', sans-serif;
   background: #f8f5f0;
   margin: 0;
-  padding-bottom: 200px;
+  padding-bottom: 250px; /* espaço para a barra fixa */
   overflow-x: hidden;
 }
 
@@ -31,9 +31,9 @@ body {
   left:15px;
   right:15px;
   bottom:0;
-  height:2px;
+  height:1px;
   background:#222;
-  box-shadow: 0 3px 0 #222;
+  box-shadow: 0 1px 0 #222;
 }
 
 /* Header */
@@ -95,6 +95,7 @@ body {
 
 img, video { width: 100%; border-radius: 8px; }
 
+/* Barra fixa inferior */
 .botoes-acoes {
   position: fixed;
   bottom: 0;
@@ -106,7 +107,7 @@ img, video { width: 100%; border-radius: 8px; }
   display: flex;
   flex-direction: column;
   gap: 10px;
-  position: relative;
+  z-index: 9999;
 }
 .botoes-acoes::before {
   content:"";
@@ -116,7 +117,7 @@ img, video { width: 100%; border-radius: 8px; }
   right:15px;
   height:1px;
   background:#222;
-  box-shadow: 0 2px 0 #222;
+  box-shadow: 0 1px 0 #222;
 }
 
 /* Caixa de seleção transparente e alinhada à esquerda */
@@ -140,7 +141,7 @@ img, video { width: 100%; border-radius: 8px; }
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
-  justify-content: flex-start; /* alinhamento à esquerda */
+  justify-content: flex-start;
   margin-top: 8px;
 }
 .tag {
