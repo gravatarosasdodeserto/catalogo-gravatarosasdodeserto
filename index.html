@@ -12,23 +12,23 @@
 body {
   font-family: 'Poppins', sans-serif;
   margin: 0;
-  padding-bottom: 75px;
 
-  background: url('imagens/fundo.jpg');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+  /* ESPAÇO DINÂMICO PRA NÃO COBRIR ITENS */
+  padding-bottom: 180px;
+}
+
+/* AJUSTE EXTRA PARA CELULAR */
+@media (max-width: 480px) {
+  body {
+    padding-bottom: 230px;
+  }
 }
 
 /* HEADER */
 .topbar {
-  background: rgba(58,54,24,0.95);
-  backdrop-filter: blur(6px);
+  background: #3a3618;
   padding: 12px 0;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.25);
-  border-bottom: 1px solid rgba(255,255,255,0.1);
-  position: relative;
-  z-index: 10;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
 }
 
 .header {
@@ -81,7 +81,6 @@ body {
 
 .busca:focus {
   outline: none;
-  border-color: #3a3618;
   box-shadow: 0 0 0 3px rgba(58,54,24,0.15);
 }
 
@@ -141,25 +140,27 @@ img, video {
   text-align: center;
 }
 
-/* BOTÕES */
+/* BOTÕES FLUTUANTES */
 .botoes-acoes {
   position: fixed;
-  bottom: 0px;
-  right: 20px;
-  left: 20px;
-  max-width: 400px;
+  bottom: 0; /* colado no fundo */
+  left: 0;
+  right: 0;
+
+  max-width: 420px;
   margin: auto;
+
+  padding: 10px 15px;
   display: flex;
   flex-direction: column;
   gap: 10px;
 
-  background: rgba(255,255,255,0.95);
-  padding: 10px 10px 8px;
-  border-radius: 16px 16px 0 0;
-  box-shadow: 0 -4px 20px rgba(0,0,0,0.15);
-  backdrop-filter: blur(6px);
+  background: #f8f5f0;
+  border-top: 1px solid #e5e5e5;
+  box-shadow: 0 -4px 12px rgba(0,0,0,0.08);
 }
 
+/* BOTÃO WHATSAPP */
 .botao-whatsapp {
   width: 100%;
   padding: 15px;
@@ -169,15 +170,16 @@ img, video {
   border: none;
   border-radius: 50px;
   cursor: pointer;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
   font-weight: 500;
 }
 
-.botao-whatsapp:active {
-  transform: scale(0.97);
+.botao-whatsapp:hover {
+  opacity: 0.9;
 }
 
+/* BOTÃO LIMPAR */
 .botao-limpar {
+  width: 100%;
   padding: 12px;
   font-size: 14px;
   background: white;
@@ -273,7 +275,10 @@ function renderCatalogo(lista) {
     div.onclick = function() {
       div.classList.toggle("selecionado");
       atualizarContador();
-      if (navigator.vibrate) navigator.vibrate(50);
+
+      if (navigator.vibrate) {
+        navigator.vibrate(50);
+      }
     };
 
     let nomeImagem = nome
@@ -338,13 +343,14 @@ function enviarWhatsApp() {
     ? "Tenho interesse no enxerto da seguinte flor:\n\n- "
     : "Tenho interesse nos enxertos das seguintes variedades:\n\n- ";
 
-  let mensagem = "Olá! 😊\n\n" + textoInicial 
+  let mensagem = "Olá!\n\n" + textoInicial 
   + ids.join("\n- ") + 
   "\n\nPoderia me passar mais informações sobre valores, disponibilidade e envio?";
 
   let telefone = "5581992665421";
   let url = "https://wa.me/" + telefone + "?text=" + encodeURIComponent(mensagem);
 
+  alert("Abrindo WhatsApp com sua seleção...");
   window.open(url, "_blank");
 }
 </script>
