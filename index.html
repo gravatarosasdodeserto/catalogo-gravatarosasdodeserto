@@ -394,7 +394,13 @@ function enviarWhatsApp(){
     ? "Tenho interesse no enxerto da seguinte flor:\n\n- "
     : "Tenho interesse nos enxertos das seguintes variedades:\n\n- ";
 
-  let mensagem = "Olá! 😊\n\n" + texto + ids.join("\n- ");
+  let mensagem = [
+  "Olá! 😊",
+  "",
+  texto + ids.join("\n- "),
+  "",
+  "Gostaria de receber mais informações sobre valores, disponibilidade e envio."
+  ].join("\n");
 
   let url = "https://wa.me/5581992665421?text=" + encodeURIComponent(mensagem);
 
