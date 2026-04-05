@@ -61,10 +61,11 @@ body {
 .item:hover { transform: translateY(-3px); box-shadow: 0 6px 14px rgba(0,0,0,0.12); }
 .item:active { transform: scale(0.97); }
 
+/* Card selecionado: tom levemente mais escuro, destaque discreto */
 .item.selecionado {
   border: 2px solid #3a3618;
-  background: rgba(58, 54, 24, 0.1);
-  box-shadow: 0 6px 14px rgba(58,54,24,0.2);
+  background: #f3edd7; /* tom claro, só para indicar seleção */
+  box-shadow: 0 6px 14px rgba(58,54,24,0.15);
 }
 
 img, video { width: 100%; border-radius: 8px; }
@@ -244,8 +245,8 @@ function renderCatalogo(){
     div.addEventListener("click", ()=>{
       selecionados.add(nome);
       atualizar();
-      buscaInput.value = ""; 
-      mostrarTodasIDs(); 
+      buscaInput.value = "";
+      mostrarTodasIDs();
     });
 
     catalogo.appendChild(div);
