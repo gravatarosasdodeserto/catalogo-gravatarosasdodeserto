@@ -12,7 +12,7 @@
 body {
   font-family: 'Poppins', sans-serif;
   margin: 0;
-  padding-bottom: 75px; /* AJUSTADO */
+  padding-bottom: 75px;
 
   background: url('imagens/fundo.jpg');
   background-size: cover;
@@ -144,7 +144,7 @@ img, video {
 /* BOTÕES */
 .botoes-acoes {
   position: fixed;
-  bottom: 0px; /* COLADO NO FUNDO */
+  bottom: 0px;
   right: 20px;
   left: 20px;
   max-width: 400px;
@@ -154,8 +154,8 @@ img, video {
   gap: 10px;
 
   background: rgba(255,255,255,0.95);
-  padding: 10px 10px 8px; /* ajuste fino */
-  border-radius: 16px 16px 0 0; /* topo arredondado */
+  padding: 10px 10px 8px;
+  border-radius: 16px 16px 0 0;
   box-shadow: 0 -4px 20px rgba(0,0,0,0.15);
   backdrop-filter: blur(6px);
 }
@@ -230,7 +230,123 @@ Escolha as ID(s) das flores que você gostou e envie sua seleção pelo WhatsApp
 </div>
 
 <script>
-// seu JS original permanece igual
+const flores = [
+"AÇUCENA (MUTANTE)","AKACHI","AMATTA","ARYA","BLOODY MARY","BP-116",
+"BRANCA DE NEVE","BRIDAL BOUQUET","CANAN 55","CANAN 170","CAPIXABA",
+"CÉU ESTRELADO","CÉU ESTRELADO VARIEGATA","COPENHAGEN","DAFNE","COCA-COLA",
+"DOUBLE STAR","DUQUESA","EGG ROLL","ELARA","ELLIE","EV19-XANADÚ",
+"FERRARI","GOLDEN FAITH","GOLDEN PINK","GRAPE CHOCOLATE","GUARÁ",
+"GTA-AIKA","GTA-BOLD","GTA-CANDY CRUSH","GTA-CÓSMICA","GTA-CREPÚSCULO",
+"GTA-DESERT DOLL","GTA-DIANA","GTA-EMMA FROST","GTA-FAY","GTA-FLORZINHA",
+"GTA-FLUTTERSHY","GTA-FRACTA","GTA-GOLDEN PINK","GTA-ICE DRAGON",
+"GTA-KIMBERLY","GTA-LITTLE KISS","GTA-LOLLIPOP BLACK","GTA-LYSSA",
+"GTA-LYTA","GTA-MISS GRAVATÁ","GTA-NYX","GTA-PERONA","GTA-PINK VENOM",
+"GTA-PINKIE PIE","GTA-RED COMETS","GTA-RED STORM","GTA-RED WIDOW",
+"GTA-SANSA","GTA-SHE HA","GTA-SUN CLUSTER","GTA-SWEET BLUSH",
+"GTA-TRINITY","GTA-TRUE FAITH","GTA-YUNA","HELENA","INDIGO GLAZE",
+"INFINITY","JHULLY","JULIUS CAESAR","KING OF KINGS","KINDLY","L-06",
+"LAILA","LILAC FROST (MUTANTE)","LM-440","LM-50","LM2","LUNA",
+"MAGNIFICAT","MARIA","MIDNIGHT","MỘNG CẦM","MORAN","NANCY","NEMO",
+"NORALINE","NUSA","P-200","PATHUMMA","PEONY","PHARAOH","PURPLE BLUE",
+"QUEEN RAY","RF-001","RF-002","RIHANNA","ROMANTIC EDGE","SANTA CLAUS",
+"SATURNO","SENNA","SIENA","SOCHI","SOPHIA","STAR CLUSTER","SWALLOW",
+"TC-04","THAMIRES","THE SECRET OF VICTORIA","TRIPLE WISH","TROPICAL","TS-69",
+"TS-222","TS-330","TW4","UNPARALLELED","VARIEGATA","VAMPIRA",
+"VIÚVA NEGRA","VOLCANO","W59","YÚ JIǍO"
+];
+
+const floresComVideo = [
+  "AÇUCENA (MUTANTE)",
+  "LILAC FROST (MUTANTE)"
+];
+
+const catalogo = document.getElementById("catalogo");
+
+function renderCatalogo(lista) {
+  catalogo.innerHTML = "";
+
+  lista.forEach(nome => {
+    let div = document.createElement("div");
+    div.className = "item";
+    div.setAttribute("data-id", nome);
+
+    div.onclick = function() {
+      div.classList.toggle("selecionado");
+      atualizarContador();
+      if (navigator.vibrate) navigator.vibrate(50);
+    };
+
+    let nomeImagem = nome
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/ /g, "-")
+      .replace(/[()]/g, "");
+
+    if (floresComVideo.includes(nome)) {
+      div.innerHTML = `
+        <video autoplay muted loop playsinline>
+          <source src="imagens/${nomeImagem}.mp4" type="video/mp4">
+        </video>
+        <p>${nome}</p>
+      `;
+    } else {
+      div.innerHTML = `
+        <img loading="lazy" src="imagens/${nomeImagem}.jpg" alt="${nome}">
+        <p>${nome}</p>
+      `;
+    }
+
+    catalogo.appendChild(div);
+  });
+}
+
+renderCatalogo(flores);
+
+document.getElementById("busca").addEventListener("input", function() {
+  let termo = this.value.toLowerCase();
+  let filtradas = flores.filter(f => f.toLowerCase().includes(termo));
+  renderCatalogo(filtradas);
+});
+
+function limparSelecao() {
+  document.querySelectorAll(".item.selecionado").forEach(item => {
+    item.classList.remove("selecionado");
+  });
+  atualizarContador();
+}
+
+function atualizarContador() {
+  let total = document.querySelectorAll(".item.selecionado").length;
+  document.getElementById("contador").innerText = total;
+}
+
+function enviarWhatsApp() {
+  let selecionados = document.querySelectorAll(".item.selecionado");
+  let ids = [];
+
+  selecionados.forEach(item => {
+    ids.push(item.getAttribute("data-id"));
+  });
+
+  if (ids.length === 0) {
+    alert("Selecione pelo menos uma flor!");
+    return;
+  }
+
+  let textoInicial = ids.length === 1
+    ? "Tenho interesse no enxerto da seguinte flor:\n\n- "
+    : "Tenho interesse nos enxertos das seguintes variedades:\n\n- ";
+
+  let mensagem = "Olá! 😊\n\n" + textoInicial 
+  + ids.join("\n- ") + 
+  "\n\nPoderia me passar mais informações sobre valores, disponibilidade e envio?";
+
+  let telefone = "5581992665421";
+  let url = "https://wa.me/" + telefone + "?text=" + encodeURIComponent(mensagem);
+
+  window.open(url, "_blank");
+}
 </script>
 
 </body>
