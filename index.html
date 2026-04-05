@@ -11,31 +11,19 @@
 <style>
 body {
   font-family: 'Poppins', sans-serif;
+  background: #f2e6da;
   margin: 0;
-  background: #f8f5f0;
-  padding-bottom: 180px;
+  padding-bottom: 100px;
 }
 
-@media (max-width: 480px) {
-  body {
-    padding-bottom: 230px;
-  }
-}
-
-/* HEADER */
-.topbar {
-  background: #3a3618;
-  padding: 12px 0;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-}
-
+/* HEADER ESTILO INSTAGRAM */
 .header {
   display: flex;
   align-items: center;
   gap: 15px;
+  padding: 15px;
   max-width: 600px;
   margin: auto;
-  padding: 0 15px;
 }
 
 .logo img {
@@ -44,66 +32,30 @@ body {
   object-fit: contain;
 }
 
+.info-topo {
+  text-align: left;
+}
+
 .info-topo h1 {
   margin: 0;
   font-size: 18px;
   font-weight: 600;
-  color: white;
 }
 
 .subtitulo {
   margin: 2px 0 0;
   font-size: 13px;
-  color: #d6d6d6;
-}
-
-/* BUSCA */
-.busca-container {
-  max-width: 600px;
-  margin: 10px auto;
-  padding: 0 15px;
-  display: flex;
-  justify-content: center;
-}
-
-.busca {
-  width: 100%;
-  max-width: 500px;
-  padding: 10px 15px;
-  border-radius: 25px;
-  border: 2px solid #3a3618;
-  font-size: 14px;
-  background: #f8f5f0;
-  box-sizing: border-box;
-}
-
-.busca:focus {
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(58,54,24,0.15);
+  color: #777;
 }
 
 /* TEXTO */
 .instrucao {
   max-width: 600px;
-  margin: 15px auto;
-  padding: 15px;
+  margin: 10px auto 15px;
+  padding: 0 15px;
   font-size: 14px;
   color: #444;
   line-height: 1.5;
-  text-align: center;
-  background: white;
-  border-radius: 12px;
-  border: 1px solid #e5e5e5;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-}
-
-/* PREVIEW IDS */
-.preview {
-  max-width: 600px;
-  margin: 5px auto 0;
-  padding: 0 15px;
-  font-size: 13px;
-  color: #555;
   text-align: center;
 }
 
@@ -111,29 +63,29 @@ body {
 .catalogo {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: 18px;
+  gap: 15px;
   padding: 15px;
 }
 
 .item {
   background: white;
   padding: 10px;
-  border-radius: 14px;
+  border-radius: 12px;
   cursor: pointer;
-  border: 1px solid #eee;
-  transition: all 0.25s cubic-bezier(.2,.8,.2,1);
-  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  border: 2px solid transparent;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
 }
 
 .item:hover {
-  transform: translateY(-3px) scale(1.02);
-  box-shadow: 0 6px 14px rgba(0,0,0,0.12);
+  transform: scale(1.03);
 }
 
 .item.selecionado {
-  border: 2px solid #3a3618;
-  transform: scale(1.04);
-  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  border: 3px solid #3a3618;
+  padding: 12px;
+  background: white;
+  transform: scale(1.05);
 }
 
 img, video {
@@ -148,28 +100,14 @@ img, video {
   text-align: center;
 }
 
-/* BOTÕES */
-.botoes-acoes {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-
-  max-width: 420px;
-  margin: auto;
-
-  padding: 10px 15px;
-  display: none; /* ESCONDE INICIALMENTE */
-  flex-direction: column;
-  gap: 10px;
-
-  background: #f8f5f0;
-  border-top: 1px solid #e5e5e5;
-  box-shadow: 0 -4px 12px rgba(0,0,0,0.08);
-}
-
+/* BOTÃO */
 .botao-whatsapp {
-  width: 100%;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  left: 20px;
+  max-width: 400px;
+  margin: auto;
   padding: 15px;
   font-size: 16px;
   background: #3a3618;
@@ -177,59 +115,44 @@ img, video {
   border: none;
   border-radius: 50px;
   cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
   font-weight: 500;
 }
 
-.botao-limpar {
-  width: 100%;
-  padding: 12px;
-  font-size: 14px;
-  background: white;
-  color: #3a3618;
-  border: 2px solid #3a3618;
-  border-radius: 50px;
-  cursor: pointer;
-  font-weight: 500;
+.botao-whatsapp:hover {
+  opacity: 0.9;
+}
+
+.botao-whatsapp:active {
+  transform: scale(0.97);
 }
 </style>
 
 </head>
 <body>
 
-<div class="topbar">
-  <div class="header">
-    <div class="logo">
-      <img src="logo.jpg" alt="Logo">
-    </div>
+<!-- TOPO ESTILO INSTAGRAM -->
+<div class="header">
+  <div class="logo">
+    <img src="logo.jpg" alt="Logo">
+  </div>
 
-    <div class="info-topo">
-      <h1>Gravatá Rosas do Deserto</h1>
-      <p class="subtitulo">Enxertos de Adenium Obesum</p>
-    </div>
+  <div class="info-topo">
+    <h1>Gravatá Rosas do Deserto</h1>
+    <p class="subtitulo">Enxertos de Adenium Obesum</p>
   </div>
 </div>
 
-<div class="busca-container">
-  <input type="text" id="busca" class="busca" placeholder="Buscar por nome da flor...">
-</div>
-
 <p class="instrucao">
-Selecione as flores desejadas e consulte disponibilidade diretamente no WhatsApp.
+Escolha as ID(s) das flores que você gostou e envie sua seleção pelo WhatsApp para consultar valores, disponibilidade, fotos atualizadas e condições de envio dos enxertos.<br><br>
+📲 Atendimento rápido e direto pelo WhatsApp.
 </p>
-
-<div class="preview" id="preview"></div>
 
 <div class="catalogo" id="catalogo"></div>
 
-<div class="botoes-acoes" id="acoes">
-  <button class="botao-whatsapp" onclick="enviarWhatsApp()">
-    Ver disponibilidade no WhatsApp (<span id="contador">0</span>)
-  </button>
-
-  <button class="botao-limpar" onclick="limparSelecao()">
-    Limpar ID(s) selecionadas
-  </button>
-</div>
+<button class="botao-whatsapp" onclick="enviarWhatsApp()">
+📲 Solicitar informações (<span id="contador">0</span>)
+</button>
 
 <script>
 const flores = [
@@ -250,7 +173,7 @@ const flores = [
 "LAILA","LILAC FROST (MUTANTE)","LM-440","LM-50","LM2","LUNA",
 "MAGNIFICAT","MARIA","MIDNIGHT","MỘNG CẦM","MORAN","NANCY","NEMO",
 "NORALINE","NUSA","P-200","PATHUMMA","PEONY","PHARAOH","PURPLE BLUE",
-"QUEEN RAY","RF-001","RF-002","RIHANNA","ROMANTIC EDGE","SANTA CLAUS",
+"QUEEN RAY","RF-001","RF-002","RIHANNA","ROMANTIC EDGE","SANSA",
 "SATURNO","SENNA","SIENA","SOCHI","SOPHIA","STAR CLUSTER","SWALLOW",
 "TC-04","THAMIRES","THE SECRET OF VICTORIA","TRIPLE WISH","TROPICAL","TS-69",
 "TS-222","TS-330","TW4","UNPARALLELED","VARIEGATA","VAMPIRA",
@@ -264,74 +187,71 @@ const floresComVideo = [
 
 const catalogo = document.getElementById("catalogo");
 
-function normalizar(texto) {
-  return texto.toLowerCase()
+flores.forEach(nome => {
+  let div = document.createElement("div");
+  div.className = "item";
+  div.setAttribute("data-id", nome);
+
+  div.onclick = function() {
+    div.classList.toggle("selecionado");
+    atualizarContador();
+  };
+
+  let nomeImagem = nome
+    .toLowerCase()
     .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "");
-}
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/ /g, "-")
+    .replace(/[()]/g, "");
 
-function renderCatalogo(lista) {
-  catalogo.innerHTML = "";
+  if (floresComVideo.includes(nome)) {
+    div.innerHTML = `
+      <video autoplay muted loop playsinline>
+        <source src="imagens/${nomeImagem}.mp4" type="video/mp4">
+      </video>
+      <p>${nome} 🎥</p>
+    `;
+  } else {
+    div.innerHTML = `
+      <img src="imagens/${nomeImagem}.jpg" alt="${nome}">
+      <p>${nome}</p>
+    `;
+  }
 
-  lista.forEach(nome => {
-    let div = document.createElement("div");
-    div.className = "item";
-    div.dataset.id = nome;
-
-    div.onclick = function() {
-      div.classList.toggle("selecionado");
-      atualizarContador();
-
-      if (navigator.vibrate) navigator.vibrate(50);
-    };
-
-    let nomeImagem = normalizar(nome).replace(/ /g, "-").replace(/[()]/g, "");
-
-    div.innerHTML = floresComVideo.includes(nome)
-      ? `<video autoplay muted loop playsinline><source src="imagens/${nomeImagem}.mp4"></video><p>${nome}</p>`
-      : `<img loading="lazy" src="imagens/${nomeImagem}.jpg"><p>${nome}</p>`;
-
-    catalogo.appendChild(div);
-  });
-}
-
-renderCatalogo(flores);
-
-/* BUSCA MELHORADA */
-document.getElementById("busca").addEventListener("input", function() {
-  let termo = normalizar(this.value);
-  renderCatalogo(flores.filter(f => normalizar(f).includes(termo)));
+  catalogo.appendChild(div);
 });
 
 function atualizarContador() {
-  let selecionados = document.querySelectorAll(".item.selecionado");
-  let ids = [...selecionados].map(i => i.dataset.id);
-
-  document.getElementById("contador").innerText = ids.length;
-  document.getElementById("preview").innerText = ids.join(", ");
-
-  document.getElementById("acoes").style.display =
-    ids.length > 0 ? "flex" : "none";
-}
-
-function limparSelecao() {
-  document.querySelectorAll(".item.selecionado").forEach(i => i.classList.remove("selecionado"));
-  atualizarContador();
+  let total = document.querySelectorAll(".item.selecionado").length;
+  document.getElementById("contador").innerText = total;
 }
 
 function enviarWhatsApp() {
-  let ids = [...document.querySelectorAll(".item.selecionado")].map(i => i.dataset.id);
+  let selecionados = document.querySelectorAll(".item.selecionado");
+  let ids = [];
 
-  if (!ids.length) return alert("Selecione pelo menos uma flor!");
+  selecionados.forEach(item => {
+    ids.push(item.getAttribute("data-id"));
+  });
+
+  if (ids.length === 0) {
+    alert("Selecione pelo menos uma flor!");
+    return;
+  }
 
   let textoInicial = ids.length === 1
     ? "Tenho interesse no enxerto da seguinte flor:\n\n- "
     : "Tenho interesse nos enxertos das seguintes variedades:\n\n- ";
 
-  let mensagem = "Olá!\n\n" + textoInicial + ids.join("\n- ") +
-    "\n\nPoderia me passar mais informações sobre valores, disponibilidade e envio?";
+  let mensagem = "Olá! 😊\n\n" + textoInicial 
+  + ids.join("\n- ") + 
+  "\n\nPoderia me passar mais informações sobre valores, disponibilidade e envio?";
 
-  window.open("https://wa.me/5581992665421?text=" + encodeURIComponent(mensagem), "_blank");
+  let telefone = "5581992665421";
+  let url = "https://wa.me/" + telefone + "?text=" + encodeURIComponent(mensagem);
+
+  alert("Abrindo WhatsApp com sua seleção...");
+  window.open(url, "_blank");
 }
 </script>
 
