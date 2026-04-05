@@ -275,6 +275,12 @@ function gerarNomeArquivo(nome){
     .replace(/[()]/g, "");
 }
 
+/* FLORES COM VÍDEO */
+const floresComVideo = [
+  "AÇUCENA (MUTANTE)",
+  "LILAC FROST (MUTANTE)"
+];
+
 function renderCatalogo(lista){
   catalogo.innerHTML = "";
 
@@ -285,10 +291,20 @@ function renderCatalogo(lista){
 
     let arquivo = gerarNomeArquivo(nome);
 
-    div.innerHTML = `
-      <img src="imagens/${arquivo}.jpg">
-      <p>${nome}</p>
-    `;
+    /* AQUI ESTÁ A CORREÇÃO */
+    if(floresComVideo.includes(nome)){
+      div.innerHTML = `
+        <video autoplay muted loop playsinline>
+          <source src="imagens/${arquivo}.mp4" type="video/mp4">
+        </video>
+        <p>${nome}</p>
+      `;
+    } else {
+      div.innerHTML = `
+        <img src="imagens/${arquivo}.jpg">
+        <p>${nome}</p>
+      `;
+    }
 
     div.onclick = () => {
       div.classList.toggle("selecionado");
@@ -341,7 +357,8 @@ function removerItem(nome){
 }
 
 function limparSelecao(){
-  document.querySelectorAll(".item.selecionado").forEach(i=>i.classList.remove("selecionado"));
+  document.querySelectorAll(".item.selecionado")
+    .forEach(i=>i.classList.remove("selecionado"));
   atualizar();
 }
 
