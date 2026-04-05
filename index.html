@@ -31,7 +31,7 @@ body {
   width: 100%;
   height: 1px;
   background-color: rgba(255,255,255,0.4);
-  box-shadow: 0 2px 0 rgba(255,255,255,0.3);
+  box-shadow: 0 1px 0 rgba(255,255,255,0.3);
   margin-top: 4px;
 }
 
@@ -80,7 +80,7 @@ body {
 
 /* Card selecionado */
 .item.selecionado {
-  background: rgba(58, 54, 24, 0.15);
+  background: rgba(58, 80, 30, 0.15);
   box-shadow: inset 0 0 8px rgba(0,0,0,0.2);
 }
 
@@ -97,7 +97,7 @@ img, video { width: 100%; border-radius: 8px; }
   display: flex;
   flex-direction: column;
   gap: 10px;
-  position: relative;
+  z-index: 10;
 }
 
 /* Linhas decorativas escuras acima da base */
@@ -106,8 +106,8 @@ img, video { width: 100%; border-radius: 8px; }
   display: block;
   width: 100%;
   height: 1px;
-  background-color: rgba(58,54,24,0.5);
-  box-shadow: 0 2px 0 rgba(58,54,24,0.4);
+  background-color: rgba(0,0,0,0.4);
+  box-shadow: 0 1px 0 rgba(0,0,0,0.3);
   margin-bottom: 8px;
 }
 
@@ -116,7 +116,8 @@ img, video { width: 100%; border-radius: 8px; }
   border: none;
   border-radius: 16px;
   padding: 10px;
-  background: rgba(58,54,24,0.15);
+  background: rgba(58, 80, 30, 0.15);
+  z-index: 5;
 }
 .topo-caixa { display: flex; justify-content: space-between; align-items: center; }
 .caixa-selecao h3 { margin: 0; font-size: 14px; }
@@ -136,7 +137,7 @@ img, video { width: 100%; border-radius: 8px; }
   margin-top: 8px;
 }
 .tag {
-  background: rgba(58,54,24,0.15);
+  background: rgba(58, 80, 30, 0.15);
   border: none;
   border-radius: 20px;
   padding: 5px 10px;
@@ -280,6 +281,7 @@ function renderCatalogo(){
         selecionados.add(nome);
       }
       atualizar();
+      renderCatalogo();
       buscaInput.value = "";
       mostrarTodasIDs();
     });
