@@ -73,12 +73,13 @@ body {
   border: 1px solid #eee;
   cursor: pointer;
   transition: all 0.2s ease;
+  box-shadow: 0 6px 14px rgba(58,80,30,0.15); /* sombra externa padrão */
 }
 .item p { text-align: center; font-size: 14px; margin-top: 8px; font-weight: 500; }
-.item:hover { transform: translateY(-3px); box-shadow: 0 6px 14px rgba(0,0,0,0.12); }
+.item:hover { transform: translateY(-3px); box-shadow: 0 6px 14px rgba(58,80,30,0.2); }
 .item:active { transform: scale(0.97); }
 
-/* Card selecionado */
+/* Card selecionado: sombra interna e fundo levemente escuro */
 .item.selecionado {
   background: rgba(58, 80, 30, 0.15);
   box-shadow: inset 0 0 8px rgba(0,0,0,0.2);
