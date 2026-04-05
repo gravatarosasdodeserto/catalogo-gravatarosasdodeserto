@@ -42,16 +42,18 @@ body {
 .subtitulo { margin: 0; font-size: 13px; color: #d6d6d6; }
 
 /* Linhas decorativas do cabeçalho */
+.topbar::before,
 .topbar::after {
   content: '';
   position: absolute;
-  left: 15px; right: 15px;
-  bottom: 5px;
-  height: 4px;
-  background: linear-gradient(to bottom, #d6d6d6 1px, #ffffff 1px);
-  background-size: 100% 2px;
-  z-index: 2;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: #d6d6d6;
 }
+
+.topbar::before { top: 4px; }   /* linha superior mais em cima */
+.topbar::after { bottom: 4px; } /* linha inferior mais embaixo */
 
 .instrucao {
   max-width: 600px;
@@ -115,16 +117,18 @@ img, video { width: 100%; border-radius: 8px; }
 }
 
 /* Linhas decorativas do rodapé */
-.botoes-acoes::before {
+.botoes-acoes::before,
+.botoes-acoes::after {
   content: '';
   position: absolute;
-  left: 15px; right: 15px;
-  top: 0;
-  height: 4px;
-  background: linear-gradient(to bottom, #3a3618 1px, #1f1c0d 1px);
-  background-size: 100% 2px;
-  z-index: 2;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: #3a3618;
 }
+
+.botoes-acoes::before { top: 4px; }  /* linha superior do rodapé mais baixa */
+.botoes-acoes::after { top: 8px; }   /* linha inferior do rodapé ainda mais baixa */
 
 .caixa-selecao {
   display: none;
