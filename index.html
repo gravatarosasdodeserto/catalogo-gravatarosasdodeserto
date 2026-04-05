@@ -96,34 +96,7 @@ img, video {
   border-radius: 8px;
 }
 
-/* CAIXA SELEÇÃO */
-.caixa-selecao {
-  position: fixed;
-  bottom: 110px;
-  left: 20px;
-  right: 20px;
-  max-width: 400px;
-  margin: auto;
-  border: 2px solid #3a3618;
-  border-radius: 16px;
-  padding: 10px;
-  background: #f8f5f0;
-  display: none;
-}
-
-.caixa-selecao h3 {
-  margin: 0 0 5px;
-  font-size: 14px;
-  text-align: center;
-}
-#listaSelecionadas {
-  text-align: center;
-  font-size: 13px;
-  line-height: 1.5;
-  margin-top: 5px;
-}
-
-/* BOTÕES */
+/* BOTÕES FIXOS */
 .botoes-acoes {
   position: fixed;
   bottom: 0;
@@ -131,8 +104,53 @@ img, video {
   right: 0;
   padding: 10px;
   background: #f8f5f0;
+  box-shadow: 0 -4px 10px rgba(0,0,0,0.1);
 }
 
+/* CAIXA DE SELEÇÃO */
+.caixa-selecao {
+  display: none;
+  border: 2px solid #3a3618;
+  border-radius: 16px;
+  padding: 10px;
+  background: #f8f5f0;
+  margin-bottom: 10px;
+}
+
+.caixa-selecao h3 {
+  margin: 0 0 8px;
+  font-size: 14px;
+  text-align: center;
+}
+
+/* TAGS */
+#listaSelecionadas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: center;
+}
+
+.tag {
+  background: white;
+  border: 1px solid #3a3618;
+  border-radius: 20px;
+  padding: 5px 10px;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.tag button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 12px;
+  color: #3a3618;
+}
+
+/* BOTÕES */
 .botao-whatsapp {
   width: 100%;
   padding: 15px;
@@ -140,18 +158,18 @@ img, video {
   color: white;
   border: none;
   border-radius: 50px;
+  margin-bottom: 5px;
 }
 
 .botao-limpar {
   width: 100%;
   padding: 12px;
-  margin-top: 5px;
   background: white;
   border: 2px solid #3a3618;
 }
 </style>
-
 </head>
+
 <body>
 
 <div class="topbar">
@@ -176,18 +194,21 @@ Escolha as ID(s) das flores e envie pelo WhatsApp.
 
 <div class="catalogo" id="catalogo"></div>
 
-<div class="caixa-selecao">
-  <h3>ID's selecionadas:</h3>
-  <div id="listaSelecionadas"></div>
-</div>
-
 <div class="botoes-acoes">
+
+  <div class="caixa-selecao">
+    <h3>ID's selecionadas:</h3>
+    <div id="listaSelecionadas"></div>
+  </div>
+
   <button class="botao-whatsapp" onclick="enviarWhatsApp()">
     Ver disponibilidade (<span id="contador">0</span>)
   </button>
+
   <button class="botao-limpar" onclick="limparSelecao()">
     Limpar ID(s)
   </button>
+
 </div>
 
 <script>
@@ -224,8 +245,7 @@ const floresComVideo = [
 const catalogo = document.getElementById("catalogo");
 
 function gerarNomeArquivo(nome){
-  return nome
-    .toLowerCase()
+  return nome.toLowerCase()
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
     .replace(/ /g, "-")
@@ -272,15 +292,38 @@ function atualizar(){
   document.getElementById("contador").innerText = total;
 
   let caixa = document.querySelector(".caixa-selecao");
+  let lista = document.getElementById("listaSelecionadas");
 
   if(total > 0){
     caixa.style.display = "block";
+    lista.innerHTML = "";
 
-    document.getElementById("listaSelecionadas").innerHTML =
-      [...selecionados].map(i=>i.dataset.id).join("<br>");
+    selecionados.forEach(item=>{
+      let nome = item.dataset.id;
+
+      let tag = document.createElement("div");
+      tag.className = "tag";
+
+      tag.innerHTML = `
+        ${nome}
+        <button onclick="removerItem('${nome}')">✕</button>
+      `;
+
+      lista.appendChild(tag);
+    });
+
   } else {
     caixa.style.display = "none";
   }
+}
+
+function removerItem(nome){
+  document.querySelectorAll(".item").forEach(item=>{
+    if(item.dataset.id === nome){
+      item.classList.remove("selecionado");
+    }
+  });
+  atualizar();
 }
 
 function limparSelecao(){
