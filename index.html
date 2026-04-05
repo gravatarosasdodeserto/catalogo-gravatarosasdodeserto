@@ -22,7 +22,6 @@ body {
 .topbar {
   background: #3a3618;
   padding: 12px 0;
-  position: relative;
 }
 
 .header {
@@ -32,30 +31,11 @@ body {
   max-width: 600px;
   margin: auto;
   padding: 0 15px;
-  position: relative;
-  z-index: 2;
 }
 
 .logo img { width: 70px; }
 .info-topo h1 { margin: 0; margin-bottom: 2px; color: white; font-size: 18px; }
 .subtitulo { margin: 0; font-size: 13px; color: #d6d6d6; }
-
-/* Linhas decorativas no cabeçalho */
-.linha-cabecalho {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  z-index: 1;
-}
-.linha-cabecalho span {
-  display: block;
-  height: 1px;
-  background: #d6d6d6;
-}
 
 .instrucao {
   max-width: 600px;
@@ -83,15 +63,15 @@ body {
   border: 1px solid #eee;
   cursor: pointer;
   transition: all 0.2s ease;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.08); /* sombra externa */
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
 }
 .item p { text-align: center; font-size: 14px; margin-top: 8px; font-weight: 500; }
 .item:hover { transform: translateY(-3px); box-shadow: 0 6px 14px rgba(0,0,0,0.12); }
 .item:active { transform: scale(0.97); }
 
 .item.selecionado {
-  box-shadow: inset 0 4px 10px rgba(58,54,24,0.2); /* sombra interna */
-  background: rgba(58, 54, 24, 0.08); /* leve escurecimento */
+  background: rgba(58, 54, 24, 0.08);
+  box-shadow: inset 0 4px 10px rgba(58,54,24,0.2);
 }
 
 img, video { width: 100%; border-radius: 8px; }
@@ -107,24 +87,6 @@ img, video { width: 100%; border-radius: 8px; }
   display: flex;
   flex-direction: column;
   gap: 10px;
-  z-index: 5;
-}
-
-/* Linhas decorativas do rodapé */
-.linha-rodape {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  z-index: 1;
-}
-.linha-rodape span {
-  display: block;
-  height: 1px;
-  background: #3a3618;
 }
 
 .caixa-selecao {
@@ -133,7 +95,6 @@ img, video { width: 100%; border-radius: 8px; }
   background: white;
   border-radius: 12px;
   padding: 10px;
-  margin-bottom: 8px;
 }
 
 .topo-caixa { display: flex; justify-content: space-between; align-items: center; }
@@ -184,8 +145,7 @@ img, video { width: 100%; border-radius: 8px; }
   letter-spacing: 0.3px;
 }
 
-/* Espaçamento extra entre busca e linhas de rodapé */
-.busca-container { display: flex; justify-content: center; margin-top: 10px; } 
+.busca-container { display: flex; justify-content: center; } 
 .busca {
   width: 100%;
   max-width: 500px;
@@ -211,10 +171,6 @@ img, video { width: 100%; border-radius: 8px; }
       <p class="subtitulo">Enxertos de Adenium Obesum</p>
     </div>
   </div>
-  <div class="linha-cabecalho">
-    <span></span>
-    <span></span>
-  </div>
 </div>
 
 <p class="instrucao">
@@ -225,10 +181,6 @@ Depois é só clicar em <strong>“Ver disponibilidade”</strong> para falar di
 <div class="catalogo" id="catalogo"></div>
 
 <div class="botoes-acoes">
-  <div class="linha-rodape">
-    <span></span>
-    <span></span>
-  </div>
 
   <div class="caixa-selecao">
     <div class="topo-caixa">
@@ -245,6 +197,7 @@ Depois é só clicar em <strong>“Ver disponibilidade”</strong> para falar di
   <button class="botao-whatsapp" onclick="enviarWhatsApp()">
     Ver disponibilidade (<span id="contador">0</span>)
   </button>
+
 </div>
 
 <script>
