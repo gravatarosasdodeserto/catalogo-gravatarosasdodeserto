@@ -295,28 +295,28 @@ function renderCatalogo(lista){
     let arquivo = gerarNomeArquivo(nome);
 
     if(floresComVideo.includes(nome)){
-      div.innerHTML = `
-        <video autoplay muted loop playsinline preload="metadata">
-          <source src="imagens/${arquivo}.mp4" type="video/mp4">
-        </video>
-        <p>${nome}</p>
-      `;
-    } else {
-      div.innerHTML = `
-      <img loading="lazy" src="imagens/${arquivo}.jpg">
-      <p>${nome}</p>
-      `;
-    
-  div.onclick = () => {
+  div.innerHTML = `
+    <video autoplay muted loop playsinline preload="metadata">
+      <source src="imagens/${arquivo}.mp4" type="video/mp4">
+    </video>
+    <p>${nome}</p>
+  `;
+} else {
+  div.innerHTML = `
+    <img loading="lazy" src="imagens/${arquivo}.jpg">
+    <p>${nome}</p>
+  `;
+}
+
+/* CLICK FORA DO IF (vale pra ambos) */
+div.onclick = () => {
   div.classList.toggle("selecionado");
   atualizar();
 
   if (navigator.vibrate) {
-  navigator.vibrate([30, 20, 30]);
+    navigator.vibrate([30, 20, 30]);
   }
-    
 };
-
     catalogo.appendChild(div);
   });
 }
