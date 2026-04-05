@@ -10,6 +10,7 @@
 
 <style>
 * { box-sizing: border-box; }
+
 body {
   font-family: 'Poppins', sans-serif;
   background: #f8f5f0;
@@ -17,9 +18,12 @@ body {
   padding-bottom: 200px;
   overflow-x: hidden;
 }
+
+/* Topbar */
 .topbar {
   background: #3a3618;
   padding: 12px 0;
+  position: relative;
 }
 .header {
   display: flex;
@@ -32,6 +36,19 @@ body {
 .logo img { width: 70px; }
 .info-topo h1 { margin: 0; margin-bottom: 2px; color: white; font-size: 18px; }
 .subtitulo { margin: 0; font-size: 13px; color: #d6d6d6; }
+
+/* Linhas decorativas no topo */
+.topbar::after {
+  content: "";
+  position: absolute;
+  bottom: 8px; /* um pouco afastado */
+  left: 0;
+  width: 100%;
+  height: 6px; /* soma das duas linhas: 2px + 4px */
+  background: linear-gradient(to bottom, #d6d6d6 2px, #bfbf90 4px); 
+}
+
+/* Instrução */
 .instrucao {
   max-width: 600px;
   margin: 15px auto;
@@ -43,6 +60,8 @@ body {
   line-height: 1.5;
   color: #444;
 }
+
+/* Catálogo */
 .catalogo {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
@@ -61,14 +80,17 @@ body {
 .item:hover { transform: translateY(-3px); box-shadow: 0 6px 14px rgba(0,0,0,0.12); }
 .item:active { transform: scale(0.97); }
 
+/* Seleção elegante e premium */
 .item.selecionado {
-  background: #ece8d5; /* tom claro puxado para o verde do cabeçalho */
+  background: rgba(58,54,24,0.07); /* leve overlay puxando o verde do topo */
   box-shadow: 0 4px 10px rgba(58,54,24,0.1);
   transition: background 0.3s, box-shadow 0.3s;
   border: 1px solid #eee; /* borda padrão */
 }
+
 img, video { width: 100%; border-radius: 8px; }
 
+/* Base / ações */
 .botoes-acoes {
   position: fixed;
   bottom: 0;
@@ -81,12 +103,14 @@ img, video { width: 100%; border-radius: 8px; }
   flex-direction: column;
   gap: 10px;
 }
+
+/* Caixa seleção */
 .caixa-selecao {
   display: none;
   border: none;
   border-radius: 16px;
   padding: 10px;
-  background: #ece8d5; /* mesmo tom dos cards selecionados */
+  background: rgba(58,54,24,0.07); /* mesmo overlay dos cards selecionados */
 }
 .topo-caixa { display: flex; justify-content: space-between; align-items: center; }
 .caixa-selecao h3 { margin: 0; font-size: 14px; }
@@ -122,6 +146,8 @@ img, video { width: 100%; border-radius: 8px; }
   font-size: 12px;
   color: #3a3618;
 }
+
+/* Botão WhatsApp */
 .botao-whatsapp {
   width: 100%;
   padding: 15px;
@@ -132,6 +158,8 @@ img, video { width: 100%; border-radius: 8px; }
   font-weight: 600;
   letter-spacing: 0.3px;
 }
+
+/* Busca */
 .busca-container { display: flex; justify-content: center; }
 .busca {
   width: 100%;
@@ -142,6 +170,18 @@ img, video { width: 100%; border-radius: 8px; }
   background: #f8f5f0;
   font-size: 14px;
   text-align: center;
+}
+
+/* Linhas decorativas base */
+.botoes-acoes::before {
+  content: "";
+  position: absolute;
+  top: 0; /* parte superior da base */
+  left: 0;
+  width: 100%;
+  height: 6px; /* duas linhas juntas: 2px + 4px */
+  background: linear-gradient(to bottom, #bfbf90 2px, #d6d6d6 4px);
+  pointer-events: none;
 }
 </style>
 </head>
@@ -232,8 +272,6 @@ function renderCatalogo(){
     let div = document.createElement("div");
     div.className = "item";
     div.dataset.id = nome;
-
-    // Mantém selecionados com o destaque
     if(selecionados.has(nome)) div.classList.add("selecionado");
 
     let arquivo = gerarNomeArquivo(nome);
@@ -244,13 +282,11 @@ function renderCatalogo(){
     }
 
     div.addEventListener("click", ()=>{
-      // Adiciona ao Set sem remover outros
       selecionados.add(nome);
+      div.classList.add("selecionado"); // destaque imediato
       atualizar();
       buscaInput.value = ""; 
       mostrarTodasIDs(); 
-      // Atualiza a classe visual
-      renderCatalogo();
     });
 
     catalogo.appendChild(div);
