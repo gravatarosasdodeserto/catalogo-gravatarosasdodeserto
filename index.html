@@ -9,11 +9,16 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
 
 <style>
+* {
+  box-sizing: border-box;
+}
+
 body {
   font-family: 'Poppins', sans-serif;
   background: #f8f5f0;
   margin: 0;
   padding-bottom: 200px;
+  overflow-x: hidden; /* REMOVE LARGURA EXTRA */
 }
 
 /* HEADER */
@@ -49,16 +54,20 @@ body {
 /* BUSCA */
 .busca-container {
   max-width: 600px;
-  margin: 10px auto;
+  margin: 12px auto;
   padding: 0 15px;
+  display: flex;
+  justify-content: center;
 }
 
 .busca {
   width: 100%;
-  padding: 10px;
+  max-width: 500px;
+  padding: 12px;
   border-radius: 25px;
   border: 2px solid #3a3618;
   background: #f8f5f0;
+  font-size: 14px;
 }
 
 /* INSTRUÇÃO */
@@ -68,6 +77,10 @@ body {
   padding: 15px;
   background: white;
   border-radius: 12px;
+  text-align: center;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #444;
 }
 
 /* CATÁLOGO */
@@ -128,7 +141,7 @@ img, video {
   font-size: 14px;
 }
 
-/* BOTÃO LIMPAR DENTRO */
+/* BOTÃO LIMPAR */
 .btn-limpar-tudo {
   background: none;
   border: none;
@@ -197,7 +210,8 @@ img, video {
 </div>
 
 <p class="instrucao">
-Escolha as ID(s) das flores e envie pelo WhatsApp.
+Escolha as ID(s) das flores que você mais gostou 🌸<br><br>
+Depois é só clicar em <strong>“Ver disponibilidade”</strong> para falar direto no WhatsApp e receber informações de valores, fotos atualizadas e envio dos enxertos.
 </p>
 
 <div class="catalogo" id="catalogo"></div>
@@ -205,12 +219,10 @@ Escolha as ID(s) das flores e envie pelo WhatsApp.
 <div class="botoes-acoes">
 
   <div class="caixa-selecao">
-    
     <div class="topo-caixa">
       <h3>ID's selecionadas:</h3>
       <button class="btn-limpar-tudo" onclick="limparSelecao()">Limpar tudo</button>
     </div>
-
     <div id="listaSelecionadas"></div>
   </div>
 
@@ -221,7 +233,7 @@ Escolha as ID(s) das flores e envie pelo WhatsApp.
 </div>
 
 <script>
-const flores = [
+const flores = [/* MANTIDO COMPLETO */
 "AÇUCENA (MUTANTE)","AKACHI","AMATTA","ARYA","BLOODY MARY","BP-116",
 "BRANCA DE NEVE","BRIDAL BOUQUET","CANAN 55","CANAN 170","CAPIXABA",
 "CÉU ESTRELADO","CÉU ESTRELADO VARIEGATA","COPENHAGEN","DAFNE","COCA-COLA",
@@ -246,11 +258,6 @@ const flores = [
 "VIÚVA NEGRA","VOLCANO","W59","YÚ JIǍO"
 ];
 
-const floresComVideo = [
-"AÇUCENA (MUTANTE)",
-"LILAC FROST (MUTANTE)"
-];
-
 const catalogo = document.getElementById("catalogo");
 
 function gerarNomeArquivo(nome){
@@ -267,23 +274,14 @@ function renderCatalogo(lista){
   lista.forEach(nome=>{
     let div = document.createElement("div");
     div.className = "item";
-    div.setAttribute("data-id", nome);
+    div.dataset.id = nome;
 
     let arquivo = gerarNomeArquivo(nome);
 
-    if(floresComVideo.includes(nome)){
-      div.innerHTML = `
-        <video autoplay muted loop playsinline>
-          <source src="imagens/${arquivo}.mp4">
-        </video>
-        <p>${nome}</p>
-      `;
-    } else {
-      div.innerHTML = `
-        <img src="imagens/${arquivo}.jpg">
-        <p>${nome}</p>
-      `;
-    }
+    div.innerHTML = `
+      <img src="imagens/${arquivo}.jpg">
+      <p>${nome}</p>
+    `;
 
     div.onclick = () => {
       div.classList.toggle("selecionado");
@@ -355,7 +353,12 @@ function enviarWhatsApp(){
     return;
   }
 
-  let mensagem = "Olá!\n\nTenho interesse em:\n\n- " + ids.join("\n- ");
+  let texto = ids.length === 1
+    ? "Tenho interesse no enxerto da seguinte flor:\n\n- "
+    : "Tenho interesse nos enxertos das seguintes variedades:\n\n- ";
+
+  let mensagem = "Olá! 😊\n\n" + texto + ids.join("\n- ");
+
   let url = "https://wa.me/5581992665421?text=" + encodeURIComponent(mensagem);
 
   window.open(url, "_blank");
