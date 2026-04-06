@@ -41,13 +41,14 @@ body {
 .info-topo h1 { margin: 0; margin-bottom: 2px; color: white; font-size: 18px; }
 .subtitulo { margin: 0; font-size: 13px; color: #d6d6d6; }
 
+/* Linha decorativa no cabeçalho */
 .topbar::after {
   content: '';
   position: absolute;
-  left: 0; right: 0; bottom: 0;
-  height: 4px;
-  background: linear-gradient(to bottom, #d6d6d6 1px, #f8f5f0 1px);
-  background-size: 100% 2px;
+  left: 0; right: 0;
+  bottom: 6px; /* pouco acima da base */
+  height: 2px;
+  background: #f8f5f0; /* bege claro */
 }
 
 .instrucao {
