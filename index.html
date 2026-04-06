@@ -83,6 +83,12 @@ body {
   font-weight: 500;
 }
 
+.item video, .item img {
+  width: 100%;
+  border-radius: 8px;
+  display: block;
+}
+  
 .estoque {
   text-align: center;
   font-size: 12px;
@@ -300,10 +306,12 @@ function renderCatalogo(){
       : `Enxertos disponíveis: 0 (pode encomendar)`;
 
     div.innerHTML = `
-      <img src="imagens/${arquivo}.jpg" onerror="this.src='imagens/sem-foto.jpg'">
-      <p>${nome}</p>
-      <div class="estoque">${texto}</div>
-    `;
+  <video src="videos/${arquivo}.mp4" poster="imagens/${arquivo}.jpg" muted loop playsinline
+         onerror="this.outerHTML='<img src=&quot;imagens/${arquivo}.jpg&quot; onerror=&quot;this.src=&quot;imagens/sem-foto.jpg&quot;&quot;>'">
+  </video>
+  <p>${nome}</p>
+  <div class="estoque">${texto}</div>
+`;
 
     div.onclick = ()=>{
       if(selecionados.has(nome)) selecionados.delete(nome);
