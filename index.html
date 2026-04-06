@@ -325,7 +325,15 @@ function atualizar(){
   }
 
   document.getElementById("contador").innerText = selecionados.size;
-  renderCatalogo();
+  document.querySelectorAll(".item").forEach(div => {
+  const nome = div.dataset.id;
+
+  if (selecionados.has(nome)) {
+    div.classList.add("selecionado");
+  } else {
+    div.classList.remove("selecionado");
+  }
+});
 }
 
 function removerItem(nome){
