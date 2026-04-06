@@ -21,7 +21,7 @@ body {
 
 .topbar {
   background: #3a3618;
-  padding: 12px 0 16px 0; /* aumenta um pouco embaixo */
+  padding: 12px 0 16px 0;
   position: relative;
 }
 
@@ -44,10 +44,12 @@ body {
 .topbar::after {
   content: '';
   position: absolute;
-  left: 0; right: 0; bottom: 0;
+  left: 0; right: 0;
+  bottom: 4px;
   height: 4px;
   background: linear-gradient(to bottom, #d6d6d6 1px, #f8f5f0 1px);
   background-size: 100% 2px;
+  z-index: 2;
 }
 .instrucao {
   max-width: 600px;
