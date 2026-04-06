@@ -172,7 +172,6 @@ img { width: 100%; border-radius: 8px; }
 .oculto {
   display: none;
 }
-
 /* MENSAGEM NADA ENCONTRADO */
 .nada-encontrado {
   text-align: center;
@@ -209,9 +208,8 @@ img { width: 100%; border-radius: 8px; }
 
   <input type="text" id="busca" class="busca" placeholder="Buscar por ID...">
 
-  <!-- ALTERAÇÃO AQUI -->
-  <button id="botaoWhatsApp" class="botao-whatsapp oculto" onclick="enviarWhatsApp()">
-  Pedir informações
+  <button class="botao-whatsapp oculto" onclick="enviarWhatsApp()">
+    Pedir informações (<span id="contador">0</span>)
   </button>
 
 </div>
@@ -310,6 +308,8 @@ buscaInput.addEventListener("input", ()=>{
     msg.className = "nada-encontrado";
     msg.innerText = "Nada encontrado";
     catalogo.appendChild(msg);
+
+    // 🔥 FORÇA SCROLL PRO TOPO
     catalogo.scrollIntoView({behavior: "smooth", block: "start"});
   }
 
@@ -340,144 +340,15 @@ function atualizar(){
   const total = selecionados.size;
   document.getElementById("contador").innerText = total;
 
-  const botao = document.getElementById("botaoWhatsApp");
-
-  if(total === 0){
-    botao.classList.add("oculto");
-<script>
-const flores = [
-"AÇUCENA (MUTANTE)","AKACHI","AMATTA","ARYA","BLOODY MARY","BP-116",
-"BRANCA DE NEVE","BRIDAL BOUQUET","CANAN 55","CANAN 170","CAPIXABA",
-"CÉU ESTRELADO","CÉU ESTRELADO VARIEGATA","COPENHAGEN","DAFNE","DIỆU CHÂU","COCA-COLA",
-"DOUBLE STAR","DUQUESA","EGG ROLL","ELARA","ELLIE","EV19-XANADÚ",
-"FERRARI","GOLDEN FAITH","GRAPE CHOCOLATE","GUARÁ PITANGA",
-"GTA-AIKA","GTA-BOLD","GTA-CANDY CRUSH","GTA-CÓSMICA","GTA-CREPÚSCULO",
-"GTA-DESERT DOLL","GTA-DIANA","GTA-EMMA FROST","GTA-FAY","GTA-FLORZINHA",
-"GTA-FLUTTERSHY","GTA-FRACTA","GTA-GOLDEN PINK","GTA-ICE DRAGON",
-"GTA-KIMBERLY","GTA-LITTLE KISS","GTA-LOLLIPOP BLACK","GTA-LYSSA",
-"GTA-LYTA","GTA-MISS GRAVATÁ","GTA-NYX","GTA-PERONA","GTA-PINK VENOM",
-"GTA-PINKIE PIE","GTA-RED COMETS","GTA-RED STORM","GTA-RED WIDOW",
-"GTA-SANSA","GTA-SHE HA","GTA-SUN CLUSTER","GTA-SWEET BLUSH",
-"GTA-TRINITY","GTA-TRUE FAITH","GTA-YUNA","HELENA","INDIGO GLAZE",
-"INFINITY","JHULLY","JULIUS CAESAR","KING OF KINGS","KINDLY","L-06",
-"LAILA","LILAC FROST (MUTANTE)","LM-440","LM-50","LM2","LUNA",
-"MAGNIFICAT","MARIA","MIDNIGHT","MỘNG CẦM","MORAN","NANCY","NEMO",
-"NORALINE","NUSA","P-200","PATHUMMA","PEONY","PHARAOH","PURPLE BLUE",
-"QUEEN RAY","RF-001","RF-002","RIHANNA","ROMANTIC EDGE","SANTA CLAUS",
-"SATURNO","SENNA","SIENA","SOCHI","SOPHIA","STAR CLUSTER","SWALLOW",
-"RC-04","THAMIRES","THE SECRET OF VICTORIA","TRIPLE WISH","TROPICAL","TS-69",
-"TS-222","TS-330","TW4","UNPARALLELED","VARIEGATA","VAMPIRA",
-"VIÚVA NEGRA","VOLCANO","W59","YÚ JIǍO"
-];
-
-const estoque = {};
-flores.forEach(nome => estoque[nome] = 0);
-
-const catalogo = document.getElementById("catalogo");
-const buscaInput = document.getElementById("busca");
-let selecionados = new Set();
-
-function gerarNomeArquivo(nome){
-  return nome.toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/ /g, "-")
-    .replace(/[()]/g, "");
-}
-
-function renderCatalogo(){
-  catalogo.innerHTML = "";
-
-  flores.forEach(nome=>{
-    let div = document.createElement("div");
-    div.className = "item";
-
-    if(selecionados.has(nome)) div.classList.add("selecionado");
-
-    let arquivo = gerarNomeArquivo(nome);
-    let qtd = estoque[nome];
-
-    let texto = qtd > 0
-      ? `Enxertos disponíveis: ${qtd} (envio imediato)`
-      : `Enxertos disponíveis: 0 (pode encomendar)`;
-
-    div.innerHTML = `
-      <img src="imagens/${arquivo}.jpg" onerror="this.src='imagens/sem-foto.jpg'">
-      <p>${nome}</p>
-      <div class="estoque">${texto}</div>
-    `;
-
-    div.onclick = ()=>{
-      if(selecionados.has(nome)) selecionados.delete(nome);
-      else selecionados.add(nome);
-
-      atualizar();
-      buscaInput.value = "";
-      mostrarTodas();
-    };
-
-    catalogo.appendChild(div);
-  });
-}
-
-buscaInput.addEventListener("input", ()=>{
-  let termo = buscaInput.value.toLowerCase();
-  let encontrados = [];
-
-  document.querySelectorAll(".item").forEach(div=>{
-    let match = div.innerText.toLowerCase().includes(termo);
-    div.style.display = match ? "block" : "none";
-    if(match) encontrados.push(div);
-  });
-
-  let aviso = document.querySelector(".nada-encontrado");
-  if(aviso) aviso.remove();
-
-  if(encontrados.length === 0 && termo !== ""){
-    let msg = document.createElement("div");
-    msg.className = "nada-encontrado";
-    msg.innerText = "Nada encontrado";
-    catalogo.appendChild(msg);
-  }
-
-  if(encontrados.length > 0){
-    encontrados[0].scrollIntoView({behavior: "smooth", block: "center"});
-  }
-});
-
-function atualizar(){
-  const caixa = document.querySelector(".caixa-selecao");
-  const lista = document.getElementById("listaSelecionadas");
-
-  lista.innerHTML = "";
-
-  if(selecionados.size > 0){
-    caixa.style.display = "block";
-
-    selecionados.forEach(nome=>{
-      let tag = document.createElement("div");
-      tag.className = "tag";
-      tag.innerHTML = `${nome} <button onclick="removerItem('${nome}')">×</button>`;
-      lista.appendChild(tag);
-    });
-  } else {
-    caixa.style.display = "none";
-  }
-
-  const total = selecionados.size;
-  const botao = document.getElementById("botaoWhatsApp");
-
+  const botao = document.querySelector(".botao-whatsapp");
   if(total === 0){
     botao.classList.add("oculto");
   } else {
     botao.classList.remove("oculto");
   }
+  botao.innerHTML = `Pedir informações do(s) <span id="contador">${total}</span> selecionado(s)`;
 
-  botao.textContent = total === 1
-  ? "Pedir informação sobre a ID selecionada"
-  : `Pedir informações das ${total} ID's selecionadas`;
-
-  renderCatalogo(); // <- atualiza a classe .selecionado nos cards
+  renderCatalogo();
 }
 
 function removerItem(nome){
@@ -492,8 +363,6 @@ function limparSelecao(){
 
 function mostrarTodas(){
   document.querySelectorAll(".item").forEach(div=>div.style.display="block");
-  let aviso = document.querySelector(".nada-encontrado");
-  if(aviso) aviso.remove();
 }
 
 function enviarWhatsApp(){
