@@ -337,11 +337,7 @@ function atualizar(){
 
   const botao = document.querySelector(".botao-whatsapp");
 
-  if(total === 1){
-    botao.innerHTML = `Pedir informações do <span id="contador">${total}</span> selecionado`;
-  } else {
-    botao.innerHTML = `Pedir informações dos <span id="contador">${total}</span> selecionados`;
-  }
+  botao.innerHTML = `Pedir informações do(s) <span id="contador">${total}</span> selecionado(s)`;
 
   renderCatalogo();
 }
