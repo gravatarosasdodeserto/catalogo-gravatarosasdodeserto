@@ -16,12 +16,11 @@ body {
   background: #f8f5f0;
   margin: 0;
   padding-bottom: 200px;
-  overflow-x: hidden;
 }
 
 .topbar {
   background: #3a3618;
-  padding: 12px 0 16px 0;
+  padding: 12px 0;
 }
 
 .header {
@@ -37,15 +36,6 @@ body {
 
 .info-topo h1 { margin: 0; color: white; font-size: 18px; }
 .subtitulo { margin: 0; font-size: 13px; color: #d6d6d6; }
-
-.instrucao {
-  max-width: 600px;
-  margin: 15px auto;
-  padding: 15px;
-  background: white;
-  border-radius: 12px;
-  text-align: center;
-}
 
 .catalogo {
   display: grid;
@@ -63,54 +53,57 @@ body {
 }
 
 .item.selecionado {
-  background: rgba(58, 54, 24, 0.15);
-}
-
-img, video {
-  width: 100%;
-  border-radius: 8px;
+  background: rgba(58,54,24,0.15);
 }
 
 .item p {
   text-align: center;
-  margin-top: 8px;
+  font-size: 14px;
+  margin: 8px 0 2px 0;
   font-weight: 500;
 }
 
 .estoque {
-  font-size: 12px;
-  margin-top: 4px;
   text-align: center;
+  font-size: 12px;
+  color: #3a3618;
+  margin-bottom: 4px;
 }
 
-.disponivel { color: green; }
-.indisponivel { color: #a67c00; }
+img { width: 100%; border-radius: 8px; }
 
 .botoes-acoes {
   position: fixed;
   bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 10px;
+  width: 100%;
   background: #f8f5f0;
+  padding: 10px;
 }
 
-.botao-whatsapp {
-  width: 100%;
-  padding: 15px;
-  background: #3a3618;
-  color: white;
-  border: none;
-  border-radius: 50px;
+.caixa-selecao {
+  display: none;
+  background: white;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.tag {
+  font-size: 12px;
 }
 
 .busca {
   width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+}
+
+.botao-whatsapp {
+  width: 100%;
   padding: 12px;
-  border-radius: 25px;
-  border: 2px solid #3a3618;
-  margin-bottom: 10px;
-  text-align: center;
+  background: #3a3618;
+  color: white;
+  border: none;
+  border-radius: 30px;
 }
 </style>
 </head>
@@ -127,27 +120,15 @@ img, video {
   </div>
 </div>
 
-<p class="instrucao">
-Escolha as ID(s) das flores e clique em <strong>Ver disponibilidade</strong>.
-</p>
-
 <div class="catalogo" id="catalogo"></div>
 
 <div class="botoes-acoes">
 
-  <div class="linha-rodape"></div>
-
   <div class="caixa-selecao">
-    <div class="topo-caixa">
-      <h3>ID's selecionadas:</h3>
-      <button onclick="limparSelecao()">Limpar tudo</button>
-    </div>
     <div id="listaSelecionadas"></div>
   </div>
 
-  <div class="busca-container">
-    <input type="text" id="busca" class="busca" placeholder="Buscar por ID da flor...">
-  </div>
+  <input type="text" id="busca" class="busca" placeholder="Buscar por ID...">
 
   <button class="botao-whatsapp" onclick="enviarWhatsApp()">
     Pedir informações / encomendar (<span id="contador">0</span>)
@@ -181,132 +162,11 @@ const flores = [
 "VIÚVA NEGRA","VOLCANO","W59","YÚ JIǍO"
 ];
 
-const floresComVideo = ["AÇUCENA (MUTANTE)","LILAC FROST (MUTANTE)"];
-
-const estoque = {
-"AÇUCENA (MUTANTE)": 0,
-"AKACHI": 0,
-"AMATTA": 0,
-"ARYA": 0,
-"BLOODY MARY": 0,
-"BP-116": 0,
-"BRANCA DE NEVE": 0,
-"BRIDAL BOUQUET": 0,
-"CANAN 55": 0,
-"CANAN 170": 0,
-"CAPIXABA": 0,
-"CÉU ESTRELADO": 0,
-"CÉU ESTRELADO VARIEGATA": 0,
-"COPENHAGEN": 0,
-"DAFNE": 0,
-"DIỆU CHÂU": 0,
-"COCA-COLA": 0,
-"DOUBLE STAR": 0,
-"DUQUESA": 0,
-"EGG ROLL": 0,
-"ELARA": 0,
-"ELLIE": 0,
-"EV19-XANADÚ": 0,
-"FERRARI": 0,
-"GOLDEN FAITH": 0,
-"GRAPE CHOCOLATE": 0,
-"GUARÁ PITANGA": 0,
-"GTA-AIKA": 0,
-"GTA-BOLD": 0,
-"GTA-CANDY CRUSH": 0,
-"GTA-CÓSMICA": 0,
-"GTA-CREPÚSCULO": 0,
-"GTA-DESERT DOLL": 0,
-"GTA-DIANA": 0,
-"GTA-EMMA FROST": 0,
-"GTA-FAY": 0,
-"GTA-FLORZINHA": 0,
-"GTA-FLUTTERSHY": 0,
-"GTA-FRACTA": 0,
-"GTA-GOLDEN PINK": 0,
-"GTA-ICE DRAGON": 0,
-"GTA-KIMBERLY": 0,
-"GTA-LITTLE KISS": 0,
-"GTA-LOLLIPOP BLACK": 0,
-"GTA-LYSSA": 0,
-"GTA-LYTA": 0,
-"GTA-MISS GRAVATÁ": 0,
-"GTA-NYX": 0,
-"GTA-PERONA": 0,
-"GTA-PINK VENOM": 0,
-"GTA-PINKIE PIE": 0,
-"GTA-RED COMETS": 0,
-"GTA-RED STORM": 0,
-"GTA-RED WIDOW": 0,
-"GTA-SANSA": 0,
-"GTA-SHE HA": 0,
-"GTA-SUN CLUSTER": 0,
-"GTA-SWEET BLUSH": 0,
-"GTA-TRINITY": 0,
-"GTA-TRUE FAITH": 0,
-"GTA-YUNA": 0,
-"HELENA": 0,
-"INDIGO GLAZE": 0,
-"INFINITY": 0,
-"JHULLY": 0,
-"JULIUS CAESAR": 0,
-"KING OF KINGS": 0,
-"KINDLY": 0,
-"L-06": 0,
-"LAILA": 0,
-"LILAC FROST (MUTANTE)": 0,
-"LM-440": 0,
-"LM-50": 0,
-"LM2": 0,
-"LUNA": 0,
-"MAGNIFICAT": 0,
-"MARIA": 0,
-"MIDNIGHT": 0,
-"MỘNG CẦM": 0,
-"MORAN": 0,
-"NANCY": 0,
-"NEMO": 0,
-"NORALINE": 0,
-"NUSA": 0,
-"P-200": 0,
-"PATHUMMA": 0,
-"PEONY": 0,
-"PHARAOH": 0,
-"PURPLE BLUE": 0,
-"QUEEN RAY": 0,
-"RF-001": 0,
-"RF-002": 0,
-"RIHANNA": 0,
-"ROMANTIC EDGE": 0,
-"SANTA CLAUS": 0,
-"SATURNO": 0,
-"SENNA": 0,
-"SIENA": 0,
-"SOCHI": 0,
-"SOPHIA": 0,
-"STAR CLUSTER": 0,
-"SWALLOW": 0,
-"RC-04": 0,
-"THAMIRES": 0,
-"THE SECRET OF VICTORIA": 0,
-"TRIPLE WISH": 0,
-"TROPICAL": 0,
-"TS-69": 0,
-"TS-222": 0,
-"TS-330": 0,
-"TW4": 0,
-"UNPARALLELED": 0,
-"VARIEGATA": 0,
-"VAMPIRA": 0,
-"VIÚVA NEGRA": 0,
-"VOLCANO": 0,
-"W59": 0,
-"YÚ JIǍO": 0
-};
+const estoque = {};
+flores.forEach(nome => estoque[nome] = 0);
 
 const catalogo = document.getElementById("catalogo");
 const buscaInput = document.getElementById("busca");
-
 let selecionados = new Set();
 
 function gerarNomeArquivo(nome){
@@ -327,53 +187,30 @@ function renderCatalogo(){
     if(selecionados.has(nome)) div.classList.add("selecionado");
 
     let arquivo = gerarNomeArquivo(nome);
-    let qtd = estoque[nome] ?? 0;
+    let qtd = estoque[nome];
 
     let texto = qtd > 0
       ? `Enxertos disponíveis: ${qtd} (envio imediato)`
       : `Enxertos disponíveis: 0 (pode encomendar)`;
 
-    let classe = qtd > 0 ? "estoque disponivel" : "estoque indisponivel";
-
-    if(floresComVideo.includes(nome)){
-      div.innerHTML = `
-        <video autoplay muted loop playsinline>
-          <source src="imagens/${arquivo}.mp4">
-        </video>
-        <p>${nome}</p>
-        <small class="${classe}">${texto}</small>
-      `;
-    } else {
-      div.innerHTML = `
-        <img src="imagens/${arquivo}.jpg" onerror="this.src='imagens/sem-foto.jpg'">
-        <p>${nome}</p>
-        <small class="${classe}">${texto}</small>
-      `;
-    }
+    div.innerHTML = `
+      <img src="imagens/${arquivo}.jpg" onerror="this.src='imagens/sem-foto.jpg'">
+      <p>${nome}</p>
+      <div class="estoque">${texto}</div>
+    `;
 
     div.onclick = ()=>{
-  if(selecionados.has(nome)) selecionados.delete(nome);
-  else selecionados.add(nome);
+      if(selecionados.has(nome)) selecionados.delete(nome);
+      else selecionados.add(nome);
 
-  atualizar();
-
-  // 🔥 limpa a busca
-  buscaInput.value = "";
-
-  // 🔥 mostra tudo novamente
-  mostrarTodasIDs();
-};
+      atualizar();
+      buscaInput.value = "";
+      mostrarTodas();
+    };
 
     catalogo.appendChild(div);
   });
 }
-
-buscaInput.addEventListener("input", ()=>{
-  const termo = buscaInput.value.toLowerCase();
-  document.querySelectorAll(".item").forEach(div=>{
-    div.style.display = div.innerText.toLowerCase().includes(termo) ? "block" : "none";
-  });
-});
 
 function atualizar(){
   const caixa = document.querySelector(".caixa-selecao");
@@ -385,20 +222,36 @@ function atualizar(){
     caixa.style.display = "block";
 
     selecionados.forEach(nome=>{
-      const tag = document.createElement("div");
+      let tag = document.createElement("div");
       tag.className = "tag";
-      tag.innerHTML = `${nome} <button onclick="removerItem('${nome}')">✕</button>`;
+      tag.innerText = nome;
       lista.appendChild(tag);
     });
-
   } else {
     caixa.style.display = "none";
   }
 
   document.getElementById("contador").innerText = selecionados.size;
-
   renderCatalogo();
 }
+
+function mostrarTodas(){
+  document.querySelectorAll(".item").forEach(div=>div.style.display="block");
+}
+
+buscaInput.addEventListener("input", ()=>{
+  let termo = buscaInput.value.toLowerCase();
+
+  document.querySelectorAll(".item").forEach(div=>{
+    div.style.display = div.innerText.toLowerCase().includes(termo) ? "block" : "none";
+  });
+});
+
+function enviarWhatsApp(){
+  alert("Simulação");
+}
+
+renderCatalogo();
 </script>
 
 </body>
