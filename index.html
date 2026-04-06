@@ -169,6 +169,14 @@ img { width: 100%; border-radius: 8px; }
   border-radius: 30px;
   font-weight: 600;
 }
+
+/* MENSAGEM NADA ENCONTRADO */
+.nada-encontrado {
+  text-align: center;
+  padding: 20px;
+  font-size: 14px;
+  color: #777;
+}
 </style>
 </head>
 
@@ -280,6 +288,31 @@ function renderCatalogo(){
   });
 }
 
+buscaInput.addEventListener("input", ()=>{
+  let termo = buscaInput.value.toLowerCase();
+  let encontrados = [];
+
+  document.querySelectorAll(".item").forEach(div=>{
+    let match = div.innerText.toLowerCase().includes(termo);
+    div.style.display = match ? "block" : "none";
+    if(match) encontrados.push(div);
+  });
+
+  let aviso = document.querySelector(".nada-encontrado");
+  if(aviso) aviso.remove();
+
+  if(encontrados.length === 0 && termo !== ""){
+    let msg = document.createElement("div");
+    msg.className = "nada-encontrado";
+    msg.innerText = "Nada encontrado";
+    catalogo.appendChild(msg);
+  }
+
+  if(encontrados.length > 0){
+    encontrados[0].scrollIntoView({behavior: "smooth", block: "center"});
+  }
+});
+
 function atualizar(){
   const caixa = document.querySelector(".caixa-selecao");
   const lista = document.getElementById("listaSelecionadas");
@@ -292,10 +325,7 @@ function atualizar(){
     selecionados.forEach(nome=>{
       let tag = document.createElement("div");
       tag.className = "tag";
-      tag.innerHTML = `
-        ${nome}
-        <button onclick="removerItem('${nome}')">×</button>
-      `;
+      tag.innerHTML = `${nome} <button onclick="removerItem('${nome}')">×</button>`;
       lista.appendChild(tag);
     });
   } else {
@@ -303,15 +333,16 @@ function atualizar(){
   }
 
   const total = selecionados.size;
-document.getElementById("contador").innerText = total;
+  document.getElementById("contador").innerText = total;
 
-const botao = document.querySelector(".botao-whatsapp");
+  const botao = document.querySelector(".botao-whatsapp");
 
-if(total === 1){
-  botao.innerHTML = `Pedir informações do <span id="contador">${total}</span> selecionado`;
-} else {
-  botao.innerHTML = `Pedir informações dos <span id="contador">${total}</span> selecionados`;
-}
+  if(total === 1){
+    botao.innerHTML = `Pedir informações do <span id="contador">${total}</span> selecionado`;
+  } else {
+    botao.innerHTML = `Pedir informações dos <span id="contador">${total}</span> selecionados`;
+  }
+
   renderCatalogo();
 }
 
@@ -328,14 +359,6 @@ function limparSelecao(){
 function mostrarTodas(){
   document.querySelectorAll(".item").forEach(div=>div.style.display="block");
 }
-
-buscaInput.addEventListener("input", ()=>{
-  let termo = buscaInput.value.toLowerCase();
-
-  document.querySelectorAll(".item").forEach(div=>{
-    div.style.display = div.innerText.toLowerCase().includes(termo) ? "block" : "none";
-  });
-});
 
 function enviarWhatsApp(){
   if(selecionados.size === 0){
