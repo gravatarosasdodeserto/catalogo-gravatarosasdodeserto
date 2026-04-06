@@ -208,7 +208,7 @@ img { width: 100%; border-radius: 8px; }
 
   <input type="text" id="busca" class="busca" placeholder="Buscar por ID...">
 
-  <button class="botao-whatsapp" onclick="enviarWhatsApp()">
+  <button class="botao-whatsapp oculto" onclick="enviarWhatsApp()">
     Pedir informações (<span id="contador">0</span>)
   </button>
 
@@ -391,6 +391,7 @@ function enviarWhatsApp(){
 }
 
 renderCatalogo();
+atualizar();
 </script>
 
 </body>
