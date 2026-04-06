@@ -25,6 +25,24 @@ body {
   position: relative;
 }
 
+/* Linha superior e inferior do cabeçalho */
+.topbar::before {
+  content: '';
+  position: absolute;
+  top: 6px; /* distância da margem superior */
+  left: 0; right: 0;
+  height: 2px;
+  background: #f8f5f0;
+}
+.topbar::after {
+  content: '';
+  position: absolute;
+  bottom: 6px; /* distância da margem inferior */
+  left: 0; right: 0;
+  height: 2px;
+  background: #f8f5f0;
+}
+
 .header {
   display: flex;
   align-items: center;
@@ -40,16 +58,6 @@ body {
 
 .info-topo h1 { margin: 0; margin-bottom: 2px; color: white; font-size: 18px; }
 .subtitulo { margin: 0; font-size: 13px; color: #d6d6d6; }
-
-/* Linha decorativa no cabeçalho */
-.topbar::after {
-  content: '';
-  position: absolute;
-  left: 0; right: 0;
-  bottom: 6px; /* pouco acima da base */
-  height: 2px;
-  background: #f8f5f0; /* bege claro */
-}
 
 .instrucao {
   max-width: 600px;
