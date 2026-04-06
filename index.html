@@ -245,11 +245,20 @@ function renderCatalogo(){
 
     const arquivo = gerarNomeArquivo(nome);
 
-    div.innerHTML = `
-      <img loading="lazy" src="imagens/${arquivo}.jpg"
-      onerror="this.onerror=null; this.src='imagens/sem-foto.jpg'">
-      <p>${nome}</p>
-    `;
+    if(nome === "AÇUCENA (MUTANTE)" || nome === "LILAC FROST (MUTANTE)"){
+      div.innerHTML = `
+        <video autoplay muted loop playsinline preload="metadata">
+          <source src="imagens/${arquivo}.mp4" type="video/mp4">
+        </video>
+        <p>${nome}</p>
+      `;
+    } else {
+      div.innerHTML = `
+        <img loading="lazy" src="imagens/${arquivo}.jpg"
+        onerror="this.onerror=null; this.src='imagens/sem-foto.jpg'">
+        <p>${nome}</p>
+      `;
+    }
 
     div.onclick = ()=>{
       selecionados.has(nome) ? selecionados.delete(nome) : selecionados.add(nome);
