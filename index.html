@@ -211,7 +211,7 @@ img { width: 100%; border-radius: 8px; }
 
   <!-- ALTERAÇÃO AQUI -->
   <button id="botaoWhatsApp" class="botao-whatsapp oculto" onclick="enviarWhatsApp()">
-    Pedir informações (<span id="contador">0</span>)
+  Pedir informações
   </button>
 
 </div>
@@ -348,11 +348,9 @@ function atualizar(){
     botao.classList.remove("oculto");
   }
 
-  if(total === 1){
-    botao.innerHTML = `Pedir informação sobre a ID selecionada`;
-  } else {
-    botao.innerHTML = `Pedir informações das ${total} ID's selecionadas`;
-  }
+  botao.textContent = total === 1
+  ? "Pedir informação sobre a ID selecionada"
+  : `Pedir informações das ${total} ID's selecionadas`;
 }
 
 function removerItem(nome){
