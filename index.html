@@ -18,19 +18,18 @@ body {
   padding-bottom: 200px;
 }
 
+/* CABEÇALHO COM AS DUAS LINHAS FINAS */
 .topbar {
   background: linear-gradient(180deg, #434019 0%, #3a3618 100%);
-  /* Ajustamos o padding para a linha não ficar colada no texto */
-  padding: 15px 0; 
+  padding: 15px 0;
   position: sticky;
   top: 0;
   z-index: 10;
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  /* Linhas na cor do fundo do site (#f8f5f0) */
   border-top: 1px solid #f8f5f0;
   border-bottom: 1px solid #f8f5f0;
-  margin-top: 0; 
 }
-
 
 .header {
   display: flex;
@@ -45,6 +44,29 @@ body {
 
 .info-topo h1 { margin: 0; color: white; font-size: 18px; text-shadow: 0 1px 2px rgba(0,0,0,0.25); }
 .subtitulo { margin: 0; font-size: 13px; color: #d6d6d6; }
+
+/* ESTILO DO TEXTO DE INSTRUÇÕES */
+.instrucoes {
+  max-width: 600px;
+  margin: 25px auto 10px auto;
+  padding: 0 20px;
+  text-align: center;
+  color: #3a3618;
+}
+
+.instrucoes p {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.instrucoes span {
+  font-size: 13px;
+  opacity: 0.8;
+  display: block;
+  margin-top: 5px;
+  line-height: 1.4;
+}
 
 .catalogo {
   display: grid;
@@ -159,7 +181,6 @@ body {
 }
   
 .oculto { display: none; }
-
 .nada-encontrado { text-align: center; padding: 20px; font-size: 14px; color: #777; grid-column: 1 / -1; }
 </style>
 </head>
@@ -174,6 +195,11 @@ body {
       <p class="subtitulo">Enxertos de Adenium Obesum</p>
     </div>
   </div>
+</div>
+
+<div class="instrucoes">
+  <p><strong>Toque nos cards</strong> para selecionar as IDs desejadas.</p>
+  <span>Variedades sem estoque (0) também podem ser encomendadas.</span>
 </div>
 
 <div class="catalogo" id="catalogo"></div>
@@ -259,16 +285,14 @@ function renderCatalogo(){
       ? `Enxertos disponíveis: ${qtd} (envio imediato)`
       : `Enxertos disponíveis: 0 (pode encomendar)`;
 
-        let media = document.createElement("video");
+    let media = document.createElement("video");
     media.src = `imagens/${arquivo}.mp4`;
     media.poster = `imagens/${arquivo}.jpg`;
     media.muted = true;
     media.loop = true;
     media.playsInline = true;
-    media.autoplay = true;
-    media.preload = "auto"; // Força o navegador a começar a baixar o vídeo logo de cara
-    media.setAttribute("muted", ""); // Reforça o mudo para garantir o autoplay instantâneo
-
+    media.autoplay = true;   
+    media.preload = "auto"; // Carregamento antecipado ativado
 
     media.onerror = function(){
       let img = document.createElement("img");
@@ -344,7 +368,7 @@ function atualizar(){
     caixa.style.display = "none";
   }
 
-  // Atualiza apenas as classes sem resetar o HTML do catálogo
+  // Atualiza apenas as classes sem resetar o HTML do catálogo (vídeos não param)
   document.querySelectorAll(".item").forEach(div => {
     const nome = div.getAttribute("data-nome");
     if(selecionados.has(nome)) div.classList.add("selecionado");
