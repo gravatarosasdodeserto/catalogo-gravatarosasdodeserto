@@ -208,19 +208,18 @@ img, video { width: 100%; border-radius: 8px; }
 
 <p class="instrucao">
 Escolha as ID(s) das flores que você mais gostou<br><br>
-Depois é só clicar em <strong>“Ver disponibilidade”</strong> para falar direto no WhatsApp e receber informações de valores, fotos atualizadas e envio dos enxertos.
+Depois clique em <strong>“Ver disponibilidade”</strong>.
 </p>
 
 <div class="catalogo" id="catalogo"></div>
 
 <div class="botoes-acoes">
-
   <div class="linha-rodape"></div>
 
   <div class="caixa-selecao">
     <div class="topo-caixa">
       <h3>ID's selecionadas:</h3>
-      <button class="btn-limpar-tudo" onclick="limparSelecao()">Limpar tudo</button>
+      <button onclick="limparSelecao()">Limpar tudo</button>
     </div>
     <div id="listaSelecionadas"></div>
   </div>
@@ -232,7 +231,6 @@ Depois é só clicar em <strong>“Ver disponibilidade”</strong> para falar di
   <button class="botao-whatsapp" onclick="enviarWhatsApp()">
     Ver disponibilidade (<span id="contador">0</span>)
   </button>
-
 </div>
 
 <script>
