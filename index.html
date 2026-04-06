@@ -25,6 +25,24 @@ body {
   position: relative;
 }
 
+/* Linhas harmônicas no cabeçalho */
+.topbar::before {
+  content: '';
+  position: absolute;
+  left: 0; right: 0;
+  top: 6px; /* pequeno espaço do topo */
+  height: 1px;
+  background: #f8f5f0; /* cor bege claro, mesmo do fundo */
+}
+.topbar::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 0;
+  bottom: 6px; /* pequeno espaço da base */
+  height: 1px;
+  background: #f8f5f0;
+}
+
 .header {
   display: flex;
   align-items: center;
@@ -40,17 +58,6 @@ body {
 
 .info-topo h1 { margin: 0; margin-bottom: 2px; color: white; font-size: 18px; }
 .subtitulo { margin: 0; font-size: 13px; color: #d6d6d6; }
-
-.topbar::before, .topbar::after {
-  content: '';
-  position: absolute;
-  left: 0; right: 0;
-  height: 4px;
-  background: linear-gradient(to bottom, #d6d6d6 1px, #f8f5f0 1px);
-  background-size: 100% 2px;
-}
-.topbar::before { top: 0; }
-.topbar::after { bottom: 0; }
 
 .instrucao {
   max-width: 600px;
@@ -104,15 +111,17 @@ img, video { width: 100%; border-radius: 8px; }
   bottom: 0;
   left: 0;
   right: 0;
-  padding: 10px 15px 15px 15px;
   background: #f8f5f0;
+  box-shadow: 0 -4px 10px rgba(0,0,0,0.1);
   display: flex;
   flex-direction: column;
   gap: 10px;
   z-index: 10;
-  /* Linha escura do rodapé */
+
+  /* Linha escura do rodapé e espaçamento harmônico */
   border-top: 4px solid #3a3618; /* mesma cor do botão */
-  border-radius: 0;
+  padding-top: 15px;  /* espaço entre a linha e os elementos internos */
+  padding-bottom: 15px;
 }
 
 .caixa-selecao {
