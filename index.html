@@ -134,10 +134,25 @@ Escolha as ID(s) das flores e clique em <strong>Ver disponibilidade</strong>.
 <div class="catalogo" id="catalogo"></div>
 
 <div class="botoes-acoes">
-  <input type="text" id="busca" class="busca" placeholder="Buscar por ID...">
+
+  <div class="linha-rodape"></div>
+
+  <div class="caixa-selecao">
+    <div class="topo-caixa">
+      <h3>ID's selecionadas:</h3>
+      <button onclick="limparSelecao()">Limpar tudo</button>
+    </div>
+    <div id="listaSelecionadas"></div>
+  </div>
+
+  <div class="busca-container">
+    <input type="text" id="busca" class="busca" placeholder="Buscar por ID da flor...">
+  </div>
+
   <button class="botao-whatsapp" onclick="enviarWhatsApp()">
-  Pedir informações / encomendar (<span id="contador">0</span>)
-</button>
+    Pedir informações / encomendar (<span id="contador">0</span>)
+  </button>
+
 </div>
 
 <script>
