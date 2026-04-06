@@ -7,7 +7,6 @@
 <title>Catálogo de Flores</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
-
 <style>
 * { box-sizing: border-box; }
 
@@ -88,7 +87,7 @@ body {
   font-weight: 500;
 }
 
-.item:hover { transform: translateY(-3px); box-shadow: 0 6px 14px rgba(0,0,0,0.12); }
+.item:hover { transform: translateY(-3px); }
 .item:active { transform: scale(0.97); }
 
 .item.selecionado {
@@ -123,7 +122,6 @@ img, video { width: 100%; border-radius: 8px; }
 
 .caixa-selecao {
   display: none;
-  border: none;
   border-radius: 16px;
   padding: 10px;
   background: #ffffff;
@@ -150,14 +148,10 @@ img, video { width: 100%; border-radius: 8px; }
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
-  justify-content: flex-start;
   margin-top: 8px;
-  background: transparent;
 }
 
 .tag {
-  background: transparent;
-  border: none;
   padding: 5px 10px;
   font-size: 12px;
   display: flex;
@@ -169,7 +163,6 @@ img, video { width: 100%; border-radius: 8px; }
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 12px;
   color: #3a3618;
 }
 
@@ -181,7 +174,6 @@ img, video { width: 100%; border-radius: 8px; }
   border: none;
   border-radius: 50px;
   font-weight: 600;
-  letter-spacing: 0.3px;
 }
 
 .busca-container { display: flex; justify-content: center; }
@@ -193,22 +185,12 @@ img, video { width: 100%; border-radius: 8px; }
   border-radius: 25px;
   border: 2px solid #3a3618;
   background: #f8f5f0;
-  font-size: 14px;
   text-align: center;
 }
-  .estoque {
-  font-size: 12px;
-  margin-top: 4px;
-  font-weight: 500;
-}
 
-.disponivel {
-  color: green;
-}
-
-.indisponivel {
-  color: #a67c00;
-}
+.estoque { font-size: 12px; margin-top: 4px; }
+.disponivel { color: green; }
+.indisponivel { color: #a67c00; }
 </style>
 </head>
 
