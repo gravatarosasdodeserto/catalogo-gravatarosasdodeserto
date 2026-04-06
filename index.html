@@ -346,7 +346,11 @@ function atualizar(){
 } else {
   botao.classList.remove("oculto");
 }
-  botao.innerHTML = `Pedir informações da(s) <span id="contador">${total}</span> ID's selecionada(s)`;
+  if(total === 1){
+  botao.innerHTML = `Pedir informação sobre a ID selecionada`;
+} else {
+  botao.innerHTML = `Pedir informações das ${total} ID's selecionadas`;
+}
 
   renderCatalogo();
 }
