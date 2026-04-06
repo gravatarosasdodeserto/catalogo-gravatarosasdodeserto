@@ -196,6 +196,19 @@ img, video { width: 100%; border-radius: 8px; }
   font-size: 14px;
   text-align: center;
 }
+  .estoque {
+  font-size: 12px;
+  margin-top: 4px;
+  font-weight: 500;
+}
+
+.disponivel {
+  color: green;
+}
+
+.indisponivel {
+  color: #a67c00;
+}
 </style>
 </head>
 
@@ -269,6 +282,12 @@ const flores = [
 const catalogo = document.getElementById("catalogo");
 const buscaInput = document.getElementById("busca");
 const floresComVideo = ["AÇUCENA (MUTANTE)","LILAC FROST (MUTANTE)"];
+const estoque = {
+  "AÇUCENA (MUTANTE)": 3,
+  "AKACHI": 0,
+  "AMATTA": 5,
+  "ARYA": 2
+};
 let selecionados = new Set();
 
 function gerarNomeArquivo(nome){
@@ -288,12 +307,35 @@ function renderCatalogo(){
     if(selecionados.has(nome)) div.classList.add("selecionado");
 
     let arquivo = gerarNomeArquivo(nome);
-    if(floresComVideo.includes(nome)){
-      div.innerHTML = `<video autoplay muted loop playsinline preload="metadata"><source src="imagens/${arquivo}.mp4" type="video/mp4"></video><p>${nome}</p>`;
-    } else {
-      div.innerHTML = `<img loading="lazy" src="imagens/${arquivo}.jpg" onerror="this.onerror=null; this.src='imagens/sem-foto.jpg'"><p>${nome}</p>`;
-    }
+    let qtd = estoque[nome] ?? 0;
 
+let textoEstoque = qtd > 0
+  ? `Enxertos disponíveis: ${qtd} (envio imediato)`
+  : `Enxertos disponíveis: 0 (pode encomendar)`;
+
+let classeEstoque = qtd > 0 ? "estoque disponivel" : "estoque indisponivel";
+    let qtd = estoque[nome] ?? 0;
+
+let textoEstoque = qtd > 0
+  ? `Enxertos disponíveis: ${qtd} (envio imediato)`
+  : `Enxertos disponíveis: 0 (pode encomendar)`;
+
+if(floresComVideo.includes(nome)){
+  div.innerHTML = `
+    <video autoplay muted loop playsinline preload="metadata">
+      <source src="imagens/${arquivo}.mp4" type="video/mp4">
+    </video>
+    <p>${nome}</p>
+    <small>${textoEstoque}</small>
+  `;
+} else {
+  div.innerHTML = `
+    <img loading="lazy" src="imagens/${arquivo}.jpg" onerror="this.onerror=null; this.src='imagens/sem-foto.jpg'">
+    <p>${nome}</p>
+    <small>${textoEstoque}</small>
+  `;
+}
+    
     div.addEventListener("click", ()=>{
       if(selecionados.has(nome)) selecionados.delete(nome);
       else selecionados.add(nome);
