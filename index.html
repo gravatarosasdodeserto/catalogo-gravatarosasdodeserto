@@ -149,6 +149,12 @@ img, video { width: 100%; border-radius: 8px; }
   border-radius: 50px;
 }
 
+.btn-limpar-tudo {
+  color: #3a3618;
+  font-size: 12px;
+  cursor: pointer;
+  font-weight: 500;
+}
 .busca {
   width: 100%;
   padding: 12px;
@@ -184,7 +190,7 @@ Escolha as flores e clique em <strong>Ver disponibilidade</strong>
   <div class="caixa-selecao">
     <div class="topo-caixa">
       <h3>ID's selecionadas:</h3>
-      <button onclick="limparSelecao()">Limpar</button>
+      <span class="btn-limpar-tudo" onclick="limparSelecao()">Limpar</span>
     </div>
     <div id="listaSelecionadas"></div>
   </div>
