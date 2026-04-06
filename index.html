@@ -313,8 +313,9 @@ let textoEstoque = qtd > 0
   ? `Enxertos disponíveis: ${qtd} (envio imediato)`
   : `Enxertos disponíveis: 0 (pode encomendar)`;
 
-let classeEstoque = qtd > 0 ? "estoque disponivel" : "estoque indisponivel";
-    let qtd = estoque[nome] ?? 0;
+let classeEstoque = qtd > 0 
+  ? "estoque disponivel" 
+  : "estoque indisponivel";
 
 let textoEstoque = qtd > 0
   ? `Enxertos disponíveis: ${qtd} (envio imediato)`
