@@ -227,6 +227,14 @@ const catalogo = document.getElementById("catalogo");
 const buscaInput = document.getElementById("busca");
 let selecionados = new Set();
 
+function gerarNomeArquivo(nome){
+  return nome.toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/ /g, "-")
+    .replace(/[()]/g, "");
+}
+
 function renderCatalogo(){
   catalogo.innerHTML = "";
   flores.forEach(nome=>{
@@ -234,11 +242,20 @@ function renderCatalogo(){
     div.className = "item";
     div.dataset.id = nome;
     if(selecionados.has(nome)) div.classList.add("selecionado");
-    div.innerHTML = `<p>${nome}</p>`;
+
+    const arquivo = gerarNomeArquivo(nome);
+
+    div.innerHTML = `
+      <img loading="lazy" src="imagens/${arquivo}.jpg"
+      onerror="this.onerror=null; this.src='imagens/sem-foto.jpg'">
+      <p>${nome}</p>
+    `;
+
     div.onclick = ()=>{
       selecionados.has(nome) ? selecionados.delete(nome) : selecionados.add(nome);
       atualizar();
     };
+
     catalogo.appendChild(div);
   });
 }
