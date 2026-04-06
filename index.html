@@ -18,7 +18,6 @@ body {
   padding-bottom: 200px;
 }
 
-/* TOPO */
 .topbar {
   background: #3a3618;
   padding: 12px 0;
@@ -38,7 +37,6 @@ body {
 .info-topo h1 { margin: 0; color: white; font-size: 18px; }
 .subtitulo { margin: 0; font-size: 13px; color: #d6d6d6; }
 
-/* CATÁLOGO */
 .catalogo {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
@@ -52,6 +50,11 @@ body {
   border-radius: 12px;
   cursor: pointer;
   box-shadow: 0 6px 14px rgba(0,0,0,0.1);
+  transition: 0.2s;
+}
+
+.item:hover {
+  transform: translateY(-3px);
 }
 
 .item.selecionado {
@@ -74,7 +77,6 @@ body {
 
 img { width: 100%; border-radius: 8px; }
 
-/* RODAPÉ */
 .botoes-acoes {
   position: fixed;
   bottom: 0;
@@ -86,7 +88,7 @@ img { width: 100%; border-radius: 8px; }
   gap: 10px;
 }
 
-/* CAIXA SELEÇÃO */
+/* CAIXA SELECIONADOS */
 .caixa-selecao {
   display: none;
   background: white;
@@ -101,10 +103,13 @@ img { width: 100%; border-radius: 8px; }
   margin-bottom: 6px;
 }
 
-.btn-limpar {
+.topo-caixa span {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.limpar {
   font-size: 12px;
-  border: none;
-  background: none;
   color: #3a3618;
   cursor: pointer;
 }
@@ -117,32 +122,40 @@ img { width: 100%; border-radius: 8px; }
 }
 
 .tag {
-  font-size: 12px;
-  background: #f2f2f2;
-  padding: 5px 8px;
+  font-size: 11px;
+  font-weight: 500;
+  background: rgba(58,54,24,0.08);
   border-radius: 20px;
+  padding: 4px 10px;
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 6px;
 }
 
 .tag button {
-  border: none;
   background: none;
+  border: none;
   cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
   color: #3a3618;
-  font-size: 12px;
+  opacity: 0.7;
+  transition: 0.2s;
+}
+
+.tag button:hover {
+  opacity: 1;
+  transform: scale(1.2);
 }
 
 /* BUSCA */
 .busca {
   width: 100%;
   padding: 12px;
-  border-radius: 25px; /* 🔥 agora arredondado */
+  border-radius: 25px;
   border: 2px solid #3a3618;
-  background: #f8f5f0;
   text-align: center;
-  font-size: 14px;
+  background: #f8f5f0;
 }
 
 /* BOTÃO */
@@ -153,7 +166,7 @@ img { width: 100%; border-radius: 8px; }
   color: white;
   border: none;
   border-radius: 30px;
-  font-weight: 500;
+  font-weight: 600;
 }
 </style>
 </head>
@@ -176,8 +189,8 @@ img { width: 100%; border-radius: 8px; }
 
   <div class="caixa-selecao">
     <div class="topo-caixa">
-      <strong>ID's selecionadas</strong>
-      <button class="btn-limpar" onclick="limparSelecao()">Limpar tudo</button>
+      <span>ID's selecionadas:</span>
+      <span class="limpar" onclick="limparSelecao()">Limpar tudo</span>
     </div>
     <div id="listaSelecionadas"></div>
   </div>
@@ -216,13 +229,8 @@ const flores = [
 "VIÚVA NEGRA","VOLCANO","W59","YÚ JIǍO"
 ];
 
-const estoque = {
-  "CÉU ESTRELADO": 2
-};
-
-flores.forEach(nome=>{
-  if(estoque[nome] === undefined) estoque[nome] = 0;
-});
+const estoque = {};
+flores.forEach(nome => estoque[nome] = 0);
 
 const catalogo = document.getElementById("catalogo");
 const buscaInput = document.getElementById("busca");
@@ -281,23 +289,19 @@ function atualizar(){
     caixa.style.display = "block";
 
     selecionados.forEach(nome=>{
-      let tag = document.createElement("span");
+      let tag = document.createElement("div");
       tag.className = "tag";
-
       tag.innerHTML = `
         ${nome}
-        <button onclick="removerItem('${nome}')">✕</button>
+        <button onclick="removerItem('${nome}')">×</button>
       `;
-
       lista.appendChild(tag);
     });
-
   } else {
     caixa.style.display = "none";
   }
 
   document.getElementById("contador").innerText = selecionados.size;
-
   renderCatalogo();
 }
 
