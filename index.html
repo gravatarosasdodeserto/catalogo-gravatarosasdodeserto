@@ -28,13 +28,6 @@ body {
   border-bottom: 1px solid rgba(255,255,255,0.06);
 }
 
-.info-topo h1 {
-  margin: 0;
-  color: white;
-  font-size: 18px;
-  text-shadow: 0 1px 2px rgba(0,0,0,0.25);
-}
-  
 .header {
   display: flex;
   align-items: center;
@@ -46,16 +39,14 @@ body {
 
 .logo img { width: 70px; }
 
-.info-topo h1 { margin: 0; color: white; font-size: 18px; }
+.info-topo h1 { margin: 0; color: white; font-size: 18px; text-shadow: 0 1px 2px rgba(0,0,0,0.25); }
 .subtitulo { margin: 0; font-size: 13px; color: #d6d6d6; }
 
-/* Catálogo com leve “afundado” */
 .catalogo {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
   gap: 15px;
   padding: 15px;
-  /* sombra interna pra dar profundidade */
   box-shadow: inset 0 6px 12px -6px rgba(0,0,0,0.08);
 }
 
@@ -70,11 +61,8 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 
-.item:hover {
-  transform: translateY(-3px);
-}
+.item:hover { transform: translateY(-3px); }
 
-/* EFEITO APERTADO NO CARD */
 .item:active {
   transform: translateY(1px) scale(0.98);
   box-shadow: inset 0 3px 6px rgba(0,0,0,0.15), 0 2px 4px rgba(0,0,0,0.1);
@@ -85,31 +73,18 @@ body {
   box-shadow: inset 0 2px 5px rgba(0,0,0,0.1), 0 4px 10px rgba(0,0,0,0.1);
 }
 
-.item p {
-  text-align: center;
-  font-size: 14px;
-  margin: 8px 0 2px 0;
-  font-weight: 500;
-}
+.item p { text-align: center; font-size: 14px; margin: 8px 0 2px 0; font-weight: 500; }
 
 .item video, .item img {
   width: 100%;
   border-radius: 8px;
   display: block;
-  background: #eee;   /* fundo enquanto carrega */
+  background: #eee;
   pointer-events: none;
 }
   
-.estoque {
-  text-align: center;
-  font-size: 12px;
-  color: #3a3618;
-  margin-bottom: 4px;
-}
+.estoque { text-align: center; font-size: 12px; color: #3a3618; margin-bottom: 4px; }
 
-img { width: 100%; border-radius: 8px; }
-
-/* Rodapé flutuante */
 .botoes-acoes {
   position: fixed;
   bottom: 0;
@@ -125,25 +100,9 @@ img { width: 100%; border-radius: 8px; }
   z-index: 10;
 }
 
-/* CAIXA SELECIONADOS */
-.caixa-selecao {
-  display: none;
-  background: white;
-  padding: 10px;
-  border-radius: 12px;
-}
-
-.topo-caixa {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 6px;
-}
-
-.topo-caixa span {
-  font-size: 13px;
-  font-weight: 500;
-}
+.caixa-selecao { display: none; background: white; padding: 10px; border-radius: 12px; }
+.topo-caixa { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+.topo-caixa span { font-size: 13px; font-weight: 500; }
 
 .limpar {
   font-size: 12px;
@@ -152,23 +111,15 @@ img { width: 100%; border-radius: 8px; }
   padding: 4px 8px;
   border-radius: 6px;
   transition: 0.15s ease;
-  user-select: none;
-  -webkit-tap-highlight-color: transparent;
 }
 
-/* EFEITO APERTADO NO LIMPAR */
 .limpar:active {
   background: rgba(58,54,24,0.1);
   box-shadow: inset 0 2px 4px rgba(0,0,0,0.15);
   transform: translateY(1px);
 }
 
-/* TAGS */
-#listaSelecionadas {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
+#listaSelecionadas { display: flex; flex-wrap: wrap; gap: 6px; }
 
 .tag {
   font-size: 11px;
@@ -183,91 +134,29 @@ img { width: 100%; border-radius: 8px; }
 }
 
 .tag button {
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: 600;
-  color: #3a3618;
-  opacity: 0.7;
-  transition: 0.15s ease;
-  border-radius: 50%;
-  width: 18px;
-  height: 18px;
-  line-height: 18px;
-  padding: 0;
-  user-select: none;
-  -webkit-tap-highlight-color: transparent;
+  background: none; border: none; cursor: pointer; font-size: 14px;
+  font-weight: 600; color: #3a3618; opacity: 0.7; width: 18px; height: 18px;
 }
 
-.tag button:hover {
-  opacity: 1;
-  background: rgba(58,54,24,0.08);
-}
-
-/* EFEITO APERTADO NO X DA TAG */
-.tag button:active {
-  opacity: 1;
-  background: rgba(58,54,24,0.15);
-  box-shadow: inset 0 2px 3px rgba(0,0,0,0.2);
-  transform: scale(0.9);
-}
-
-/* BUSCA */
 .busca {
-  width: 100%;
-  padding: 12px;
-  border-radius: 25px;
-  border: 2px solid #3a3618;
-  text-align: center;
-  background: #f8f5f0;
-  font-family: 'Poppins', sans-serif;
-  transition: 0.15s ease;
+  width: 100%; padding: 12px; border-radius: 25px; border: 2px solid #3a3618;
+  text-align: center; background: #f8f5f0; font-family: 'Poppins', sans-serif;
 }
 
-.busca:focus {
-  outline: none;
-  box-shadow: inset 0 2px 5px rgba(0,0,0,0.1);
-}
-
-/* BOTÃO WHATSAPP COM EFEITO PROFUNDO */
 .botao-whatsapp {
-  width: 100%;
-  padding: 14px;
-  background: linear-gradient(180deg, #434019 0%, #3a3618 100%);
-  color: white;
-  border: none;
-  border-radius: 30px;
-  font-weight: 600;
-  font-family: 'Poppins', sans-serif;
-  cursor: pointer;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.1);
-  transition: all 0.15s ease;
-  user-select: none;
-  -webkit-tap-highlight-color: transparent;
+  width: 100%; padding: 14px; background: linear-gradient(180deg, #434019 0%, #3a3618 100%);
+  color: white; border: none; border-radius: 30px; font-weight: 600; cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.25);
 }
 
-.botao-whatsapp:hover {
-  box-shadow: 0 6px 14px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.15);
-}
-
-/* EFEITO APERTADO REAL */
 .botao-whatsapp:active {
   transform: translateY(2px);
   box-shadow: inset 0 4px 8px rgba(0,0,0,0.3), 0 1px 2px rgba(0,0,0,0.2);
 }
   
-.oculto {
-  display: none;
-}
-/* MENSAGEM NADA ENCONTRADO */
-.nada-encontrado {
-  text-align: center;
-  padding: 20px;
-  font-size: 14px;
-  color: #777;
-  grid-column: 1 / -1;
-}
+.oculto { display: none; }
+
+.nada-encontrado { text-align: center; padding: 20px; font-size: 14px; color: #777; grid-column: 1 / -1; }
 </style>
 </head>
 
@@ -286,7 +175,6 @@ img { width: 100%; border-radius: 8px; }
 <div class="catalogo" id="catalogo"></div>
 
 <div class="botoes-acoes">
-
   <div class="caixa-selecao">
     <div class="topo-caixa">
       <span>ID's selecionadas:</span>
@@ -300,7 +188,6 @@ img { width: 100%; border-radius: 8px; }
   <button class="botao-whatsapp oculto" onclick="enviarWhatsApp()">
     Pedir informações (<span id="contador">0</span>)
   </button>
-
 </div>
 
 <script>
@@ -335,7 +222,6 @@ const estoque = {
   "AMATTA": 1,
   "ARYA": 0,
   "BLOODY MARY": 0,
-  
 };
 
 flores.forEach(nome => {
@@ -360,6 +246,7 @@ function renderCatalogo(){
   flores.forEach(nome=>{
     let div = document.createElement("div");
     div.className = "item";
+    div.setAttribute("data-nome", nome);
     if(selecionados.has(nome)) div.classList.add("selecionado");
 
     let arquivo = gerarNomeArquivo(nome);
@@ -424,12 +311,10 @@ buscaInput.addEventListener("input", ()=>{
     msg.className = "nada-encontrado";
     msg.innerText = "Nada encontrado";
     catalogo.appendChild(msg);
-
-    // 🔥 FORÇA SCROLL PRO TOPO
     catalogo.scrollIntoView({behavior: "smooth", block: "start"});
   }
 
-  if(encontrados.length > 0){
+  if(encontrados.length > 0 && termo !== ""){
     encontrados[0].scrollIntoView({behavior: "smooth", block: "center"});
   }
 });
@@ -442,7 +327,6 @@ function atualizar(){
 
   if(selecionados.size > 0){
     caixa.style.display = "block";
-
     selecionados.forEach(nome=>{
       let tag = document.createElement("div");
       tag.className = "tag";
@@ -453,6 +337,13 @@ function atualizar(){
     caixa.style.display = "none";
   }
 
+  // Atualiza apenas as classes sem resetar o HTML do catálogo
+  document.querySelectorAll(".item").forEach(div => {
+    const nome = div.getAttribute("data-nome");
+    if(selecionados.has(nome)) div.classList.add("selecionado");
+    else div.classList.remove("selecionado");
+  });
+
   const total = selecionados.size;
   const botao = document.querySelector(".botao-whatsapp");
 
@@ -460,14 +351,10 @@ function atualizar(){
     botao.classList.add("oculto");
   } else {
     botao.classList.remove("oculto");
-    if(total === 1){
-      botao.innerHTML = `Pedir informações da ID selecionada`;
-    } else {
-      botao.innerHTML = `Pedir informações das ${total} ID's selecionadas`;
-    }
+    botao.innerHTML = total === 1 
+      ? `Pedir informações da ID selecionada` 
+      : `Pedir informações das ${total} ID's selecionadas`;
   }
-
-  renderCatalogo();
 }
 
 function removerItem(nome){
@@ -485,13 +372,9 @@ function mostrarTodas(){
 }
 
 function enviarWhatsApp(){
-  if(selecionados.size === 0){
-    alert("Selecione pelo menos uma flor!");
-    return;
-  }
+  if(selecionados.size === 0) return;
 
   let ids = Array.from(selecionados);
-
   let texto = ids.length === 1
     ? "Tenho interesse em adquirir enxerto da seguinte variedade:\n\n- "
     : "Tenho interesse em adquirir enxertos das seguintes variedades:\n\n- ";
@@ -505,7 +388,6 @@ function enviarWhatsApp(){
   ].join("\n");
 
   let url = "https://wa.me/5581992665421?text=" + encodeURIComponent(mensagem);
-
   window.open(url, "_blank");
 }
 
