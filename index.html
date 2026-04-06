@@ -348,6 +348,98 @@ function atualizar(){
 
 function removerItem(nome){
   selecionados.delete(nome);
+const estoque = {
+  "AÇUCENA (MUTANTE)": 3,
+  "AKACHI": 0,
+  "AMATTA": 5,
+  "ARYA": 2
+};
+
+const catalogo = document.getElementById("catalogo");
+const buscaInput = document.getElementById("busca");
+let selecionados = new Set();
+
+function gerarNomeArquivo(nome){
+  return nome.toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/ /g, "-")
+    .replace(/[()]/g, "");
+}
+
+function renderCatalogo(){
+  catalogo.innerHTML = "";
+
+  flores.forEach(nome=>{
+    let div = document.createElement("div");
+    div.className = "item";
+    div.dataset.id = nome;
+
+    if(selecionados.has(nome)) div.classList.add("selecionado");
+
+    let arquivo = gerarNomeArquivo(nome);
+    let qtd = estoque[nome] ?? 0;
+
+    let textoEstoque = qtd > 0
+      ? `Enxertos disponíveis: ${qtd} (envio imediato)`
+      : `Enxertos disponíveis: 0 (pode encomendar)`;
+
+    let classeEstoque = qtd > 0 ? "estoque disponivel" : "estoque indisponivel";
+
+    if(floresComVideo.includes(nome)){
+      div.innerHTML = `
+        <video autoplay muted loop playsinline preload="metadata">
+          <source src="imagens/${arquivo}.mp4" type="video/mp4">
+        </video>
+        <p>${nome}</p>
+        <small class="${classeEstoque}">${textoEstoque}</small>
+      `;
+    } else {
+      div.innerHTML = `
+        <img loading="lazy" src="imagens/${arquivo}.jpg" onerror="this.onerror=null; this.src='imagens/sem-foto.jpg'">
+        <p>${nome}</p>
+        <small class="${classeEstoque}">${textoEstoque}</small>
+      `;
+    }
+
+    div.onclick = ()=>{
+      if(selecionados.has(nome)) selecionados.delete(nome);
+      else selecionados.add(nome);
+
+      atualizar();
+      buscaInput.value = "";
+      mostrarTodasIDs();
+    };
+
+    catalogo.appendChild(div);
+  });
+}
+
+function atualizar(){
+  const lista = document.getElementById("listaSelecionadas");
+  const caixa = document.querySelector(".caixa-selecao");
+
+  lista.innerHTML = "";
+
+  if(selecionados.size > 0){
+    caixa.style.display = "block";
+
+    selecionados.forEach(nome=>{
+      let tag = document.createElement("div");
+      tag.className = "tag";
+      tag.innerHTML = `${nome} <button onclick="removerItem('${nome}')">✕</button>`;
+      lista.appendChild(tag);
+    });
+  } else {
+    caixa.style.display = "none";
+  }
+
+  document.getElementById("contador").innerText = selecionados.size;
+  renderCatalogo();
+}
+
+function removerItem(nome){
+  selecionados.delete(nome);
   atualizar();
 }
 
@@ -362,21 +454,43 @@ function mostrarTodasIDs(){
 
 buscaInput.addEventListener("input", ()=>{
   const termo = normalizarTexto(buscaInput.value);
+
   document.querySelectorAll(".item").forEach(div=>{
-    div.style.display = normalizarTexto(div.dataset.id).includes(termo) ? "block" : "none";
+    div.style.display =
+      normalizarTexto(div.dataset.id).includes(termo)
+      ? "block" : "none";
   });
 });
 
 function normalizarTexto(texto){
-  return texto.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9 ]/g,"");
+  return texto.toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g,"")
+    .replace(/[^a-z0-9 ]/g,"");
 }
 
 function enviarWhatsApp(){
-  if(selecionados.size===0){ alert("Selecione pelo menos uma flor!"); return; }
+  if(selecionados.size === 0){
+    alert("Selecione pelo menos uma flor!");
+    return;
+  }
+
   let ids = Array.from(selecionados);
-  let texto = ids.length===1 ? "Tenho interesse no enxerto da seguinte flor:\n\n- " : "Tenho interesse nos enxertos das seguintes variedades:\n\n- ";
-  let mensagem = ["Olá!","",""+texto+ids.join("\n- "),"","Poderia me informar valores, disponibilidade e condições de envio?"].join("\n");
+
+  let texto = ids.length === 1
+    ? "Tenho interesse no enxerto da seguinte flor:\n\n- "
+    : "Tenho interesse nos enxertos das seguintes variedades:\n\n- ";
+
+  let mensagem = [
+    "Olá!",
+    "",
+    texto + ids.join("\n- "),
+    "",
+    "Poderia me informar valores e envio?"
+  ].join("\n");
+
   let url = "https://wa.me/5581992665421?text=" + encodeURIComponent(mensagem);
+
   window.open(url, "_blank");
 }
 
