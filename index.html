@@ -41,7 +41,6 @@ body {
 .info-topo h1 { margin: 0; margin-bottom: 2px; color: white; font-size: 18px; }
 .subtitulo { margin: 0; font-size: 13px; color: #d6d6d6; }
 
-/* Linhas decorativas no cabeçalho */
 .topbar::before, .topbar::after {
   content: '';
   position: absolute;
@@ -113,14 +112,15 @@ img, video { width: 100%; border-radius: 8px; }
   z-index: 10;
 }
 
-/* Linha decorativa do rodapé */
-.botoes-acoes::before {
+/* Linha escura do rodapé */
+.botoes-acoes::after {
   content: '';
-  position: absolute;
-  top: 0;
-  left: 0; right: 0;
+  display: block;
   height: 4px;
-  background-color: #3a3618;
+  width: 100%;
+  background-color: #3a3618; /* mesma cor do botão */
+  margin-top: 10px; /* espaçamento harmônico */
+  border-radius: 2px;
 }
 
 .caixa-selecao {
