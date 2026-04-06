@@ -115,9 +115,10 @@ img, video { width: 100%; border-radius: 8px; }
 
 /* Linha do rodapé */
 .linha-rodape {
-  width: 100%;
   height: 2px;
   background: #3a3618;
+  width: calc(100% + 30px); /* compensa os 15px de cada lado */
+  margin-left: -15px;       /* estica pra esquerda */
   margin-bottom: 10px;
 }
 
