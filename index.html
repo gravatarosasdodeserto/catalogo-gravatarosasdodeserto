@@ -361,26 +361,29 @@ buscaInput.addEventListener("input", ()=>{
 });
 
 function atualizar(){
-  document.getElementById("contador").innerText = selecionados.size;
-  renderCatalogo();
-}
+  const caixa = document.querySelector(".caixa-selecao");
+  const lista = document.getElementById("listaSelecionadas");
 
-function enviarWhatsApp(){
-  if(selecionados.size === 0){
-    alert("Selecione pelo menos uma flor!");
-    return;
+  lista.innerHTML = "";
+
+  if(selecionados.size > 0){
+    caixa.style.display = "block";
+
+    selecionados.forEach(nome=>{
+      const tag = document.createElement("div");
+      tag.className = "tag";
+      tag.innerHTML = `${nome} <button onclick="removerItem('${nome}')">✕</button>`;
+      lista.appendChild(tag);
+    });
+
+  } else {
+    caixa.style.display = "none";
   }
 
-  let ids = Array.from(selecionados);
+  document.getElementById("contador").innerText = selecionados.size;
 
-  let mensagem = "Olá!\n\nTenho interesse:\n\n- " + ids.join("\n- ");
-
-  let url = "https://wa.me/5581992665421?text=" + encodeURIComponent(mensagem);
-
-  window.open(url, "_blank");
+  renderCatalogo();
 }
-
-renderCatalogo();
 </script>
 
 </body>
