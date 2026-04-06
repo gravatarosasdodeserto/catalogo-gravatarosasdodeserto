@@ -255,13 +255,16 @@ function renderCatalogo(){
       ? `Enxertos disponíveis: ${qtd} (envio imediato)`
       : `Enxertos disponíveis: 0 (pode encomendar)`;
 
-    let media = document.createElement("video");
+        let media = document.createElement("video");
     media.src = `imagens/${arquivo}.mp4`;
     media.poster = `imagens/${arquivo}.jpg`;
     media.muted = true;
     media.loop = true;
     media.playsInline = true;
-    media.autoplay = true;   
+    media.autoplay = true;
+    media.preload = "auto"; // Força o navegador a começar a baixar o vídeo logo de cara
+    media.setAttribute("muted", ""); // Reforça o mudo para garantir o autoplay instantâneo
+
 
     media.onerror = function(){
       let img = document.createElement("img");
