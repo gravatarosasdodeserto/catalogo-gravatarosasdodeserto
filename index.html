@@ -338,7 +338,28 @@ buscaInput.addEventListener("input", ()=>{
 });
 
 function enviarWhatsApp(){
-  alert("Simulação");
+  if(selecionados.size === 0){
+    alert("Selecione pelo menos uma flor!");
+    return;
+  }
+
+  let ids = Array.from(selecionados);
+
+  let texto = ids.length === 1
+    ? "Tenho interesse em adquirir enxerto da seguinte variedade:\n\n- "
+    : "Tenho interesse em adquirir enxertos das seguintes variedades:\n\n- ";
+
+  let mensagem = [
+    "Olá!",
+    "",
+    texto + ids.join("\n- "),
+    "",
+    "Poderia me dar mais informações? Tenho a seguinte duvida...?"
+  ].join("\n");
+
+  let url = "https://wa.me/5581992665421?text=" + encodeURIComponent(mensagem);
+
+  window.open(url, "_blank");
 }
 
 renderCatalogo();
