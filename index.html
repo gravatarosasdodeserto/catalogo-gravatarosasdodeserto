@@ -295,28 +295,43 @@ function renderCatalogo(){
   flores.forEach(nome=>{
     let div = document.createElement("div");
     div.className = "item";
-
     if(selecionados.has(nome)) div.classList.add("selecionado");
 
     let arquivo = gerarNomeArquivo(nome);
     let qtd = estoque[nome];
-
     let texto = qtd > 0
       ? `Enxertos disponíveis: ${qtd} (envio imediato)`
       : `Enxertos disponíveis: 0 (pode encomendar)`;
 
-    div.innerHTML = `
-  <video src="videos/${arquivo}.mp4" poster="imagens/${arquivo}.jpg" muted loop playsinline
-         onerror="this.outerHTML='<img src=&quot;imagens/${arquivo}.jpg&quot; onerror=&quot;this.src=&quot;imagens/sem-foto.jpg&quot;&quot;>'">
-  </video>
-  <p>${nome}</p>
-  <div class="estoque">${texto}</div>
-`;
+    // cria a mídia separada pra não quebrar aspas no onerror
+    let media = document.createElement("video");
+    media.src = `videos/${arquivo}.mp4`;
+    media.poster = `imagens/${arquivo}.jpg`;
+    media.muted = true;
+    media.loop = true;
+    media.playsInline = true;
+
+    media.onerror = function(){
+      let img = document.createElement("img");
+      img.src = `imagens/${arquivo}.jpg`;
+      img.onerror = function(){ this.src = 'imagens/sem-foto.jpg'; };
+      this.replaceWith(img);
+    };
+
+    let p = document.createElement("p");
+    p.textContent = nome;
+
+    let est = document.createElement("div");
+    est.className = "estoque";
+    est.textContent = texto;
+
+    div.appendChild(media);
+    div.appendChild(p);
+    div.appendChild(est);
 
     div.onclick = ()=>{
       if(selecionados.has(nome)) selecionados.delete(nome);
       else selecionados.add(nome);
-
       atualizar();
       buscaInput.value = "";
       mostrarTodas();
