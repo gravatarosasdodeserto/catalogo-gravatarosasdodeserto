@@ -18,6 +18,7 @@ body {
   padding-bottom: 200px;
 }
 
+/* TOPO */
 .topbar {
   background: #3a3618;
   padding: 12px 0;
@@ -37,6 +38,7 @@ body {
 .info-topo h1 { margin: 0; color: white; font-size: 18px; }
 .subtitulo { margin: 0; font-size: 13px; color: #d6d6d6; }
 
+/* CATÁLOGO */
 .catalogo {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
@@ -72,26 +74,31 @@ body {
 
 img { width: 100%; border-radius: 8px; }
 
+/* RODAPÉ */
 .botoes-acoes {
   position: fixed;
   bottom: 0;
   width: 100%;
   background: #f8f5f0;
-  padding: 10px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
+/* CAIXA SELEÇÃO */
 .caixa-selecao {
   display: none;
   background: white;
   padding: 10px;
-  border-radius: 10px;
-  margin-bottom: 5px;
+  border-radius: 12px;
 }
 
 .topo-caixa {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 5px;
+  align-items: center;
+  margin-bottom: 6px;
 }
 
 .btn-limpar {
@@ -102,10 +109,21 @@ img { width: 100%; border-radius: 8px; }
   cursor: pointer;
 }
 
+/* TAGS */
+#listaSelecionadas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
 .tag {
   font-size: 12px;
-  display: inline-block;
-  margin-right: 6px;
+  background: #f2f2f2;
+  padding: 5px 8px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
 
 .tag button {
@@ -113,21 +131,29 @@ img { width: 100%; border-radius: 8px; }
   background: none;
   cursor: pointer;
   color: #3a3618;
+  font-size: 12px;
 }
 
+/* BUSCA */
 .busca {
   width: 100%;
-  padding: 10px;
-  margin-top: 5px;
+  padding: 12px;
+  border-radius: 25px; /* 🔥 agora arredondado */
+  border: 2px solid #3a3618;
+  background: #f8f5f0;
+  text-align: center;
+  font-size: 14px;
 }
 
+/* BOTÃO */
 .botao-whatsapp {
   width: 100%;
-  padding: 12px;
+  padding: 14px;
   background: #3a3618;
   color: white;
   border: none;
   border-radius: 30px;
+  font-weight: 500;
 }
 </style>
 </head>
@@ -194,11 +220,8 @@ const estoque = {
   "CÉU ESTRELADO": 2
 };
 
-// garante todas com 0 se não tiver definido
-flores.forEach(nome => {
-  if(estoque[nome] === undefined){
-    estoque[nome] = 0;
-  }
+flores.forEach(nome=>{
+  if(estoque[nome] === undefined) estoque[nome] = 0;
 });
 
 const catalogo = document.getElementById("catalogo");
@@ -240,7 +263,6 @@ function renderCatalogo(){
       else selecionados.add(nome);
 
       atualizar();
-
       buscaInput.value = "";
       mostrarTodas();
     };
@@ -302,28 +324,7 @@ buscaInput.addEventListener("input", ()=>{
 });
 
 function enviarWhatsApp(){
-  if(selecionados.size === 0){
-    alert("Selecione pelo menos uma flor!");
-    return;
-  }
-
-  let ids = Array.from(selecionados);
-
-  let texto = ids.length === 1
-    ? "Tenho interesse no enxerto da seguinte flor:\n\n- "
-    : "Tenho interesse nos enxertos das seguintes variedades:\n\n- ";
-
-  let mensagem = [
-    "Olá!",
-    "",
-    texto + ids.join("\n- "),
-    "",
-    "Poderia me informar valores e envio?"
-  ].join("\n");
-
-  let url = "https://wa.me/5581992665421?text=" + encodeURIComponent(mensagem);
-
-  window.open(url, "_blank");
+  alert("Simulação");
 }
 
 renderCatalogo();
