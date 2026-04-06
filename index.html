@@ -302,7 +302,16 @@ function atualizar(){
     caixa.style.display = "none";
   }
 
-  document.getElementById("contador").innerText = selecionados.size;
+  const total = selecionados.size;
+document.getElementById("contador").innerText = total;
+
+const botao = document.querySelector(".botao-whatsapp");
+
+if(total === 1){
+  botao.innerHTML = `Pedir informações do <span id="contador">${total}</span> selecionado`;
+} else {
+  botao.innerHTML = `Pedir informações dos <span id="contador">${total}</span> selecionados`;
+}
   renderCatalogo();
 }
 
