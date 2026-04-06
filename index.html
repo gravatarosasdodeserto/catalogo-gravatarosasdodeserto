@@ -267,11 +267,13 @@ function renderCatalogo(){
         <p>${nome}</p>
       `;
     }
-
+    
     div.onclick = ()=>{
       selecionados.has(nome) ? selecionados.delete(nome) : selecionados.add(nome);
       atualizar();
-    };
+      buscaInput.value = "";
+      mostrarTodasIDs();
+};
 
     catalogo.appendChild(div);
   });
