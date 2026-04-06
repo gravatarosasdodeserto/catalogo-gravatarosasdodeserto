@@ -338,15 +338,18 @@ function atualizar(){
   }
 
   const total = selecionados.size;
-  document.getElementById("contador").innerText = total;
-
   const botao = document.querySelector(".botao-whatsapp");
+
   if(total === 0){
     botao.classList.add("oculto");
   } else {
     botao.classList.remove("oculto");
+    if(total === 1){
+      botao.innerHTML = `Pedir informações do ID selecionado`;
+    } else {
+      botao.innerHTML = `Pedir informações dos ${total} IDs selecionados`;
+    }
   }
-  botao.innerHTML = `Pedir informações do(s) <span id="contador">${total}</span> selecionado(s)`;
 
   renderCatalogo();
 }
