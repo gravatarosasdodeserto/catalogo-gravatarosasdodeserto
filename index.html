@@ -319,7 +319,8 @@ function atualizar(){
     selecionados.forEach(nome=>{
       const tag = document.createElement("div");
       tag.className = "tag";
-      tag.innerHTML = `${nome} <button onclick="removerItem('${nome}')">✕</button>`;
+      tag.innerHTML = `${nome} <button>✕</button>`;
+      tag.querySelector("button").addEventListener("click", () => removerItem(nome));
       lista.appendChild(tag);
     });
   } else {
