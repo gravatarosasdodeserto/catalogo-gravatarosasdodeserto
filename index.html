@@ -337,10 +337,17 @@ function renderCatalogo(){
     }
 
     div.onclick = ()=>{
-      if(selecionados.has(nome)) selecionados.delete(nome);
-      else selecionados.add(nome);
-      atualizar();
-    };
+  if(selecionados.has(nome)) selecionados.delete(nome);
+  else selecionados.add(nome);
+
+  atualizar();
+
+  // 🔥 limpa a busca
+  buscaInput.value = "";
+
+  // 🔥 mostra tudo novamente
+  mostrarTodasIDs();
+};
 
     catalogo.appendChild(div);
   });
