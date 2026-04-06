@@ -350,11 +350,8 @@ function atualizar(){
   botao.innerHTML = `Pedir informação sobre a ID selecionada`;
 } else {
   botao.innerHTML = `Pedir informações das ${total} ID's selecionadas`;
+  }
 }
-
-  renderCatalogo();
-}
-
 function removerItem(nome){
   selecionados.delete(nome);
   atualizar();
