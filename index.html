@@ -329,8 +329,18 @@ const flores = [
 "VIÚVA NEGRA","VOLCANO","W59","YÚ JIǍO"
 ];
 
-const estoque = {};
-flores.forEach(nome => estoque[nome] = 0);
+const estoque = {
+  "AÇUCENA (MUTANTE)": 1,
+  "AKACHI": 0,
+  "AMATTA": 1,
+  "ARYA": 0,
+  "BLOODY MARY": 0,
+  
+};
+
+flores.forEach(nome => {
+  if (!(nome in estoque)) estoque[nome] = 0;
+});
 
 const catalogo = document.getElementById("catalogo");
 const buscaInput = document.getElementById("busca");
