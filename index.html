@@ -306,6 +306,9 @@ buscaInput.addEventListener("input", ()=>{
     msg.className = "nada-encontrado";
     msg.innerText = "Nada encontrado";
     catalogo.appendChild(msg);
+
+    // 🔥 FORÇA SCROLL PRO TOPO
+    catalogo.scrollIntoView({behavior: "smooth", block: "start"});
   }
 
   if(encontrados.length > 0){
