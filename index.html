@@ -313,14 +313,7 @@ let textoEstoque = qtd > 0
   ? `Enxertos disponíveis: ${qtd} (envio imediato)`
   : `Enxertos disponíveis: 0 (pode encomendar)`;
 
-let classeEstoque = qtd > 0 
-  ? "estoque disponivel" 
-  : "estoque indisponivel";
-
-let textoEstoque = qtd > 0
-  ? `Enxertos disponíveis: ${qtd} (envio imediato)`
-  : `Enxertos disponíveis: 0 (pode encomendar)`;
-
+let classeEstoque = qtd > 0 ? "estoque disponivel" : "estoque indisponivel";
 if(floresComVideo.includes(nome)){
   div.innerHTML = `
     <video autoplay muted loop playsinline preload="metadata">
