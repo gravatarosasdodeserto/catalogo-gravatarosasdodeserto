@@ -172,6 +172,7 @@ img { width: 100%; border-radius: 8px; }
 .oculto {
   display: none;
 }
+
 /* MENSAGEM NADA ENCONTRADO */
 .nada-encontrado {
   text-align: center;
@@ -208,7 +209,8 @@ img { width: 100%; border-radius: 8px; }
 
   <input type="text" id="busca" class="busca" placeholder="Buscar por ID...">
 
-  <button class="botao-whatsapp oculto" onclick="enviarWhatsApp()">
+  <!-- ALTERAÇÃO AQUI -->
+  <button id="botaoWhatsApp" class="botao-whatsapp oculto" onclick="enviarWhatsApp()">
     Pedir informações (<span id="contador">0</span>)
   </button>
 
@@ -308,8 +310,6 @@ buscaInput.addEventListener("input", ()=>{
     msg.className = "nada-encontrado";
     msg.innerText = "Nada encontrado";
     catalogo.appendChild(msg);
-
-    // 🔥 FORÇA SCROLL PRO TOPO
     catalogo.scrollIntoView({behavior: "smooth", block: "start"});
   }
 
@@ -340,18 +340,21 @@ function atualizar(){
   const total = selecionados.size;
   document.getElementById("contador").innerText = total;
 
-  const botao = document.querySelector(".botao-whatsapp");
+  const botao = document.getElementById("botaoWhatsApp");
+
   if(total === 0){
-  botao.classList.add("oculto");
-} else {
-  botao.classList.remove("oculto");
-}
+    botao.classList.add("oculto");
+  } else {
+    botao.classList.remove("oculto");
+  }
+
   if(total === 1){
-  botao.innerHTML = `Pedir informação sobre a ID selecionada`;
-} else {
-  botao.innerHTML = `Pedir informações das ${total} ID's selecionadas`;
+    botao.innerHTML = `Pedir informação sobre a ID selecionada`;
+  } else {
+    botao.innerHTML = `Pedir informações das ${total} ID's selecionadas`;
   }
 }
+
 function removerItem(nome){
   selecionados.delete(nome);
   atualizar();
