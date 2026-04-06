@@ -38,7 +38,7 @@ body {
 
 .logo img { width: 70px; }
 
-.info-topo h1 { margin: 0 0 2px 0; color: white; font-size: 18px; }
+.info-topo h1 { margin: 0; margin-bottom: 2px; color: white; font-size: 18px; }
 .subtitulo { margin: 0; font-size: 13px; color: #d6d6d6; }
 
 .topbar::after {
@@ -49,6 +49,7 @@ body {
   bottom: 6px;
   height: 2px;
   background: #d6d6d6;
+  z-index: 2;
 }
 
 .instrucao {
@@ -59,6 +60,7 @@ body {
   border-radius: 12px;
   text-align: center;
   font-size: 14px;
+  line-height: 1.5;
   color: #444;
 }
 
@@ -76,10 +78,17 @@ body {
   border: 1px solid #eee;
   cursor: pointer;
   box-shadow: 0 6px 14px rgba(0,0,0,0.1);
-  transition: 0.2s;
+  transition: all 0.2s ease;
 }
 
-.item:hover { transform: translateY(-3px); }
+.item p {
+  text-align: center;
+  font-size: 14px;
+  margin-top: 8px;
+  font-weight: 500;
+}
+
+.item:hover { transform: translateY(-3px); box-shadow: 0 6px 14px rgba(0,0,0,0.12); }
 .item:active { transform: scale(0.97); }
 
 .item.selecionado {
@@ -95,12 +104,13 @@ img, video { width: 100%; border-radius: 8px; }
   bottom: 0;
   left: 0;
   right: 0;
-  padding: 10px 15px 15px;
+  padding: 10px 15px 15px 15px;
   background: #f8f5f0;
   box-shadow: 0 -4px 10px rgba(0,0,0,0.1);
   display: flex;
   flex-direction: column;
   gap: 10px;
+  z-index: 10;
 }
 
 .linha-rodape {
@@ -108,58 +118,82 @@ img, video { width: 100%; border-radius: 8px; }
   background: #3a3618;
   width: calc(100% + 30px);
   margin-left: -15px;
+  margin-bottom: 10px;
 }
 
 .caixa-selecao {
   display: none;
+  border: none;
   border-radius: 16px;
   padding: 10px;
-  background: #fff;
+  background: #ffffff;
 }
 
 .topo-caixa {
   display: flex;
   justify-content: space-between;
+  align-items: center;
+}
+
+.caixa-selecao h3 { margin: 0; font-size: 14px; }
+
+.btn-limpar-tudo {
+  background: none;
+  border: none;
+  color: #3a3618;
+  font-size: 12px;
+  cursor: pointer;
+  font-weight: 500;
 }
 
 #listaSelecionadas {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
+  justify-content: flex-start;
   margin-top: 8px;
+  background: transparent;
 }
 
 .tag {
-  display: flex;
-  gap: 6px;
+  background: transparent;
+  border: none;
+  padding: 5px 10px;
   font-size: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .tag button {
   background: none;
   border: none;
   cursor: pointer;
+  font-size: 12px;
+  color: #3a3618;
 }
 
 .botao-whatsapp {
+  width: 100%;
   padding: 15px;
   background: #3a3618;
   color: white;
   border: none;
   border-radius: 50px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
 }
 
-.btn-limpar-tudo {
-  color: #3a3618;
-  font-size: 12px;
-  cursor: pointer;
-  font-weight: 500;
-}
+.busca-container { display: flex; justify-content: center; }
+
 .busca {
   width: 100%;
+  max-width: 500px;
   padding: 12px;
   border-radius: 25px;
   border: 2px solid #3a3618;
+  background: #f8f5f0;
+  font-size: 14px;
   text-align: center;
 }
 </style>
@@ -178,8 +212,7 @@ img, video { width: 100%; border-radius: 8px; }
 </div>
 
 <p class="instrucao">
-Escolha as ID(s) das flores que você mais gostou
-
+Escolha as ID(s) das flores que você mais gostou<br><br>
 Depois é só clicar em <strong>“Ver disponibilidade”</strong> para falar direto no WhatsApp e receber informações de valores, fotos atualizadas e envio dos enxertos.
 </p>
 
@@ -192,12 +225,14 @@ Depois é só clicar em <strong>“Ver disponibilidade”</strong> para falar di
   <div class="caixa-selecao">
     <div class="topo-caixa">
       <h3>ID's selecionadas:</h3>
-      <span class="btn-limpar-tudo" onclick="limparSelecao()">Limpar</span>
+      <button class="btn-limpar-tudo" onclick="limparSelecao()">Limpar tudo</button>
     </div>
     <div id="listaSelecionadas"></div>
   </div>
 
-  <input type="text" id="busca" class="busca" placeholder="Buscar...">
+  <div class="busca-container">
+    <input type="text" id="busca" class="busca" placeholder="Buscar por ID da flor...">
+  </div>
 
   <button class="botao-whatsapp" onclick="enviarWhatsApp()">
     Ver disponibilidade (<span id="contador">0</span>)
@@ -233,6 +268,7 @@ const flores = [
 
 const catalogo = document.getElementById("catalogo");
 const buscaInput = document.getElementById("busca");
+const floresComVideo = ["AÇUCENA (MUTANTE)","LILAC FROST (MUTANTE)"];
 let selecionados = new Set();
 
 function gerarNomeArquivo(nome){
@@ -246,34 +282,28 @@ function gerarNomeArquivo(nome){
 function renderCatalogo(){
   catalogo.innerHTML = "";
   flores.forEach(nome=>{
-    const div = document.createElement("div");
+    let div = document.createElement("div");
     div.className = "item";
     div.dataset.id = nome;
     if(selecionados.has(nome)) div.classList.add("selecionado");
 
-    const arquivo = gerarNomeArquivo(nome);
-
-    if(nome === "AÇUCENA (MUTANTE)" || nome === "LILAC FROST (MUTANTE)"){
-      div.innerHTML = `
-        <video autoplay muted loop playsinline preload="metadata">
-          <source src="imagens/${arquivo}.mp4" type="video/mp4">
-        </video>
-        <p>${nome}</p>
-      `;
+    let arquivo = gerarNomeArquivo(nome);
+    if(floresComVideo.includes(nome)){
+      div.innerHTML = `<video autoplay muted loop playsinline preload="metadata"><source src="imagens/${arquivo}.mp4" type="video/mp4"></video><p>${nome}</p>`;
     } else {
-      div.innerHTML = `
-        <img loading="lazy" src="imagens/${arquivo}.jpg"
-        onerror="this.onerror=null; this.src='imagens/sem-foto.jpg'">
-        <p>${nome}</p>
-      `;
+      div.innerHTML = `<img loading="lazy" src="imagens/${arquivo}.jpg" onerror="this.onerror=null; this.src='imagens/sem-foto.jpg'"><p>${nome}</p>`;
     }
-    
-    div.onclick = ()=>{
-      selecionados.has(nome) ? selecionados.delete(nome) : selecionados.add(nome);
+
+    div.addEventListener("click", ()=>{
+      if(selecionados.has(nome)) selecionados.delete(nome);
+      else selecionados.add(nome);
+
       atualizar();
       buscaInput.value = "";
       mostrarTodasIDs();
-};
+
+      if(navigator.vibrate) navigator.vibrate([30,20,30]);
+    });
 
     catalogo.appendChild(div);
   });
@@ -283,29 +313,21 @@ function atualizar(){
   const caixa = document.querySelector(".caixa-selecao");
   const lista = document.getElementById("listaSelecionadas");
 
-  caixa.style.display = selecionados.size ? "block" : "none";
-  lista.innerHTML = "";
-
-  selecionados.forEach(nome=>{
-    const tag = document.createElement("div");
-    tag.className = "tag";
-
-    const texto = document.createElement("span");
-    texto.textContent = nome;
-
-    const btn = document.createElement("button");
-    btn.textContent = "✕";
-    btn.onclick = () => removerItem(nome);
-
-    tag.append(texto, btn);
-    lista.appendChild(tag);
-  });
+  if(selecionados.size>0){
+    caixa.style.display = "block";
+    lista.innerHTML = "";
+    selecionados.forEach(nome=>{
+      const tag = document.createElement("div");
+      tag.className = "tag";
+      tag.innerHTML = `${nome} <button onclick="removerItem('${nome}')">✕</button>`;
+      lista.appendChild(tag);
+    });
+  } else {
+    caixa.style.display = "none";
+  }
 
   document.getElementById("contador").innerText = selecionados.size;
-
-  document.querySelectorAll(".item").forEach(div=>{
-    div.classList.toggle("selecionado", selecionados.has(div.dataset.id));
-  });
+  renderCatalogo();
 }
 
 function removerItem(nome){
@@ -318,25 +340,32 @@ function limparSelecao(){
   atualizar();
 }
 
+function mostrarTodasIDs(){
+  document.querySelectorAll(".item").forEach(div=>div.style.display="block");
+}
+
 buscaInput.addEventListener("input", ()=>{
   const termo = normalizarTexto(buscaInput.value);
-
   document.querySelectorAll(".item").forEach(div=>{
-    if(termo === ""){
-      div.style.display = "block";
-    } else {
-      div.style.display = normalizarTexto(div.dataset.id).includes(termo) ? "block" : "none";
-    }
+    div.style.display = normalizarTexto(div.dataset.id).includes(termo) ? "block" : "none";
   });
 });
 
+function normalizarTexto(texto){
+  return texto.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9 ]/g,"");
+}
+
 function enviarWhatsApp(){
-  if(!selecionados.size) return alert("Selecione algo");
-  const mensagem = "Olá! Tenho interesse em:\n- " + [...selecionados].join("\n- ");
-  window.open("https://wa.me/5581992665421?text=" + encodeURIComponent(mensagem));
+  if(selecionados.size===0){ alert("Selecione pelo menos uma flor!"); return; }
+  let ids = Array.from(selecionados);
+  let texto = ids.length===1 ? "Tenho interesse no enxerto da seguinte flor:\n\n- " : "Tenho interesse nos enxertos das seguintes variedades:\n\n- ";
+  let mensagem = ["Olá!","",""+texto+ids.join("\n- "),"","Poderia me informar valores, disponibilidade e condições de envio?"].join("\n");
+  let url = "https://wa.me/5581992665421?text=" + encodeURIComponent(mensagem);
+  window.open(url, "_blank");
 }
 
 renderCatalogo();
+atualizar();
 </script>
 
 </body>
