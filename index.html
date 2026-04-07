@@ -21,18 +21,17 @@ body {
 /* CABEÇALHO COM AS LINHAS "MOLDURADAS" INTERNAMENTE */
 .topbar {
   background: linear-gradient(180deg, #434019 0%, #3a3618 100%);
-  padding: 25px 0; /* Aumentado para dar espaço às linhas */
+  padding: 25px 0;
   position: sticky;
   top: 0;
   z-index: 10;
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
-/* Linha superior deslocada para baixo */
 .topbar::before {
   content: "";
   position: absolute;
-  top: 8px; /* Controla o quanto ela desce */
+  top: 8px;
   left: 0;
   right: 0;
   height: 1px;
@@ -40,11 +39,10 @@ body {
   opacity: 0.7;
 }
 
-/* Linha inferior deslocada para cima */
 .topbar::after {
   content: "";
   position: absolute;
-  bottom: 8px; /* Controla o quanto ela sobe */
+  bottom: 8px;
   left: 0;
   right: 0;
   height: 1px;
@@ -73,7 +71,6 @@ body {
 .info-topo h1 { margin: 0; color: white; font-size: 18px; text-shadow: 0 1px 2px rgba(0,0,0,0.25); }
 .subtitulo { margin: 0; font-size: 13px; color: #d6d6d6; }
 
-/* Botão admin discreto */
 .admin-btn {
   width: 32px;
   height: 32px;
@@ -362,13 +359,16 @@ const flores = [
 "VIÚVA NEGRA","VOLCANO","W59","YÚ JIǍO"
 ];
 
+// ESTOQUE - EDITADO PELA ACTION AUTOMATICAMENTE
 const estoque = {
   "AÇUCENA (MUTANTE)": 1,
   "AKACHI": 0,
   "AMATTA": 1,
   "ARYA": 0,
   "BLOODY MARY": 0,
+  // LINHA-INSERCAO-ACTION
 };
+// FIM ESTOQUE
 
 flores.forEach(nome => {
   if (!(nome in estoque)) estoque[nome] = 0;
@@ -381,11 +381,8 @@ let selecionados = new Set();
 let apenasDisponiveis = false;
 let termoBusca = "";
 
-// LOGIN ADMIN
 function loginAdmin(){
   const senha = prompt("Digite a senha de administrador:");
-  
-  // TROCA AQUI PELA SUA SENHA
   if(senha === "gravata2026"){
     window.location.href = 'admin.html';
   } else if(senha !== null) {
@@ -467,7 +464,6 @@ function renderCatalogo(salvarScroll = true){
       if(selecionados.has(nome)) selecionados.delete(nome);
       else selecionados.add(nome);
       
-      // Limpa busca e mostra todas ao selecionar
       termoBusca = "";
       buscaInput.value = "";
       
