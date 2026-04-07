@@ -202,6 +202,63 @@ body {
   
 .oculto { display: none; }
 .nada-encontrado { text-align: center; padding: 20px; font-size: 14px; color: #777; grid-column: 1 / -1; }
+
+.filtro-disponivel {
+  max-width: 600px;
+  margin: 0 auto 15px auto;
+  padding: 0 20px;
+  text-align: center;
+}
+
+.switch-disponivel {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #3a3618;
+  cursor: pointer;
+  user-select: none;
+}
+
+.switch-disponivel input {
+  display: none;
+}
+
+.switch-disponivel .slider {
+  position: relative;
+  width: 44px;
+  height: 24px;
+  background: #ddd;
+  border-radius: 24px;
+  transition: 0.2s;
+}
+
+.switch-disponivel .slider::before {
+  content: "";
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  left: 3px;
+  top: 3px;
+  background: white;
+  border-radius: 50%;
+  transition: 0.2s;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+
+.switch-disponivel input:checked + .slider {
+  background: #3a3618;
+}
+
+.switch-disponivel input:checked + .slider::before {
+  transform: translateX(20px);
+}
+
+.switch-disponivel:active .slider {
+  transform: scale(0.95);
+}
+  
 </style>
 </head>
 
@@ -306,17 +363,41 @@ function gerarNomeArquivo(nome){
     .replace(/[()]/g, "");
 }
 
+const buscaInput = document.getElementById("busca");
+const filtroDisponivel = document.getElementById("filtroDisponivel"); // NOVO
+let selecionados = new Set();
+let apenasDisponiveis = false; // NOVO
+
+// NOVO: listener do filtro
+filtroDisponivel.addEventListener("change", () => {
+  apenasDisponiveis = filtroDisponivel.checked;
+  renderCatalogo();
+  buscaInput.value = ""; // limpa busca ao filtrar
+});
+
+function gerarNomeArquivo(nome){
+  return nome.toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/ /g, "-")
+    .replace(/[()]/g, "");
+}
+
 function renderCatalogo(){
   catalogo.innerHTML = "";
 
   flores.forEach(nome=>{
+    let qtd = estoque[nome];
+    
+    // NOVO: pula se filtro ativo e não tem estoque
+    if(apenasDisponiveis && qtd === 0) return;
+
     let div = document.createElement("div");
     div.className = "item";
     div.setAttribute("data-nome", nome);
     if(selecionados.has(nome)) div.classList.add("selecionado");
 
     let arquivo = gerarNomeArquivo(nome);
-    let qtd = estoque[nome];
     let texto = qtd > 0
       ? `Enxertos disponíveis: ${qtd} (envio imediato)`
       : `Enxertos disponíveis: 0 (pode encomendar)`;
@@ -329,10 +410,12 @@ function renderCatalogo(){
     media.playsInline = true;
     media.autoplay = true;   
     media.preload = "auto";
+    media.loading = "lazy"; // NOVO: performance
 
     media.onerror = function(){
       let img = document.createElement("img");
       img.src = `imagens/${arquivo}.jpg`;
+      img.loading = "lazy"; // NOVO: performance
       img.onerror = function(){ this.src = 'imagens/sem-foto.jpg'; };
       this.replaceWith(img);
     };
@@ -358,8 +441,15 @@ function renderCatalogo(){
 
     catalogo.appendChild(div);
   });
+  
+  // NOVO: mostra "nada encontrado" se filtro não retornar nada
+  if(catalogo.innerHTML === "") {
+    let msg = document.createElement("div");
+    msg.className = "nada-encontrado";
+    msg.innerText = "Nenhuma variedade com pronta entrega no momento";
+    catalogo.appendChild(msg);
+  }
 }
-
 buscaInput.addEventListener("input", ()=>{
   let termo = buscaInput.value.toLowerCase();
   let encontrados = [];
