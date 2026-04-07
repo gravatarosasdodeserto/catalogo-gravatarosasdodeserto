@@ -5,23 +5,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Cadastro de IDs - Gravatá</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <style>
 * { box-sizing: border-box; }
 body { font-family: 'Poppins', sans-serif; background: #f8f5f0; margin: 0; padding: 20px; }
 .container { max-width: 700px; margin: auto; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 6px 14px rgba(0,0,0,0.1); }
 h1 { color: #3a3618; margin-top: 0; }
-h2 { color: #3a3618; font-size: 18px; margin-top: 30px; }
 input, button { width: 100%; padding: 12px; margin: 8px 0; border-radius: 8px; border: 2px solid #3a3618; font-family: 'Poppins'; }
 button { background: #434019; color: white; font-weight: 600; cursor: pointer; border: none; }
 button:active { transform: translateY(1px); }
 button.secundario { background: #999; }
+button:disabled { background: #ccc; cursor: not-allowed; }
 label { font-weight: 500; font-size: 14px; color: #3a3618; display: block; margin-top: 12px; }
 #preview { display: flex; gap: 10px; margin: 10px 0; }
 #preview img, #preview video { width: 100px; height: 100px; object-fit: cover; border-radius: 8px; background: #eee; }
-.tabela { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 14px; }
-.tabela th, .tabela td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-.tabela th { background: #f3efe9; }
 .erro { color: #c00; font-size: 13px; }
 .ok { color: #080; font-size: 13px; }
 </style>
@@ -47,24 +43,27 @@ label { font-weight: 500; font-size: 14px; color: #3a3618; display: block; margi
   <div id="preview"></div>
   <p id="msg" class="erro"></p>
 
-  <button onclick="adicionarItem()">Adicionar à lista</button>
-
-  <h2>Itens para enviar</h2>
-  <table class="tabela" id="tabelaItens">
-    <thead><tr><th>ID</th><th>Estoque</th><th>Foto</th><th>Vídeo</th><th></th></tr></thead>
-    <tbody></tbody>
-  </table>
-
-  <button onclick="baixarZip()" style="background:#1a5d1a; margin-top:20px;">Baixar .zip com flores.json + imagens</button>
-  <p class="ok">1. Baixa o .zip<br>2. Descompacta<br>3. Sobe o flores.json e a pasta imagens/ pro GitHub substituindo os antigos</p>
+  <button id="btnSalvar" onclick="salvarFirebase()">Salvar no Catálogo</button>
+  <p class="ok">Depois de salvar, o catálogo atualiza sozinho em 2 segundos.</p>
 </div>
 
-<script>
-let floresAtuais = [];
-let novosItens = [];
-let arquivosZip = {};
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
 
-fetch('flores.json').then(r => r.json()).then(d => floresAtuais = d).catch(()=>console.log('flores.json não encontrado, começando do zero'));
+const firebaseConfig = {
+  apiKey: "AIzaSyACY4dN_xmN06571jZyY34Oz_xXkvdOdtk",
+  authDomain: "gravata-rosas.firebaseapp.com",
+  projectId: "gravata-rosas",
+  storageBucket: "gravata-rosas.firebasestorage.app",
+  messagingSenderId: "72580333369",
+  appId: "1:72580333369:web:5f17bdc737bd3401fd72e8"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const storage = getStorage(app);
 
 function slug(nome){
   return nome.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/ /g, "-").replace(/[()]/g, "");
@@ -85,8 +84,9 @@ async function redimensionarImagem(file, size = 800){
   });
 }
 
-async function adicionarItem(){
+window.salvarFirebase = async function(){
   const msg = document.getElementById('msg');
+  const btn = document.getElementById('btnSalvar');
   msg.innerText = "";
   msg.className = "erro";
   
@@ -96,69 +96,57 @@ async function adicionarItem(){
   const videoFile = document.getElementById('video').files[0];
 
   if(!nome || !fotoFile || !videoFile) return msg.innerText = "Preencha todos os campos *";
-  if(floresAtuais.find(f => f.id === nome) || novosItens.find(f => f.id === nome)) return msg.innerText = "Essa ID já existe";
-
-  msg.innerText = "Processando...";
   
-  const fotoBlob = await redimensionarImagem(fotoFile, 800);
-  const nomeArquivo = slug(nome);
-  const caminhoFoto = `imagens/${nomeArquivo}.jpg`;
-  const caminhoVideo = `imagens/${nomeArquivo}.mp4`;
-
-  const novoItem = { id: nome, estoque: estoque, foto: caminhoFoto, video: caminhoVideo };
-  novosItens.push(novoItem);
-  
-  arquivosZip[caminhoFoto] = fotoBlob;
-  arquivosZip[caminhoVideo] = videoFile;
-
-  document.getElementById('preview').innerHTML = `
-    <img src="${URL.createObjectURL(fotoBlob)}">
-    <video src="${URL.createObjectURL(videoFile)}" muted loop></video>
-  `;
-
-  renderTabela();
+  btn.disabled = true;
   msg.className = "ok";
-  msg.innerText = "Adicionado! Pode cadastrar mais ou baixar o .zip.";
-  
-  document.getElementById('nomeId').value = "";
-  document.getElementById('estoque').value = "0";
-  document.getElementById('foto').value = "";
-  document.getElementById('video').value = "";
-}
+  msg.innerText = "Enviando...";
 
-function removerItem(index){
-  novosItens.splice(index, 1);
-  renderTabela();
-}
+  try {
+    const nomeArquivo = slug(nome);
+    const fotoBlob = await redimensionarImagem(fotoFile, 800);
+    
+    // Upload foto
+    const fotoRef = ref(storage, `imagens/${nomeArquivo}.jpg`);
+    await uploadBytes(fotoRef, fotoBlob);
+    const fotoURL = await getDownloadURL(fotoRef);
+    
+    // Upload vídeo
+    const videoRef = ref(storage, `imagens/${nomeArquivo}.mp4`);
+    await uploadBytes(videoRef, videoFile);
+    const videoURL = await getDownloadURL(videoRef);
+    
+    // Salva no Firestore
+    await setDoc(doc(db, "flores", nomeArquivo), {
+      id: nome,
+      estoque: estoque,
+      foto: fotoURL,
+      video: videoURL
+    });
 
-function renderTabela(){
-  const tbody = document.querySelector('#tabelaItens tbody');
-  tbody.innerHTML = "";
-  novosItens.forEach((item, i) => {
-    const tr = document.createElement('tr');
-    tr.innerHTML = `<td>${item.id}</td><td>${item.estoque}</td><td>${item.foto.split('/')[1]}</td><td>${item.video.split('/')[1]}</td><td><button onclick="removerItem(${i})" style="width:auto;padding:4px 8px;">X</button></td>`;
-    tbody.appendChild(tr);
-  });
-}
-
-async function baixarZip(){
-  if(novosItens.length === 0) return alert("Cadastre pelo menos 1 item");
-  
-  const zip = new JSZip();
-  const jsonFinal = [...floresAtuais, ...novosItens];
-  zip.file("flores.json", JSON.stringify(jsonFinal, null, 2));
-  
-  const imgFolder = zip.folder("imagens");
-  for(let path in arquivosZip){
-    imgFolder.file(path.replace('imagens/',''), arquivosZip[path]);
+    msg.innerText = "Salvo! Atualize o catálogo pra ver.";
+    document.getElementById('nomeId').value = "";
+    document.getElementById('estoque').value = "0";
+    document.getElementById('foto').value = "";
+    document.getElementById('video').value = "";
+    document.getElementById('preview').innerHTML = "";
+    
+  } catch (error) {
+    msg.className = "erro";
+    msg.innerText = "Erro: " + error.message;
   }
-
-  const blob = await zip.generateAsync({type:"blob"});
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = "atualizacao_catalogo.zip";
-  a.click();
+  
+  btn.disabled = false;
 }
+
+// Preview
+document.getElementById('foto').addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  if(file) document.getElementById('preview').innerHTML = `<img src="${URL.createObjectURL(file)}">`;
+});
+document.getElementById('video').addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  if(file) document.getElementById('preview').innerHTML += `<video src="${URL.createObjectURL(file)}" muted loop></video>`;
+});
 </script>
 
 </body>
