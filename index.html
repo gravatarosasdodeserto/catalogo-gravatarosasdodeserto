@@ -351,12 +351,12 @@ let termoBusca = "";
 
 filtroDisponivel.addEventListener("change", () => {
   apenasDisponiveis = filtroDisponivel.checked;
-  renderCatalogo();
+  renderCatalogo(false);
 });
 
 buscaInput.addEventListener("input", ()=>{
   termoBusca = buscaInput.value.toLowerCase();
-  renderCatalogo();
+  renderCatalogo(false);
 });
 
 function gerarNomeArquivo(nome){
@@ -367,7 +367,8 @@ function gerarNomeArquivo(nome){
     .replace(/[()]/g, "");
 }
 
-function renderCatalogo(){
+function renderCatalogo(salvarScroll = true){
+  let scrollPos = salvarScroll ? window.scrollY : 0;
   catalogo.innerHTML = "";
   let encontrados = 0;
 
@@ -421,7 +422,13 @@ function renderCatalogo(){
     div.onclick = ()=>{
       if(selecionados.has(nome)) selecionados.delete(nome);
       else selecionados.add(nome);
+      
+      // Limpa busca e mostra todas ao selecionar
+      termoBusca = "";
+      buscaInput.value = "";
+      
       atualizar();
+      renderCatalogo();
     };
 
     catalogo.appendChild(div);
@@ -435,6 +442,8 @@ function renderCatalogo(){
       : "Nada encontrado";
     catalogo.appendChild(msg);
   }
+  
+  if(salvarScroll) window.scrollTo(0, scrollPos);
 }
 
 function atualizar(){
