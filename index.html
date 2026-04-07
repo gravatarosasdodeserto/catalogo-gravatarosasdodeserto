@@ -18,19 +18,21 @@ body {
   padding-bottom: 200px;
 }
 
+/* CABEÇALHO COM AS LINHAS "MOLDURADAS" INTERNAMENTE */
 .topbar {
   background: linear-gradient(180deg, #434019 0%, #3a3618 100%);
-  padding: 25px 0;
+  padding: 25px 0; /* Aumentado para dar espaço às linhas */
   position: sticky;
   top: 0;
   z-index: 10;
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
+/* Linha superior deslocada para baixo */
 .topbar::before {
   content: "";
   position: absolute;
-  top: 8px;
+  top: 8px; /* Controla o quanto ela desce */
   left: 0;
   right: 0;
   height: 1px;
@@ -38,10 +40,11 @@ body {
   opacity: 0.7;
 }
 
+/* Linha inferior deslocada para cima */
 .topbar::after {
   content: "";
   position: absolute;
-  bottom: 8px;
+  bottom: 8px; /* Controla o quanto ela sobe */
   left: 0;
   right: 0;
   height: 1px;
@@ -206,7 +209,7 @@ body {
 
 <div class="topbar">
   <div class="header">
-    <div class="logo"><img src="logo.jpg" alt="Logo"></div>
+    <div class="logo"><img src="logo.jpg"></div>
     <div class="info-topo">
       <h1>Gravatá Rosas do Deserto</h1>
       <p class="subtitulo">Enxertos de Adenium Obesum</p>
@@ -233,74 +236,108 @@ body {
   <input type="text" id="busca" class="busca" placeholder="Buscar por ID...">
 
   <button class="botao-whatsapp oculto" onclick="enviarWhatsApp()">
-    Pedir informações
+    Pedir informações (<span id="contador">0</span>)
   </button>
 </div>
 
 <script>
+const flores = [
+"AÇUCENA (MUTANTE)","AKACHI","AMATTA","ARYA","BLOODY MARY","BP-116",
+"BRANCA DE NEVE","BRIDAL BOUQUET","CANAN 55","CANAN 170","CAPIXABA",
+"CÉU ESTRELADO","CÉU ESTRELADO VARIEGATA","COPENHAGEN","DAFNE","DIỆU CHÂU","COCA-COLA",
+"DOUBLE STAR","DUQUESA","EGG ROLL","ELARA","ELLIE","EV19-XANADÚ",
+"FERRARI","GOLDEN FAITH","GRAPE CHOCOLATE","GUARÁ PITANGA",
+"GTA-AIKA","GTA-BOLD","GTA-CANDY CRUSH","GTA-CÓSMICA","GTA-CREPÚSCULO",
+"GTA-DESERT DOLL","GTA-DIANA","GTA-EMMA FROST","GTA-FAY","GTA-FLORZINHA",
+"GTA-FLUTTERSHY","GTA-FRACTA","GTA-GOLDEN PINK","GTA-ICE DRAGON",
+"GTA-KIMBERLY","GTA-LITTLE KISS","GTA-LOLLIPOP BLACK","GTA-LYSSA",
+"GTA-LYTA","GTA-MISS GRAVATÁ","GTA-NYX","GTA-PERONA","GTA-PINK VENOM",
+"GTA-PINKIE PIE","GTA-RED COMETS","GTA-RED STORM","GTA-RED WIDOW",
+"GTA-SANSA","GTA-SHE HA","GTA-SUN CLUSTER","GTA-SWEET BLUSH",
+"GTA-TRINITY","GTA-TRUE FAITH","GTA-YUNA","HELENA","INDIGO GLAZE",
+"INFINITY","JHULLY","JULIUS CAESAR","KING OF KINGS","KINDLY","L-06",
+"LAILA","LILAC FROST (MUTANTE)","LM-440","LM-50","LM2","LUNA",
+"MAGNIFICAT","MARIA","MIDNIGHT","MỘNG CẦM","MORAN","NANCY","NEMO",
+"NORALINE","NUSA","P-200","PATHUMMA","PEONY","PHARAOH","PURPLE BLUE",
+"QUEEN RAY","RF-001","RF-002","RIHANNA","ROMANTIC EDGE","SANTA CLAUS",
+"SATURNO","SENNA","SIENA","SOCHI","SOPHIA","STAR CLUSTER","SWALLOW",
+"RC-04","THAMIRES","THE SECRET OF VICTORIA","TRIPLE WISH","TROPICAL","TS-69",
+"TS-222","TS-330","TW4","UNPARALLELED","VARIEGATA","VAMPIRA",
+"VIÚVA NEGRA","VOLCANO","W59","YÚ JIǍO"
+];
+
+const estoque = {
+  "AÇUCENA (MUTANTE)": 1,
+  "AKACHI": 0,
+  "AMATTA": 1,
+  "ARYA": 0,
+  "BLOODY MARY": 0,
+};
+
+flores.forEach(nome => {
+  if (!(nome in estoque)) estoque[nome] = 0;
+});
+
 const catalogo = document.getElementById("catalogo");
 const buscaInput = document.getElementById("busca");
 let selecionados = new Set();
 
-fetch('flores.json')
-  .then(response => response.json())
-  .then(flores => {
-    renderCatalogo(flores);
-    atualizar();
-  })
-  .catch(err => {
-    catalogo.innerHTML = `<div class="nada-encontrado">Erro ao carregar catálogo. Verifique se o arquivo flores.json existe.</div>`;
-    console.error(err);
-  });
+function gerarNomeArquivo(nome){
+  return nome.toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/ /g, "-")
+    .replace(/[()]/g, "");
+}
 
-function renderCatalogo(flores){
+function renderCatalogo(){
   catalogo.innerHTML = "";
 
-  flores.forEach(item => {
+  flores.forEach(nome=>{
     let div = document.createElement("div");
     div.className = "item";
-    div.setAttribute("data-nome", item.id);
-    if(selecionados.has(item.id)) div.classList.add("selecionado");
+    div.setAttribute("data-nome", nome);
+    if(selecionados.has(nome)) div.classList.add("selecionado");
 
-    let media;
-    if(item.video){
-      media = document.createElement("video");
-      media.src = item.video;
-      media.poster = item.foto;
-      media.muted = true;
-      media.loop = true;
-      media.playsInline = true;
-      media.autoplay = true;
-      media.preload = "metadata";
-      media.onerror = function(){
-        let img = document.createElement("img");
-        img.src = item.foto;
-        img.onerror = function(){ this.style.display = 'none'; };
-        this.replaceWith(img);
-      };
-    } else {
-      media = document.createElement("img");
-      media.src = item.foto;
-      media.onerror = function(){ this.style.display = 'none'; };
-    }
+    let arquivo = gerarNomeArquivo(nome);
+    let qtd = estoque[nome];
+    let texto = qtd > 0
+      ? `Enxertos disponíveis: ${qtd} (envio imediato)`
+      : `Enxertos disponíveis: 0 (pode encomendar)`;
+
+    let media = document.createElement("video");
+    media.src = `imagens/${arquivo}.mp4`;
+    media.poster = `imagens/${arquivo}.jpg`;
+    media.muted = true;
+    media.loop = true;
+    media.playsInline = true;
+    media.autoplay = true;   
+    media.preload = "auto";
+
+    media.onerror = function(){
+      let img = document.createElement("img");
+      img.src = `imagens/${arquivo}.jpg`;
+      img.onerror = function(){ this.src = 'imagens/sem-foto.jpg'; };
+      this.replaceWith(img);
+    };
 
     let p = document.createElement("p");
-    p.textContent = item.id;
+    p.textContent = nome;
 
     let est = document.createElement("div");
     est.className = "estoque";
-    est.textContent = item.estoque > 0 
-      ? `Enxertos disponíveis: ${item.estoque} (envio imediato)` 
-      : `Enxertos disponíveis: 0 (pode encomendar)`;
+    est.textContent = texto;
 
     div.appendChild(media);
     div.appendChild(p);
     div.appendChild(est);
 
     div.onclick = ()=>{
-      if(selecionados.has(item.id)) selecionados.delete(item.id);
-      else selecionados.add(item.id);
+      if(selecionados.has(nome)) selecionados.delete(nome);
+      else selecionados.add(nome);
       atualizar();
+      buscaInput.value = "";
+      mostrarTodas();
     };
 
     catalogo.appendChild(div);
@@ -309,19 +346,18 @@ function renderCatalogo(flores){
 
 buscaInput.addEventListener("input", ()=>{
   let termo = buscaInput.value.toLowerCase();
-  let encontrados = 0;
+  let encontrados = [];
 
   document.querySelectorAll(".item").forEach(div=>{
-    let nome = div.getAttribute("data-nome").toLowerCase();
-    let match = nome.includes(termo);
+    let match = div.innerText.toLowerCase().includes(termo);
     div.style.display = match ? "block" : "none";
-    if(match) encontrados++;
+    if(match) encontrados.push(div);
   });
 
   let aviso = document.querySelector(".nada-encontrado");
   if(aviso) aviso.remove();
 
-  if(encontrados === 0 && termo !== ""){
+  if(encontrados.length === 0 && termo !== ""){
     let msg = document.createElement("div");
     msg.className = "nada-encontrado";
     msg.innerText = "Nada encontrado";
@@ -329,9 +365,8 @@ buscaInput.addEventListener("input", ()=>{
     catalogo.scrollIntoView({behavior: "smooth", block: "start"});
   }
 
-  if(encontrados > 0 && termo !== ""){
-    let primeiro = document.querySelector(".item[style='display: block;']");
-    if(primeiro) primeiro.scrollIntoView({behavior: "smooth", block: "center"});
+  if(encontrados.length > 0 && termo !== ""){
+    encontrados[0].scrollIntoView({behavior: "smooth", block: "center"});
   }
 });
 
@@ -346,15 +381,7 @@ function atualizar(){
     selecionados.forEach(nome=>{
       let tag = document.createElement("div");
       tag.className = "tag";
-      tag.textContent = nome + " ";
-      
-      let btn = document.createElement("button");
-      btn.textContent = "×";
-      btn.onclick = (e) => {
-        e.stopPropagation();
-        removerItem(nome);
-      };
-      tag.appendChild(btn);
+      tag.innerHTML = `${nome} <button onclick="removerItem('${nome}')">×</button>`;
       lista.appendChild(tag);
     });
   } else {
@@ -390,6 +417,10 @@ function limparSelecao(){
   atualizar();
 }
 
+function mostrarTodas(){
+  document.querySelectorAll(".item").forEach(div=>div.style.display="block");
+}
+
 function enviarWhatsApp(){
   if(selecionados.size === 0) return;
 
@@ -403,12 +434,15 @@ function enviarWhatsApp(){
     "",
     texto + ids.join("\n- "),
     "",
-    "Poderia me dar mais informações? Tenho a seguinte dúvida..."
+    "Poderia me dar mais informações? Tenho a seguinte duvida..."
   ].join("\n");
 
   let url = "https://wa.me/5581992665421?text=" + encodeURIComponent(mensagem);
   window.open(url, "_blank");
 }
+
+renderCatalogo();
+atualizar();
 </script>
 
 </body>
