@@ -17,23 +17,16 @@ jobs:
           NOME="${{ github.event.client_payload.nome }}"
           QTD="${{ github.event.client_payload.qtd }}"
           
-          echo "Procurando index.html..."
-          ls -la index.html
+          echo "Atualizando $NOME para $QTD unidades..."
           
-          echo "Conteúdo antes:"
-          grep -n "</table>" index.html || echo "</table> NAO ENCONTRADO"
+          # Remove linha antiga se existir
+          sed -i "/\"$NOME\":/d" index.html
           
-          echo "Removendo linha antiga se existir..."
-          sed -i "/data-nome=\"$NOME\"/d" index.html
+          # Insere nova linha no objeto estoque
+          sed -i "/\/\/ LINHA-INSERCAO-ACTION/i \  \"$NOME\": $QTD," index.html
           
-          echo "Inserindo nova linha..."
-          sed -i "/<\/table>/i <tr data-nome=\"$NOME\"><td>$NOME</td><td>$QTD</td></tr>" index.html
-          
-          echo "Diff das mudanças:"
+          echo "Diff:"
           git diff index.html
-          
-          echo "Conteúdo depois:"
-          grep -A2 -B2 "$NOME" index.html || echo "LINHA NAO INSERIDA"
       
       - name: Commit e Push
         run: |
