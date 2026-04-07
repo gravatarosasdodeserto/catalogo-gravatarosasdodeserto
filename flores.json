@@ -1,1 +1,4 @@
-
+[
+  { "id": "AÇUCENA (MUTANTE)", "estoque": 0, "foto": "imagens/acucena-mutante.jpg", "video": "imagens/acucena-mutante.mp4" },
+  { "id": "AKACHI", "estoque": 0, "foto": "imagens/akachi.jpg", "video": "imagens/akachi.mp4" }
+]
