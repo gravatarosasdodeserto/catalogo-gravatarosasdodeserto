@@ -11,24 +11,34 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
       
       - name: Atualizar index.html
         run: |
           NOME="${{ github.event.client_payload.nome }}"
           QTD="${{ github.event.client_payload.qtd }}"
           
-          # Remove linha antiga se existir
+          echo "Procurando index.html..."
+          ls -la index.html
+          
+          echo "Conteúdo antes:"
+          grep -n "</table>" index.html || echo "</table> NAO ENCONTRADO"
+          
+          echo "Removendo linha antiga se existir..."
           sed -i "/data-nome=\"$NOME\"/d" index.html
           
-          # Adiciona nova linha antes do </tbody>
-          sed -i "/<\/tbody>/i \  <tr data-nome=\"$NOME\"><td>$NOME</td><td>$QTD</td></tr>" index.html
+          echo "Inserindo nova linha..."
+          sed -i "/<\/table>/i <tr data-nome=\"$NOME\"><td>$NOME</td><td>$QTD</td></tr>" index.html
+          
+          echo "Diff das mudanças:"
+          git diff index.html
+          
+          echo "Conteúdo depois:"
+          grep -A2 -B2 "$NOME" index.html || echo "LINHA NAO INSERIDA"
       
       - name: Commit e Push
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add index.html
-          git commit -m "Atualiza estoque: ${{ github.event.client_payload.nome }}" || exit 0
+          git commit -m "Atualiza estoque: ${{ github.event.client_payload.nome }}" || echo "Nada pra commitar"
           git push
