@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head><title>Migrar GitHub → Firestore</title>
+<style>
+body{font-family:sans-serif;padding:20px;max-width:600px;margin:auto}
+button{padding:15px;width:100%;background:#434019;color:#fff;border:none;border-radius:8px;font-size:16px;cursor:pointer}
+button:disabled{background:#ccc}
+#log{background:#f5f5f5;padding:15px;border-radius:8px;margin:10px 0;font-size:13px;max-height:400px;overflow:auto}
+.ok{color:#080}.erro{color:#c00}
+</style>
+</head>
+<body>
+<h1>Migrar Catálogo GitHub → Firestore</h1>
+<p>Esse script pega seu <code>flores.json</code> + pasta <code>imagens</code> e salva tudo no Firestore com base64.</p>
+<p><strong>ATENÇÃO:</strong> Roda só 1 vez. Se rodar de novo vai duplicar.</p>
+<button id="btn" onclick="migrar()">Iniciar Migração</button>
+<div id="log"></div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyACY4dN_xmN06571jZyY34Oz_xXkvdOdtk",
+  authDomain: "gravata-rosas.firebaseapp.com",
+  projectId: "gravata-rosas",
+  storageBucket: "gravata-rosas.firebasestorage.app",
+  messagingSenderId: "72580333369",
+  appId: "1:72580333369:web:5f17bdc737bd3401fd72e8"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+function log(msg, tipo=''){
+  document.getElementById('log').innerHTML += `<div class="${tipo}">${msg}</div>`;
+}
+
+async function urlToBase64(url){
+  const res = await fetch(url);
+  const blob = await res.blob();
+  if(blob.size > 1048576) throw new Error(`Arquivo ${url} maior que 1MB: ${(blob.size/1024/1024).toFixed(2)}MB`);
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.readAsDataURL(blob);
+  });
+}
+
+window.migrar = async function(){
+  const btn = document.getElementById('btn');
+  btn.disabled = true;
+  log('Buscando flores.json...', 'ok');
+  
+  try{
+    const res = await fetch('flores.json');
+    const flores = await res.json();
+    log(`Encontradas ${flores.length} IDs`, 'ok');
+    
+    for(let i = 0; i < flores.length; i++){
+      const f = flores[i];
+      log(`[${i+1}/${flores.length}] Migrando ${f.id}...`);
+      
+      try{
+        const fotoBase64 = await urlToBase64(f.foto);
+        log(`  ✓ Foto convertida`, 'ok');
+        const videoBase64 = await urlToBase64(f.video);
+        log(`  ✓ Vídeo convertido`, 'ok');
+        
+        await addDoc(collection(db, "catalogo"), {
+          nome: f.id,
+          estoque: f.estoque,
+          fotoBase64: fotoBase64,
+          videoBase64: videoBase64,
+          criado: Date.now()
+        });
+        log(`  ✓ Salvo no Firestore`, 'ok');
+      }catch(e){
+        log(`  ✗ ERRO em ${f.id}: ${e.message}`, 'erro');
+      }
+    }
+    log('Migração finalizada!', 'ok');
+  }catch(e){
+    log('ERRO: ' + e.message, 'erro');
+  }
+  btn.disabled = false;
+}
+</script>
+</body>
+</html>
