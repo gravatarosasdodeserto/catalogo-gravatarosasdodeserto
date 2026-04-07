@@ -29,7 +29,7 @@ label {
   font-weight: 500;
   font-size: 14px;
 }
-input, select {
+input {
   width: 100%;
   padding: 12px;
   border: 2px solid #3a3618;
@@ -50,45 +50,29 @@ button {
   box-shadow: 0 4px 10px rgba(0,0,0,0.25);
 }
 button:active { transform: translateY(2px); }
-.resultado {
-  margin-top: 25px;
-  padding: 15px;
-  background: #f3efe9;
+button:disabled { opacity: 0.5; cursor: not-allowed; }
+.status {
+  margin-top: 15px;
+  padding: 12px;
   border-radius: 8px;
+  font-size: 13px;
   display: none;
 }
-.resultado h3 { margin: 0 0 10px 0; font-size: 15px; }
-pre {
-  background: #2d2d2d;
-  color: #f8f8f2;
-  padding: 15px;
-  border-radius: 8px;
-  overflow-x: auto;
-  font-size: 12px;
-  white-space: pre-wrap;
-}
-.copiar {
-  background: #3a3618;
+.status.sucesso { background: #d4edda; color: #155724; display: block; }
+.status.erro { background: #f8d7da; color: #721c24; display: block; }
+.status.carregando { background: #fff3cd; color: #856404; display: block; }
+.voltar {
+  background: #8a8a8a;
   margin-top: 10px;
-  padding: 10px;
-  font-size: 13px;
 }
 .aviso {
   font-size: 12px;
   opacity: 0.7;
-  margin-top: 10px;
+  margin-top: 15px;
   line-height: 1.4;
-}
-.preview {
-  margin-top: 10px;
-  max-width: 200px;
+  padding: 12px;
+  background: #f3efe9;
   border-radius: 8px;
-  display: none;
-}
-.baixar-img {
-  background: #5a7d3a;
-  margin-top: 10px;
-  display: none;
 }
 </style>
 </head>
@@ -103,98 +87,88 @@ pre {
   <label>Quantidade em estoque:</label>
   <input type="number" id="qtd" value="0" min="0">
   
-  <label>Foto da variedade:</label>
-  <input type="file" id="imagem" accept="image/*">
-  <img id="preview" class="preview">
+  <label>Senha do admin:</label>
+  <input type="password" id="senha" placeholder="Digite a senha">
   
-  <label>Tem vídeo .mp4?</label>
-  <select id="temVideo">
-    <option value="nao">Não - só tenho .jpg</option>
-    <option value="sim">Sim - vou subir o .mp4 separado</option>
-  </select>
+  <button onclick="cadastrar()" id="btn-cadastrar">Cadastrar no GitHub</button>
+  <div class="status" id="status"></div>
   
-  <button onclick="gerarCodigo()">Gerar código + Imagem</button>
+  <button class="voltar" onclick="window.location.href='index.html'">← Voltar pro catálogo</button>
   
-  <div class="resultado" id="resultado">
-    <h3>1. Baixe a imagem renomeada:</h3>
-    <a id="downloadImg" class="baixar-img" download><button class="baixar-img">Baixar imagem .jpg</button></a>
-    
-    <h3>2. Adicione esse nome no array `flores`:</h3>
-    <pre id="codigoArray"></pre>
-    <button class="copiar" onclick="copiar('codigoArray')">Copiar</button>
-    
-    <h3>3. Adicione essa linha no objeto `estoque`:</h3>
-    <pre id="codigoEstoque"></pre>
-    <button class="copiar" onclick="copiar('codigoEstoque')">Copiar</button>
-    
-    <p class="aviso">
-      <strong>Próximos passos:</strong><br>
-      1. Baixa a imagem acima<br>
-      2. Cola os 2 códigos no `index.html`<br>
-      3. Sobe a imagem + vídeo se tiver na pasta `/imagens` do GitHub<br>
-      4. Commit → pronto em 2min
-    </p>
+  <div class="aviso">
+    <strong>Como funciona:</strong><br>
+    1. Preenche os dados e clica cadastrar<br>
+    2. A GitHub Action roda em ~30 segundos<br>
+    3. O site atualiza sozinho<br>
+    4. A foto você sobe manual na pasta /imagens com o nome gerado<br>
+    <br>
+    <strong>Nome da imagem:</strong> <span id="nome-arquivo">preencha o nome acima</span>
   </div>
 </div>
 
 <script>
-let imagemBase64 = null;
-let nomeArquivoFinal = '';
+// TROCA AQUI
+const SENHA_ADMIN = 'gravata2026'; // senha simples só pra não deixar aberto
+const GITHUB_USER = 'SEU_USUARIO';
+const GITHUB_REPO = 'SEU_REPO';
 
-function gerarNomeArquivo(nome){
-  return nome.toLowerCase()
+document.getElementById('nome').addEventListener('input', (e) => {
+  const nome = e.target.value.toLowerCase()
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
     .replace(/ /g, "-")
     .replace(/[()]/g, "");
-}
-
-document.getElementById('imagem').addEventListener('change', function(e){
-  const file = e.target.files[0];
-  if(file){
-    const reader = new FileReader();
-    reader.onload = function(evt){
-      imagemBase64 = evt.target.result;
-      document.getElementById('preview').src = imagemBase64;
-      document.getElementById('preview').style.display = 'block';
-    }
-    reader.readAsDataURL(file);
-  }
+  document.getElementById('nome-arquivo').textContent = nome ? nome + '.jpg' : 'preencha o nome acima';
 });
 
-function gerarCodigo(){
-  const nome = document.getElementById('nome').value.trim().toUpperCase();
-  const qtd = document.getElementById('qtd').value;
-  
-  if(!nome) {
-    alert('Preenche o nome da variedade');
-    return;
-  }
-  if(!imagemBase64) {
-    alert('Seleciona uma imagem');
-    return;
-  }
-  
-  nomeArquivoFinal = gerarNomeArquivo(nome);
-  
-  // Prepara download da imagem
-  const link = document.getElementById('downloadImg');
-  link.href = imagemBase64;
-  link.download = `${nomeArquivoFinal}.jpg`;
-  link.style.display = 'block';
-  document.querySelector('.baixar-img').style.display = 'block';
-  
-  document.getElementById('codigoArray').textContent = `"${nome}",`;
-  document.getElementById('codigoEstoque').textContent = `"${nome}": ${qtd},`;
-  
-  document.getElementById('resultado').style.display = 'block';
+function mostrarStatus(msg, tipo){
+  const el = document.getElementById('status');
+  el.className = 'status ' + tipo;
+  el.textContent = msg;
 }
 
-function copiar(id){
-  const texto = document.getElementById(id).textContent;
-  navigator.clipboard.writeText(texto).then(() => {
-    alert('Copiado!');
-  });
+async function cadastrar(){
+  const nome = document.getElementById('nome').value.trim().toUpperCase();
+  const qtd = parseInt(document.getElementById('qtd').value) || 0;
+  const senha = document.getElementById('senha').value;
+  
+  if(!nome) return alert('Preenche o nome');
+  if(senha !== SENHA_ADMIN) return alert('Senha incorreta');
+  
+  document.getElementById('btn-cadastrar').disabled = true;
+  mostrarStatus('Enviando pro GitHub... aguarda 30s', 'carregando');
+  
+  try {
+    // Dispara a GitHub Action
+    const res = await fetch(`https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/dispatches`, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/vnd.github.v3+json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        event_type: 'atualizar-catalogo',
+        client_payload: {
+          acao: 'cadastrar',
+          nome: nome,
+          qtd: qtd
+        }
+      })
+    });
+    
+    if(res.status === 204){
+      mostrarStatus('Sucesso! Site vai atualizar em ~30s. Sobe a imagem na pasta /imagens', 'sucesso');
+      document.getElementById('nome').value = '';
+      document.getElementById('qtd').value = '0';
+      document.getElementById('senha').value = '';
+    } else {
+      throw new Error('Erro ao disparar action');
+    }
+  } catch(err) {
+    mostrarStatus('Erro: ' + err.message, 'erro');
+  } finally {
+    document.getElementById('btn-cadastrar').disabled = false;
+  }
 }
 </script>
 
