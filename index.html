@@ -45,4 +45,187 @@ h1 { margin: 0; font-size: 22px; font-weight: 600; color: #fff; }
 .modal-login { background: #fff; padding: 25px; border-radius: 12px; width: 90%; max-width: 320px; box-shadow: 0 6px 14px rgba(0,0,0,0.2); }
 .modal-login h2 { margin-top: 0; font-size: 20px; color: #3a3618; }
 .modal-login input { width: 100%; padding: 10px; margin: 8px 0; border: 2px solid #3a3618; border-radius: 8px; font-family: 'Poppins'; }
-.modal-login button { width: 100%; padding: 12px; background: #434019; color: #fff; border: none; border-radius
+.modal-login button { width: 100%; padding: 12px; background: #434019; color: #fff; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; margin-top: 10px; }
+.modal-login button.fechar { background: #999; margin-top: 6px; }
+.modal-login .erro { color: #c00; font-size: 13px; margin-top: 8px; }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="header">
+    <div class="logo"><img src="logo.jpg" alt="Logo"></div>
+    <div class="info-topo">
+      <h1>Gravatá Rosas do Deserto</h1>
+      <p class="subtitulo">Enxertos de Adenium Obesum</p>
+    </div>
+    <button class="btn-admin" onclick="abrirLogin()">⚙️ Gestão</button>
+  </div>
+</div>
+
+<div class="instrucoes">
+  <p><strong>Selecione as ID's desejadas</strong> para solicitar informações sobre os enxertos.</p>
+  <span>Variedades sem pronta entrega podem ser encomendadas sem custo.</span>
+</div>
+
+<div class="catalogo" id="catalogo"></div>
+
+<div class="botoes-acoes">
+  <div class="caixa-selecao">
+    <div class="topo-caixa">
+      <span>ID's selecionadas:</span>
+      <span class="limpar" onclick="limparSelecao()">Limpar tudo</span>
+    </div>
+    <div id="listaSelecionadas"></div>
+  </div>
+  <input type="text" id="busca" class="busca" placeholder="Buscar por ID...">
+  <button class="botao-whatsapp oculto" onclick="enviarWhatsApp()">Pedir informações</button>
+</div>
+
+<div class="modal-overlay" id="modalLogin">
+  <div class="modal-login">
+    <h2>Acesso Restrito</h2>
+    <input type="text" id="loginUser" placeholder="Usuário">
+    <input type="password" id="loginPass" placeholder="Senha">
+    <button onclick="fazerLogin()">Entrar</button>
+    <button class="fechar" onclick="fecharLogin()">Cancelar</button>
+    <p class="erro" id="erroLogin"></p>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyACY4dN_xmN06571jZyY34Oz_xXkvdOdtk",
+  authDomain: "gravata-rosas.firebaseapp.com",
+  projectId: "gravata-rosas",
+  storageBucket: "gravata-rosas.firebasestorage.app",
+  messagingSenderId: "72580333369",
+  appId: "1:72580333369:web:5f17bdc737bd3401fd72e8"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+const USUARIO_CORRETO = "admin";
+const SENHA_CORRETA = "gravata123";
+const catalogo = document.getElementById("catalogo");
+const buscaInput = document.getElementById("busca");
+let selecionados = new Set();
+let todasFlores = [];
+
+async function carregarFlores(){
+  catalogo.innerHTML = "<p style='grid-column:1/-1;text-align:center;padding:40px;color:#999'>Carregando...</p>";
+  const querySnapshot = await getDocs(collection(db, "flores"));
+  todasFlores = [];
+  querySnapshot.forEach((doc) => {
+    todasFlores.push(doc.data());
+  });
+  renderCatalogo(todasFlores);
+  atualizar();
+}
+
+carregarFlores();
+
+function renderCatalogo(flores){
+  catalogo.innerHTML = "";
+  flores.forEach(item => {
+    let div = document.createElement("div");
+    div.className = "item";
+    div.setAttribute("data-nome", item.id);
+    if(selecionados.has(item.id)) div.classList.add("selecionado");
+    let media;
+    if(item.video){
+      media = document.createElement("video");
+      media.src = item.video;
+      media.poster = item.foto;
+      media.muted = true; media.loop = true; media.playsInline = true; media.autoplay = true;
+    } else {
+      media = document.createElement("img");
+      media.src = item.foto;
+    }
+    let p = document.createElement("p");
+    p.textContent = item.id;
+    let est = document.createElement("div");
+    est.className = "estoque";
+    est.textContent = item.estoque > 0 ? `Enxertos disponíveis: ${item.estoque} (envio imediato)` : `Enxertos disponíveis: 0 (pode encomendar)`;
+    div.appendChild(media); div.appendChild(p); div.appendChild(est);
+    div.onclick = ()=>{ if(selecionados.has(item.id)) selecionados.delete(item.id); else selecionados.add(item.id); atualizar(); };
+    catalogo.appendChild(div);
+  });
+}
+
+buscaInput.addEventListener("input", ()=>{
+  let termo = buscaInput.value.toLowerCase();
+  let encontrados = 0;
+  document.querySelectorAll(".item").forEach(div=>{
+    let nome = div.getAttribute("data-nome").toLowerCase();
+    let match = nome.includes(termo);
+    div.style.display = match ? "block" : "none";
+    if(match) encontrados++;
+  });
+  let aviso = document.querySelector(".nada-encontrado");
+  if(aviso) aviso.remove();
+  if(encontrados === 0 && termo !== ""){
+    let msg = document.createElement("div");
+    msg.className = "nada-encontrado";
+    msg.innerText = "Nada encontrado";
+    catalogo.appendChild(msg);
+  }
+});
+
+function atualizar(){
+  const caixa = document.querySelector(".caixa-selecao");
+  const lista = document.getElementById("listaSelecionadas");
+  lista.innerHTML = "";
+  if(selecionados.size > 0){
+    caixa.style.display = "block";
+    selecionados.forEach(nome=>{
+      let tag = document.createElement("div");
+      tag.className = "tag";
+      tag.textContent = nome + " ";
+      let btn = document.createElement("button");
+      btn.textContent = "×";
+      btn.onclick = (e) => { e.stopPropagation(); removerItem(nome); };
+      tag.appendChild(btn);
+      lista.appendChild(tag);
+    });
+  } else { caixa.style.display = "none"; }
+  document.querySelectorAll(".item").forEach(div => {
+    const nome = div.getAttribute("data-nome");
+    if(selecionados.has(nome)) div.classList.add("selecionado");
+    else div.classList.remove("selecionado");
+  });
+  const total = selecionados.size;
+  const botao = document.querySelector(".botao-whatsapp");
+  if(total === 0){ botao.classList.add("oculto"); } 
+  else { botao.classList.remove("oculto"); botao.innerHTML = total === 1 ? `Pedir informações sobre a ID selecionada` : `Pedir informações sobre as ${total} ID's selecionadas`; }
+}
+function removerItem(nome){ selecionados.delete(nome); atualizar(); }
+function limparSelecao(){ selecionados.clear(); atualizar(); }
+function enviarWhatsApp(){
+  if(selecionados.size === 0) return;
+  let ids = Array.from(selecionados);
+  let texto = ids.length === 1 ? "Tenho interesse em adquirir enxerto da seguinte variedade:\n\n- " : "Tenho interesse em adquirir enxertos das seguintes variedades:\n\n- ";
+  let mensagem = ["Olá!","",texto + ids.join("\n- "),"","Poderia me dar mais informações? Tenho a seguinte dúvida..."].join("\n");
+  let url = "https://wa.me/5581992665421?text=" + encodeURIComponent(mensagem);
+  window.open(url, "_blank");
+}
+function abrirLogin(){ document.getElementById('modalLogin').classList.add('ativo'); }
+function fecharLogin(){ document.getElementById('modalLogin').classList.remove('ativo'); }
+function fazerLogin(){
+  const u = document.getElementById('loginUser').value;
+  const s = document.getElementById('loginPass').value;
+  const erro = document.getElementById('erroLogin');
+  if(u === USUARIO_CORRETO && s === SENHA_CORRETA){
+    fecharLogin();
+    window.open('cadastro.html', '_blank');
+  } else { erro.innerText = "Usuário ou senha incorretos"; }
+}
+window.abrirLogin = abrirLogin; window.fecharLogin = fecharLogin; window.fazerLogin = fazerLogin;
+window.removerItem = removerItem; window.limparSelecao = limparSelecao; window.enviarWhatsApp = enviarWhatsApp;
+</script>
+</body>
+</html>
