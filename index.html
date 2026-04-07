@@ -506,24 +506,20 @@ function fazerLogin(){
   const s = document.getElementById('loginPass').value;
   const erro = document.getElementById('erroLogin');
   
-  console.log('Tentando login:', u); // DEBUG
-  
   if(u === USUARIO_CORRETO && s === SENHA_CORRETA){
     erro.innerText = "";
     fecharLogin();
     
-    // Tenta abrir em nova aba
-    const novaAba = window.open('admin.html', '_blank');
+    // ABRE O CADASTRO.HTML
+    const novaAba = window.open('cadastro.html', '_blank');
     
-    // Se o navegador bloqueou o pop-up, redireciona na mesma aba
     if (!novaAba || novaAba.closed || typeof novaAba.closed == 'undefined') {
-      alert('Pop-up bloqueado! Vou abrir o painel aqui mesmo.');
-      window.location.href = 'admin.html';
+      alert('Pop-up bloqueado! Abrindo o painel aqui.');
+      window.location.href = 'cadastro.html';
     }
     
   } else {
     erro.innerText = "Usuário ou senha incorretos";
-    console.log('Login falhou. Esperado:', USUARIO_CORRETO, 'Digitado:', u);
   }
 }
 
