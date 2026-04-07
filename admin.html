@@ -1,168 +1,28 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin - Gravatá Rosas</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
-<style>
-* { box-sizing: border-box; }
-body {
-  font-family: 'Poppins', sans-serif;
-  background: #f8f5f0;
-  margin: 0;
-  padding: 20px;
-  color: #3a3618;
-}
-.container {
-  max-width: 600px;
-  margin: 0 auto;
-  background: white;
-  padding: 25px;
-  border-radius: 12px;
-  box-shadow: 0 6px 14px rgba(0,0,0,0.1);
-}
-h1 { margin: 0 0 20px 0; font-size: 20px; }
-label {
-  display: block;
-  margin: 15px 0 5px 0;
-  font-weight: 500;
-  font-size: 14px;
-}
-input {
-  width: 100%;
-  padding: 12px;
-  border: 2px solid #3a3618;
-  border-radius: 8px;
-  font-family: 'Poppins', sans-serif;
-  font-size: 14px;
-}
-button {
-  width: 100%;
-  padding: 14px;
-  background: linear-gradient(180deg, #434019 0%, #3a3618 100%);
-  color: white;
-  border: none;
-  border-radius: 30px;
-  font-weight: 600;
-  cursor: pointer;
-  margin-top: 20px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.25);
-}
-button:active { transform: translateY(2px); }
-button:disabled { opacity: 0.5; cursor: not-allowed; }
-.status {
-  margin-top: 15px;
-  padding: 12px;
-  border-radius: 8px;
-  font-size: 13px;
-  display: none;
-}
-.status.sucesso { background: #d4edda; color: #155724; display: block; }
-.status.erro { background: #f8d7da; color: #721c24; display: block; }
-.status.carregando { background: #fff3cd; color: #856404; display: block; }
-.voltar {
-  background: #8a8a8a;
-  margin-top: 10px;
-}
-.aviso {
-  font-size: 12px;
-  opacity: 0.7;
-  margin-top: 15px;
-  line-height: 1.4;
-  padding: 12px;
-  background: #f3efe9;
-  border-radius: 8px;
-}
-</style>
-</head>
-<body>
-
-<div class="container">
-  <h1>Cadastrar Nova ID</h1>
-  
-  <label>Nome da variedade:</label>
-  <input type="text" id="nome" placeholder="Ex: GTA-NOVA ROSA">
-  
-  <label>Quantidade em estoque:</label>
-  <input type="number" id="qtd" value="0" min="0">
-  
-  <label>Senha do admin:</label>
-  <input type="password" id="senha" placeholder="Digite a senha">
-  
-  <button onclick="cadastrar()" id="btn-cadastrar">Cadastrar no GitHub</button>
-  <div class="status" id="status"></div>
-  
-  <button class="voltar" onclick="window.location.href='index.html'">← Voltar pro catálogo</button>
-  
-  <div class="aviso">
-    <strong>Como funciona:</strong><br>
-    1. Preenche os dados e clica cadastrar<br>
-    2. A GitHub Action roda em ~30 segundos<br>
-    3. O site atualiza sozinho<br>
-    4. A foto você sobe manual na pasta /imagens com o nome gerado<br>
-    <br>
-    <strong>Nome da imagem:</strong> <span id="nome-arquivo">preencha o nome acima</span>
-  </div>
-</div>
-
-<script>
-// TROCA AQUI
-const SENHA_ADMIN = 'gravata2026'; // senha simples só pra não deixar aberto
-const GITHUB_USER = 'SEU_USUARIO';
-const GITHUB_REPO = 'SEU_REPO';
-
-document.getElementById('nome').addEventListener('input', (e) => {
-  const nome = e.target.value.toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/ /g, "-")
-    .replace(/[()]/g, "");
-  document.getElementById('nome-arquivo').textContent = nome ? nome + '.jpg' : 'preencha o nome acima';
-});
-
-function mostrarStatus(msg, tipo){
-  const el = document.getElementById('status');
-  el.className = 'status ' + tipo;
-  el.textContent = msg;
-}
-
 async function cadastrar(){
   const nome = document.getElementById('nome').value.trim().toUpperCase();
   const qtd = parseInt(document.getElementById('qtd').value) || 0;
   const senha = document.getElementById('senha').value;
   
   if(!nome) return alert('Preenche o nome');
-  if(senha !== SENHA_ADMIN) return alert('Senha incorreta');
   
   document.getElementById('btn-cadastrar').disabled = true;
-  mostrarStatus('Enviando pro GitHub... aguarda 30s', 'carregando');
+  mostrarStatus('Enviando... aguarda 30s', 'carregando');
   
   try {
-    // Dispara a GitHub Action
-    const res = await fetch(`https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/dispatches`, {
+    const res = await fetch('/.netlify/functions/cadastrar', {
       method: 'POST',
-      headers: {
-        'Accept': 'application/vnd.github.v3+json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        event_type: 'atualizar-catalogo',
-        client_payload: {
-          acao: 'cadastrar',
-          nome: nome,
-          qtd: qtd
-        }
-      })
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ nome, qtd, senha })
     });
     
-    if(res.status === 204){
-      mostrarStatus('Sucesso! Site vai atualizar em ~30s. Sobe a imagem na pasta /imagens', 'sucesso');
+    if(res.ok){
+      mostrarStatus('Sucesso! Site vai atualizar em ~30s', 'sucesso');
       document.getElementById('nome').value = '';
       document.getElementById('qtd').value = '0';
       document.getElementById('senha').value = '';
     } else {
-      throw new Error('Erro ao disparar action');
+      const erro = await res.text();
+      throw new Error(erro);
     }
   } catch(err) {
     mostrarStatus('Erro: ' + err.message, 'erro');
@@ -170,7 +30,3 @@ async function cadastrar(){
     document.getElementById('btn-cadastrar').disabled = false;
   }
 }
-</script>
-
-</body>
-</html>
