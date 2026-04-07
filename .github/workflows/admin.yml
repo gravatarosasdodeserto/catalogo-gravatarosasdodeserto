@@ -20,7 +20,7 @@ jobs:
           echo "Arquivo: catalogo/index.html"
           ls -la catalogo/index.html
           
-          echo "Removendo linha antiga..."
+          echo "Removendo linha antiga de $NOME..."
           sed -i "/\"$NOME\":/d" catalogo/index.html
           
           echo "Inserindo nova linha..."
