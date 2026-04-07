@@ -18,19 +18,21 @@ body {
   padding-bottom: 200px;
 }
 
+/* CABEÇALHO COM AS LINHAS "MOLDURADAS" INTERNAMENTE */
 .topbar {
   background: linear-gradient(180deg, #434019 0%, #3a3618 100%);
-  padding: 25px 0;
+  padding: 25px 0; /* Aumentado para dar espaço às linhas */
   position: sticky;
   top: 0;
   z-index: 10;
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
+/* Linha superior deslocada para baixo */
 .topbar::before {
   content: "";
   position: absolute;
-  top: 8px;
+  top: 8px; /* Controla o quanto ela desce */
   left: 0;
   right: 0;
   height: 1px;
@@ -38,10 +40,11 @@ body {
   opacity: 0.7;
 }
 
+/* Linha inferior deslocada para cima */
 .topbar::after {
   content: "";
   position: absolute;
-  bottom: 8px;
+  bottom: 8px; /* Controla o quanto ela sobe */
   left: 0;
   right: 0;
   height: 1px;
@@ -52,41 +55,16 @@ body {
 .header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   gap: 15px;
   max-width: 600px;
   margin: auto;
   padding: 0 15px;
 }
 
-.header-left {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-}
-
 .logo img { width: 70px; }
 
 .info-topo h1 { margin: 0; color: white; font-size: 18px; text-shadow: 0 1px 2px rgba(0,0,0,0.25); }
 .subtitulo { margin: 0; font-size: 13px; color: #d6d6d6; }
-
-.admin-btn {
-  width: 32px;
-  height: 32px;
-  opacity: 0.4;
-  cursor: pointer;
-  transition: 0.2s;
-  -webkit-tap-highlight-color: transparent;
-}
-
-.admin-btn:hover {
-  opacity: 0.8;
-  transform: scale(1.1);
-}
-
-.admin-btn:active {
-  transform: scale(0.95);
-}
 
 .instrucoes {
   max-width: 600px;
@@ -287,17 +265,11 @@ body {
 
 <div class="topbar">
   <div class="header">
-    <div class="header-left">
-      <div class="logo"><img src="logo.jpg"></div>
-      <div class="info-topo">
-        <h1>Gravatá Rosas do Deserto</h1>
-        <p class="subtitulo">Enxertos de Adenium Obesum</p>
-      </div>
+    <div class="logo"><img src="logo.jpg"></div>
+    <div class="info-topo">
+      <h1>Gravatá Rosas do Deserto</h1>
+      <p class="subtitulo">Enxertos de Adenium Obesum</p>
     </div>
-    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23f8f5f0'%3E%3Cpath d='M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.74,8.87 C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.8,11.69,4.8,12s0.02,0.64,0.07,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.47-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z'/%3E%3C/svg%3E" 
-         class="admin-btn" 
-         onclick="loginAdmin()" 
-         title="Admin">
   </div>
 </div>
 
@@ -333,7 +305,6 @@ body {
 </div>
 
 <script>
-// LISTA DE FLORES - EDITADO PELA ACTION AUTOMATICAMENTE
 const flores = [
 "AÇUCENA (MUTANTE)","AKACHI","AMATTA","ARYA","BLOODY MARY","BP-116",
 "BRANCA DE NEVE","BRIDAL BOUQUET","CANAN 55","CANAN 170","CAPIXABA",
@@ -357,20 +328,15 @@ const flores = [
 "RC-04","THAMIRES","THE SECRET OF VICTORIA","TRIPLE WISH","TROPICAL","TS-69",
 "TS-222","TS-330","TW4","UNPARALLELED","VARIEGATA","VAMPIRA",
 "VIÚVA NEGRA","VOLCANO","W59","YÚ JIǍO"
-// LINHA-INSERCAO-FLORES
 ];
-// FIM LISTA FLORES
 
-// ESTOQUE - EDITADO PELA ACTION AUTOMATICAMENTE
 const estoque = {
   "AÇUCENA (MUTANTE)": 1,
   "AKACHI": 0,
   "AMATTA": 1,
   "ARYA": 0,
   "BLOODY MARY": 0,
-  // LINHA-INSERCAO-ESTOQUE
 };
-// FIM ESTOQUE
 
 flores.forEach(nome => {
   if (!(nome in estoque)) estoque[nome] = 0;
@@ -382,15 +348,6 @@ const filtroDisponivel = document.getElementById("filtroDisponivel");
 let selecionados = new Set();
 let apenasDisponiveis = false;
 let termoBusca = "";
-
-function loginAdmin(){
-  const senha = prompt("Digite a senha de administrador:");
-  if(senha === "gravata2026"){
-    window.location.href = 'admin.html';
-  } else if(senha !== null) {
-    alert("Senha incorreta");
-  }
-}
 
 filtroDisponivel.addEventListener("change", () => {
   apenasDisponiveis = filtroDisponivel.checked;
@@ -466,6 +423,7 @@ function renderCatalogo(salvarScroll = true){
       if(selecionados.has(nome)) selecionados.delete(nome);
       else selecionados.add(nome);
       
+      // Limpa busca e mostra todas ao selecionar
       termoBusca = "";
       buscaInput.value = "";
       
