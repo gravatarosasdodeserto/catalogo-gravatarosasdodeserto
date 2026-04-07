@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin - Gravatá Rosas</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; }
+body {
+  font-family: 'Poppins', sans-serif;
+  background: #f8f5f0;
+  margin: 0;
+  padding: 20px;
+  color: #3a3618;
+}
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.1);
+}
+h1 { margin: 0 0 20px 0; font-size: 20px; }
+label {
+  display: block;
+  margin: 15px 0 5px 0;
+  font-weight: 500;
+  font-size: 14px;
+}
+input, select {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #3a3618;
+  border-radius: 8px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+}
+button {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(180deg, #434019 0%, #3a3618 100%);
+  color: white;
+  border: none;
+  border-radius: 30px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 20px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+}
+button:active { transform: translateY(2px); }
+.resultado {
+  margin-top: 25px;
+  padding: 15px;
+  background: #f3efe9;
+  border-radius: 8px;
+  display: none;
+}
+.resultado h3 { margin: 0 0 10px 0; font-size: 15px; }
+pre {
+  background: #2d2d2d;
+  color: #f8f8f2;
+  padding: 15px;
+  border-radius: 8px;
+  overflow-x: auto;
+  font-size: 12px;
+  white-space: pre-wrap;
+}
+.copiar {
+  background: #3a3618;
+  margin-top: 10px;
+  padding: 10px;
+  font-size: 13px;
+}
+.aviso {
+  font-size: 12px;
+  opacity: 0.7;
+  margin-top: 10px;
+  line-height: 1.4;
+}
+.preview {
+  margin-top: 10px;
+  max-width: 200px;
+  border-radius: 8px;
+  display: none;
+}
+.baixar-img {
+  background: #5a7d3a;
+  margin-top: 10px;
+  display: none;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h1>Cadastrar Nova ID</h1>
+  
+  <label>Nome da variedade:</label>
+  <input type="text" id="nome" placeholder="Ex: GTA-NOVA ROSA">
+  
+  <label>Quantidade em estoque:</label>
+  <input type="number" id="qtd" value="0" min="0">
+  
+  <label>Foto da variedade:</label>
+  <input type="file" id="imagem" accept="image/*">
+  <img id="preview" class="preview">
+  
+  <label>Tem vídeo .mp4?</label>
+  <select id="temVideo">
+    <option value="nao">Não - só tenho .jpg</option>
+    <option value="sim">Sim - vou subir o .mp4 separado</option>
+  </select>
+  
+  <button onclick="gerarCodigo()">Gerar código + Imagem</button>
+  
+  <div class="resultado" id="resultado">
+    <h3>1. Baixe a imagem renomeada:</h3>
+    <a id="downloadImg" class="baixar-img" download><button class="baixar-img">Baixar imagem .jpg</button></a>
+    
+    <h3>2. Adicione esse nome no array `flores`:</h3>
+    <pre id="codigoArray"></pre>
+    <button class="copiar" onclick="copiar('codigoArray')">Copiar</button>
+    
+    <h3>3. Adicione essa linha no objeto `estoque`:</h3>
+    <pre id="codigoEstoque"></pre>
+    <button class="copiar" onclick="copiar('codigoEstoque')">Copiar</button>
+    
+    <p class="aviso">
+      <strong>Próximos passos:</strong><br>
+      1. Baixa a imagem acima<br>
+      2. Cola os 2 códigos no `index.html`<br>
+      3. Sobe a imagem + vídeo se tiver na pasta `/imagens` do GitHub<br>
+      4. Commit → pronto em 2min
+    </p>
+  </div>
+</div>
+
+<script>
+let imagemBase64 = null;
+let nomeArquivoFinal = '';
+
+function gerarNomeArquivo(nome){
+  return nome.toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/ /g, "-")
+    .replace(/[()]/g, "");
+}
+
+document.getElementById('imagem').addEventListener('change', function(e){
+  const file = e.target.files[0];
+  if(file){
+    const reader = new FileReader();
+    reader.onload = function(evt){
+      imagemBase64 = evt.target.result;
+      document.getElementById('preview').src = imagemBase64;
+      document.getElementById('preview').style.display = 'block';
+    }
+    reader.readAsDataURL(file);
+  }
+});
+
+function gerarCodigo(){
+  const nome = document.getElementById('nome').value.trim().toUpperCase();
+  const qtd = document.getElementById('qtd').value;
+  
+  if(!nome) {
+    alert('Preenche o nome da variedade');
+    return;
+  }
+  if(!imagemBase64) {
+    alert('Seleciona uma imagem');
+    return;
+  }
+  
+  nomeArquivoFinal = gerarNomeArquivo(nome);
+  
+  // Prepara download da imagem
+  const link = document.getElementById('downloadImg');
+  link.href = imagemBase64;
+  link.download = `${nomeArquivoFinal}.jpg`;
+  link.style.display = 'block';
+  document.querySelector('.baixar-img').style.display = 'block';
+  
+  document.getElementById('codigoArray').textContent = `"${nome}",`;
+  document.getElementById('codigoEstoque').textContent = `"${nome}": ${qtd},`;
+  
+  document.getElementById('resultado').style.display = 'block';
+}
+
+function copiar(id){
+  const texto = document.getElementById(id).textContent;
+  navigator.clipboard.writeText(texto).then(() => {
+    alert('Copiado!');
+  });
+}
+</script>
+
+</body>
+</html>
