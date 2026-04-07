@@ -1,4 +1,4 @@
-name: Atualizar Catálogo
+name: Admin Catálogo
 
 on:
   repository_dispatch:
@@ -7,48 +7,28 @@ on:
 jobs:
   atualizar:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
         with:
-          token: ${{ secrets.ADMIN_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
       
       - name: Atualizar index.html
         run: |
-          python3 << 'EOF'
-          import json
-          import os
-          import re
+          NOME="${{ github.event.client_payload.nome }}"
+          QTD="${{ github.event.client_payload.qtd }}"
           
-          # Pega os dados enviados pelo admin.html
-          dados = json.loads('''${{ toJson(github.event.client_payload) }}''')
+          # Remove linha antiga se existir
+          sed -i "/data-nome=\"$NOME\"/d" index.html
           
-          # Lê o index.html atual
-          with open('index.html', 'r', encoding='utf-8') as f:
-              conteudo = f.read()
-          
-          # Adiciona nova ID se for cadastro
-          if dados['acao'] == 'cadastrar':
-              # Adiciona no array flores
-              flores_match = re.search(r'const flores = \[([\s\S]*?)\];', conteudo)
-              if flores_match:
-                  novo_array = flores_match.group(1).rstrip() + f'\n"{dados["nome"]}",'
-                  conteudo = conteudo.replace(flores_match.group(0), f'const flores = [{novo_array}\n];')
-              
-              # Adiciona no objeto estoque
-              estoque_match = re.search(r'const estoque = \{([\s\S]*?)\};', conteudo)
-              if estoque_match:
-                  novo_estoque = estoque_match.group(1).rstrip() + f'\n  "{dados["nome"]}": {dados["qtd"]},'
-                  conteudo = conteudo.replace(estoque_match.group(0), f'const estoque = {{{novo_estoque}\n}};')
-          
-          # Salva o arquivo
-          with open('index.html', 'w', encoding='utf-8') as f:
-              f.write(conteudo)
-          EOF
+          # Adiciona nova linha antes do </tbody>
+          sed -i "/<\/tbody>/i \  <tr data-nome=\"$NOME\"><td>$NOME</td><td>$QTD</td></tr>" index.html
       
-      - name: Commit mudanças
+      - name: Commit e Push
         run: |
-          git config user.name "Admin Bot"
-          git config user.email "bot@gravata.com"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
           git add index.html
-          git commit -m "Update: ${{ github.event.client_payload.nome }}" || exit 0
+          git commit -m "Atualiza estoque: ${{ github.event.client_payload.nome }}" || exit 0
           git push
