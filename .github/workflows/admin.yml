@@ -17,12 +17,13 @@ jobs:
           NOME="${{ github.event.client_payload.nome }}"
           QTD="${{ github.event.client_payload.qtd }}"
           
-          echo "Atualizando $NOME para $QTD unidades..."
+          echo "Arquivo: catalogo/index.html"
+          ls -la catalogo/index.html
           
-          # Remove linha antiga se existir
+          echo "Removendo linha antiga..."
           sed -i "/\"$NOME\":/d" catalogo/index.html
           
-          # Insere nova linha no objeto estoque
+          echo "Inserindo nova linha..."
           sed -i "/\/\/ LINHA-INSERCAO-ACTION/i \  \"$NOME\": $QTD," catalogo/index.html
           
           echo "Diff:"
