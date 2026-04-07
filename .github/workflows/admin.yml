@@ -12,7 +12,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       
-      - name: Atualizar index.html
+      - name: Atualizar catalogo/index.html
         run: |
           NOME="${{ github.event.client_payload.nome }}"
           QTD="${{ github.event.client_payload.qtd }}"
@@ -20,18 +20,18 @@ jobs:
           echo "Atualizando $NOME para $QTD unidades..."
           
           # Remove linha antiga se existir
-          sed -i "/\"$NOME\":/d" index.html
+          sed -i "/\"$NOME\":/d" catalogo/index.html
           
           # Insere nova linha no objeto estoque
-          sed -i "/\/\/ LINHA-INSERCAO-ACTION/i \  \"$NOME\": $QTD," index.html
+          sed -i "/\/\/ LINHA-INSERCAO-ACTION/i \  \"$NOME\": $QTD," catalogo/index.html
           
           echo "Diff:"
-          git diff index.html
+          git diff catalogo/index.html
       
       - name: Commit e Push
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add index.html
+          git add catalogo/index.html
           git commit -m "Atualiza estoque: ${{ github.event.client_payload.nome }}" || echo "Nada pra commitar"
           git push
