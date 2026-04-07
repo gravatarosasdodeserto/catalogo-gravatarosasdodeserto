@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cadastro de IDs - Gravatá</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<style>
+* { box-sizing: border-box; }
+body { font-family: 'Poppins', sans-serif; background: #f8f5f0; margin: 0; padding: 20px; }
+.container { max-width: 700px; margin: auto; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 6px 14px rgba(0,0,0,0.1); }
+h1 { color: #3a3618; margin-top: 0; }
+h2 { color: #3a3618; font-size: 18px; margin-top: 30px; }
+input, button { width: 100%; padding: 12px; margin: 8px 0; border-radius: 8px; border: 2px solid #3a3618; font-family: 'Poppins'; }
+button { background: #434019; color: white; font-weight: 600; cursor: pointer; border: none; }
+button:active { transform: translateY(1px); }
+button.secundario { background: #999; }
+label { font-weight: 500; font-size: 14px; color: #3a3618; display: block; margin-top: 12px; }
+#preview { display: flex; gap: 10px; margin: 10px 0; }
+#preview img, #preview video { width: 100px; height: 100px; object-fit: cover; border-radius: 8px; background: #eee; }
+.tabela { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 14px; }
+.tabela th, .tabela td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+.tabela th { background: #f3efe9; }
+.erro { color: #c00; font-size: 13px; }
+.ok { color: #080; font-size: 13px; }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h1>Cadastrar Nova ID</h1>
+  <button onclick="window.close()" class="secundario">Fechar painel</button>
+  
+  <label>Nome da ID *</label>
+  <input type="text" id="nomeId" placeholder="Ex: ROSA VERMELHA">
+
+  <label>Estoque *</label>
+  <input type="number" id="estoque" value="0" min="0">
+
+  <label>Foto JPG/PNG - será redimensionada pra 800x800 *</label>
+  <input type="file" id="foto" accept="image/jpeg,image/png">
+  
+  <label>Vídeo MP4 800x800 *</label>
+  <input type="file" id="video" accept="video/mp4">
+
+  <div id="preview"></div>
+  <p id="msg" class="erro"></p>
+
+  <button onclick="adicionarItem()">Adicionar à lista</button>
+
+  <h2>Itens para enviar</h2>
+  <table class="tabela" id="tabelaItens">
+    <thead><tr><th>ID</th><th>Estoque</th><th>Foto</th><th>Vídeo</th><th></th></tr></thead>
+    <tbody></tbody>
+  </table>
+
+  <button onclick="baixarZip()" style="background:#1a5d1a; margin-top:20px;">Baixar .zip com flores.json + imagens</button>
+  <p class="ok">1. Baixa o .zip<br>2. Descompacta<br>3. Sobe o flores.json e a pasta imagens/ pro GitHub substituindo os antigos</p>
+</div>
+
+<script>
+let floresAtuais = [];
+let novosItens = [];
+let arquivosZip = {};
+
+fetch('flores.json').then(r => r.json()).then(d => floresAtuais = d).catch(()=>console.log('flores.json não encontrado, começando do zero'));
+
+function slug(nome){
+  return nome.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/ /g, "-").replace(/[()]/g, "");
+}
+
+async function redimensionarImagem(file, size = 800){
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      canvas.width = size;
+      canvas.height = size;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, size, size);
+      canvas.toBlob(resolve, 'image/jpeg', 0.9);
+    };
+    img.src = URL.createObjectURL(file);
+  });
+}
+
+async function adicionarItem(){
+  const msg = document.getElementById('msg');
+  msg.innerText = "";
+  msg.className = "erro";
+  
+  const nome = document.getElementById('nomeId').value.trim().toUpperCase();
+  const estoque = parseInt(document.getElementById('estoque').value) || 0;
+  const fotoFile = document.getElementById('foto').files[0];
+  const videoFile = document.getElementById('video').files[0];
+
+  if(!nome || !fotoFile || !videoFile) return msg.innerText = "Preencha todos os campos *";
+  if(floresAtuais.find(f => f.id === nome) || novosItens.find(f => f.id === nome)) return msg.innerText = "Essa ID já existe";
+
+  msg.innerText = "Processando...";
+  
+  const fotoBlob = await redimensionarImagem(fotoFile, 800);
+  const nomeArquivo = slug(nome);
+  const caminhoFoto = `imagens/${nomeArquivo}.jpg`;
+  const caminhoVideo = `imagens/${nomeArquivo}.mp4`;
+
+  const novoItem = { id: nome, estoque: estoque, foto: caminhoFoto, video: caminhoVideo };
+  novosItens.push(novoItem);
+  
+  arquivosZip[caminhoFoto] = fotoBlob;
+  arquivosZip[caminhoVideo] = videoFile;
+
+  document.getElementById('preview').innerHTML = `
+    <img src="${URL.createObjectURL(fotoBlob)}">
+    <video src="${URL.createObjectURL(videoFile)}" muted loop></video>
+  `;
+
+  renderTabela();
+  msg.className = "ok";
+  msg.innerText = "Adicionado! Pode cadastrar mais ou baixar o .zip.";
+  
+  document.getElementById('nomeId').value = "";
+  document.getElementById('estoque').value = "0";
+  document.getElementById('foto').value = "";
+  document.getElementById('video').value = "";
+}
+
+function removerItem(index){
+  novosItens.splice(index, 1);
+  renderTabela();
+}
+
+function renderTabela(){
+  const tbody = document.querySelector('#tabelaItens tbody');
+  tbody.innerHTML = "";
+  novosItens.forEach((item, i) => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${item.id}</td><td>${item.estoque}</td><td>${item.foto.split('/')[1]}</td><td>${item.video.split('/')[1]}</td><td><button onclick="removerItem(${i})" style="width:auto;padding:4px 8px;">X</button></td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+async function baixarZip(){
+  if(novosItens.length === 0) return alert("Cadastre pelo menos 1 item");
+  
+  const zip = new JSZip();
+  const jsonFinal = [...floresAtuais, ...novosItens];
+  zip.file("flores.json", JSON.stringify(jsonFinal, null, 2));
+  
+  const imgFolder = zip.folder("imagens");
+  for(let path in arquivosZip){
+    imgFolder.file(path.replace('imagens/',''), arquivosZip[path]);
+  }
+
+  const blob = await zip.generateAsync({type:"blob"});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = "atualizacao_catalogo.zip";
+  a.click();
+}
+</script>
+
+</body>
+</html>
