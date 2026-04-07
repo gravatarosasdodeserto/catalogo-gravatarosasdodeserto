@@ -1,32 +1,72 @@
-async function cadastrar(){
-  const nome = document.getElementById('nome').value.trim().toUpperCase();
-  const qtd = parseInt(document.getElementById('qtd').value) || 0;
-  const senha = document.getElementById('senha').value;
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin - Gravatas</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 500px; margin: 50px auto; padding: 20px; }
+    input, button { width: 100%; padding: 12px; margin: 8px 0; font-size: 16px; box-sizing: border-box; }
+    button { background: #2d5; color: white; border: none; cursor: pointer; font-weight: bold; }
+    button:disabled { background: #ccc; cursor: not-allowed; }
+    #status { margin-top: 20px; padding: 15px; border-radius: 5px; display: none; }
+    .sucesso { background: #d4edda; color: #155724; }
+    .erro { background: #f8d7da; color: #721c24; }
+    .carregando { background: #d1ecf1; color: #0c5460; }
+  </style>
+</head>
+<body>
+  <h1>Cadastrar ID</h1>
   
-  if(!nome) return alert('Preenche o nome');
+  <input type="text" id="nome" placeholder="ID da rosa (ex: ABC-123)" autocomplete="off">
+  <input type="number" id="qtd" placeholder="Quantidade" value="0" min="0">
+  <input type="password" id="senha" placeholder="Senha admin" autocomplete="off">
   
-  document.getElementById('btn-cadastrar').disabled = true;
-  mostrarStatus('Enviando... aguarda 30s', 'carregando');
+  <button id="btn-cadastrar" onclick="cadastrar()">Cadastrar no site</button>
   
-  try {
-    const res = await fetch('/.netlify/functions/cadastrar', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ nome, qtd, senha })
-    });
-    
-    if(res.ok){
-      mostrarStatus('Sucesso! Site vai atualizar em ~30s', 'sucesso');
-      document.getElementById('nome').value = '';
-      document.getElementById('qtd').value = '0';
-      document.getElementById('senha').value = '';
-    } else {
-      const erro = await res.text();
-      throw new Error(erro);
+  <div id="status"></div>
+
+  <script>
+    function mostrarStatus(msg, tipo) {
+      const div = document.getElementById('status');
+      div.textContent = msg;
+      div.className = tipo;
+      div.style.display = 'block';
     }
-  } catch(err) {
-    mostrarStatus('Erro: ' + err.message, 'erro');
-  } finally {
-    document.getElementById('btn-cadastrar').disabled = false;
-  }
-}
+
+    async function cadastrar(){
+      const nome = document.getElementById('nome').value.trim().toUpperCase();
+      const qtd = parseInt(document.getElementById('qtd').value) || 0;
+      const senha = document.getElementById('senha').value;
+      
+      if(!nome) return alert('Preenche o ID da rosa');
+      if(!senha) return alert('Preenche a senha');
+      
+      document.getElementById('btn-cadastrar').disabled = true;
+      mostrarStatus('Enviando... aguarda 30s pra atualizar', 'carregando');
+      
+      try {
+        const res = await fetch('/.netlify/functions/cadastrar', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ nome, qtd, senha })
+        });
+        
+        if(res.ok){
+          mostrarStatus('Sucesso! Site vai atualizar em ~30s', 'sucesso');
+          document.getElementById('nome').value = '';
+          document.getElementById('qtd').value = '0';
+          document.getElementById('senha').value = '';
+        } else {
+          const erro = await res.text();
+          throw new Error(erro);
+        }
+      } catch(err) {
+        mostrarStatus('Erro: ' + err.message, 'erro');
+      } finally {
+        document.getElementById('btn-cadastrar').disabled = false;
+      }
+    }
+  </script>
+</body>
+</html>
