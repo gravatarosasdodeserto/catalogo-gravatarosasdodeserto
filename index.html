@@ -1,95 +1,40 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Catálogo de Flores</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<title>Catálogo - Gravatá Rosa</title>
 <style>
-* { box-sizing: border-box; }
-body { margin: 0; font-family: 'Poppins', sans-serif; background-color: #f8f5f0; color: #3a3618; }
-.topbar { background: #434019; padding: 10px 20px; }
-.header { display: flex; align-items: center; justify-content: space-between; max-width: 1100px; margin: 0 auto; }
-.logo img { height: 50px; border-radius: 50%; }
-.info-topo { flex: 1; text-align: center; }
-h1 { margin: 0; font-size: 22px; font-weight: 600; color: #fff; }
-.subtitulo { font-size: 14px; font-weight: 300; color: #ddd; margin-top: 2px; }
-.btn-admin { background: #2c2a10; color: #fff; border: none; padding: 8px 14px; border-radius: 8px; font-family: 'Poppins'; font-weight: 500; cursor: pointer; }
-.btn-admin:active { transform: translateY(1px); }
-.instrucoes { max-width: 1100px; margin: 15px auto 0; padding: 0 20px; font-size: 14px; line-height: 1.4; }
-.instrucoes strong { font-weight: 600; }
-.instrucoes span { font-size: 12px; color: #666; }
-.catalogo { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; padding: 15px 20px 140px; max-width: 1100px; margin: 0 auto; }
-.item { background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.08); cursor: pointer; transition: transform .15s; position: relative; }
-.item:active { transform: scale(0.98); }
-.item img, .item video { width: 100%; height: 120px; object-fit: cover; display: block; }
-.item p { margin: 8px; font-weight: 500; font-size: 14px; text-align: center; }
-.estoque { font-size: 12px; color: #666; text-align: center; padding: 0 8px 8px; }
-.item.selecionado { outline: 3px solid #434019; }
-.item.selecionado::after { content: "✔"; position: absolute; top: 8px; right: 8px; background: #434019; color: #fff; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; }
-.nada-encontrado { grid-column: 1/-1; text-align: center; padding: 40px 0; color: #999; font-size: 15px; }
-.botoes-acoes { position: fixed; bottom: 0; left: 0; right: 0; background: #fff; border-top: 1px solid #ddd; padding: 10px 15px; display: flex; flex-direction: column; gap: 8px; z-index: 10; }
-.busca { width: 100%; padding: 10px 12px; border: 2px solid #3a3618; border-radius: 8px; font-size: 14px; font-family: 'Poppins'; }
-.caixa-selecao { background: #f3efe9; border: 2px solid #3a3618; border-radius: 8px; padding: 8px 12px; font-size: 14px; display: none; }
-.topo-caixa { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
-.topo-caixa span { font-weight: 600; }
-.limpar { color: #8a1f1f; cursor: pointer; font-size: 13px; }
-#listaSelecionadas { display: flex; flex-wrap: wrap; gap: 6px; }
-.tag { background: #e8e2d8; border-radius: 20px; padding: 4px 10px; font-size: 13px; display: flex; align-items: center; gap: 6px; }
-.tag button { background: none; border: none; font-size: 16px; line-height: 1; cursor: pointer; color: #3a3618; }
-.botao-whatsapp { width: 100%; background: #434019; color: #fff; border: none; padding: 14px; font-size: 16px; font-weight: 600; border-radius: 10px; cursor: pointer; }
-.botao-whatsapp:active { transform: translateY(1px); }
-.botao-whatsapp.oculto { display: none; }
-.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 20; }
-.modal-overlay.ativo { display: flex; }
-.modal-login { background: #fff; padding: 25px; border-radius: 12px; width: 90%; max-width: 320px; box-shadow: 0 6px 14px rgba(0,0,0,0.2); }
-.modal-login h2 { margin-top: 0; font-size: 20px; color: #3a3618; }
-.modal-login input { width: 100%; padding: 10px; margin: 8px 0; border: 2px solid #3a3618; border-radius: 8px; font-family: 'Poppins'; }
-.modal-login button { width: 100%; padding: 12px; background: #434019; color: #fff; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; margin-top: 10px; }
-.modal-login button.fechar { background: #999; margin-top: 6px; }
-.modal-login .erro { color: #c00; font-size: 13px; margin-top: 8px; }
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:sans-serif;background:#f8f5f0;color:#3a3618}
+.header{background:#434019;color:#f3efe9;padding:20px;text-align:center}
+.header h1{font-size:28px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px;padding:20px;max-width:1200px;margin:auto}
+.card{background:white;border-radius:12px;overflow:hidden;box-shadow:0 6px 14px rgba(0,0,0,0.1);cursor:pointer}
+.card img{width:100%;height:280px;object-fit:cover}
+.card-body{padding:15px}
+.card h3{font-size:18px;margin-bottom:5px}
+.card p{font-size:14px;color:#666}
+.modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);z-index:100;align-items:center;justify-content:center}
+.modal-content{background:white;border-radius:12px;max-width:500px;width:90%;max-height:90vh;overflow:auto}
+.modal video{width:100%;max-height:400px;background:#000}
+.modal-body{padding:20px}
+.close{float:right;font-size:28px;cursor:pointer;color:#999}
 </style>
 </head>
 <body>
+<div class="header"><h1>Catálogo Gravatá Rosa</h1></div>
+<div class="grid" id="grid"></div>
 
-<div class="topbar">
-  <div class="header">
-    <div class="logo"><img src="logo.jpg" alt="Logo"></div>
-    <div class="info-topo">
-      <h1>Gravatá Rosas do Deserto</h1>
-      <p class="subtitulo">Enxertos de Adenium Obesum</p>
+<div class="modal" id="modal">
+  <div class="modal-content">
+    <div class="modal-body">
+      <span class="close" onclick="fecharModal()">&times;</span>
+      <h2 id="modalNome"></h2>
+      <video id="modalVideo" controls></video>
+      <p id="modalEstoque"></p>
     </div>
-    <button class="btn-admin" onclick="abrirLogin()">⚙️ Gestão</button>
-  </div>
-</div>
-
-<div class="instrucoes">
-  <p><strong>Selecione as ID's desejadas</strong> para solicitar informações sobre os enxertos.</p>
-  <span>Variedades sem pronta entrega podem ser encomendadas sem custo.</span>
-</div>
-
-<div class="catalogo" id="catalogo"></div>
-
-<div class="botoes-acoes">
-  <div class="caixa-selecao">
-    <div class="topo-caixa">
-      <span>ID's selecionadas:</span>
-      <span class="limpar" onclick="limparSelecao()">Limpar tudo</span>
-    </div>
-    <div id="listaSelecionadas"></div>
-  </div>
-  <input type="text" id="busca" class="busca" placeholder="Buscar por ID...">
-  <button class="botao-whatsapp oculto" onclick="enviarWhatsApp()">Pedir informações</button>
-</div>
-
-<div class="modal-overlay" id="modalLogin">
-  <div class="modal-login">
-    <h2>Acesso Restrito</h2>
-    <input type="text" id="loginUser" placeholder="Usuário">
-    <input type="password" id="loginPass" placeholder="Senha">
-    <button onclick="fazerLogin()">Entrar</button>
-    <button class="fechar" onclick="fecharLogin()">Cancelar</button>
-    <p class="erro" id="erroLogin"></p>
   </div>
 </div>
 
@@ -109,123 +54,55 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-const USUARIO_CORRETO = "admin";
-const SENHA_CORRETA = "gravata123";
-const catalogo = document.getElementById("catalogo");
-const buscaInput = document.getElementById("busca");
-let selecionados = new Set();
-let todasFlores = [];
-
-async function carregarFlores(){
-  catalogo.innerHTML = "<p style='grid-column:1/-1;text-align:center;padding:40px;color:#999'>Carregando...</p>";
-  const querySnapshot = await getDocs(collection(db, "flores"));
-  todasFlores = [];
-  querySnapshot.forEach((doc) => {
-    todasFlores.push(doc.data());
-  });
-  renderCatalogo(todasFlores);
-  atualizar();
-}
-
-carregarFlores();
-
-function renderCatalogo(flores){
-  catalogo.innerHTML = "";
-  flores.forEach(item => {
-    let div = document.createElement("div");
-    div.className = "item";
-    div.setAttribute("data-nome", item.id);
-    if(selecionados.has(item.id)) div.classList.add("selecionado");
-    let media;
-    if(item.video){
-      media = document.createElement("video");
-      media.src = item.video;
-      media.poster = item.foto;
-      media.muted = true; media.loop = true; media.playsInline = true; media.autoplay = true;
-    } else {
-      media = document.createElement("img");
-      media.src = item.foto;
-    }
-    let p = document.createElement("p");
-    p.textContent = item.id;
-    let est = document.createElement("div");
-    est.className = "estoque";
-    est.textContent = item.estoque > 0 ? `Enxertos disponíveis: ${item.estoque} (envio imediato)` : `Enxertos disponíveis: 0 (pode encomendar)`;
-    div.appendChild(media); div.appendChild(p); div.appendChild(est);
-    div.onclick = ()=>{ if(selecionados.has(item.id)) selecionados.delete(item.id); else selecionados.add(item.id); atualizar(); };
-    catalogo.appendChild(div);
-  });
-}
-
-buscaInput.addEventListener("input", ()=>{
-  let termo = buscaInput.value.toLowerCase();
-  let encontrados = 0;
-  document.querySelectorAll(".item").forEach(div=>{
-    let nome = div.getAttribute("data-nome").toLowerCase();
-    let match = nome.includes(termo);
-    div.style.display = match ? "block" : "none";
-    if(match) encontrados++;
-  });
-  let aviso = document.querySelector(".nada-encontrado");
-  if(aviso) aviso.remove();
-  if(encontrados === 0 && termo !== ""){
-    let msg = document.createElement("div");
-    msg.className = "nada-encontrado";
-    msg.innerText = "Nada encontrado";
-    catalogo.appendChild(msg);
+async function carregarCatalogo(){
+  const grid = document.getElementById('grid');
+  grid.innerHTML = 'Carregando...';
+  
+  const querySnapshot = await getDocs(collection(db, "catalogo"));
+  grid.innerHTML = '';
+  
+  if(querySnapshot.empty){
+    grid.innerHTML = '<p style="grid-column:1/-1;text-align:center">Nenhuma ID cadastrada ainda.</p>';
+    return;
   }
-});
-
-function atualizar(){
-  const caixa = document.querySelector(".caixa-selecao");
-  const lista = document.getElementById("listaSelecionadas");
-  lista.innerHTML = "";
-  if(selecionados.size > 0){
-    caixa.style.display = "block";
-    selecionados.forEach(nome=>{
-      let tag = document.createElement("div");
-      tag.className = "tag";
-      tag.textContent = nome + " ";
-      let btn = document.createElement("button");
-      btn.textContent = "×";
-      btn.onclick = (e) => { e.stopPropagation(); removerItem(nome); };
-      tag.appendChild(btn);
-      lista.appendChild(tag);
-    });
-  } else { caixa.style.display = "none"; }
-  document.querySelectorAll(".item").forEach(div => {
-    const nome = div.getAttribute("data-nome");
-    if(selecionados.has(nome)) div.classList.add("selecionado");
-    else div.classList.remove("selecionado");
+  
+  querySnapshot.forEach((doc) => {
+    const f = doc.data();
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.onclick = () => abrirModal(f);
+    
+    const img = f.fotoBase64 || 'https://via.placeholder.com/280x280?text=Sem+Foto';
+    card.innerHTML = `
+      <img src="${img}" alt="${f.nome}">
+      <div class="card-body">
+        <h3>${f.nome}</h3>
+        <p>Estoque: ${f.estoque || 0}</p>
+      </div>
+    `;
+    grid.appendChild(card);
   });
-  const total = selecionados.size;
-  const botao = document.querySelector(".botao-whatsapp");
-  if(total === 0){ botao.classList.add("oculto"); } 
-  else { botao.classList.remove("oculto"); botao.innerHTML = total === 1 ? `Pedir informações sobre a ID selecionada` : `Pedir informações sobre as ${total} ID's selecionadas`; }
 }
-function removerItem(nome){ selecionados.delete(nome); atualizar(); }
-function limparSelecao(){ selecionados.clear(); atualizar(); }
-function enviarWhatsApp(){
-  if(selecionados.size === 0) return;
-  let ids = Array.from(selecionados);
-  let texto = ids.length === 1 ? "Tenho interesse em adquirir enxerto da seguinte variedade:\n\n- " : "Tenho interesse em adquirir enxertos das seguintes variedades:\n\n- ";
-  let mensagem = ["Olá!","",texto + ids.join("\n- "),"","Poderia me dar mais informações? Tenho a seguinte dúvida..."].join("\n");
-  let url = "https://wa.me/5581992665421?text=" + encodeURIComponent(mensagem);
-  window.open(url, "_blank");
+
+window.abrirModal = function(f){
+  document.getElementById('modalNome').textContent = f.nome;
+  document.getElementById('modalEstoque').textContent = `Estoque: ${f.estoque || 0}`;
+  const video = document.getElementById('modalVideo');
+  if(f.videoBase64){
+    video.src = f.videoBase64;
+    video.style.display = 'block';
+  } else {
+    video.style.display = 'none';
+  }
+  document.getElementById('modal').style.display = 'flex';
 }
-function abrirLogin(){ document.getElementById('modalLogin').classList.add('ativo'); }
-function fecharLogin(){ document.getElementById('modalLogin').classList.remove('ativo'); }
-function fazerLogin(){
-  const u = document.getElementById('loginUser').value;
-  const s = document.getElementById('loginPass').value;
-  const erro = document.getElementById('erroLogin');
-  if(u === USUARIO_CORRETO && s === SENHA_CORRETA){
-    fecharLogin();
-    window.open('cadastro.html', '_blank');
-  } else { erro.innerText = "Usuário ou senha incorretos"; }
+
+window.fecharModal = function(){
+  document.getElementById('modal').style.display = 'none';
+  document.getElementById('modalVideo').pause();
 }
-window.abrirLogin = abrirLogin; window.fecharLogin = fecharLogin; window.fazerLogin = fazerLogin;
-window.removerItem = removerItem; window.limparSelecao = limparSelecao; window.enviarWhatsApp = enviarWhatsApp;
+
+carregarCatalogo();
 </script>
 </body>
 </html>
