@@ -69,6 +69,7 @@ button:active {
   text-align: center;
   font-size: 14px;
   display: none;
+  line-height: 1.5;
 }
 .msg.sucesso {
   background: #d4edda;
@@ -82,6 +83,7 @@ button:active {
   color: #3a3618;
   text-decoration: none;
   font-size: 14px;
+  font-weight: 500;
 }
 </style>
 </head>
@@ -100,7 +102,7 @@ button:active {
   
   <div id="msg" class="msg"></div>
   
-  <a href="catalogo/" class="voltar">← Voltar ao catálogo</a>
+  <a href="https://gravatarosasdodeserto.github.io/catalogo/index.html" class="voltar">← Voltar ao catálogo</a>
 </div>
 
 <script>
@@ -115,11 +117,11 @@ function abrirIssue(){
   
   const titulo = encodeURIComponent(`[ADMIN] ${nome}: ${qtd}`);
   const body = encodeURIComponent(`nome: ${nome}\nqtd: ${qtd}`);
-  const url = `https://github.com/gravatarosasdodeserto/gravatarosasdodeserto-catalogo/issues/new?title=${titulo}&body=${body}&labels=admin`;
+  const url = `https://github.com/gravatarosasdodeserto/gravatarosasdodeserto-catalogo/issues/new?title=${titulo}&body=${body}`;
   
   window.open(url, "_blank");
   
-  document.getElementById("msg").textContent = "✅ Issue aberta. Clica em 'Submit new issue' pra confirmar.";
+  document.getElementById("msg").innerHTML = `✅ Issue aberta em nova aba!<br><strong>Passo 2:</strong> Clica em "Submit new issue" pra confirmar.<br>A Action vai atualizar e fechar a Issue sozinha em 1-2min.`;
   document.getElementById("msg").className = "msg sucesso";
   document.getElementById("nome").value = "";
   document.getElementById("qtd").value = "";
