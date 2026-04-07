@@ -319,8 +319,8 @@ body {
 
 <script>
 // TROCA AQUI SEU LOGIN E SENHA
-const USUARIO_CORRETO = "admin";
-const SENHA_CORRETA = "gravata123";
+const USUARIO_CORRETO = "pedro.cabral";
+const SENHA_CORRETA = "140508le";
 
 const catalogo = document.getElementById("catalogo");
 const buscaInput = document.getElementById("busca");
@@ -506,12 +506,24 @@ function fazerLogin(){
   const s = document.getElementById('loginPass').value;
   const erro = document.getElementById('erroLogin');
   
+  console.log('Tentando login:', u); // DEBUG
+  
   if(u === USUARIO_CORRETO && s === SENHA_CORRETA){
     erro.innerText = "";
     fecharLogin();
-    window.open('admin.html', '_blank'); // Abre o painel de cadastro em nova aba
+    
+    // Tenta abrir em nova aba
+    const novaAba = window.open('admin.html', '_blank');
+    
+    // Se o navegador bloqueou o pop-up, redireciona na mesma aba
+    if (!novaAba || novaAba.closed || typeof novaAba.closed == 'undefined') {
+      alert('Pop-up bloqueado! Vou abrir o painel aqui mesmo.');
+      window.location.href = 'admin.html';
+    }
+    
   } else {
     erro.innerText = "Usuário ou senha incorretos";
+    console.log('Login falhou. Esperado:', USUARIO_CORRETO, 'Digitado:', u);
   }
 }
 
