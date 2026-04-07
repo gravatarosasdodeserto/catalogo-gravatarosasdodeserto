@@ -62,10 +62,6 @@ button:active {
   transform: translateY(2px);
   box-shadow: inset 0 4px 8px rgba(0,0,0,0.3);
 }
-button:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
 .msg {
   margin-top: 20px;
   padding: 12px;
@@ -77,11 +73,6 @@ button:disabled {
 .msg.sucesso {
   background: #d4edda;
   color: #155724;
-  display: block;
-}
-.msg.erro {
-  background: #f8d7da;
-  color: #721c24;
   display: block;
 }
 .voltar {
@@ -105,7 +96,7 @@ button:disabled {
   <label>Quantidade em Estoque</label>
   <input type="number" id="qtd" placeholder="Ex: 5" min="0">
   
-  <button id="btnSalvar" onclick="salvar()">Salvar no Catálogo</button>
+  <button onclick="abrirIssue()">Salvar no Catálogo</button>
   
   <div id="msg" class="msg"></div>
   
@@ -113,65 +104,25 @@ button:disabled {
 </div>
 
 <script>
-// TROCA AQUI PELO SEU TOKEN
-const GITHUB_TOKEN = "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";
-const REPO_OWNER = "gravatarosasdodeserto";
-const REPO_NAME = "gravatarosasdodeserto-catalogo";
-
-const btn = document.getElementById("btnSalvar");
-const msg = document.getElementById("msg");
-
-async function salvar(){
+function abrirIssue(){
   const nome = document.getElementById("nome").value.trim().toUpperCase();
   const qtd = parseInt(document.getElementById("qtd").value);
   
   if(!nome || isNaN(qtd) || qtd < 0){
-    mostrarMsg("Preencha nome e quantidade válida", "erro");
+    alert("Preencha nome e quantidade válida");
     return;
   }
   
-  if(GITHUB_TOKEN === "ghp_COLE_SEU_TOKEN_AQUI"){
-    mostrarMsg("Configure o GITHUB_TOKEN no admin.html primeiro", "erro");
-    return;
-  }
+  const titulo = encodeURIComponent(`[ADMIN] ${nome}: ${qtd}`);
+  const body = encodeURIComponent(`nome: ${nome}\nqtd: ${qtd}`);
+  const url = `https://github.com/gravatarosasdodeserto/gravatarosasdodeserto-catalogo/issues/new?title=${titulo}&body=${body}&labels=admin`;
   
-  btn.disabled = true;
-  btn.textContent = "Salvando...";
-  msg.style.display = "none";
+  window.open(url, "_blank");
   
-  try {
-    const res = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/dispatches`, {
-      method: "POST",
-      headers: {
-        "Accept": "application/vnd.github+json",
-        "Authorization": `Bearer ${GITHUB_TOKEN}`,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        event_type: "atualizar-catalogo",
-        client_payload: { nome: nome, qtd: qtd }
-      })
-    });
-    
-    if(res.status === 204){
-      mostrarMsg(`✅ ${nome} atualizada! Aguarde 1-2min e recarregue o catálogo.`, "sucesso");
-      document.getElementById("nome").value = "";
-      document.getElementById("qtd").value = "";
-    } else {
-      const erro = await res.text();
-      mostrarMsg(`Erro ${res.status}: ${erro}`, "erro");
-    }
-  } catch(e) {
-    mostrarMsg(`Erro de rede: ${e.message}`, "erro");
-  }
-  
-  btn.disabled = false;
-  btn.textContent = "Salvar no Catálogo";
-}
-
-function mostrarMsg(texto, tipo){
-  msg.textContent = texto;
-  msg.className = `msg ${tipo}`;
+  document.getElementById("msg").textContent = "✅ Issue aberta. Clica em 'Submit new issue' pra confirmar.";
+  document.getElementById("msg").className = "msg sucesso";
+  document.getElementById("nome").value = "";
+  document.getElementById("qtd").value = "";
 }
 </script>
 
