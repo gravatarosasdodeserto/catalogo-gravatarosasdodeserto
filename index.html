@@ -56,12 +56,36 @@ body {
   max-width: 600px;
   margin: auto;
   padding: 0 15px;
+  position: relative;
+  z-index: 2; /* ← ADICIONA ESSA LINHA */
 }
 
 .logo img { width: 70px; }
 
 .info-topo h1 { margin: 0; color: white; font-size: 18px; text-shadow: 0 1px 2px rgba(0,0,0,0.25); }
 .subtitulo { margin: 0; font-size: 13px; color: #d6d6d6; }
+
+/* BOTÃO GESTÃO */
+.btn-admin {
+  position: absolute;
+  top: 50%;
+  right: 15px;
+  transform: translateY(-50%);
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.3);
+  color: white;
+  padding: 8px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  backdrop-filter: blur(4px);
+  transition: 0.15s ease;
+  z-index: 5; /* ← ADICIONA ESSA LINHA */
+}
+  
+.btn-admin:hover { background: rgba(255,255,255,0.25); }
+.btn-admin:active { transform: translateY(-50%) scale(0.95); }
 
 .instrucoes {
   max-width: 600px;
@@ -199,6 +223,49 @@ body {
   
 .oculto { display: none; }
 .nada-encontrado { text-align: center; padding: 20px; font-size: 14px; color: #777; grid-column: 1 / -1; }
+
+/* MODAL DE LOGIN */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(4px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+.modal-overlay.ativo { display: flex; }
+
+.modal-login {
+  background: white;
+  padding: 30px 25px;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 350px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  animation: surge 0.2s ease;
+}
+@keyframes surge {
+  from { transform: scale(0.9); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+.modal-login h2 { margin: 0 0 20px 0; color: #3a3618; font-size: 20px; text-align: center; }
+.modal-login input {
+  width: 100%; padding: 12px; margin: 8px 0; border-radius: 8px; 
+  border: 2px solid #3a3618; font-family: 'Poppins'; font-size: 14px;
+}
+.modal-login button {
+  width: 100%; padding: 12px; margin-top: 12px; border-radius: 8px; 
+  background: #434019; color: white; font-weight: 600; cursor: pointer; border: none;
+}
+.modal-login .fechar {
+  background: #999; margin-top: 8px;
+}
+.modal-login .erro { color: #c00; font-size: 13px; text-align: center; margin-top: 8px; min-height: 18px; }
 </style>
 </head>
 
@@ -211,6 +278,7 @@ body {
       <h1>Gravatá Rosas do Deserto</h1>
       <p class="subtitulo">Enxertos de Adenium Obesum</p>
     </div>
+    <button class="btn-admin" onclick="abrirLogin()">⚙️ Gestão</button>
   </div>
 </div>
 
@@ -237,7 +305,23 @@ body {
   </button>
 </div>
 
+<!-- MODAL DE LOGIN FLUTUANTE -->
+<div class="modal-overlay" id="modalLogin">
+  <div class="modal-login">
+    <h2>Acesso Restrito</h2>
+    <input type="text" id="loginUser" placeholder="Usuário">
+    <input type="password" id="loginPass" placeholder="Senha">
+    <button onclick="fazerLogin()">Entrar</button>
+    <button class="fechar" onclick="fecharLogin()">Cancelar</button>
+    <p class="erro" id="erroLogin"></p>
+  </div>
+</div>
+
 <script>
+// TROCA AQUI SEU LOGIN E SENHA
+const USUARIO_CORRETO = "admin";
+const SENHA_CORRETA = "gravata123";
+
 const catalogo = document.getElementById("catalogo");
 const buscaInput = document.getElementById("busca");
 let selecionados = new Set();
@@ -249,13 +333,12 @@ fetch('flores.json')
     atualizar();
   })
   .catch(err => {
-    catalogo.innerHTML = `<div class="nada-encontrado">Erro ao carregar catálogo. Verifique se o arquivo flores.json existe.</div>`;
+    catalogo.innerHTML = `<div class="nada-encontrado">Erro ao carregar catálogo.</div>`;
     console.error(err);
   });
 
 function renderCatalogo(flores){
   catalogo.innerHTML = "";
-
   flores.forEach(item => {
     let div = document.createElement("div");
     div.className = "item";
@@ -338,7 +421,6 @@ buscaInput.addEventListener("input", ()=>{
 function atualizar(){
   const caixa = document.querySelector(".caixa-selecao");
   const lista = document.getElementById("listaSelecionadas");
-
   lista.innerHTML = "";
 
   if(selecionados.size > 0){
@@ -347,7 +429,6 @@ function atualizar(){
       let tag = document.createElement("div");
       tag.className = "tag";
       tag.textContent = nome + " ";
-      
       let btn = document.createElement("button");
       btn.textContent = "×";
       btn.onclick = (e) => {
@@ -392,12 +473,10 @@ function limparSelecao(){
 
 function enviarWhatsApp(){
   if(selecionados.size === 0) return;
-
   let ids = Array.from(selecionados);
   let texto = ids.length === 1
     ? "Tenho interesse em adquirir enxerto da seguinte variedade:\n\n- "
     : "Tenho interesse em adquirir enxertos das seguintes variedades:\n\n- ";
-
   let mensagem = [
     "Olá!",
     "",
@@ -405,10 +484,41 @@ function enviarWhatsApp(){
     "",
     "Poderia me dar mais informações? Tenho a seguinte dúvida..."
   ].join("\n");
-
   let url = "https://wa.me/5581992665421?text=" + encodeURIComponent(mensagem);
   window.open(url, "_blank");
 }
+
+// FUNÇÕES DO LOGIN
+function abrirLogin(){
+  document.getElementById('modalLogin').classList.add('ativo');
+  document.getElementById('loginUser').focus();
+}
+
+function fecharLogin(){
+  document.getElementById('modalLogin').classList.remove('ativo');
+  document.getElementById('loginUser').value = "";
+  document.getElementById('loginPass').value = "";
+  document.getElementById('erroLogin').innerText = "";
+}
+
+function fazerLogin(){
+  const u = document.getElementById('loginUser').value;
+  const s = document.getElementById('loginPass').value;
+  const erro = document.getElementById('erroLogin');
+  
+  if(u === USUARIO_CORRETO && s === SENHA_CORRETA){
+    erro.innerText = "";
+    fecharLogin();
+    window.open('admin.html', '_blank'); // Abre o painel de cadastro em nova aba
+  } else {
+    erro.innerText = "Usuário ou senha incorretos";
+  }
+}
+
+// Fechar modal com ESC
+document.addEventListener('keydown', (e) => {
+  if(e.key === 'Escape') fecharLogin();
+});
 </script>
 
 </body>
