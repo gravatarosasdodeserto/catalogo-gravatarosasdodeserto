@@ -9,8 +9,8 @@
 :root {
   --header-bg: #fcfaf7;    
   --body-bg: #e5e0d8;      
-  --card-white: #ffffff;    /* Card Branco quando não selecionado */
-  --card-selected: #cbc4b7; /* Card Escuro quando selecionado */
+  --card-white: #ffffff;    
+  --card-selected: #cbc4b7; 
   --text-main: #3a3618;    
 }
 
@@ -28,16 +28,18 @@ body {
   line-height: 1.5;
 }
 
-/* ===== CABEÇALHO ===== */
+/* ===== CABEÇALHO COM EFEITO DE CAMADA ALTA ===== */
 .topbar {
   background: var(--header-bg);
   padding: 35px 0;
   position: sticky;
   top: 0;
-  z-index: 100;
+  z-index: 1000; /* Garante que fique acima de tudo */
   display: flex;
   justify-content: center;
-  border-bottom: 1px solid rgba(0,0,0,0.08);
+  /* Sombra fixa para parecer elevado */
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12); 
+  border-bottom: 1px solid rgba(0,0,0,0.05);
 }
 
 .topbar::before {
@@ -62,7 +64,7 @@ body {
 
 .switch-disponivel {
   display: inline-flex; align-items: center; gap: 12px; font-size: 13px; font-weight: 600;
-  background: rgba(255, 255, 255, 0.3); padding: 10px 20px; border-radius: 50px; cursor: pointer;
+  background: rgba(255, 255, 255, 0.4); padding: 10px 20px; border-radius: 50px; cursor: pointer;
 }
 
 .switch-disponivel input { display: none; }
@@ -83,20 +85,19 @@ body {
 }
 
 .item {
-  background: var(--card-white); /* AGORA BRANCO POR PADRÃO */
+  background: var(--card-white);
   padding: 12px; 
   border-radius: 20px; 
   cursor: pointer;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.05); /* Sombra suave para fora */
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05); 
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   border: 1px solid rgba(0,0,0,0.02);
 }
 
-/* QUANDO SELECIONADO: ESCURECE E AFUNDA */
 .item.selecionado {
   background: var(--card-selected) !important;
   transform: scale(0.94);
-  box-shadow: inset 0 4px 8px rgba(0,0,0,0.15) !important; /* Efeito de profundidade */
+  box-shadow: inset 0 4px 8px rgba(0,0,0,0.15) !important;
   border: 1px solid rgba(0, 0, 0, 0.08) !important;
 }
 
@@ -104,9 +105,7 @@ body {
   width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 14px; 
 }
 
-.item.selecionado video, .item.selecionado img {
-  filter: brightness(0.85); 
-}
+.item.selecionado video, .item.selecionado img { filter: brightness(0.85); }
 
 .item p { text-align: center; font-size: 14px; font-weight: 600; margin: 12px 0 2px 0; }
 
@@ -114,12 +113,13 @@ body {
 .disponivel { color: #2d5a27; }
 .encomenda { color: #8a8471; opacity: 0.7; }
 
-/* ===== RODAPÉ SÓLIDO ===== */
+/* ===== RODAPÉ ===== */
 .rodape-acoes {
   position: fixed; bottom: 0; left: 0; width: 100%;
   background: rgba(229, 224, 216, 0.98); backdrop-filter: blur(12px);
   padding: 15px 20px 30px; border-top: 1px solid rgba(0,0,0,0.1);
   z-index: 1000;
+  box-shadow: 0 -5px 15px rgba(0,0,0,0.05);
 }
 
 .container-rodape { max-width: 500px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
@@ -134,9 +134,8 @@ body {
   display: inline-flex; align-items: center; gap: 8px; margin: 0 5px 5px 0;
 }
 
-.tag-item button { border: none; background: none; color: #8b2d2d; cursor: pointer; }
+.tag-item button { border: none; background: none; color: #8b2d2d; cursor: pointer; font-weight: bold; }
 
-/* BARRA DE BUSCA TRANSPARENTE */
 .campo-busca {
   width: 100%; padding: 16px 25px; border-radius: 50px; 
   border: 1.5px solid rgba(58, 54, 24, 0.15);
@@ -145,7 +144,6 @@ body {
   color: var(--text-main);
 }
 
-/* BOTÃO CONSULTAR WHATSAPP (Sempre branco, escurece só no toque) */
 .btn-whatsapp {
   width: 100%; padding: 18px; 
   background: #ffffff; 
@@ -263,20 +261,15 @@ function montarCatalogo() {
 
     card.onclick = () => {
       if (navigator.vibrate) navigator.vibrate(50);
-      
       if (itensSelecionados.has(nome)) itensSelecionados.delete(nome);
       else itensSelecionados.add(nome);
-      
-      // LIMPAR BUSCA AO SELECIONAR
       filtroTexto = "";
       inputPesquisa.value = "";
-      
       montarCatalogo();
       atualizarPainelAcoes();
     };
     grid.appendChild(card);
   });
-
   if (itensExibidos === 0) grid.innerHTML = `<div class="vazio">Nenhuma ID encontrada.</div>`;
 }
 
@@ -284,7 +277,6 @@ function atualizarPainelAcoes() {
   const areaSelecao = document.getElementById("areaSelecao");
   const containerTags = document.getElementById("containerTags");
   const btnZap = document.getElementById("btnEnviar");
-
   containerTags.innerHTML = "";
   if (itensSelecionados.size > 0) {
     areaSelecao.style.display = "block";
@@ -300,13 +292,9 @@ function atualizarPainelAcoes() {
     areaSelecao.style.display = "none";
     btnZap.classList.add("oculto");
   }
-
-  document.querySelectorAll(".item").forEach(card => {
-    card.classList.toggle("selecionado", itensSelecionados.has(card.getAttribute("data-id")));
-  });
 }
 
-function removerDaSelecao(nome) { itensSelecionados.delete(nome); atualizarPainelAcoes(); }
+function removerDaSelecao(nome) { itensSelecionados.delete(nome); atualizarPainelAcoes(); montarCatalogo(); }
 
 function enviarPedido() {
   const msg = "Olá! Gostaria de verificar estas IDs:\n\n- " + Array.from(itensSelecionados).join("\n- ");
