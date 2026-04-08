@@ -6,12 +6,12 @@
 <title>Catálogo | Gravatá Rosas do Deserto</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-/* ===== VARIÁVEIS DE COR E TEMA ===== */
+/* ===== VARIÁVEIS DE COR AJUSTADAS PARA PROFUNDIDADE ===== */
 :root {
-  --header-bg: #fcfaf7;    /* Cabeçalho mais claro */
-  --body-bg: #e5e0d8;      /* Corpo mais escuro (Fendi) */
-  --text-main: #3a3618;    /* Verde Oliva Profundo */
-  --card-bg: #ffffff;      /* Cards brancos para contraste */
+  --header-bg: #fcfaf7;    
+  --body-bg: #e5e0d8;      /* Cor base do fundo */
+  --card-bg: #d8d2c9;      /* Card levemente MAIS ESCURO que o fundo */
+  --text-main: #3a3618;    
 }
 
 * { 
@@ -24,9 +24,8 @@ body {
   background-color: var(--body-bg);
   color: var(--text-main);
   margin: 0;
-  padding-bottom: 230px; /* Espaço para o rodapé sólido fixo */
+  padding-bottom: 230px; 
   line-height: 1.5;
-  box-shadow: inset 0 10px 15px -10px rgba(0,0,0,0.1);
 }
 
 /* ===== CABEÇALHO ===== */
@@ -55,7 +54,6 @@ body {
   width: 145px; 
   position: relative; 
   z-index: 2; 
-  filter: drop-shadow(0 2px 5px rgba(0,0,0,0.05));
 }
 
 /* ===== FILTROS E INSTRUÇÕES ===== */
@@ -66,17 +64,13 @@ body {
   padding: 0 20px;
 }
 
-.instrucoes-texto { margin-bottom: 20px; }
-.instrucoes-texto p { margin: 0; font-size: 18px; font-weight: 600; }
-.instrucoes-texto span { font-size: 13px; opacity: 0.7; }
-
 .switch-disponivel {
   display: inline-flex; 
   align-items: center; 
   gap: 12px; 
   font-size: 13px; 
   font-weight: 600;
-  background: rgba(255, 255, 255, 0.4); 
+  background: rgba(255, 255, 255, 0.3); 
   padding: 10px 20px; 
   border-radius: 50px; 
   cursor: pointer;
@@ -92,7 +86,7 @@ body {
 .switch-disponivel input:checked + .slider { background: var(--text-main); }
 .switch-disponivel input:checked + .slider::before { transform: translateX(18px); }
 
-/* ===== GRID DE PRODUTOS ===== */
+/* ===== GRID E CARDS (EFEITO REBAIXADO) ===== */
 .catalogo {
   display: grid; 
   grid-template-columns: repeat(auto-fill, minmax(165px, 1fr));
@@ -107,17 +101,19 @@ body {
   padding: 12px; 
   border-radius: 20px; 
   cursor: pointer;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06); 
-  transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  border: 1px solid rgba(0,0,0,0.02);
+  /* Sombra interna para parecer que o card está "dentro" do fundo */
+  box-shadow: inset 0 2px 6px rgba(0,0,0,0.08);
+  transition: all 0.2s ease;
+  border: 1px solid rgba(0,0,0,0.03);
 }
 
-.item:active { transform: scale(0.94); }
+.item:active { transform: scale(0.96); }
 
+/* QUANDO SELECIONADO: Ganha destaque e "sobe" levemente ou muda o tom */
 .item.selecionado {
   background: #fdfcf9 !important;
-  transform: scale(0.95) !important;
-  box-shadow: inset 0 2px 10px rgba(0,0,0,0.1) !important;
+  transform: scale(0.95);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1) !important; /* Vira um botão real */
   border: 1px solid rgba(58, 54, 24, 0.2) !important;
 }
 
@@ -126,7 +122,7 @@ body {
   aspect-ratio: 1/1; 
   object-fit: cover; 
   border-radius: 14px; 
-  background: #f0f0f0; 
+  filter: brightness(0.95); /* Leve ajuste para integrar ao card escuro */
 }
 
 .item p { 
@@ -145,7 +141,7 @@ body {
 .disponivel { color: #2d5a27; }
 .encomenda { color: #8a8471; opacity: 0.7; }
 
-/* ===== RODAPÉ SÓLIDO E FIXO ===== */
+/* ===== RODAPÉ SÓLIDO E BUSCA TRANSPARENTE ===== */
 .rodape-acoes {
   position: fixed; 
   bottom: 0; 
@@ -155,8 +151,7 @@ body {
   backdrop-filter: blur(12px);
   padding: 15px 20px 30px; 
   border-top: 1px solid rgba(0,0,0,0.1);
-  z-index: 1000; 
-  box-shadow: 0 -5px 25px rgba(0,0,0,0.08);
+  z-index: 1000;
 }
 
 .container-rodape { 
@@ -173,33 +168,31 @@ body {
   padding: 12px; 
   border-radius: 18px;
   max-height: 110px; 
-  overflow-y: auto; 
-  border: 1px solid rgba(0,0,0,0.05);
+  overflow-y: auto;
+  margin-bottom: 5px;
 }
-
-.lista-tags { display: flex; flex-wrap: wrap; gap: 8px; }
 
 .tag-item {
-  font-size: 11px; 
-  background: #f0f0eb; 
-  padding: 6px 12px; 
-  border-radius: 8px;
-  display: flex; 
-  align-items: center; 
-  gap: 8px;
+  font-size: 11px; background: #f0f0eb; padding: 6px 12px; border-radius: 8px;
+  display: inline-flex; align-items: center; gap: 8px; margin: 0 5px 5px 0;
 }
 
-.tag-item button { border: none; background: none; color: #8b2d2d; font-weight: bold; cursor: pointer; padding: 0; }
+.tag-item button { border: none; background: none; color: #8b2d2d; cursor: pointer; }
 
+/* BUSCA COR DO FUNDO / TRANSPARENTE */
 .campo-busca {
   width: 100%; 
   padding: 16px 25px; 
   border-radius: 50px; 
-  border: 1px solid rgba(0,0,0,0.12);
+  border: 1.5px solid rgba(58, 54, 24, 0.15);
+  background: transparent; /* Barra transparente */
   outline: none; 
   font-family: inherit; 
   font-size: 15px;
+  color: var(--text-main);
 }
+
+.campo-busca::placeholder { color: rgba(58, 54, 24, 0.5); }
 
 .btn-whatsapp {
   width: 100%; 
@@ -211,6 +204,7 @@ body {
   font-weight: 600; 
   font-size: 16px; 
   cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
 .oculto { display: none; }
@@ -220,18 +214,18 @@ body {
 <body>
 
 <div class="topbar">
-  <div class="logo"><img src="logo.png" alt="Gravatá"></div>
+  <div class="logo"><img src="logo.png"></div>
 </div>
 
 <div class="secao-filtros">
-  <div class="instrucoes-texto">
-    <p>Catálogo de Variedades</p>
-    <span>Selecione as ID's desejadas para o WhatsApp.</span>
+  <div style="margin-bottom:20px">
+    <p style="margin:0; font-size:18px; font-weight:600">Catálogo de Variedades</p>
+    <span style="font-size:13px; opacity:0.7">Toque para selecionar as IDs desejadas</span>
   </div>
   <label class="switch-disponivel">
     <input type="checkbox" id="checkProntaEntrega">
     <span class="slider"></span>
-    Mostrar apenas Pronta Entrega
+    Apenas Pronta Entrega
   </label>
 </div>
 
@@ -240,15 +234,14 @@ body {
 <div class="rodape-acoes">
   <div class="container-rodape">
     <div class="caixa-selecao" id="areaSelecao">
-      <div class="lista-tags" id="containerTags"></div>
+      <div id="containerTags"></div>
     </div>
-    <input type="text" id="inputPesquisa" class="campo-busca" placeholder="Pesquisar por ID ou nome...">
+    <input type="text" id="inputPesquisa" class="campo-busca" placeholder="Pesquisar ID ou nome...">
     <button id="btnEnviar" class="btn-whatsapp oculto" onclick="enviarPedido()">Consultar Selecionados</button>
   </div>
 </div>
 
 <script>
-/* ===== DICIONÁRIO ÚNICO (DADOS) ===== */
 const estoque = {
   "AÇUCENA (MUTANTE)": 1, "AKACHI": 0, "AMATTA": 1, "ARYA": 0, "BLOODY MARY": 0, "BP-116": 0,
   "BRANCA DE NEVE": 0, "BRIDAL BOUQUET": 0, "CANAN 55": 0, "CANAN 170": 0, "CAPIXABA": 0,
@@ -293,7 +286,6 @@ function montarCatalogo() {
   grid.innerHTML = "";
   let itensExibidos = 0;
 
-  // Usa as chaves do objeto estoque para gerar a lista
   Object.keys(estoque).forEach(nome => {
     const quantidade = estoque[nome];
     if (apenasDisponiveis && quantidade === 0) return;
@@ -342,7 +334,7 @@ function atualizarPainelAcoes() {
       containerTags.appendChild(tag);
     });
     btnZap.classList.remove("oculto");
-    btnZap.innerHTML = `Consultar ${itensSelecionados.size} variedade${itensSelecionados.size > 1 ? 's' : ''}`;
+    btnZap.innerHTML = `Consultar ${itensSelecionados.size} variedades`;
   } else {
     areaSelecao.style.display = "none";
     btnZap.classList.add("oculto");
@@ -356,10 +348,8 @@ function atualizarPainelAcoes() {
 function removerDaSelecao(nome) { itensSelecionados.delete(nome); atualizarPainelAcoes(); }
 
 function enviarPedido() {
-  if (itensSelecionados.size === 0) return;
-  const listaIds = Array.from(itensSelecionados).join("\n- ");
-  const mensagem = "Olá! Gostaria de verificar a disponibilidade destas IDs:\n\n- " + listaIds;
-  window.open("https://wa.me/5581992665421?text=" + encodeURIComponent(mensagem), "_blank");
+  const msg = "Olá! Gostaria de verificar estas IDs:\n\n- " + Array.from(itensSelecionados).join("\n- ");
+  window.open("https://wa.me/5581992665421?text=" + encodeURIComponent(msg), "_blank");
 }
 
 montarCatalogo();
