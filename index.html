@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Catálogo de Flores</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+  font-family: 'Poppins', sans-serif;
+  /* Bege mais escuro/fechado para o fundo */
+  background: #eaddca; 
+  margin: 0;
+  padding-bottom: 200px;
+}
+
+/* ===== HEADER ===== */
+.topbar {
+  /* Mesma cor do fundo para continuidade visual */
+  background: #eaddca; 
+  padding: 35px 0;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.topbar::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url('imagens/folhas-topo.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  /* Mantido em 1 para mostrar bem as folhas */
+  opacity: 1; 
+  z-index: 1;
+}
+
+.topbar::after {
+  display: none;
+}
+
+/* LINHAS - Cor marrom escura com baixa opacidade */
+.linha-topo,
+.linha-baixo {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background-color: #3a3618;
+  opacity: 0.15;
+  z-index: 2;
+}
+
+.linha-topo { top: 10px; }
+.linha-baixo { bottom: 10px; }
+
+/* HEADER CONTAINER */
+.header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: 600px;
+  margin: auto;
+  position: relative;
+  z-index: 3;
+}
+
+/* LOGO */
+.logo img {
+  width: 160px;
+  height: auto;
+  display: block;
+  /* Sombra leve para destacar no centro branco da imagem */
+  filter: drop-shadow(0 2px 5px rgba(0,0,0,0.1));
+}
+
+/* ===== RESTO DO ESTILO ===== */
+
+.instrucoes {
+  max-width: 600px;
+  margin: 25px auto 10px auto;
+  padding: 0 20px;
+  text-align: center;
+  color: #3a3618;
+}
+
+.instrucoes p {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.instrucoes span {
+  font-size: 13px;
+  opacity: 0.8;
+  display: block;
+  margin-top: 5px;
+  line-height: 1.4;
+}
+
+.filtro-disponivel {
+  max-width: 600px;
+  margin: 0 auto 15px auto;
+  padding: 0 20px;
+  text-align: center;
+}
+
+.switch-disponivel {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #3a3618;
+  cursor: pointer;
+}
+
+.switch-disponivel input {
+  display: none;
+}
+
+.switch-disponivel .slider {
+  position: relative;
+  width: 44px;
+  height: 24px;
+  background: #c9bcab; /* Cor de trilho mais escura para o switch */
+  border-radius: 24px;
+  transition: 0.2s;
+}
+
+.switch-disponivel .slider::before {
+  content: "";
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  left: 3px;
+  top: 3px;
+  background: white;
+  border-radius: 50%;
+  transition: 0.2s;
+}
+
+.switch-disponivel input:checked + .slider {
+  background: #3a3618;
+}
+
+.switch-disponivel input:checked + .slider::before {
+  transform: translateX(20px);
+}
+
+.catalogo {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 15px;
+  padding: 15px;
+}
+
+.item {
+  background: white;
+  padding: 10px;
+  border-radius: 12px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  transition: 0.15s ease;
+}
+
+.item:hover { transform: translateY(-3px); }
+
+.item p { text-align: center; font-size: 14px; margin: 8px 0 2px 0; }
+
+.item video, .item img {
+  width: 100%;
+  border-radius: 8px;
+  display: block;
+  background: #eee;
+}
+
+.item.selecionado {
+  outline: 3px solid #3a3618;
+  background: #fffefb;
+}
+
+.estoque { text-align: center; font-size: 12px; color: #3a3618; margin-bottom: 4px; }
+
+.botoes-acoes {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  /* Fundo do rodapé flutuante acompanhando o bege com leve transparência */
+  background: rgba(234, 221, 202, 0.95);
+  backdrop-filter: blur(8px);
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 100;
+}
+
+.caixa-selecao { 
+  display: none; 
+  background: white; 
+  padding: 12px; 
+  border-radius: 12px; 
+  box-shadow: 0 -4px 10px rgba(0,0,0,0.05);
+}
+
+.topo-caixa {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.limpar { color: #8b2d2d; cursor: pointer; }
+
+#listaSelecionadas { display: flex; flex-wrap: wrap; gap: 6px; }
+
+.tag {
+  font-size: 11px;
+  background: #f3efe9;
+  border-radius: 20px;
+  padding: 4px 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid #e2ddd3;
+}
+
+.tag button {
+  background: none;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+  color: #8b2d2d;
+  padding: 0;
+}
+
+.busca {
+  width: 100%;
+  padding: 12px;
+  border-radius: 25px;
+  border: 2px solid #3a3618;
+  text-align: center;
+  font-family: inherit;
+  background: white;
+}
+
+.botao-whatsapp {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(180deg, #434019 0%, #3a3618 100%);
+  color: white;
+  border: none;
+  border-radius: 30px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.oculto { display: none; }
+
+.nada-encontrado {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 40px 20px;
+  color: #777;
+}
+</style>
+</head>
+
+<body>
+
+<div class="topbar">
+  <div class="linha-topo"></div>
+  <div class="linha-baixo"></div>
+
+  <div class="header">
+    <div class="logo">
+      <img src="logo.png" alt="Gravatá Rosas do Deserto">
+    </div>
+  </div>
+</div>
+
+<div class="instrucoes">
+  <p><strong>Selecione as ID's desejadas</strong> para solicitar informações sobre os enxertos.</p>
+  <span>Variedades sem pronta entrega podem ser encomendadas sem custo.</span>
+</div>
+
+<div class="filtro-disponivel">
+  <label class="switch-disponivel">
+    <input type="checkbox" id="filtroDisponivel">
+    <span class="slider"></span>
+    Mostrar só variedades com pronta entrega
+  </label>
+</div>
+
+<div class="catalogo" id="catalogo"></div>
+
+<div class="botoes-acoes">
+  <div class="caixa-selecao">
+    <div class="topo-caixa">
+      <span>ID's selecionadas:</span>
+      <span class="limpar" onclick="limparSelecao()">Limpar tudo</span>
+    </div>
+    <div id="listaSelecionadas"></div>
+  </div>
+
+  <input type="text" id="busca" class="busca" placeholder="Buscar por ID...">
+
+  <button class="botao-whatsapp oculto" onclick="enviarWhatsApp()">
+    Pedir informações
+  </button>
+</div>
+
+<script>
+  
+const flores = [
+"AÇUCENA (MUTANTE)","AKACHI","AMATTA","ARYA","BLOODY MARY","BP-116",
+"BRANCA DE NEVE","BRIDAL BOUQUET","CANAN 55","CANAN 170","CAPIXABA",
+"CÉU ESTRELADO","CÉU ESTRELADO VARIEGATA","COPENHAGEN","DAFNE","DIỆU CHÂU","COCA-COLA",
+"DOUBLE STAR","DUQUESA","EGG ROLL","ELARA","ELLIE","EV19-XANADÚ",
+"FERRARI","GOLDEN FAITH","GRAPE CHOCOLATE","GUARÁ PITANGA",
+"GTA-AIKA","GTA-BOLD","GTA-CANDY CRUSH","GTA-CÓSMICA","GTA-CREPÚSCULO",
+"GTA-DESERT DOLL","GTA-DIANA","GTA-EMMA FROST","GTA-FAY","GTA-FLORZINHA",
+"GTA-FLUTTERSHY","GTA-FRACTA","GTA-GOLDEN PINK","GTA-ICE DRAGON",
+"GTA-KIMBERLY","GTA-LITTLE KISS","GTA-LOLLIPOP BLACK","GTA-LYSSA",
+"GTA-LYTA","GTA-MISS GRAVATÁ","GTA-NYX","GTA-PERONA","GTA-PINK VENOM",
+"GTA-PINKIE PIE","GTA-RED COMETS","GTA-RED STORM","GTA-RED WIDOW",
+"GTA-SANSA","GTA-SHE HA","GTA-SUN CLUSTER","GTA-SWEET BLUSH",
+"GTA-TRINITY","GTA-TRUE FAITH","GTA-YUNA","HELENA","INDIGO GLAZE",
+"INFINITY","JHULLY","JULIUS CAESAR","KING OF KINGS","KINDLY","L-06",
+"LAILA","LILAC FROST (MUTANTE)","LM-440","LM-50","LM-02","LUNA",
+"MAGNIFICAT","MARIA","MIDNIGHT","MỘNG CẦM","MORAN","NANCY","NEMO",
+"NORALINE","NUSA","P-200","PATHUMMA","PEONY","PHARAOH","PURPLE BLUE",
+"QUEEN RAY","RF-001","RF-002","RIHANNA","ROMANTIC EDGE","SANTA CLAUS",
+"SATURNO","SENNA","SIENA","SOCHI","SOPHIA","STAR CLUSTER","SWALLOW",
+"RC-04","THAMIRES","THE SECRET OF VICTORIA","TRIPLE WISH","TROPICAL","TS-69",
+"TS-222","TS-330","TW4","UNPARALLELED","VARIEGATA","VAMPIRA",
+"VIÚVA NEGRA","VOLCANO","W59","YÚ JIǍO"
+];
+
+const estoque = {
+  "AÇUCENA (MUTANTE)": 1,
+  "AKACHI": 0,
+  "AMATTA": 1,
+  "ARYA": 0,
+  "BLOODY MARY": 0,
+  "BP-116": 0,
+  "BRANCA DE NEVE": 0,
+  "BRIDAL BOUQUET": 0,
+  "CANAN 55": 0,
+  "CANAN 170": 0,
+  "CAPIXABA": 0,
+  "CÉU ESTRELADO": 2,
+  "CÉU ESTRELADO VARIEGATA": 0,
+  "COPENHAGEN": 0,
+  "DAFNE": 0,
+  "DIỆU CHÂU": 0,
+  "COCA-COLA": 0,
+  "DOUBLE STAR": 0,
+  "DUQUESA": 0,
+  "EGG ROLL": 0,
+  "ELARA": 0,
+  "ELLIE": 0,
+  "EV19-XANADÚ": 0,
+  "FERRARI": 0,
+  "GOLDEN FAITH": 0,
+  "GRAPE CHOCOLATE": 0,
+  "GUARÁ PITANGA": 0,
+  "GTA-AIKA": 0,
+  "GTA-BOLD": 0,
+  "GTA-CANDY CRUSH": 0,
+  "GTA-CÓSMICA": 0,
+  "GTA-CREPÚSCULO": 0,
+  "GTA-DESERT DOLL": 0,
+  "GTA-DIANA": 0,
+  "GTA-EMMA FROST": 0,
+  "GTA-FAY": 0,
+  "GTA-FLORZINHA": 0,
+  "GTA-FLUTTERSHY": 0,
+  "GTA-FRACTA": 0,
+  "GTA-GOLDEN PINK": 0,
+  "GTA-ICE DRAGON": 0,
+  "GTA-KIMBERLY": 0,
+  "GTA-LITTLE KISS": 0,
+  "GTA-LOLLIPOP BLACK": 0,
+  "GTA-LYSSA": 0,
+  "GTA-LYTA": 0,
+  "GTA-MISS GRAVATÁ": 0,
+  "GTA-NYX": 0,
+  "GTA-PERONA": 0,
+  "GTA-PINK VENOM": 0,
+  "GTA-PINKIE PIE": 0,
+  "GTA-RED COMETS": 0,
+  "GTA-RED STORM": 0,
+  "GTA-RED WIDOW": 0,
+  "GTA-SANSA": 0,
+  "GTA-SHE HA": 0,
+  "GTA-SUN CLUSTER": 0,
+  "GTA-SWEET BLUSH": 0,
+  "GTA-TRINITY": 0,
+  "GTA-TRUE FAITH": 0,
+  "GTA-YUNA": 0,
+  "HELENA": 0,
+  "INDIGO GLAZE": 0,
+  "INFINITY": 0,
+  "JHULLY": 0,
+  "JULIUS CAESAR": 0,
+  "KING OF KINGS": 0,
+  "KINDLY": 0,
+  "L-06": 0,
+  "LAILA": 0,
+  "LILAC FROST (MUTANTE)": 0,
+  "LM-440": 0,
+  "LM-50": 0,
+  "LM-02": 0,
+  "LUNA": 0,
+  "MAGNIFICAT": 0,
+  "MARIA": 0,
+  "MIDNIGHT": 0,
+  "MỘNG CẦM": 0,
+  "MORAN": 0,
+  "NANCY": 0,
+  "NEMO": 0,
+  "NORALINE": 0,
+  "NUSA": 0,
+  "P-200": 0,
+  "PATHUMMA": 0,
+  "PEONY": 0,
+  "PHARAOH": 0,
+  "PURPLE BLUE": 0,
+  "QUEEN RAY": 0,
+  "RF-001": 0,
+  "RF-002": 0,
+  "RIHANNA": 0,
+  "ROMANTIC EDGE": 0,
+  "SANTA CLAUS": 0,
+  "SATURNO": 0,
+  "SENNA": 0,
+  "SIENA": 0,
+  "SOCHI": 0,
+  "SOPHIA": 0,
+  "STAR CLUSTER": 0,
+  "SWALLOW": 0,
+  "RC-04": 0,
+  "THAMIRES": 0,
+  "THE SECRET OF VICTORIA": 0,
+  "TRIPLE WISH": 0,
+  "TROPICAL": 0,
+  "TS-69": 0,
+  "TS-222": 0,
+  "TS-330": 0,
+  "TW4": 0,
+  "UNPARALLELED": 0,
+  "VARIEGATA": 0,
+  "VAMPIRA": 0,
+  "VIÚVA NEGRA": 0,
+  "VOLCANO": 0,
+  "W59": 0,
+  "YÚ JIǍO": 0
+};
+
+flores.forEach(nome => {
+  if (!(nome in estoque)) estoque[nome] = 0;
+});
+
+const catalogo = document.getElementById("catalogo");
+const buscaInput = document.getElementById("busca");
+const filtroDisponivel = document.getElementById("filtroDisponivel");
+let selecionados = new Set();
+let apenasDisponiveis = false;
+let termoBusca = "";
+
+filtroDisponivel.addEventListener("change", () => {
+  apenasDisponiveis = filtroDisponivel.checked;
+  renderCatalogo();
+});
+
+buscaInput.addEventListener("input", ()=>{
+  termoBusca = buscaInput.value.toLowerCase();
+  renderCatalogo();
+});
+
+function gerarNomeArquivo(nome){
+  return nome.toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/ /g, "-")
+    .replace(/[()]/g, "");
+}
+
+function renderCatalogo(){
+  catalogo.innerHTML = "";
+  let encontrados = 0;
+
+  flores.forEach(nome=>{
+    let qtd = estoque[nome];
+    
+    if(apenasDisponiveis && qtd === 0) return;
+    if(termoBusca && !nome.toLowerCase().includes(termoBusca)) return;
+    
+    encontrados++;
+
+    let div = document.createElement("div");
+    div.className = "item";
+    div.setAttribute("data-nome", nome);
+    if(selecionados.has(nome)) div.classList.add("selecionado");
+
+    let arquivo = gerarNomeArquivo(nome);
+    let texto = qtd > 0
+      ? `Enxertos disponíveis: ${qtd} (envio imediato)`
+      : `Enxertos disponíveis: 0 (pode encomendar)`;
+
+    let media = document.createElement("video");
+    media.src = `imagens/${arquivo}.mp4`;
+    media.poster = `imagens/${arquivo}.jpg`;
+    media.muted = true;
+    media.loop = true;
+    media.playsInline = true;
+    media.autoplay = true;   
+    media.preload = "auto";
+    media.loading = "lazy";
+
+    media.onerror = function(){
+      let img = document.createElement("img");
+      img.src = `imagens/${arquivo}.jpg`;
+      img.loading = "lazy";
+      img.onerror = function(){ this.src = 'imagens/sem-foto.jpg'; };
+      this.replaceWith(img);
+    };
+
+    let p = document.createElement("p");
+    p.innerHTML = `<strong>${nome}</strong>`;
+
+    let est = document.createElement("div");
+    est.className = "estoque";
+    est.textContent = texto;
+
+    div.appendChild(media);
+    div.appendChild(p);
+    div.appendChild(est);
+
+    div.onclick = ()=>{
+      if(selecionados.has(nome)) selecionados.delete(nome);
+      else selecionados.add(nome);
+      atualizar();
+    };
+
+    catalogo.appendChild(div);
+  });
+  
+  if(encontrados === 0) {
+    let msg = document.createElement("div");
+    msg.className = "nada-encontrado";
+    msg.innerText = apenasDisponiveis 
+      ? "Nenhuma variedade com pronta entrega no momento" 
+      : "Nada encontrado";
+    catalogo.appendChild(msg);
+  }
+}
+
+function atualizar(){
+  const caixa = document.querySelector(".caixa-selecao");
+  const lista = document.getElementById("listaSelecionadas");
+
+  lista.innerHTML = "";
+
+  if(selecionados.size > 0){
+    caixa.style.display = "block";
+    selecionados.forEach(nome=>{
+      let tag = document.createElement("div");
+      tag.className = "tag";
+      tag.innerHTML = `${nome} <button onclick="removerItem('${nome}')">×</button>`;
+      lista.appendChild(tag);
+    });
+  } else {
+    caixa.style.display = "none";
+  }
+
+  document.querySelectorAll(".item").forEach(div => {
+    const nome = div.getAttribute("data-nome");
+    if(selecionados.has(nome)) div.classList.add("selecionado");
+    else div.classList.remove("selecionado");
+  });
+
+  const total = selecionados.size;
+  const botao = document.querySelector(".botao-whatsapp");
+
+  if(total === 0){
+    botao.classList.add("oculto");
+  } else {
+    botao.classList.remove("oculto");
+    botao.innerHTML = total === 1 
+      ? `Pedir informações sobre a ID selecionada` 
+      : `Pedir informações sobre as ${total} ID's selecionadas`;
+  }
+}
+
+function removerItem(nome){
+  selecionados.delete(nome);
+  atualizar();
+}
+
+function limparSelecao(){
+  selecionados.clear();
+  atualizar();
+}
+
+function enviarWhatsApp(){
+  if(selecionados.size === 0) return;
+
+  let ids = Array.from(selecionados);
+  let texto = ids.length === 1
+    ? "Tenho interesse em adquirir enxerto da seguinte variedade:\n\n- "
+    : "Tenho interesse em adquirir enxertos das seguintes variedades:\n\n- ";
+
+  let mensagem = [
+    "Olá!",
+    "",
+    texto + ids.join("\n- "),
+    "",
+    "Poderia me dar mais informações? Tenho a seguinte duvida..."
+  ].join("\n");
+
+  let url = "https://wa.me/5581992665421?text=" + encodeURIComponent(mensagem);
+  window.open(url, "_blank");
+}
+
+renderCatalogo();
+atualizar();
+</script>
+
+</body>
+</html>
