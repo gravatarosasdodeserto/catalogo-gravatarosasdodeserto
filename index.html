@@ -9,14 +9,13 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
 
 <style>
-/* ===== VARIÁVEIS DE CORES REFINADAS ===== */
+/* ===== PALETA DE CORES CONTRASTANTE ===== */
 :root {
-  --bg-color: #fcfaf7; /* Off-white / Pérola (Suave e moderno) */
-  --text-main: #3a3618; /* Verde Musgo Escuro */
-  --accent-color: #4a4521;
-  --card-bg: #ffffff;
-  --shadow-subtle: 0 4px 20px rgba(0, 0, 0, 0.04);
-  --shadow-focus: 0 12px 40px rgba(74, 69, 33, 0.12);
+  --header-bg: #fcfaf7;    /* Mais claro (Pérola) */
+  --body-bg: #e5e0d8;      /* Mais escuro (Fendi/Areia Escuro) */
+  --text-main: #3a3618;    /* Verde Oliva Profundo */
+  --card-bg: #ffffff;      /* Branco puro para os produtos */
+  --accent: #4a4521;
 }
 
 * { 
@@ -26,17 +25,20 @@
 
 body {
   font-family: 'Poppins', sans-serif;
-  background-color: var(--bg-color);
+  background-color: var(--body-bg);
   color: var(--text-main);
   margin: 0;
-  padding-bottom: 220px;
+  /* Espaço exato para o novo rodapé sólido */
+  padding-bottom: 180px; 
   line-height: 1.5;
+  /* Sombra interna no topo do corpo para marcar a divisão */
+  box-shadow: inset 0 10px 15px -10px rgba(0,0,0,0.1);
 }
 
-/* ===== HEADER CLEAN ===== */
+/* ===== HEADER CLARO E DEFINIDO ===== */
 .topbar {
-  background: var(--bg-color);
-  padding: 30px 0;
+  background: var(--header-bg);
+  padding: 35px 0;
   position: sticky;
   top: 0;
   z-index: 100;
@@ -44,7 +46,8 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  border-bottom: 1px solid rgba(0,0,0,0.05);
+  /* Borda inferior sutil para nitidez */
+  border-bottom: 1px solid rgba(0,0,0,0.08);
 }
 
 .topbar::before {
@@ -54,7 +57,7 @@ body {
   background-image: url('imagens/folhas-topo.png');
   background-size: cover;
   background-position: center;
-  opacity: 1; /* Imagem totalmente visível */
+  opacity: 1;
   z-index: 1;
 }
 
@@ -64,30 +67,29 @@ body {
 }
 
 .logo img {
-  width: 140px;
+  width: 145px;
   height: auto;
   display: block;
-  filter: drop-shadow(0 2px 8px rgba(0,0,0,0.05));
 }
 
-/* ===== TEXTOS E FILTROS ===== */
+/* ===== CONTEÚDO ===== */
 .instrucoes {
   max-width: 600px;
-  margin: 35px auto 15px;
+  margin: 40px auto 20px;
   padding: 0 25px;
   text-align: center;
 }
 
 .instrucoes p {
   margin: 0;
-  font-size: 17px;
+  font-size: 18px;
   font-weight: 600;
-  letter-spacing: -0.02em;
+  color: var(--text-main);
 }
 
 .instrucoes span {
   font-size: 13px;
-  opacity: 0.6;
+  opacity: 0.7;
   display: block;
   margin-top: 6px;
 }
@@ -102,12 +104,13 @@ body {
 .switch-disponivel {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   font-size: 12px;
   font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  color: #8a8471;
+  color: var(--text-main);
+  background: rgba(255, 255, 255, 0.3);
+  padding: 8px 16px;
+  border-radius: 50px;
   cursor: pointer;
 }
 
@@ -117,7 +120,7 @@ body {
   position: relative;
   width: 38px;
   height: 20px;
-  background: #e0ddd5;
+  background: #c7c1b5;
   border-radius: 20px;
   transition: 0.3s;
 }
@@ -137,81 +140,94 @@ body {
 .switch-disponivel input:checked + .slider { background: var(--text-main); }
 .switch-disponivel input:checked + .slider::before { transform: translateX(18px); }
 
-/* ===== CATÁLOGO ===== */
+/* ===== GRID DE ITENS ===== */
 .catalogo {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(165px, 1fr));
-  gap: 16px;
-  padding: 0 16px;
+  gap: 20px;
+  padding: 0 20px;
   max-width: 1100px;
   margin: 0 auto;
 }
 
 .item {
   background: var(--card-bg);
-  padding: 10px;
-  border-radius: 18px;
+  padding: 12px;
+  border-radius: 20px;
   cursor: pointer;
-  box-shadow: var(--shadow-subtle);
-  transition: all 0.3s ease;
-  border: 1px solid rgba(0,0,0,0.03);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  border: 1px solid rgba(0,0,0,0.02);
 }
 
 .item:hover {
-  transform: translateY(-5px);
-  box-shadow: var(--shadow-focus);
+  transform: translateY(-6px);
+  box-shadow: 0 15px 35px rgba(58, 54, 24, 0.15);
 }
 
 .item video, .item img {
   width: 100%;
   aspect-ratio: 1/1;
   object-fit: cover;
-  border-radius: 12px;
-  background: #fdfdfd;
+  border-radius: 14px;
+  background: #f9f9f9;
 }
 
 .item p {
   text-align: center;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
-  margin: 10px 0 2px 0;
+  margin: 12px 0 2px 0;
 }
 
 .estoque {
   text-align: center;
-  font-size: 10px;
-  color: #9a9481;
+  font-size: 11px;
+  color: #8a8471;
   font-weight: 500;
 }
 
 .item.selecionado {
-  background: #fdfcf9;
-  border: 2px solid var(--text-main);
-  box-shadow: var(--shadow-focus);
+  background: #fff;
+  outline: 3px solid var(--text-main);
 }
 
-/* ===== CONTROLES FLUTUANTES ===== */
+/* ===== RODAPÉ SÓLIDO E FIXO ===== */
 .botoes-acoes {
   position: fixed;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 92%;
-  max-width: 450px;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  /* Fundo sólido acompanhando o corpo, mas com leve transparência */
+  background-color: rgba(229, 224, 216, 0.98); 
+  backdrop-filter: blur(5px);
   z-index: 1000;
   display: flex;
   flex-direction: column;
   gap: 10px;
+  /* Preenchimento interno para os elementos */
+  padding: 15px 20px 20px 20px; 
+  /* Borda superior para definir o início do rodapé */
+  border-top: 1px solid rgba(0,0,0,0.1);
+  box-shadow: 0 -5px 20px rgba(0,0,0,0.05);
+}
+
+/* Centraliza o conteúdo do rodapé em telas grandes */
+.botoes-acoes > * {
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .caixa-selecao {
   display: none;
   background: white;
   padding: 12px;
-  border-radius: 16px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-  max-height: 120px;
+  border-radius: 15px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  max-height: 100px;
   overflow-y: auto;
+  width: 100%;
 }
 
 .topo-caixa {
@@ -220,8 +236,8 @@ body {
   font-size: 10px;
   font-weight: 700;
   text-transform: uppercase;
+  color: #999;
   margin-bottom: 8px;
-  color: #bbb;
 }
 
 .limpar { color: #8b2d2d; cursor: pointer; }
@@ -230,33 +246,28 @@ body {
 
 .tag {
   font-size: 10px;
-  background: #f5f4f0;
+  background: #f0f0eb;
   border-radius: 6px;
   padding: 4px 8px;
   display: flex;
   align-items: center;
   gap: 6px;
-  border: 1px solid rgba(0,0,0,0.04);
 }
 
 .tag button {
-  background: none; border: none; font-weight: bold; cursor: pointer; color: #8b2d2d;
+  background: none; border: none; font-weight: bold; cursor: pointer; color: #8b2d2d; font-size: 12px; padding: 0;
 }
 
 .busca {
   width: 100%;
   padding: 14px 20px;
-  border-radius: 14px;
+  border-radius: 50px;
   border: 1px solid rgba(0,0,0,0.1);
   background: white;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.03);
   font-family: inherit;
   font-size: 14px;
   outline: none;
-  transition: 0.2s;
 }
-
-.busca:focus { border-color: var(--text-main); }
 
 .botao-whatsapp {
   width: 100%;
@@ -264,29 +275,29 @@ body {
   background: var(--text-main);
   color: white;
   border: none;
-  border-radius: 14px;
+  border-radius: 50px;
   font-weight: 600;
-  font-size: 14px;
+  font-size: 15px;
   cursor: pointer;
-  transition: 0.2s;
+  transition: 0.3s;
 }
 
-.botao-whatsapp:active { transform: scale(0.98); }
+.botao-whatsapp:hover { background: #2d2a16; }
 
 .oculto { display: none; }
 
 .nada-encontrado {
   grid-column: 1 / -1;
   text-align: center;
-  padding: 50px 0;
-  color: #9a9481;
+  padding: 60px 0;
+  color: #8a8471;
 }
 
 @keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(10px); }
+  from { opacity: 0; transform: translateY(15px); }
   to { opacity: 1; transform: translateY(0); }
 }
-.item { animation: fadeInUp 0.4s ease backwards; }
+.item { animation: fadeInUp 0.5s ease backwards; }
 </style>
 </head>
 
@@ -302,14 +313,14 @@ body {
 
 <div class="instrucoes">
   <p>Catálogo de Variedades</p>
-  <span>Selecione as ID's que deseja consultar via WhatsApp.</span>
+  <span>Selecione as ID's desejadas para consultar via WhatsApp.</span>
 </div>
 
 <div class="filtro-disponivel">
   <label class="switch-disponivel">
     <input type="checkbox" id="filtroDisponivel">
     <span class="slider"></span>
-    Pronta entrega apenas
+    Apenas Pronta Entrega
   </label>
 </div>
 
@@ -318,13 +329,13 @@ body {
 <div class="botoes-acoes">
   <div class="caixa-selecao">
     <div class="topo-caixa">
-      <span>Selecionados</span>
-      <span class="limpar" onclick="limparSelecao()">Remover todos</span>
+      <span>Itens Selecionados</span>
+      <span class="limpar" onclick="limparSelecao()">Limpar tudo</span>
     </div>
     <div id="listaSelecionadas"></div>
   </div>
 
-  <input type="text" id="busca" class="busca" placeholder="Buscar por ID ou nome...">
+  <input type="text" id="busca" class="busca" placeholder="Pesquisar ID ou nome...">
 
   <button class="botao-whatsapp oculto" onclick="enviarWhatsApp()">
     Solicitar informações
@@ -332,7 +343,7 @@ body {
 </div>
 
 <script>
-/* LÓGICA MANTIDA INALTERADA */
+/* SISTEMA ORIGINAL MANTIDO INTEGRALMENTE */
 const flores = [
 "AÇUCENA (MUTANTE)","AKACHI","AMATTA","ARYA","BLOODY MARY","BP-116",
 "BRANCA DE NEVE","BRIDAL BOUQUET","CANAN 55","CANAN 170","CAPIXABA",
