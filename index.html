@@ -1,4 +1,4 @@
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
@@ -16,55 +16,157 @@
 
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
-body { font-family: 'Poppins', sans-serif; background-color: var(--body-bg); color: var(--text-main); margin: 0; padding-bottom: 230px; line-height: 1.5; }
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: var(--body-bg);
+  color: var(--text-main);
+  margin: 0;
+  padding-bottom: 230px; 
+  line-height: 1.5;
+}
 
-.topbar { background: var(--header-bg); padding: 35px 0; position: sticky; top: 0; z-index: 1000; display: flex; justify-content: center; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12); border-bottom: 1px solid rgba(0,0,0,0.05); }
-.topbar::before { content: ""; position: absolute; inset: 0; background-image: url('imagens/folhas-topo.png'); background-size: cover; background-position: center; z-index: 1; }
+/* ===== CABEÇALHO (EFEITO CAMADA ALTA) ===== */
+.topbar {
+  background: var(--header-bg);
+  padding: 35px 0;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12); 
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+
+.topbar::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url('imagens/folhas-topo.png');
+  background-size: cover;
+  background-position: center;
+  z-index: 1;
+}
+
 .logo img { width: 145px; position: relative; z-index: 2; }
 
-.secao-filtros { max-width: 600px; margin: 30px auto; text-align: center; padding: 0 20px; }
-.switch-disponivel { display: inline-flex; align-items: center; gap: 12px; font-size: 13px; font-weight: 600; background: rgba(255, 255, 255, 0.4); padding: 10px 20px; border-radius: 50px; cursor: pointer; }
+/* ===== TEXTOS DE INSTRUÇÃO (ORIGINAIS) ===== */
+.secao-filtros {
+  max-width: 600px;
+  margin: 30px auto;
+  text-align: center;
+  padding: 0 20px;
+}
+
+.instrucoes-topo p { margin: 0; font-size: 16px; font-weight: 600; }
+.instrucoes-topo span { font-size: 13px; opacity: 0.8; display: block; margin: 8px 0 20px 0; line-height: 1.4; }
+
+.switch-disponivel {
+  display: inline-flex; align-items: center; gap: 12px; font-size: 13px; font-weight: 600;
+  background: rgba(255, 255, 255, 0.4); padding: 10px 20px; border-radius: 50px; cursor: pointer;
+}
+
 .switch-disponivel input { display: none; }
-.switch-disponivel .slider { width: 38px; height: 20px; background: #c7c1b5; border-radius: 20px; position: relative; transition: 0.3s; }
-.switch-disponivel .slider::before { content: ""; position: absolute; width: 14px; height: 14px; left: 3px; top: 3px; background: white; border-radius: 50%; transition: 0.3s; }
+.switch-disponivel .slider {
+  width: 38px; height: 20px; background: #c7c1b5; border-radius: 20px; position: relative; transition: 0.3s;
+}
+.switch-disponivel .slider::before {
+  content: ""; position: absolute; width: 14px; height: 14px; left: 3px; top: 3px; background: white; border-radius: 50%; transition: 0.3s;
+}
 .switch-disponivel input:checked + .slider { background: var(--text-main); }
 .switch-disponivel input:checked + .slider::before { transform: translateX(18px); }
 
-.catalogo { display: grid; grid-template-columns: repeat(auto-fill, minmax(165px, 1fr)); gap: 20px; padding: 0 20px; max-width: 1100px; margin: 0 auto; }
-.item { background: var(--card-white); padding: 12px; border-radius: 20px; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.05); transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); border: 1px solid rgba(0,0,0,0.02); }
-.item.selecionado { background: var(--card-selected) !important; transform: scale(0.94); box-shadow: inset 0 4px 8px rgba(0,0,0,0.15) !important; border: 1px solid rgba(0, 0, 0, 0.08) !important; }
+/* ===== GRID E CARDS ===== */
+.catalogo {
+  display: grid; 
+  grid-template-columns: repeat(auto-fill, minmax(165px, 1fr));
+  gap: 20px; padding: 0 20px; max-width: 1100px; margin: 0 auto;
+}
+
+.item {
+  background: var(--card-white);
+  padding: 12px; border-radius: 20px; cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05); 
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid rgba(0,0,0,0.02);
+}
+
+.item.selecionado {
+  background: var(--card-selected) !important;
+  transform: scale(0.94);
+  box-shadow: inset 0 4px 8px rgba(0,0,0,0.15) !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+}
+
 .item video, .item img { width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 14px; }
 .item.selecionado video, .item.selecionado img { filter: brightness(0.85); }
 .item p { text-align: center; font-size: 14px; font-weight: 600; margin: 12px 0 2px 0; }
+
 .estoque-status { text-align: center; font-size: 11px; font-weight: 700; text-transform: uppercase; }
 .disponivel { color: #2d5a27; }
 .encomenda { color: #8a8471; opacity: 0.7; }
 
-.rodape-acoes { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(229, 224, 216, 0.98); backdrop-filter: blur(12px); padding: 15px 20px 30px; border-top: 1px solid rgba(0,0,0,0.1); z-index: 1000; box-shadow: 0 -5px 15px rgba(0,0,0,0.05); }
+/* ===== RODAPÉ E CAIXA DE SELEÇÃO ===== */
+.rodape-acoes {
+  position: fixed; bottom: 0; left: 0; width: 100%;
+  background: rgba(229, 224, 216, 0.98); backdrop-filter: blur(12px);
+  padding: 15px 20px 30px; border-top: 1px solid rgba(0,0,0,0.1);
+  z-index: 1000; box-shadow: 0 -5px 15px rgba(0,0,0,0.05);
+}
+
 .container-rodape { max-width: 500px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
-.caixa-selecao { display: none; background: white; padding: 15px; border-radius: 20px; max-height: 120px; overflow-y: auto; margin-bottom: 5px; box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.1); border: 1px solid rgba(0,0,0,0.05); }
-.tag-item { font-size: 11px; background: #f0f0eb; padding: 8px 14px; border-radius: 10px; display: inline-flex; align-items: center; gap: 8px; margin: 0 6px 6px 0; box-shadow: 0 2px 4px rgba(0,0,0,0.08); border: 1px solid rgba(0,0,0,0.03); }
+
+.caixa-selecao {
+  display: none; background: #ffffff; padding: 15px; border-radius: 20px;
+  max-height: 120px; overflow-y: auto; margin-bottom: 5px;
+  box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.1); border: 1px solid rgba(0,0,0,0.05);
+}
+
+.topo-caixa { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-size: 12px; font-weight: 600; }
+.limpar { color: #8b2d2d; cursor: pointer; text-decoration: underline; }
+
+.tag-item {
+  font-size: 11px; background: #f0f0eb; padding: 8px 14px; border-radius: 10px;
+  display: inline-flex; align-items: center; gap: 8px; margin: 0 6px 6px 0;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.08); border: 1px solid rgba(0,0,0,0.03);
+}
+
 .tag-item button { border: none; background: none; color: #8b2d2d; cursor: pointer; font-weight: bold; font-size: 14px; }
-.campo-busca { width: 100%; padding: 16px 25px; border-radius: 50px; border: 1.5px solid rgba(58, 54, 24, 0.15); background: transparent; outline: none; font-family: inherit; font-size: 15px; color: var(--text-main); }
-.btn-whatsapp { width: 100%; padding: 18px; background: #ffffff; color: var(--text-main); border: 1px solid rgba(0,0,0,0.1); border-radius: 50px; font-weight: 600; font-size: 16px; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.05); transition: all 0.2s; }
+
+.campo-busca {
+  width: 100%; padding: 16px 25px; border-radius: 50px; 
+  border: 1.5px solid rgba(58, 54, 24, 0.15); background: transparent; 
+  outline: none; font-family: inherit; font-size: 15px; color: var(--text-main); text-align: center;
+}
+
+.btn-whatsapp {
+  width: 100%; padding: 18px; background: #ffffff; color: var(--text-main);
+  border: 1px solid rgba(0,0,0,0.1); border-radius: 50px; font-weight: 600; 
+  font-size: 15px; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  transition: all 0.2s;
+}
+
 .btn-whatsapp:active { background: var(--text-main); color: white; transform: scale(0.96); }
+
 .oculto { display: none; }
 .vazio { grid-column: 1/-1; text-align: center; padding: 60px; opacity: 0.5; }
 </style>
 </head>
 <body>
 
-<div class="topbar"><div class="logo"><img src="logo.png"></div></div>
+<div class="topbar">
+  <div class="logo"><img src="logo.png"></div>
+</div>
 
 <div class="secao-filtros">
-  <div style="margin-bottom:20px">
-    <p style="margin:0; font-size:18px; font-weight:600">Catálogo de Variedades</p>
-    <span style="font-size:13px; opacity:0.7">Toque para selecionar as IDs desejadas</span>
+  <div class="instrucoes-topo">
+    <p>Selecione as ID's desejadas para solicitar informações sobre os enxertos.</p>
+    <span>Variedades sem pronta entrega podem ser encomendadas sem custo.</span>
   </div>
   <label class="switch-disponivel">
     <input type="checkbox" id="checkProntaEntrega">
     <span class="slider"></span>
-    Pronta Entrega
+    Mostrar só variedades com pronta entrega
   </label>
 </div>
 
@@ -73,16 +175,20 @@ body { font-family: 'Poppins', sans-serif; background-color: var(--body-bg); col
 <div class="rodape-acoes">
   <div class="container-rodape">
     <div class="caixa-selecao" id="areaSelecao">
+      <div class="topo-caixa">
+        <span>ID's selecionadas:</span>
+        <span class="limpar" onclick="limparTudo()">Limpar tudo</span>
+      </div>
       <div id="containerTags"></div>
     </div>
-    <input type="text" id="inputPesquisa" class="campo-busca" placeholder="Pesquisar ID ou nome...">
+    <input type="text" id="inputPesquisa" class="campo-busca" placeholder="Buscar por ID...">
     <button id="btnEnviar" class="btn-whatsapp oculto" onclick="enviarPedido()"></button>
   </div>
 </div>
 
 <script>
-const estoque = { "AÇUCENA (MUTANTE)": 1, "AMATTA": 1, "CÉU ESTRELADO": 2, "AKACHI": 0, "ARYA": 0, "BLOODY MARY": 0, "BP-116": 0, "BRANCA DE NEVE": 0, "BRIDAL BOUQUET": 0, "CANAN 55": 0, "CANAN 170": 0, "CAPIXABA": 0, "CÉU ESTRELADO VARIEGATA": 0, "COPENHAGEN": 0, "DAFNE": 0, "DIỆU CHÂU": 0, "COCA-COLA": 0, "DOUBLE STAR": 0, "DUQUESA": 0, "EGG ROLL": 0, "ELARA": 0, "ELLIE": 0, "EV19-XANADÚ": 0, "FERRARI": 0, "GOLDEN FAITH": 0, "GRAPE CHOCOLATE": 0, "GUARÁ PITANGA": 0, "GTA-AIKA": 0, "GTA-BOLD": 0, "GTA-CANDY CRUSH": 0, "GTA-CÓSMICA": 0, "GTA-CREPÚSCULO": 0, "GTA-DESERT DOLL": 0, "GTA-DIANA": 0, "GTA-EMMA FROST": 0, "GTA-FAY": 0, "GTA-FLORZINHA": 0, "GTA-FLUTTERSHY": 0, "GTA-FRACTA": 0, "GTA-GOLDEN PINK": 0, "GTA-ICE DRAGON": 0, "GTA-KIMBERLY": 0, "GTA-LITTLE KISS": 0, "GTA-LOLLIPOP BLACK": 0, "GTA-LYSSA": 0, "GTA-LYTA": 0, "GTA-MISS GRAVATÁ": 0, "GTA-NYX": 0, "GTA-PERONA": 0, "GTA-PINK VENOM": 0, "GTA-PINKIE PIE": 0, "GTA-RED COMETS": 0, "GTA-RED STORM": 0, "GTA-RED WIDOW": 0, "GTA-SANSA": 0, "GTA-SHE HA": 0, "GTA-SUN CLUSTER": 0, "GTA-SWEET BLUSH": 0, "GTA-TRINITY": 0, "GTA-TRUE FAITH": 0, "GTA-YUNA": 0, "HELENA": 0, "INDIGO GLAZE": 0, "INFINITY": 0, "JHULLY": 0, "JULIUS CAESAR": 0, "KING OF KINGS": 0, "KINDLY": 0, "L-06": 0, "LAILA": 0, "LILAC FROST (MUTANTE)": 0, "LM-440": 0, "LM-50": 0, "LM-02": 0, "LUNA": 0, "MAGNIFICAT": 0, "MARIA": 0, "MIDNIGHT": 0, "MỘNG CẦM": 0, "MORAN": 0, "NANCY": 0, "NEMO": 0, "NORALINE": 0, "NUSA": 0, "P-200": 0, "PATHUMMA": 0, "PEONY": 0, "PHARAOH": 0, "PURPLE BLUE": 0, "QUEEN RAY": 0, "RF-001": 0, "RF-002": 0, "RIHANNA": 0, "ROMANTIC EDGE": 0, "SANTA CLAUS": 0, "SATURNO": 0, "SENNA": 0, "SIENA": 0, "SOCHI": 0, "SOPHIA": 0, "STAR CLUSTER": 0, "SWALLOW": 0, "RC-04": 0, "THAMIRES": 0, "THE SECRET OF VICTORIA": 0, "TRIPLE WISH": 0, "TROPICAL": 0, "TS-69": 0, "TS-222": 0, "TS-330": 0, "TW4": 0, "UNPARALLELED": 0, "VARIEGATA": 0, "VAMPIRA": 0, "VIÚVA NEGRA": 0, "VOLCANO": 0, "W59": 0, "YÚ JIǍO": 0 };
-let itensSelecionados = new Set();
+const estoque = { "AÇUCENA (MUTANTE)": 1, "AKACHI": 0, "AMATTA": 1, "ARYA": 0, "BLOODY MARY": 0, "BP-116": 0, "BRANCA DE NEVE": 0, "BRIDAL BOUQUET": 0, "CANAN 55": 0, "CANAN 170": 0, "CAPIXABA": 0, "CÉU ESTRELADO": 2, "CÉU ESTRELADO VARIEGATA": 0, "COPENHAGEN": 0, "DAFNE": 0, "DIỆU CHÂU": 0, "COCA-COLA": 0, "DOUBLE STAR": 0, "DUQUESA": 0, "EGG ROLL": 0, "ELARA": 0, "ELLIE": 0, "EV19-XANADÚ": 0, "FERRARI": 0, "GOLDEN FAITH": 0, "GRAPE CHOCOLATE": 0, "GUARÁ PITANGA": 0, "GTA-AIKA": 0, "GTA-BOLD": 0, "GTA-CANDY CRUSH": 0, "GTA-CÓSMICA": 0, "GTA-CREPÚSCULO": 0, "GTA-DESERT DOLL": 0, "GTA-DIANA": 0, "GTA-EMMA FROST": 0, "GTA-FAY": 0, "GTA-FLORZINHA": 0, "GTA-FLUTTERSHY": 0, "GTA-FRACTA": 0, "GTA-GOLDEN PINK": 0, "GTA-ICE DRAGON": 0, "GTA-KIMBERLY": 0, "GTA-LITTLE KISS": 0, "GTA-LOLLIPOP BLACK": 0, "GTA-LYSSA": 0, "GTA-LYTA": 0, "GTA-MISS GRAVATÁ": 0, "GTA-NYX": 0, "GTA-PERONA": 0, "GTA-PINK VENOM": 0, "GTA-PINKIE PIE": 0, "GTA-RED COMETS": 0, "GTA-RED STORM": 0, "GTA-RED WIDOW": 0, "GTA-SANSA": 0, "GTA-SHE HA": 0, "GTA-SUN CLUSTER": 0, "GTA-SWEET BLUSH": 0, "GTA-TRINITY": 0, "GTA-TRUE FAITH": 0, "GTA-YUNA": 0, "HELENA": 0, "INDIGO GLAZE": 0, "INFINITY": 0, "JHULLY": 0, "JULIUS CAESAR": 0, "KING OF KINGS": 0, "KINDLY": 0, "L-06": 0, "LAILA": 0, "LILAC FROST (MUTANTE)": 0, "LM-440": 0, "LM-50": 0, "LM-02": 0, "LUNA": 0, "MAGNIFICAT": 0, "MARIA": 0, "MIDNIGHT": 0, "MỘNG CẦM": 0, "MORAN": 0, "NANCY": 0, "NEMO": 0, "NORALINE": 0, "NUSA": 0, "P-200": 0, "PATHUMMA": 0, "PEONY": 0, "PHARAOH": 0, "PURPLE BLUE": 0, "QUEEN RAY": 0, "RF-001": 0, "RF-002": 0, "RIHANNA": 0, "ROMANTIC EDGE": 0, "SANTA CLAUS": 0, "SATURNO": 0, "SENNA": 0, "SIENA": 0, "SOCHI": 0, "SOPHIA": 0, "STAR CLUSTER": 0, "SWALLOW": 0, "RC-04": 0, "THAMIRES": 0, "THE SECRET OF VICTORIA": 0, "TRIPLE WISH": 0, "TROPICAL": 0, "TS-69": 0, "TS-222": 0, "TS-330": 0, "TW4": 0, "UNPARALLELED": 0, "VARIEGATA": 0, "VAMPIRA": 0, "VIÚVA NEGRA": 0, "VOLCANO": 0, "W59": 0, "YÚ JIǍO": 0 };
+let selecionados = new Set();
 let filtroTexto = "";
 let apenasDisponiveis = false;
 
@@ -105,10 +211,9 @@ function montarCatalogo() {
     itensExibidos++;
     const nomeArquivo = formatarNomeArquivo(nome);
     const card = document.createElement("div");
-    card.className = "item" + (itensSelecionados.has(nome) ? " selecionado" : "");
-    card.setAttribute("data-id", nome);
-    card.innerHTML = `<video src="imagens/${nomeArquivo}.mp4" poster="imagens/${nomeArquivo}.jpg" muted loop playsinline autoplay onerror="this.style.display='none'; this.nextElementSibling.style.display='block'"></video><img src="imagens/${nomeArquivo}.jpg" style="display:none" onerror="this.src='imagens/sem-foto.jpg'"><p>${nome}</p><div class="estoque-status ${qtd > 0 ? 'disponivel' : 'encomenda'}">${qtd > 0 ? 'Pronta Entrega ('+qtd+')' : 'Sob Encomenda'}</div>`;
-    card.onclick = () => { if (navigator.vibrate) navigator.vibrate(50); if (itensSelecionados.has(nome)) itensSelecionados.delete(nome); else itensSelecionados.add(nome); filtroTexto = ""; inputPesquisa.value = ""; montarCatalogo(); atualizarPainelAcoes(); };
+    card.className = "item" + (selecionados.has(nome) ? " selecionado" : "");
+    card.innerHTML = `<video src="imagens/${nomeArquivo}.mp4" poster="imagens/${nomeArquivo}.jpg" muted loop playsinline autoplay onerror="this.style.display='none'; this.nextElementSibling.style.display='block'"></video><img src="imagens/${nomeArquivo}.jpg" style="display:none" onerror="this.src='imagens/sem-foto.jpg'"><p>${nome}</p><div class="estoque-status ${qtd > 0 ? 'disponivel' : 'encomenda'}">${qtd > 0 ? 'Enxertos disponíveis: '+qtd+' (envio imediato)' : 'Enxertos disponíveis: 0 (pode encomendar)'}</div>`;
+    card.onclick = () => { if (selecionados.has(nome)) selecionados.delete(nome); else selecionados.add(nome); filtroTexto = ""; inputPesquisa.value = ""; montarCatalogo(); atualizarPainelAcoes(); };
     grid.appendChild(card);
   });
   if (itensExibidos === 0) grid.innerHTML = `<div class="vazio">Nenhuma ID encontrada.</div>`;
@@ -119,25 +224,29 @@ function atualizarPainelAcoes() {
   const containerTags = document.getElementById("containerTags");
   const btnZap = document.getElementById("btnEnviar");
   containerTags.innerHTML = "";
-  if (itensSelecionados.size > 0) {
+  if (selecionados.size > 0) {
     areaSelecao.style.display = "block";
-    itensSelecionados.forEach(nome => {
+    selecionados.forEach(nome => {
       const tag = document.createElement("div");
       tag.className = "tag-item";
-      tag.innerHTML = `${nome} <button onclick="event.stopPropagation(); removerDaSelecao('${nome}')">×</button>`;
+      tag.innerHTML = `${nome} <button onclick="event.stopPropagation(); removerItem('${nome}')">×</button>`;
       containerTags.appendChild(tag);
     });
     btnZap.classList.remove("oculto");
-    btnZap.innerHTML = itensSelecionados.size === 1 ? `Consultar 1 enxerto` : `Consultar ${itensSelecionados.size} enxertos`;
+    // TEXTO DO BOTÃO (ORIGINAL)
+    btnZap.innerHTML = selecionados.size === 1 ? `Pedir informações sobre a ID selecionada` : `Pedir informações sobre as ${selecionados.size} ID's selecionadas`;
   } else { areaSelecao.style.display = "none"; btnZap.classList.add("oculto"); }
 }
 
-function removerDaSelecao(nome) { itensSelecionados.delete(nome); atualizarPainelAcoes(); montarCatalogo(); }
+function removerItem(nome) { selecionados.delete(nome); atualizarPainelAcoes(); montarCatalogo(); }
+function limparTudo() { selecionados.clear(); atualizarPainelAcoes(); montarCatalogo(); }
 
 function enviarPedido() {
-  const arr = Array.from(itensSelecionados);
-  const msg = arr.length === 1 ? `Olá! Gostaria de verificar a disponibilidade deste enxerto:\n\n- ${arr[0]}` : `Olá! Gostaria de verificar a disponibilidade destes enxertos:\n\n- ${arr.join("\n- ")}`;
-  window.open("https://wa.me/5581992665421?text=" + encodeURIComponent(msg), "_blank");
+  const ids = Array.from(selecionados);
+  // MENSAGEM DO WHATSAPP (ORIGINAL)
+  const intro = ids.length === 1 ? "Tenho interesse em adquirir enxerto da seguinte variedade:\n\n- " : "Tenho interesse em adquirir enxertos das seguintes variedades:\n\n- ";
+  const mensagem = `Olá!\n\n${intro}${ids.join("\n- ")}\n\nPoderia me dar mais informações? Tenho a seguinte duvida...`;
+  window.open("https://wa.me/5581992665421?text=" + encodeURIComponent(mensagem), "_blank");
 }
 montarCatalogo();
 </script>
