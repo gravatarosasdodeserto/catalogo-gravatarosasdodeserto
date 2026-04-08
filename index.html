@@ -42,12 +42,19 @@ body {
   opacity: 0;
 }
 
-/* LINHA */
 .logo-texto .linha {
-  width: 100%;
+  width: fit-content;
   height: 2px;
   background: white;
   margin: 6px 0;
+}
+
+/* FAZ A LINHA SEGUIR EXATAMENTE O TEXTO */
+.logo-texto {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
   transform: scaleX(0);
   transform-origin: left;
   animation: drawLine 0.8s ease forwards;
