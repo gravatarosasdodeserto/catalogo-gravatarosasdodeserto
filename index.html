@@ -6,11 +6,11 @@
 <title>Catálogo | Gravatá Rosas do Deserto</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-/* ===== VARIÁVEIS DE COR AJUSTADAS PARA PROFUNDIDADE ===== */
 :root {
   --header-bg: #fcfaf7;    
-  --body-bg: #e5e0d8;      /* Cor base do fundo */
-  --card-bg: #d8d2c9;      /* Card levemente MAIS ESCURO que o fundo */
+  --body-bg: #e5e0d8;      /* Fundo da página */
+  --card-normal: #e0dbd0;  /* Card quase da cor do fundo */
+  --card-selected: #cbc4b7; /* Card MAIS ESCURO quando selecionado */
   --text-main: #3a3618;    
 }
 
@@ -50,13 +50,9 @@ body {
   z-index: 1;
 }
 
-.logo img { 
-  width: 145px; 
-  position: relative; 
-  z-index: 2; 
-}
+.logo img { width: 145px; position: relative; z-index: 2; }
 
-/* ===== FILTROS E INSTRUÇÕES ===== */
+/* ===== FILTROS ===== */
 .secao-filtros {
   max-width: 600px;
   margin: 30px auto;
@@ -65,15 +61,8 @@ body {
 }
 
 .switch-disponivel {
-  display: inline-flex; 
-  align-items: center; 
-  gap: 12px; 
-  font-size: 13px; 
-  font-weight: 600;
-  background: rgba(255, 255, 255, 0.3); 
-  padding: 10px 20px; 
-  border-radius: 50px; 
-  cursor: pointer;
+  display: inline-flex; align-items: center; gap: 12px; font-size: 13px; font-weight: 600;
+  background: rgba(255, 255, 255, 0.3); padding: 10px 20px; border-radius: 50px; cursor: pointer;
 }
 
 .switch-disponivel input { display: none; }
@@ -86,90 +75,60 @@ body {
 .switch-disponivel input:checked + .slider { background: var(--text-main); }
 .switch-disponivel input:checked + .slider::before { transform: translateX(18px); }
 
-/* ===== GRID E CARDS (EFEITO REBAIXADO) ===== */
+/* ===== GRID E CARDS (EFEITO PROFUNDIDADE) ===== */
 .catalogo {
   display: grid; 
   grid-template-columns: repeat(auto-fill, minmax(165px, 1fr));
-  gap: 20px; 
-  padding: 0 20px; 
-  max-width: 1100px; 
-  margin: 0 auto;
+  gap: 20px; padding: 0 20px; max-width: 1100px; margin: 0 auto;
 }
 
 .item {
-  background: var(--card-bg); 
+  background: var(--card-normal); 
   padding: 12px; 
   border-radius: 20px; 
   cursor: pointer;
-  /* Sombra interna para parecer que o card está "dentro" do fundo */
-  box-shadow: inset 0 2px 6px rgba(0,0,0,0.08);
-  transition: all 0.2s ease;
-  border: 1px solid rgba(0,0,0,0.03);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05); /* Sombra leve para fora */
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid rgba(0,0,0,0.02);
 }
 
-.item:active { transform: scale(0.96); }
-
-/* QUANDO SELECIONADO: Ganha destaque e "sobe" levemente ou muda o tom */
+/* QUANDO SELECIONADO: ESCURECE E AFUNDA */
 .item.selecionado {
-  background: #fdfcf9 !important;
-  transform: scale(0.95);
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1) !important; /* Vira um botão real */
-  border: 1px solid rgba(58, 54, 24, 0.2) !important;
+  background: var(--card-selected) !important;
+  transform: scale(0.94);
+  /* Sombra interna para dar efeito de "buraco" ou "apertado" */
+  box-shadow: inset 0 4px 8px rgba(0,0,0,0.15) !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
 }
 
 .item video, .item img { 
-  width: 100%; 
-  aspect-ratio: 1/1; 
-  object-fit: cover; 
-  border-radius: 14px; 
-  filter: brightness(0.95); /* Leve ajuste para integrar ao card escuro */
+  width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 14px; 
+  transition: filter 0.3s;
 }
 
-.item p { 
-  text-align: center; 
-  font-size: 14px; 
-  font-weight: 600; 
-  margin: 12px 0 2px 0; 
+.item.selecionado video, .item.selecionado img {
+  filter: brightness(0.85); /* Escurece a mídia também para acompanhar o card */
 }
 
-.estoque-status { 
-  text-align: center; 
-  font-size: 11px; 
-  font-weight: 700; 
-  text-transform: uppercase;
-}
+.item p { text-align: center; font-size: 14px; font-weight: 600; margin: 12px 0 2px 0; }
+
+.estoque-status { text-align: center; font-size: 11px; font-weight: 700; text-transform: uppercase; }
 .disponivel { color: #2d5a27; }
 .encomenda { color: #8a8471; opacity: 0.7; }
 
 /* ===== RODAPÉ SÓLIDO E BUSCA TRANSPARENTE ===== */
 .rodape-acoes {
-  position: fixed; 
-  bottom: 0; 
-  left: 0; 
-  width: 100%;
-  background: rgba(229, 224, 216, 0.98); 
-  backdrop-filter: blur(12px);
-  padding: 15px 20px 30px; 
-  border-top: 1px solid rgba(0,0,0,0.1);
+  position: fixed; bottom: 0; left: 0; width: 100%;
+  background: rgba(229, 224, 216, 0.98); backdrop-filter: blur(12px);
+  padding: 15px 20px 30px; border-top: 1px solid rgba(0,0,0,0.1);
   z-index: 1000;
 }
 
-.container-rodape { 
-  max-width: 500px; 
-  margin: 0 auto; 
-  display: flex; 
-  flex-direction: column; 
-  gap: 12px; 
-}
+.container-rodape { max-width: 500px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
 
 .caixa-selecao {
-  display: none; 
-  background: white; 
-  padding: 12px; 
-  border-radius: 18px;
-  max-height: 110px; 
-  overflow-y: auto;
-  margin-bottom: 5px;
+  display: none; background: white; padding: 12px; border-radius: 18px;
+  max-height: 110px; overflow-y: auto; margin-bottom: 5px;
 }
 
 .tag-item {
@@ -179,32 +138,18 @@ body {
 
 .tag-item button { border: none; background: none; color: #8b2d2d; cursor: pointer; }
 
-/* BUSCA COR DO FUNDO / TRANSPARENTE */
+/* BARRA DE BUSCA TRANSPARENTE */
 .campo-busca {
-  width: 100%; 
-  padding: 16px 25px; 
-  border-radius: 50px; 
+  width: 100%; padding: 16px 25px; border-radius: 50px; 
   border: 1.5px solid rgba(58, 54, 24, 0.15);
-  background: transparent; /* Barra transparente */
-  outline: none; 
-  font-family: inherit; 
-  font-size: 15px;
+  background: transparent; 
+  outline: none; font-family: inherit; font-size: 15px;
   color: var(--text-main);
 }
 
-.campo-busca::placeholder { color: rgba(58, 54, 24, 0.5); }
-
 .btn-whatsapp {
-  width: 100%; 
-  padding: 18px; 
-  background: var(--text-main); 
-  color: white;
-  border: none; 
-  border-radius: 50px; 
-  font-weight: 600; 
-  font-size: 16px; 
-  cursor: pointer;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  width: 100%; padding: 18px; background: var(--text-main); color: white;
+  border: none; border-radius: 50px; font-weight: 600; font-size: 16px; cursor: pointer;
 }
 
 .oculto { display: none; }
@@ -220,12 +165,12 @@ body {
 <div class="secao-filtros">
   <div style="margin-bottom:20px">
     <p style="margin:0; font-size:18px; font-weight:600">Catálogo de Variedades</p>
-    <span style="font-size:13px; opacity:0.7">Toque para selecionar as IDs desejadas</span>
+    <span style="font-size:13px; opacity:0.7">Selecione para consultar no WhatsApp</span>
   </div>
   <label class="switch-disponivel">
     <input type="checkbox" id="checkProntaEntrega">
     <span class="slider"></span>
-    Apenas Pronta Entrega
+    Pronta Entrega
   </label>
 </div>
 
