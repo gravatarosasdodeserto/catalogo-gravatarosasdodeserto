@@ -70,7 +70,7 @@ body {
 .linha-topo { top: 8px; }
 .linha-baixo { bottom: 8px; }
 
-/* HEADER AJUSTADO */
+/* HEADER */
 .header {
   display: flex;
   align-items: center;
@@ -93,9 +93,11 @@ body {
   display: block;
   object-fit: contain;
   filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+  animation: fadeLogo 0.8s ease forwards;
+  opacity: 0;
 }
 
-/* TEXTO DO LOGO (ESTILO IGUAL IMAGEM) */
+/* TEXTO DO LOGO */
 .logo-texto {
   display: flex;
   flex-direction: column;
@@ -112,6 +114,9 @@ body {
   letter-spacing: 4px;
   color: white;
   line-height: 1;
+  animation: slideFade 0.8s ease forwards;
+  animation-delay: 0.2s;
+  opacity: 0;
 }
 
 /* LINHA */
@@ -121,6 +126,10 @@ body {
   background-color: white;
   margin: 6px 0;
   opacity: 0.9;
+  transform: scaleX(0);
+  transform-origin: left;
+  animation: drawLine 0.8s ease forwards;
+  animation-delay: 0.4s;
 }
 
 /* ROSAS DO DESERTO */
@@ -130,6 +139,53 @@ body {
   letter-spacing: 6px;
   color: #ff6b5a;
   line-height: 1;
+  animation: slideFade 0.8s ease forwards;
+  animation-delay: 0.6s;
+  opacity: 0;
+}
+
+/* ===== HOVER PREMIUM ===== */
+.logo-texto:hover h1 {
+  text-shadow: 0 0 8px rgba(255,255,255,0.35);
+  transition: 0.3s ease;
+}
+
+.logo-texto:hover p {
+  text-shadow: 0 0 6px rgba(255,107,90,0.4);
+  transition: 0.3s ease;
+}
+
+/* ===== ANIMAÇÕES ===== */
+
+@keyframes fadeLogo {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideFade {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes drawLine {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
 }
 
 /* ===== RESTO ORIGINAL ===== */
@@ -208,16 +264,11 @@ body {
   transform: translateX(20px);
 }
 
-.switch-disponivel:active .slider {
-  transform: scale(0.95);
-}
-
 .catalogo {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
   gap: 15px;
   padding: 15px;
-  box-shadow: inset 0 6px 12px -6px rgba(0,0,0,0.08);
 }
 
 .item {
@@ -227,46 +278,13 @@ body {
   cursor: pointer;
   box-shadow: 0 6px 14px rgba(0,0,0,0.1);
   transition: 0.15s ease;
-  user-select: none;
-  -webkit-tap-highlight-color: transparent;
 }
 
 .item:hover { transform: translateY(-3px); }
 
-.item:active {
-  transform: translateY(1px) scale(0.98);
-  box-shadow: inset 0 3px 6px rgba(0,0,0,0.15), 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.item.selecionado {
-  background: rgba(58,54,24,0.15);
-  box-shadow: inset 0 2px 5px rgba(0,0,0,0.1), 0 4px 10px rgba(0,0,0,0.1);
-}
-
-.item p {
-  text-align: center;
-  font-size: 14px;
-  margin: 8px 0 2px 0;
-  font-weight: 500;
-}
-
-.item video, .item img {
-  width: 100%;
-  border-radius: 8px;
-  display: block;
-  background: #eee;
-  pointer-events: none;
-}
-
-.estoque {
-  text-align: center;
-  font-size: 12px;
-  color: #3a3618;
-  margin-bottom: 4px;
-}
-
 /* RESPONSIVO */
 @media (max-width: 768px) {
+
   .topbar::before {
     background-size: 160%;
     background-position: center 20%;
@@ -274,6 +292,7 @@ body {
 
   .logo-texto h1 {
     font-size: 22px;
+    letter-spacing: 3px;
   }
 
   .logo-texto p {
