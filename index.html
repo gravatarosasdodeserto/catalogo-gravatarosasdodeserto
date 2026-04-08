@@ -18,15 +18,18 @@ body {
   padding-bottom: 200px;
 }
 
-/* ===== HEADER ===== */
+/* ===== HEADER MELHORADO ===== */
 .topbar {
-  background: linear-gradient(180deg, #434019 0%, #3a3618 100%);
-  padding: 20px 0;
+  background: #f8f5f0; /* Fundo limpo para harmonizar com o centro da imagem */
+  padding: 35px 0;
   position: sticky;
   top: 0;
   z-index: 10;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
   overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .topbar::before {
@@ -34,53 +37,54 @@ body {
   position: absolute;
   inset: 0;
   background-image: url('imagens/folhas-topo.png');
-  background-size: 120%;
+  background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  opacity: 0.25;
+  opacity: 1; /* Opacidade total para ver as folhagens */
+  z-index: 1;
 }
 
+/* Removido o filtro escuro que ficava sobre a imagem */
 .topbar::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to right, rgba(0,0,0,0.5), rgba(0,0,0,0.2), rgba(0,0,0,0.5));
+  display: none;
 }
 
-/* LINHAS */
+/* LINHAS - Ajustadas para contraste sutil no fundo claro */
 .linha-topo,
 .linha-baixo {
   position: absolute;
   left: 0;
   right: 0;
   height: 1px;
-  background-color: #f8f5f0;
-  opacity: 0.7;
+  background-color: #3a3618;
+  opacity: 0.15;
   z-index: 2;
 }
 
-.linha-topo { top: 8px; }
-.linha-baixo { bottom: 8px; }
+.linha-topo { top: 10px; }
+.linha-baixo { bottom: 10px; }
 
 /* HEADER CONTAINER */
 .header {
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 100%;
   max-width: 600px;
   margin: auto;
   position: relative;
   z-index: 3;
 }
 
-/* LOGO CENTRALIZADO */
+/* LOGO - Agora visível sobre o fundo branco central */
 .logo img {
-  width: 130px;
+  width: 160px; /* Tamanho otimizado */
   height: auto;
   display: block;
+  filter: drop-shadow(0 2px 5px rgba(0,0,0,0.1));
 }
 
-/* ===== RESTO ORIGINAL ===== */
+/* ===== RESTO DO ESTILO ORIGINAL ===== */
 
 .instrucoes {
   max-width: 600px;
@@ -181,6 +185,11 @@ body {
   background: #eee;
 }
 
+.item.selecionado {
+  outline: 3px solid #3a3618;
+  background: #fdfcf9;
+}
+
 .estoque { text-align: center; font-size: 12px; color: #3a3618; margin-bottom: 4px; }
 
 .botoes-acoes {
@@ -193,9 +202,26 @@ body {
   display: flex;
   flex-direction: column;
   gap: 10px;
+  z-index: 100;
 }
 
-.caixa-selecao { display: none; background: white; padding: 10px; border-radius: 12px; }
+.caixa-selecao { 
+  display: none; 
+  background: white; 
+  padding: 12px; 
+  border-radius: 12px; 
+  box-shadow: 0 -4px 10px rgba(0,0,0,0.05);
+}
+
+.topo-caixa {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.limpar { color: #8b2d2d; cursor: pointer; }
 
 #listaSelecionadas { display: flex; flex-wrap: wrap; gap: 6px; }
 
@@ -205,7 +231,18 @@ body {
   border-radius: 20px;
   padding: 4px 10px;
   display: flex;
+  align-items: center;
   gap: 6px;
+  border: 1px solid #e2ddd3;
+}
+
+.tag button {
+  background: none;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+  color: #8b2d2d;
+  padding: 0;
 }
 
 .busca {
@@ -214,6 +251,7 @@ body {
   border-radius: 25px;
   border: 2px solid #3a3618;
   text-align: center;
+  font-family: inherit;
 }
 
 .botao-whatsapp {
@@ -223,13 +261,16 @@ body {
   color: white;
   border: none;
   border-radius: 30px;
+  font-weight: 600;
+  cursor: pointer;
 }
 
 .oculto { display: none; }
 
 .nada-encontrado {
+  grid-column: 1 / -1;
   text-align: center;
-  padding: 20px;
+  padding: 40px 20px;
   color: #777;
 }
 </style>
@@ -243,7 +284,7 @@ body {
 
   <div class="header">
     <div class="logo">
-      <img src="logo.png">
+      <img src="logo.png" alt="Gravatá Rosas do Deserto">
     </div>
   </div>
 </div>
@@ -497,7 +538,7 @@ function renderCatalogo(){
     };
 
     let p = document.createElement("p");
-    p.textContent = nome;
+    p.innerHTML = `<strong>${nome}</strong>`;
 
     let est = document.createElement("div");
     est.className = "estoque";
