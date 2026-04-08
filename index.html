@@ -13,19 +13,21 @@
 
 body {
   font-family: 'Poppins', sans-serif;
-  background: #f8f5f0;
+  /* Bege mais escuro/fechado para o fundo */
+  background: #eaddca; 
   margin: 0;
   padding-bottom: 200px;
 }
 
-/* ===== HEADER MELHORADO ===== */
+/* ===== HEADER ===== */
 .topbar {
-  background: #f8f5f0; /* Fundo limpo para harmonizar com o centro da imagem */
+  /* Mesma cor do fundo para continuidade visual */
+  background: #eaddca; 
   padding: 35px 0;
   position: sticky;
   top: 0;
   z-index: 10;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
   overflow: hidden;
   display: flex;
   align-items: center;
@@ -40,16 +42,16 @@ body {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  opacity: 1; /* Opacidade total para ver as folhagens */
+  /* Mantido em 1 para mostrar bem as folhas */
+  opacity: 1; 
   z-index: 1;
 }
 
-/* Removido o filtro escuro que ficava sobre a imagem */
 .topbar::after {
   display: none;
 }
 
-/* LINHAS - Ajustadas para contraste sutil no fundo claro */
+/* LINHAS - Cor marrom escura com baixa opacidade */
 .linha-topo,
 .linha-baixo {
   position: absolute;
@@ -76,15 +78,16 @@ body {
   z-index: 3;
 }
 
-/* LOGO - Agora visível sobre o fundo branco central */
+/* LOGO */
 .logo img {
-  width: 160px; /* Tamanho otimizado */
+  width: 160px;
   height: auto;
   display: block;
+  /* Sombra leve para destacar no centro branco da imagem */
   filter: drop-shadow(0 2px 5px rgba(0,0,0,0.1));
 }
 
-/* ===== RESTO DO ESTILO ORIGINAL ===== */
+/* ===== RESTO DO ESTILO ===== */
 
 .instrucoes {
   max-width: 600px;
@@ -133,7 +136,7 @@ body {
   position: relative;
   width: 44px;
   height: 24px;
-  background: #ddd;
+  background: #c9bcab; /* Cor de trilho mais escura para o switch */
   border-radius: 24px;
   transition: 0.2s;
 }
@@ -170,7 +173,7 @@ body {
   padding: 10px;
   border-radius: 12px;
   cursor: pointer;
-  box-shadow: 0 6px 14px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
   transition: 0.15s ease;
 }
 
@@ -187,7 +190,7 @@ body {
 
 .item.selecionado {
   outline: 3px solid #3a3618;
-  background: #fdfcf9;
+  background: #fffefb;
 }
 
 .estoque { text-align: center; font-size: 12px; color: #3a3618; margin-bottom: 4px; }
@@ -196,7 +199,8 @@ body {
   position: fixed;
   bottom: 0;
   width: 100%;
-  background: rgba(248,245,240,0.9);
+  /* Fundo do rodapé flutuante acompanhando o bege com leve transparência */
+  background: rgba(234, 221, 202, 0.95);
   backdrop-filter: blur(8px);
   padding: 12px;
   display: flex;
@@ -252,6 +256,7 @@ body {
   border: 2px solid #3a3618;
   text-align: center;
   font-family: inherit;
+  background: white;
 }
 
 .botao-whatsapp {
