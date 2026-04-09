@@ -85,15 +85,16 @@ body {
 /* ===== BARRA DE FILTROS (FIXA) ===== */
 .secao-filtros {
   position: sticky;
-  top: 160px; /* Ajusta essa distância do topo se precisar */
+  top: 160px;
   z-index: 950;
-  padding: 0 15px; /* Só padding lateral */
-  background: transparent; /* Sem fundo */
-  border: none; /* Sem borda */
+  padding: 0 15px;
+  background: transparent;
+  border: none;
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  pointer-events: none; /* Pra não bloquear clique no que tiver atrás */
+  pointer-events: none;
+  min-height: 48px; /* Garante espaço pros dois elementos */
 }
 
 .btn-abrir-filtros {
@@ -114,20 +115,22 @@ body {
 }
 
 .status-filtro {
-  font-size: 11px;
-  font-weight: 500;
+  font-size: 13px; /* Mesmo do botão */
+  font-weight: 600; /* Mesmo do botão */
   color: var(--text-main);
-  background: rgba(255, 255, 255, 0.9); /* Fundo branco só no texto */
-  backdrop-filter: blur(5px); /* Desfoque no que tá atrás pra ler melhor */
-  display: inline-block;
-  padding: 4px 12px;
-  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(5px);
+  display: inline-flex; /* Flex pra centralizar verticalmente */
+  align-items: center; /* Centraliza o texto */
+  padding: 8px 20px; /* Mesmo padding do botão */
+  border-radius: 50px; /* Mesmo radius do botão */
   position: absolute;
   left: 15px;
   top: 50%;
   transform: translateY(-50%);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.15); /* Mesma sombra do botão */
   pointer-events: auto;
+  line-height: 1; /* Garante altura consistente */
 }
 
 /* ===== TEXTO DE INSTRUÇÃO (ESTÁTICO NO CORPO) ===== */
