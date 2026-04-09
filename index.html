@@ -569,7 +569,11 @@ function atualizarPainelAcoes() {
       containerTags.appendChild(tag);
     });
     btnZap.classList.remove("oculto");
-    btnZap.innerHTML = `Enviar interesse via WhatsApp (${selecionados.size})`;
+    if (selecionados.size === 1) {
+  btnZap.innerHTML = "Solicitar informação sobre a ID selecionada";
+} else {
+  btnZap.innerHTML = `Solicitar informações sobre as ${selecionados.size} IDs selecionadas`;
+}
   } else {
     areaSelecao.style.display = "none";
     btnZap.classList.add("oculto");
