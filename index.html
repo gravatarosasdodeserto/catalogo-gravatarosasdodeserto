@@ -1,3 +1,4 @@
+HTML
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -22,7 +23,7 @@ body {
   background-color: var(--body-bg);
   color: var(--text-main);
   margin: 0;
-  padding-bottom: 230px; /* aumentei de novo pra caber a lista de tags */
+  padding-bottom: 230px;
 }
 
 /* ===== CABEÇALHO ===== */
@@ -171,7 +172,6 @@ body {
 .wrapper-switch { margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid rgba(0,0,0,0.1); }
 .switch-disponivel { display: inline-flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 600; cursor: pointer; }
 .switch-disponivel input { display: none; }
-/* CORRIGIDO: espaço adicionado aqui */
 .switch-disponivel .slider { width: 34px; height: 18px; background: #c7c1b5; border-radius: 20px; position: relative; transition: 0.3s; }
 .switch-disponivel .slider::before { content: ""; position: absolute; width: 12px; height: 12px; left: 3px; top: 3px; background: white; border-radius: 50%; transition: 0.3s; }
 .switch-disponivel input:checked +.slider { background: var(--text-main); }
@@ -449,8 +449,8 @@ inputPesquisa.addEventListener("input", (e) => {
     checkProntaEntrega.checked = false;
     document.querySelectorAll('#filtroCategorias.pill').forEach(p => p.classList.remove('active'));
     document.querySelectorAll('#filtroCores.pill').forEach(p => p.classList.remove('active'));
-    document.querySelector('#filtroCategorias.pill').classList.add('active'); // CORRIGIDO: espaço adicionado
-    document.querySelector('#filtroCores.pill').classList.add('active'); // CORRIGIDO: espaço adicionado
+    document.querySelector('#filtroCategorias .pill').classList.add('active');
+    document.querySelector('#filtroCores .pill').classList.add('active');
   }
 
   montarCatalogo();
@@ -463,7 +463,7 @@ function filtrarCategoria(cat, elemento) {
   if (categoriaAtiva === cat && cat !== "Todas") {
     categoriaAtiva = "Todas";
     document.querySelectorAll('#filtroCategorias.pill').forEach(p => p.classList.remove('active'));
-    document.querySelector('#filtroCategorias.pill').classList.add('active');
+    document.querySelector('#filtroCategorias .pill').classList.add('active');
   } else {
     categoriaAtiva = cat;
     document.querySelectorAll('#filtroCategorias.pill').forEach(p => p.classList.remove('active'));
@@ -477,7 +477,7 @@ function filtrarCor(cor, elemento) {
   if (corAtiva === cor && cor !== "Todas") {
     corAtiva = "Todas";
     document.querySelectorAll('#filtroCores.pill').forEach(p => p.classList.remove('active'));
-    document.querySelector('#filtroCores.pill').classList.add('active');
+    document.querySelector('#filtroCores .pill').classList.add('active');
   } else {
     corAtiva = cor;
     document.querySelectorAll('#filtroCores.pill').forEach(p => p.classList.remove('active'));
