@@ -25,7 +25,7 @@ body {
   padding-bottom: 230px; 
 }
 
-/* ===== CABEÇALHO RESTAURADO ===== */
+/* ===== CABEÇALHO COM EFEITO SHOWROOM ===== */
 .topbar {
   padding: 50px 0; 
   position: sticky;
@@ -193,10 +193,7 @@ body {
   border: 1px solid rgba(0,0,0,0.02);
 }
 
-.item.selecionado {
-  background: var(--card-selected) !important;
-  transform: scale(0.96);
-}
+.item.selecionado { background: var(--card-selected) !important; transform: scale(0.96); }
 
 .item video, .item img { width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 14px; }
 .item p { text-align: center; font-size: 14px; font-weight: 600; margin: 12px 0 2px 0; }
@@ -236,6 +233,7 @@ body {
 }
 
 .oculto { display: none; }
+.vazio { grid-column: 1/-1; text-align: center; padding: 60px; opacity: 0.5; }
 </style>
 </head>
 <body>
@@ -250,23 +248,28 @@ body {
 
 <div class="container-filtros">
   <div class="grupo-filtro">
-    <div class="titulo-filtro">Categorias</div>
+    <div class="titulo-filtro">Tipo e Camadas</div>
     <div class="scroll-filtros" id="filtroCategorias">
       <div class="pill active" onclick="filtrarCategoria('Todas', this)">Todas</div>
-      <div class="pill" onclick="filtrarCategoria('Especiais', this)">Especiais</div>
-      <div class="pill" onclick="filtrarCategoria('Mutantes', this)">Mutantes</div>
-      <div class="pill" onclick="filtrarCategoria('Arabicum', this)">Arabicum</div>
+      <div class="pill" onclick="filtrarCategoria('Singela', this)">Singela</div>
+      <div class="pill" onclick="filtrarCategoria('Dupla', this)">Dupla</div>
+      <div class="pill" onclick="filtrarCategoria('Tripla+', this)">Tripla+</div>
+      <div class="pill" onclick="filtrarCategoria('Mutante', this)">Mutante</div>
+      <div class="pill" onclick="filtrarCategoria('Efeito Mosaico', this)">Mosaico</div>
+      <div class="pill" onclick="filtrarCategoria('Variegata', this)">Variegata</div>
     </div>
   </div>
 
   <div class="grupo-filtro">
-    <div class="titulo-filtro">Cores da Flor</div>
+    <div class="titulo-filtro">Cores Predominantes</div>
     <div class="scroll-filtros" id="filtroCores">
-      <div class="pill active" onclick="filtrarCor('Todas', this)">Todas</div>
-      <div class="pill" onclick="filtrarCor('Negras', this)">Negras/Roxas</div>
-      <div class="pill" onclick="filtrarCor('Amarelas', this)">Amarelas</div>
+      <div class="pill active" onclick="filtrarCor('Todas', this)">Todas as cores</div>
+      <div class="pill" onclick="filtrarCor('Escuras', this)">Escuras/Negras</div>
+      <div class="pill" onclick="filtrarCor('Amarelas', this)">Amarelas/Laranjas</div>
       <div class="pill" onclick="filtrarCor('Vermelhas', this)">Vermelhas</div>
+      <div class="pill" onclick="filtrarCor('Rosas', this)">Rosas</div>
       <div class="pill" onclick="filtrarCor('Claras', this)">Claras/Brancas</div>
+      <div class="pill" onclick="filtrarCor('Matizadas', this)">Matizadas/Riscadas</div>
     </div>
   </div>
 
@@ -292,24 +295,21 @@ body {
 </div>
 
 <script>
+// BASE DE DADOS: Agora com Categoria e Cor para cada item
 const estoque = { 
-  "AÇUCENA (MUTANTE)": { qtd: 1, cat: "Mutantes", cor: "Claras" }, 
-  "AKACHI": { qtd: 0, cat: "Especiais", cor: "Vermelhas" }, 
-  "AMATTA": { qtd: 1, cat: "Especiais", cor: "Vermelhas" }, 
-  "ARYA": { qtd: 0, cat: "Especiais", cor: "Claras" }, 
-  "BLOODY MARY": { qtd: 0, cat: "Especiais", cor: "Vermelhas" }, 
-  "CÉU ESTRELADO": { qtd: 2, cat: "Especiais", cor: "Negras" },
-  "CÉU ESTRELADO VARIEGATA": { qtd: 0, cat: "Mutantes", cor: "Negras" },
-  "GTA-RED COMETS": { qtd: 0, cat: "Especiais", cor: "Vermelhas" },
-  "GTA-SUN CLUSTER": { qtd: 0, cat: "Especiais", cor: "Amarelas" },
-  "GTA-GOLDEN PINK": { qtd: 0, cat: "Especiais", cor: "Amarelas" },
-  "GTA-LYSSA": { qtd: 0, cat: "Especiais", cor: "Negras" },
-  "BP-116": { qtd: 0, cat: "Especiais", cor: "Todas" },
-  "BRANCA DE NEVE": { qtd: 0, cat: "Especiais", cor: "Claras" },
-  "BRIDAL BOUQUET": { qtd: 0, cat: "Especiais", cor: "Claras" },
-  "CANAN 55": { qtd: 0, cat: "Especiais", cor: "Todas" },
-  "VAMPIRA": { qtd: 0, cat: "Especiais", cor: "Negras" },
-  "VIÚVA NEGRA": { qtd: 0, cat: "Especiais", cor: "Negras" }
+  "AÇUCENA (MUTANTE)": { qtd: 1, cat: "Mutante", cor: "Claras" }, 
+  "CÉU ESTRELADO": { qtd: 2, cat: "Tripla+", cor: "Escuras" },
+  "CÉU ESTRELADO VARIEGATA": { qtd: 0, cat: "Variegata", cor: "Escuras" },
+  "GTA-RED COMETS": { qtd: 0, cat: "Dupla", cor: "Vermelhas" },
+  "GTA-SUN CLUSTER": { qtd: 0, cat: "Tripla+", cor: "Amarelas" },
+  "GTA-LYSSA": { qtd: 0, cat: "Dupla", cor: "Escuras" },
+  "VAMPIRA": { qtd: 0, cat: "Tripla+", cor: "Escuras" },
+  "VIÚVA NEGRA": { qtd: 0, cat: "Tripla+", cor: "Escuras" },
+  "AKACHI": { qtd: 0, cat: "Dupla", cor: "Vermelhas" },
+  "AMATTA": { qtd: 1, cat: "Dupla", cor: "Vermelhas" },
+  "ARYA": { qtd: 0, cat: "Tripla+", cor: "Claras" },
+  "BLOODY MARY": { qtd: 0, cat: "Dupla", cor: "Vermelhas" },
+  "LH-20 (MOSAICO)": { qtd: 1, cat: "Efeito Mosaico", cor: "Matizadas" }
 };
 
 let selecionados = new Set();
@@ -371,13 +371,13 @@ function montarCatalogo() {
     };
     grid.appendChild(card);
   });
+  if (itensExibidos === 0) grid.innerHTML = `<div class="vazio">Nenhuma ID encontrada com esses filtros.</div>`;
 }
 
 function atualizarPainelAcoes() {
   const areaSelecao = document.getElementById("areaSelecao");
   const containerTags = document.getElementById("containerTags");
   const btnZap = document.getElementById("btnEnviar");
-  
   containerTags.innerHTML = "";
   if (selecionados.size > 0) {
     areaSelecao.style.display = "block";
