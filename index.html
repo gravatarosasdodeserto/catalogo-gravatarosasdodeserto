@@ -646,9 +646,9 @@ function enviarPedido() {
   const ids = Array.from(selecionados);
   let mensagem = "";
   if (ids.length === 1) {
-    mensagem = `Olá, gostaria de saber a disponibilidade e valor do enxerto da ID:\n- ${ids[0]}`;
+    mensagem = `Olá, tenho interesse em adquirir um enxerto da \n- ${ids[0]}, poderia me dar mais informações?`;
   } else {
-    mensagem = `Olá, gostaria de saber a disponibilidade e valor dos enxertos das ID's:\n- ${ids.join("\n- ")}`;
+    mensagem = `Olá, tenho interesse em adquirir os seguintes enxertos: \n- ${ids[0]}, poderia me dar mais informações?`;
   }
   window.open("https://wa.me/5581992665421?text=" + encodeURIComponent(mensagem), "_blank");
 }
