@@ -22,7 +22,7 @@ body {
   background-color: var(--body-bg);
   color: var(--text-main);
   margin: 0;
-  padding-bottom: 150px;
+  padding-bottom: 230px; /* aumentei de novo pra caber a lista de tags */
 }
 
 /* ===== CABEÇALHO ===== */
@@ -87,25 +87,25 @@ body {
   position: sticky;
   top: 152px;
   z-index: 950;
-  padding: 4px 15px; /* bem fininho */
-  background: #ffffff; /* fundo branco */
+  padding: 4px 15px;
+  background: #ffffff;
   border: none;
   display: flex;
   justify-content: space-between;
   align-items: center;
   pointer-events: none;
   gap: 10px;
-  height: 32px; /* trava a altura pra ficar fino mesmo */
-  border-bottom: 1px solid rgba(0,0,0,0.06); /* linha sutil de separação */
+  height: 32px;
+  border-bottom: 1px solid rgba(0,0,0,0.06);
 }
 .status-filtro {
   font-size: 11px;
   font-weight: 600;
   color: var(--text-main);
-  background: rgba(58, 54, 24, 0.08); /* fundo bege sutil já que a barra é branca */
+  background: rgba(58, 54, 24, 0.08);
   display: inline-flex;
   align-items: center;
-  padding: 4px 12px; /* mais baixo */
+  padding: 4px 12px;
   border-radius: 50px;
   pointer-events: auto;
   line-height: 1;
@@ -120,7 +120,7 @@ body {
   display: flex;
   align-items: center;
   gap: 5px;
-  padding: 4px 12px; /* mais baixo */
+  padding: 4px 12px;
   border-radius: 50px;
   border: none;
   font-weight: 600;
@@ -128,16 +128,16 @@ body {
   cursor: pointer;
   pointer-events: auto;
   line-height: 1;
-  height: 24px; /* altura fixa */
+  height: 24px;
 }
 
 .btn-abrir-filtros svg {
-  width: 12px; /* ícone menor pra caber */
+  width: 12px;
   height: 12px;
   flex-shrink: 0;
 }
 
-/* ===== TEXTO DE INSTRUÇÃO (ESTÁTICO NO CORPO) ===== */
+/* ===== TEXTO DE INSTRUÇÃO ===== */
 .instrucao-texto {
   text-align: center;
   font-size: 13px;
@@ -171,14 +171,14 @@ body {
 .wrapper-switch { margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid rgba(0,0,0,0.1); }
 .switch-disponivel { display: inline-flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 600; cursor: pointer; }
 .switch-disponivel input { display: none; }
-.switch-disponivel .slider { width: 34px; height: 18px; background: #c7c1b5; border-radius: 20px; position: relative; transition: 0.3s; }
-.switch-disponivel .slider::before { content: ""; position: absolute; width: 12px; height: 12px; left: 3px; top: 3px; background: white; border-radius: 50%; transition: 0.3s; }
+.switch-disponivel.slider { width: 34px; height: 18px; background: #c7c1b5; border-radius: 20px; position: relative; transition: 0.3s; }
+.switch-disponivel.slider::before { content: ""; position: absolute; width: 12px; height: 12px; left: 3px; top: 3px; background: white; border-radius: 50%; transition: 0.3s; }
 .switch-disponivel input:checked +.slider { background: var(--text-main); }
 .switch-disponivel input:checked +.slider::before { transform: translateX(16px); }
 
 /* ===== GRID ===== */
 .catalogo { display: grid; grid-template-columns: repeat(auto-fill, minmax(165px, 1fr)); gap: 15px; padding: 0 15px; max-width: 1200px; margin: 0 auto; }
-.item { background: var(--card-white); padding: 10px; border-radius: 20px; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+.item { background: var(--card-white); padding: 10px; border-radius: 20px; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.05); transition: all 0.2s; }
 .item.selecionado { background: var(--card-selected)!important; transform: scale(0.96); }
 .item video,.item img { width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 14px; }
 .item p { text-align: center; font-size: 13px; font-weight: 600; margin: 10px 0 2px 0; }
@@ -189,6 +189,23 @@ body {
 /* ===== RODAPÉ ===== */
 .rodape-acoes { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(229, 224, 216, 0.98); backdrop-filter: blur(12px); padding: 10px 20px 25px; z-index: 1000; border-top: 2px solid #ffffff; }
 .container-rodape { max-width: 500px; margin: 0 auto; display: flex; flex-direction: column; gap: 8px; }
+
+/* VOLTOU: CAIXA DE SELEÇÃO */
+.caixa-selecao {
+  display: none;
+  background: #ffffff;
+  padding: 6px 10px;
+  border-radius: 15px;
+  max-height: 70px;
+  overflow-y: auto;
+  border: 1px solid rgba(0,0,0,0.05);
+  margin-bottom: 2px;
+}
+.topo-caixa { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; font-size: 10px; font-weight: 600; }
+.limpar { color: #8b2d2d; cursor: pointer; text-decoration: underline; }
+.tag-item { font-size: 10px; background: #f0f0eb; padding: 4px 10px; border-radius: 8px; display: inline-flex; align-items: center; gap: 6px; margin: 0 4px 4px 0; }
+.tag-item button { border: none; background: none; color: #8b2d2d; cursor: pointer; font-weight: bold; font-size: 12px; }
+
 .campo-busca { width: 100%; padding: 12px 20px; border-radius: 50px; border: 1.5px solid rgba(0,0,0,0.1); background: white; outline: none; text-align: center; }
 .btn-whatsapp { width: 100%; padding: 15px; background: var(--text-main); color: white; border: none; border-radius: 50px; font-weight: 600; cursor: pointer; }
 .vazio { grid-column: 1/-1; text-align: center; padding: 60px; opacity: 0.5; }
@@ -266,6 +283,15 @@ body {
 
 <div class="rodape-acoes">
   <div class="container-rodape">
+    <!-- VOLTOU: CAIXA COM AS TAGS DAS ID'S SELECIONADAS -->
+    <div class="caixa-selecao" id="areaSelecao">
+      <div class="topo-caixa">
+        <span>ID's selecionadas:</span>
+        <span class="limpar" onclick="limparTudo()">Limpar tudo</span>
+      </div>
+      <div id="containerTags"></div>
+    </div>
+
     <input type="text" id="inputPesquisa" class="campo-busca" placeholder="Buscar ID pelo nome...">
     <button id="btnEnviar" class="btn-whatsapp oculto" onclick="enviarPedido()"></button>
   </div>
@@ -415,14 +441,14 @@ checkProntaEntrega.addEventListener("change", (e) => { apenasDisponiveis = e.tar
 
 function filtrarCategoria(cat, elemento) {
   categoriaAtiva = cat;
-  document.querySelectorAll('#filtroCategorias .pill').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('#filtroCategorias.pill').forEach(p => p.classList.remove('active'));
   elemento.classList.add('active');
   montarCatalogo();
 }
 
 function filtrarCor(cor, elemento) {
   corAtiva = cor;
-  document.querySelectorAll('#filtroCores .pill').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('#filtroCores.pill').forEach(p => p.classList.remove('active'));
   elemento.classList.add('active');
   montarCatalogo();
 }
@@ -471,7 +497,7 @@ function montarCatalogo() {
 
     card.onclick = () => {
       if (selecionados.has(nome)) selecionados.delete(nome); else selecionados.add(nome);
-      atualizarPainelAcoes();
+      atualizarPainelAcoes(); // VOLTOU: atualiza a lista de tags
       montarCatalogo();
     };
     grid.appendChild(card);
@@ -479,12 +505,27 @@ function montarCatalogo() {
   if (itensExibidos === 0) grid.innerHTML = `<div class="vazio">Nenhuma ID encontrada com esses filtros.</div>`;
 }
 
+// VOLTOU: FUNÇÃO QUE MOSTRA AS TAGS
 function atualizarPainelAcoes() {
+  const areaSelecao = document.getElementById("areaSelecao");
+  const containerTags = document.getElementById("containerTags");
   const btnZap = document.getElementById("btnEnviar");
+  containerTags.innerHTML = "";
+
   if (selecionados.size > 0) {
+    areaSelecao.style.display = "block";
+    selecionados.forEach(nome => {
+      const tag = document.createElement("div");
+      tag.className = "tag-item";
+      tag.innerHTML = `${nome} <button onclick="event.stopPropagation(); removerItem('${nome}')">×</button>`;
+      containerTags.appendChild(tag);
+    });
     btnZap.classList.remove("oculto");
     btnZap.innerHTML = `Enviar interesse via WhatsApp (${selecionados.size})`;
-  } else { btnZap.classList.add("oculto"); }
+  } else {
+    areaSelecao.style.display = "none";
+    btnZap.classList.add("oculto");
+  }
 }
 
 function enviarPedido() {
