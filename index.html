@@ -139,18 +139,28 @@ body {
 
 /* ===== TEXTO DE INSTRUÇÃO ===== */
 .instrucao-texto {
-  text-align: center;
-  font-size: 13px;
-  opacity: 0.8;
-  margin: 20px auto;
-  padding: 0 20px;
-  line-height: 1.5;
+    max-width: 500px;
+    margin: 20px auto 10px;
+    padding: 12px 16px;
+    background: rgba(255, 255, 255, 0.6);
+    border-radius: 14px;
+    text-align: center;
+    font-size: 13px;
+    line-height: 1.5;
+    backdrop-filter: blur(6px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.instrucao-texto p {
+    margin: 0;
+    font-weight: 500;
 }
 
 .instrucao-texto span {
-  display: block;
-  font-size: 11px;
-  font-weight: 500;
+    display: block;
+    margin-top: 6px;
+    font-size: 11px;
+    color: rgba(58, 54, 24, 0.7);
 }
 
 .oculto { display: none!important; }
@@ -275,7 +285,7 @@ body {
 </div>
 
 <div class="instrucao-texto">
-    <p>Selecione as ID's desejadas para solicitar informações sobre os enxertos.</p>
+    <p>Selecione a(s) ID(s) desejada(s) para solicitar informações.</p>
     <span>Variedades sem pronta entrega podem ser encomendadas sem custo.</span>
 </div>
 
