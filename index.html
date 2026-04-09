@@ -1,4 +1,3 @@
-HTML
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -83,493 +82,213 @@ body {
 .logo { position: relative; z-index: 3; }
 .logo img { width: 150px; height: auto; filter: drop-shadow(0 4px 15px rgba(0,0,0,0.4)); }
 
-/* ===== BARRA DE FILTROS (FIXA) ===== */
+/* ===== BARRA DE FILTROS ===== */
 .secao-filtros {
   position: sticky;
   top: 152px;
   z-index: 950;
   padding: 4px 15px;
   background: #ffffff;
-  border: none;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  pointer-events: none;
   gap: 10px;
   height: 32px;
   border-bottom: 1px solid rgba(0,0,0,0.06);
 }
+
 .status-filtro {
   font-size: 11px;
   font-weight: 600;
-  color: var(--text-main);
   background: rgba(58, 54, 24, 0.08);
-  display: inline-flex;
-  align-items: center;
   padding: 4px 12px;
   border-radius: 50px;
-  pointer-events: auto;
-  line-height: 1;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .btn-abrir-filtros {
   background: var(--text-main);
   color: white;
-  display: flex;
-  align-items: center;
-  gap: 5px;
   padding: 4px 12px;
   border-radius: 50px;
   border: none;
-  font-weight: 600;
   font-size: 11px;
   cursor: pointer;
-  pointer-events: auto;
-  line-height: 1;
-  height: 24px;
 }
-
-.btn-abrir-filtros svg {
-  width: 12px;
-  height: 12px;
-  flex-shrink: 0;
-}
-
-/* ===== TEXTO DE INSTRUÇÃO ===== */
-.instrucao-texto {
-  text-align: center;
-  font-size: 13px;
-  opacity: 0.8;
-  margin: 20px auto;
-  padding: 0 20px;
-  line-height: 1.5;
-}
-
-.instrucao-texto span {
-  display: block;
-  font-size: 11px;
-  font-weight: 500;
-}
-
-.oculto { display: none!important; }
-
-/* ===== DRAWER ===== */
-.overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 2000; display: none; backdrop-filter: blur(3px); }
-.drawer-filtros { position: fixed; right: -300px; top: 0; width: 300px; height: 100%; background: var(--body-bg); z-index: 2001; transition: 0.3s; padding: 30px 20px; box-shadow: -5px 0 25px rgba(0,0,0,0.2); display: flex; flex-direction: column; }
-.drawer-filtros.active { right: 0; }
-.fechar-drawer { background: none; border: none; font-size: 24px; cursor: pointer; text-align: right; margin-bottom: 20px; color: var(--text-main); }
-
-.grupo-filtro { margin-bottom: 25px; }
-.titulo-filtro { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; margin-bottom: 12px; opacity: 0.6; }
-.opcoes-filtro { display: flex; flex-wrap: wrap; gap: 8px; }
-
-.pill { padding: 6px 14px; background: #ffffff; border: 1px solid rgba(0,0,0,0.05); border-radius: 50px; font-size: 12px; cursor: pointer; }
-.pill.active { background: var(--text-main); color: white; }
-
-.wrapper-switch { margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid rgba(0,0,0,0.1); }
-.switch-disponivel { display: inline-flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 600; cursor: pointer; }
-.switch-disponivel input { display: none; }
-.switch-disponivel .slider { width: 34px; height: 18px; background: #c7c1b5; border-radius: 20px; position: relative; transition: 0.3s; }
-.switch-disponivel .slider::before { content: ""; position: absolute; width: 12px; height: 12px; left: 3px; top: 3px; background: white; border-radius: 50%; transition: 0.3s; }
-.switch-disponivel input:checked +.slider { background: var(--text-main); }
-.switch-disponivel input:checked +.slider::before { transform: translateX(16px); }
 
 /* ===== GRID ===== */
-.catalogo { display: grid; grid-template-columns: repeat(auto-fill, minmax(165px, 1fr)); gap: 15px; padding: 0 15px; max-width: 1200px; margin: 0 auto; }
-.item { background: var(--card-white); padding: 10px; border-radius: 20px; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.05); transition: all 0.2s; }
-.item.selecionado { background: var(--card-selected)!important; transform: scale(0.96); }
-.item video,.item img { width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 14px; }
-.item p { text-align: center; font-size: 13px; font-weight: 600; margin: 10px 0 2px 0; }
-.estoque-status { text-align: center; font-size: 10px; font-weight: 700; text-transform: uppercase; }
+.catalogo {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(165px, 1fr));
+  gap: 15px;
+  padding: 0 15px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.item {
+  background: var(--card-white);
+  padding: 10px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.item.selecionado {
+  background: var(--card-selected)!important;
+  transform: scale(0.96);
+}
+
+.item video,.item img {
+  width: 100%;
+  aspect-ratio: 1/1;
+  object-fit: cover;
+  border-radius: 14px;
+}
+
+.item p {
+  text-align: center;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.estoque-status {
+  text-align: center;
+  font-size: 10px;
+  font-weight: 700;
+}
+
 .disponivel { color: #2d5a27; }
-.encomenda { color: #8a8471; opacity: 0.7; }
+.encomenda { color: #8a8471; }
 
 /* ===== RODAPÉ ===== */
-.rodape-acoes { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(229, 224, 216, 0.98); backdrop-filter: blur(12px); padding: 10px 20px 25px; z-index: 1000; border-top: 2px solid #ffffff; }
-.container-rodape { max-width: 500px; margin: 0 auto; display: flex; flex-direction: column; gap: 8px; }
+.rodape-acoes {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background: rgba(229,224,216,0.98);
+  padding: 10px 20px 25px;
+}
 
-/* VOLTOU: CAIXA DE SELEÇÃO */
 .caixa-selecao {
   display: none;
-  background: #ffffff;
-  padding: 6px 10px;
+  background: white;
+  padding: 6px;
   border-radius: 15px;
-  max-height: 70px;
-  overflow-y: auto;
-  border: 1px solid rgba(0,0,0,0.05);
-  margin-bottom: 2px;
 }
-.topo-caixa { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; font-size: 10px; font-weight: 600; }
-.limpar { color: #8b2d2d; cursor: pointer; text-decoration: underline; }
-.tag-item { font-size: 10px; background: #f0f0eb; padding: 4px 10px; border-radius: 8px; display: inline-flex; align-items: center; gap: 6px; margin: 0 4px 4px 0; }
-.tag-item button { border: none; background: none; color: #8b2d2d; cursor: pointer; font-weight: bold; font-size: 12px; }
 
-.campo-busca { width: 100%; padding: 12px 20px; border-radius: 50px; border: 1.5px solid rgba(0,0,0,0.1); background: white; outline: none; text-align: center; }
-.btn-whatsapp { width: 100%; padding: 15px; background: var(--text-main); color: white; border: none; border-radius: 50px; font-weight: 600; cursor: pointer; }
-.vazio { grid-column: 1/-1; text-align: center; padding: 60px; opacity: 0.5; }
+.tag-item {
+  font-size: 10px;
+  background: #f0f0eb;
+  padding: 4px 10px;
+  border-radius: 8px;
+  margin: 2px;
+}
 
+.campo-busca {
+  width: 100%;
+  padding: 12px;
+  border-radius: 50px;
+}
+
+.btn-whatsapp {
+  width: 100%;
+  padding: 15px;
+  background: var(--text-main);
+  color: white;
+  border-radius: 50px;
+}
+
+.oculto { display:none; }
 </style>
 </head>
+
 <body>
 
 <div class="topbar">
   <div class="logo"><img src="logo.png"></div>
-  <div class="white-frame">
-    <div class="line-top"></div>
-    <div class="line-bottom"></div>
-  </div>
 </div>
 
 <div class="secao-filtros">
-  <div class="status-filtro" id="statusFiltro" style="display: none;">
-    Exibindo apenas ID's...
-  </div>
-
-  <button class="btn-abrir-filtros" onclick="toggleDrawer()">
-    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M3 4.5H21M7 12H17M10 19.5H14" stroke="white" stroke-width="2" stroke-linecap="round"/>
-    </svg>
-    <span>Filtrar</span>
-  </button>
-</div>
-
-<div class="overlay" id="overlay" onclick="toggleDrawer()"></div>
-
-<div class="drawer-filtros" id="drawer">
-  <button class="fechar-drawer" onclick="toggleDrawer()">✕</button>
-
-  <div class="wrapper-switch">
-    <label class="switch-disponivel">
-      <input type="checkbox" id="checkProntaEntrega">
-      <span class="slider"></span>
-      ID's pronta entrega
-    </label>
-  </div>
-
-  <div class="grupo-filtro">
-    <div class="titulo-filtro">Tipo e Camadas</div>
-    <div class="opcoes-filtro" id="filtroCategorias">
-      <div class="pill active" onclick="filtrarCategoria('Todas', this)">Todas</div>
-      <div class="pill" onclick="filtrarCategoria('Singela', this)">Singela</div>
-      <div class="pill" onclick="filtrarCategoria('Dupla', this)">Dupla</div>
-      <div class="pill" onclick="filtrarCategoria('Tripla+', this)">Tripla+</div>
-      <div class="pill" onclick="filtrarCategoria('Mutante', this)">Mutante</div>
-      <div class="pill" onclick="filtrarCategoria('Variegata', this)">Variegata</div>
-    </div>
-  </div>
-
-  <div class="grupo-filtro">
-    <div class="titulo-filtro">Famílias de Cores</div>
-    <div class="opcoes-filtro" id="filtroCores">
-      <div class="pill active" onclick="filtrarCor('Todas', this)">Todas as cores</div>
-      <div class="pill" onclick="filtrarCor('Escuras', this)">Escuras</div>
-      <div class="pill" onclick="filtrarCor('Claras', this)">Claras</div>
-      <div class="pill" onclick="filtrarCor('Amarelas', this)">Amarelas</div>
-      <div class="pill" onclick="filtrarCor('Vermelhas', this)">Vermelhas</div>
-      <div class="pill" onclick="filtrarCor('Rosas', this)">Rosas</div>
-      <div class="pill" onclick="filtrarCor('Matizadas', this)">Matizadas</div>
-    </div>
-  </div>
-</div>
-
-<div class="instrucao-texto">
-    <p>Selecione as ID's desejadas para solicitar informações sobre os enxertos.</p>
-    <span>Variedades sem pronta entrega podem ser encomendadas sem custo.</span>
+  <div id="statusFiltro" class="status-filtro" style="display:none;"></div>
+  <button class="btn-abrir-filtros" onclick="toggleDrawer()">Filtrar</button>
 </div>
 
 <div class="catalogo" id="gridCatalogo"></div>
 
 <div class="rodape-acoes">
-  <div class="container-rodape">
-    <!-- VOLTOU: CAIXA COM AS TAGS DAS ID'S SELECIONADAS -->
-    <div class="caixa-selecao" id="areaSelecao">
-      <div class="topo-caixa">
-        <span>ID's selecionadas:</span>
-        <span class="limpar" onclick="limparTudo()">Limpar tudo</span>
-      </div>
-      <div id="containerTags"></div>
-    </div>
-
-    <input type="text" id="inputPesquisa" class="campo-busca" placeholder="Buscar ID pelo nome...">
-    <button id="btnEnviar" class="btn-whatsapp oculto" onclick="enviarPedido()"></button>
+  <div class="caixa-selecao" id="areaSelecao">
+    <div id="containerTags"></div>
   </div>
+
+  <input type="text" id="inputPesquisa" class="campo-busca" placeholder="Buscar ID pelo nome...">
+  <button id="btnEnviar" class="btn-whatsapp oculto" onclick="enviarPedido()"></button>
 </div>
 
-<script>
-// ESTOQUE COMPLETO - 117 IDs
-const estoque = {
-  "AÇUCENA (MUTANTE)": { qtd: 1, cat: "Mutante", cor: "Claras" },
-  "AKACHI": { qtd: 1, cat: "Dupla", cor: "Vermelhas" },
-  "AMATTA": { qtd: 1, cat: "Dupla", cor: "Rosas" },
-  "ARYA": { qtd: 1, cat: "Tripla+", cor: "Claras" },
-  "BLOODY MARY": { qtd: 1, cat: "Dupla", cor: "Vermelhas" },
-  "BP-116": { qtd: 1, cat: "Dupla", cor: "Matizadas" },
-  "BRANCA DE NEVE": { qtd: 1, cat: "Singela", cor: "Claras" },
-  "BRIDAL BOUQUET": { qtd: 1, cat: "Tripla+", cor: "Claras" },
-  "CANAN 55": { qtd: 1, cat: "Dupla", cor: "Matizadas" },
-  "CANAN 170": { qtd: 1, cat: "Dupla", cor: "Matizadas" },
-  "CAPIXABA": { qtd: 1, cat: "Dupla", cor: "Vermelhas" },
-  "CÉU ESTRELADO": { qtd: 1, cat: "Tripla+", cor: "Escuras" },
-  "CÉU ESTRELADO VARIEGATA": { qtd: 1, cat: "Variegata", cor: "Escuras" },
-  "COPENHAGEN": { qtd: 1, cat: "Dupla", cor: "Rosas" },
-  "DAFNE": { qtd: 1, cat: "Dupla", cor: "Vermelhas" },
-  "DIỆU CHÂU": { qtd: 1, cat: "Dupla", cor: "Matizadas" },
-  "COCA-COLA": { qtd: 1, cat: "Dupla", cor: "Escuras" },
-  "DOUBLE STAR": { qtd: 1, cat: "Dupla", cor: "Vermelhas" },
-  "DUQUESA": { qtd: 1, cat: "Tripla+", cor: "Rosas" },
-  "EGG ROLL": { qtd: 1, cat: "Tripla+", cor: "Amarelas" },
-  "ELARA": { qtd: 1, cat: "Dupla", cor: "Escuras" },
-  "ELLIE": { qtd: 1, cat: "Dupla", cor: "Rosas" },
-  "EV19-XANADÚ": { qtd: 1, cat: "Tripla+", cor: "Matizadas" },
-  "FERRARI": { qtd: 1, cat: "Dupla", cor: "Vermelhas" },
-  "GOLDEN FAITH": { qtd: 1, cat: "Tripla+", cor: "Amarelas" },
-  "GRAPE CHOCOLATE": { qtd: 1, cat: "Dupla", cor: "Escuras" },
-  "GUARÁ PITANGA": { qtd: 1, cat: "Dupla", cor: "Vermelhas" },
-  "GTA-AIKA": { qtd: 1, cat: "Dupla", cor: "Rosas" },
-  "GTA-BOLD": { qtd: 1, cat: "Dupla", cor: "Vermelhas" },
-  "GTA-CANDY CRUSH": { qtd: 1, cat: "Dupla", cor: "Matizadas" },
-  "GTA-CÓSMICA": { qtd: 1, cat: "Dupla", cor: "Escuras" },
-  "GTA-CREPÚSCULO": { qtd: 1, cat: "Dupla", cor: "Escuras" },
-  "GTA-DESERT DOLL": { qtd: 1, cat: "Dupla", cor: "Claras" },
-  "GTA-DIANA": { qtd: 1, cat: "Dupla", cor: "Rosas" },
-  "GTA-EMMA FROST": { qtd: 1, cat: "Dupla", cor: "Claras" },
-  "GTA-FAY": { qtd: 1, cat: "Dupla", cor: "Rosas" },
-  "GTA-FLORZINHA": { qtd: 1, cat: "Dupla", cor: "Rosas" },
-  "GTA-FLUTTERSHY": { qtd: 1, cat: "Dupla", cor: "Amarelas" },
-  "GTA-FRACTA": { qtd: 1, cat: "Dupla", cor: "Matizadas" },
-  "GTA-GOLDEN PINK": { qtd: 1, cat: "Dupla", cor: "Matizadas" },
-  "GTA-ICE DRAGON": { qtd: 1, cat: "Dupla", cor: "Claras" },
-  "GTA-KIMBERLY": { qtd: 1, cat: "Dupla", cor: "Rosas" },
-  "GTA-LITTLE KISS": { qtd: 1, cat: "Singela", cor: "Rosas" },
-  "GTA-LOLLIPOP BLACK": { qtd: 1, cat: "Dupla", cor: "Escuras" },
-  "GTA-LYSSA": { qtd: 1, cat: "Dupla", cor: "Escuras" },
-  "GTA-LYTA": { qtd: 1, cat: "Dupla", cor: "Rosas" },
-  "GTA-MISS GRAVATÁ": { qtd: 1, cat: "Dupla", cor: "Matizadas" },
-  "GTA-NYX": { qtd: 1, cat: "Dupla", cor: "Escuras" },
-  "GTA-PERONA": { qtd: 1, cat: "Dupla", cor: "Rosas" },
-  "GTA-PINK VENOM": { qtd: 1, cat: "Dupla", cor: "Escuras" },
-  "GTA-PINKIE PIE": { qtd: 1, cat: "Dupla", cor: "Rosas" },
-  "GTA-RED COMETS": { qtd: 1, cat: "Dupla", cor: "Vermelhas" },
-  "GTA-RED STORM": { qtd: 1, cat: "Dupla", cor: "Vermelhas" },
-  "GTA-RED WIDOW": { qtd: 1, cat: "Dupla", cor: "Vermelhas" },
-  "GTA-SANSA": { qtd: 1, cat: "Dupla", cor: "Rosas" },
-  "GTA-SHE HA": { qtd: 1, cat: "Dupla", cor: "Rosas" },
-  "GTA-SUN CLUSTER": { qtd: 1, cat: "Tripla+", cor: "Amarelas" },
-  "GTA-SWEET BLUSH": { qtd: 1, cat: "Dupla", cor: "Rosas" },
-  "GTA-TRINITY": { qtd: 1, cat: "Dupla", cor: "Claras" },
-  "GTA-TRUE FAITH": { qtd: 1, cat: "Dupla", cor: "Amarelas" },
-  "GTA-YUNA": { qtd: 1, cat: "Dupla", cor: "Rosas" },
-  "HELENA": { qtd: 1, cat: "Dupla", cor: "Rosas" },
-  "INDIGO GLAZE": { qtd: 1, cat: "Dupla", cor: "Escuras" },
-  "INFINITY": { qtd: 1, cat: "Dupla", cor: "Vermelhas" },
-  "JHULLY": { qtd: 1, cat: "Dupla", cor: "Rosas" },
-  "JULIUS CAESAR": { qtd: 1, cat: "Dupla", cor: "Escuras" },
-  "KING OF KINGS": { qtd: 1, cat: "Dupla", cor: "Vermelhas" },
-  "KINDLY": { qtd: 1, cat: "Dupla", cor: "Rosas" },
-  "L-06": { qtd: 1, cat: "Tripla+", cor: "Matizadas" },
-  "LAILA": { qtd: 1, cat: "Dupla", cor: "Vermelhas" },
-  "LILAC FROST (MUTANTE)": { qtd: 1, cat: "Mutante", cor: "Claras" },
-  "LM-440": { qtd: 1, cat: "Dupla", cor: "Matizadas" },
-  "LM-50": { qtd: 1, cat: "Dupla", cor: "Matizadas" },
-  "LM2": { qtd: 1, cat: "Dupla", cor: "Matizadas" },
-  "LUNA": { qtd: 1, cat: "Dupla", cor: "Claras" },
-  "MAGNIFICAT": { qtd: 1, cat: "Dupla", cor: "Matizadas" },
-  "MARIA": { qtd: 1, cat: "Dupla", cor: "Claras" },
-  "MIDNIGHT": { qtd: 1, cat: "Dupla", cor: "Escuras" },
-  "MỘNG CẦM": { qtd: 1, cat: "Dupla", cor: "Matizadas" },
-  "MORAN": { qtd: 1, cat: "Dupla", cor: "Rosas" },
-  "NANCY": { qtd: 1, cat: "Dupla", cor: "Rosas" },
-  "NEMO": { qtd: 1, cat: "Dupla", cor: "Matizadas" },
-  "NORALINE": { qtd: 1, cat: "Dupla", cor: "Rosas" },
-  "NUSA": { qtd: 1, cat: "Dupla", cor: "Amarelas" },
-  "P-200": { qtd: 1, cat: "Dupla", cor: "Matizadas" },
-  "PATHUMMA": { qtd: 1, cat: "Dupla", cor: "Rosas" },
-  "PEONY": { qtd: 1, cat: "Dupla", cor: "Rosas" },
-  "PHARAOH": { qtd: 1, cat: "Dupla", cor: "Amarelas" },
-  "PURPLE BLUE": { qtd: 1, cat: "Dupla", cor: "Escuras" },
-  "QUEEN RAY": { qtd: 1, cat: "Dupla", cor: "Rosas" },
-  "RF-001": { qtd: 1, cat: "Singela", cor: "Claras" },
-  "RF-002": { qtd: 1, cat: "Singela", cor: "Claras" },
-  "RIHANNA": { qtd: 1, cat: "Dupla", cor: "Escuras" },
-  "ROMANTIC EDGE": { qtd: 1, cat: "Dupla", cor: "Matizadas" },
-  "SANTA CLAUS": { qtd: 1, cat: "Dupla", cor: "Vermelhas" },
-  "SATURNO": { qtd: 1, cat: "Dupla", cor: "Escuras" },
-  "SENNA": { qtd: 1, cat: "Dupla", cor: "Vermelhas" },
-  "SIENA": { qtd: 1, cat: "Dupla", cor: "Amarelas" },
-  "SOCHI": { qtd: 1, cat: "Dupla", cor: "Claras" },
-  "SOPHIA": { qtd: 1, cat: "Dupla", cor: "Rosas" },
-  "STAR CLUSTER": { qtd: 1, cat: "Tripla+", cor: "Amarelas" },
-  "SWALLOW": { qtd: 1, cat: "Dupla", cor: "Claras" },
-  "RC-04": { qtd: 1, cat: "Dupla", cor: "Matizadas" },
-  "THAMIRES": { qtd: 1, cat: "Dupla", cor: "Rosas" },
-  "THE SECRET OF VICTORIA": { qtd: 1, cat: "Tripla+", cor: "Matizadas" },
-  "TRIPLE WISH": { qtd: 1, cat: "Tripla+", cor: "Matizadas" },
-  "TROPICAL": { qtd: 1, cat: "Dupla", cor: "Amarelas" },
-  "TS-69": { qtd: 1, cat: "Dupla", cor: "Matizadas" },
-  "TS-222": { qtd: 1, cat: "Dupla", cor: "Matizadas" },
-  "TS-330": { qtd: 1, cat: "Dupla", cor: "Matizadas" },
-  "TW4": { qtd: 1, cat: "Dupla", cor: "Matizadas" },
-  "UNPARALLELED": { qtd: 1, cat: "Tripla+", cor: "Matizadas" },
-  "VARIEGATA": { qtd: 1, cat: "Variegata", cor: "Rosas" },
-  "VAMPIRA": { qtd: 1, cat: "Tripla+", cor: "Escuras" },
-  "VIÚVA NEGRA": { qtd: 1, cat: "Tripla+", cor: "Escuras" },
-  "VOLCANO": { qtd: 1, cat: "Dupla", cor: "Vermelhas" },
-  "W59": { qtd: 1, cat: "Dupla", cor: "Matizadas" },
-  "YÚ JIǍO": { qtd: 1, cat: "Dupla", cor: "Claras" }
-};
+<script> // ESTOQUE COMPLETO - 117 IDs const estoque = { "AÇUCENA (MUTANTE)": { qtd: 1, cat: "Mutante", cor: "Claras" }, "AKACHI": { qtd: 1, cat: "Dupla", cor: "Vermelhas" }, "AMATTA": { qtd: 1, cat: "Dupla", cor: "Rosas" }, "ARYA": { qtd: 1, cat: "Tripla+", cor: "Claras" }, "BLOODY MARY": { qtd: 1, cat: "Dupla", cor: "Vermelhas" }, "BP-116": { qtd: 1, cat: "Dupla", cor: "Matizadas" }, "BRANCA DE NEVE": { qtd: 1, cat: "Singela", cor: "Claras" }, "BRIDAL BOUQUET": { qtd: 1, cat: "Tripla+", cor: "Claras" }, "CANAN 55": { qtd: 1, cat: "Dupla", cor: "Matizadas" }, "CANAN 170": { qtd: 1, cat: "Dupla", cor: "Matizadas" }, "CAPIXABA": { qtd: 1, cat: "Dupla", cor: "Vermelhas" }, "CÉU ESTRELADO": { qtd: 1, cat: "Tripla+", cor: "Escuras" }, "CÉU ESTRELADO VARIEGATA": { qtd: 1, cat: "Variegata", cor: "Escuras" }, "COPENHAGEN": { qtd: 1, cat: "Dupla", cor: "Rosas" }, "DAFNE": { qtd: 1, cat: "Dupla", cor: "Vermelhas" }, "DIỆU CHÂU": { qtd: 1, cat: "Dupla", cor: "Matizadas" }, "COCA-COLA": { qtd: 1, cat: "Dupla", cor: "Escuras" }, "DOUBLE STAR": { qtd: 1, cat: "Dupla", cor: "Vermelhas" }, "DUQUESA": { qtd: 1, cat: "Tripla+", cor: "Rosas" }, "EGG ROLL": { qtd: 1, cat: "Tripla+", cor: "Amarelas" }, "ELARA": { qtd: 1, cat: "Dupla", cor: "Escuras" }, "ELLIE": { qtd: 1, cat: "Dupla", cor: "Rosas" }, "EV19-XANADÚ": { qtd: 1, cat: "Tripla+", cor: "Matizadas" }, "FERRARI": { qtd: 1, cat: "Dupla", cor: "Vermelhas" }, "GOLDEN FAITH": { qtd: 1, cat: "Tripla+", cor: "Amarelas" }, "GRAPE CHOCOLATE": { qtd: 1, cat: "Dupla", cor: "Escuras" }, "GUARÁ PITANGA": { qtd: 1, cat: "Dupla", cor: "Vermelhas" }, "GTA-AIKA": { qtd: 1, cat: "Dupla", cor: "Rosas" }, "GTA-BOLD": { qtd: 1, cat: "Dupla", cor: "Vermelhas" }, "GTA-CANDY CRUSH": { qtd: 1, cat: "Dupla", cor: "Matizadas" }, "GTA-CÓSMICA": { qtd: 1, cat: "Dupla", cor: "Escuras" }, "GTA-CREPÚSCULO": { qtd: 1, cat: "Dupla", cor: "Escuras" }, "GTA-DESERT DOLL": { qtd: 1, cat: "Dupla", cor: "Claras" }, "GTA-DIANA": { qtd: 1, cat: "Dupla", cor: "Rosas" }, "GTA-EMMA FROST": { qtd: 1, cat: "Dupla", cor: "Claras" }, "GTA-FAY": { qtd: 1, cat: "Dupla", cor: "Rosas" }, "GTA-FLORZINHA": { qtd: 1, cat: "Dupla", cor: "Rosas" }, "GTA-FLUTTERSHY": { qtd: 1, cat: "Dupla", cor: "Amarelas" }, "GTA-FRACTA": { qtd: 1, cat: "Dupla", cor: "Matizadas" }, "GTA-GOLDEN PINK": { qtd: 1, cat: "Dupla", cor: "Matizadas" }, "GTA-ICE DRAGON": { qtd: 1, cat: "Dupla", cor: "Claras" }, "GTA-KIMBERLY": { qtd: 1, cat: "Dupla", cor: "Rosas" }, "GTA-LITTLE KISS": { qtd: 1, cat: "Singela", cor: "Rosas" }, "GTA-LOLLIPOP BLACK": { qtd: 1, cat: "Dupla", cor: "Escuras" }, "GTA-LYSSA": { qtd: 1, cat: "Dupla", cor: "Escuras" }, "GTA-LYTA": { qtd: 1, cat: "Dupla", cor: "Rosas" }, "GTA-MISS GRAVATÁ": { qtd: 1, cat: "Dupla", cor: "Matizadas" }, "GTA-NYX": { qtd: 1, cat: "Dupla", cor: "Escuras" }, "GTA-PERONA": { qtd: 1, cat: "Dupla", cor: "Rosas" }, "GTA-PINK VENOM": { qtd: 1, cat: "Dupla", cor: "Escuras" }, "GTA-PINKIE PIE": { qtd: 1, cat: "Dupla", cor: "Rosas" }, "GTA-RED COMETS": { qtd: 1, cat: "Dupla", cor: "Vermelhas" }, "GTA-RED STORM": { qtd: 1, cat: "Dupla", cor: "Vermelhas" }, "GTA-RED WIDOW": { qtd: 1, cat: "Dupla", cor: "Vermelhas" }, "GTA-SANSA": { qtd: 1, cat: "Dupla", cor: "Rosas" }, "GTA-SHE HA": { qtd: 1, cat: "Dupla", cor: "Rosas" }, "GTA-SUN CLUSTER": { qtd: 1, cat: "Tripla+", cor: "Amarelas" }, "GTA-SWEET BLUSH": { qtd: 1, cat: "Dupla", cor: "Rosas" }, "GTA-TRINITY": { qtd: 1, cat: "Dupla", cor: "Claras" }, "GTA-TRUE FAITH": { qtd: 1, cat: "Dupla", cor: "Amarelas" }, "GTA-YUNA": { qtd: 1, cat: "Dupla", cor: "Rosas" }, "HELENA": { qtd: 1, cat: "Dupla", cor: "Rosas" }, "INDIGO GLAZE": { qtd: 1, cat: "Dupla", cor: "Escuras" }, "INFINITY": { qtd: 1, cat: "Dupla", cor: "Vermelhas" }, "JHULLY": { qtd: 1, cat: "Dupla", cor: "Rosas" }, "JULIUS CAESAR": { qtd: 1, cat: "Dupla", cor: "Escuras" }, "KING OF KINGS": { qtd: 1, cat: "Dupla", cor: "Vermelhas" }, "KINDLY": { qtd: 1, cat: "Dupla", cor: "Rosas" }, "L-06": { qtd: 1, cat: "Tripla+", cor: "Matizadas" }, "LAILA": { qtd: 1, cat: "Dupla", cor: "Vermelhas" }, "LILAC FROST (MUTANTE)": { qtd: 1, cat: "Mutante", cor: "Claras" }, "LM-440": { qtd: 1, cat: "Dupla", cor: "Matizadas" }, "LM-50": { qtd: 1, cat: "Dupla", cor: "Matizadas" }, "LM2": { qtd: 1, cat: "Dupla", cor: "Matizadas" }, "LUNA": { qtd: 1, cat: "Dupla", cor: "Claras" }, "MAGNIFICAT": { qtd: 1, cat: "Dupla", cor: "Matizadas" }, "MARIA": { qtd: 1, cat: "Dupla", cor: "Claras" }, "MIDNIGHT": { qtd: 1, cat: "Dupla", cor: "Escuras" }, "MỘNG CẦM": { qtd: 1, cat: "Dupla", cor: "Matizadas" }, "MORAN": { qtd: 1, cat: "Dupla", cor: "Rosas" }, "NANCY": { qtd: 1, cat: "Dupla", cor: "Rosas" }, "NEMO": { qtd: 1, cat: "Dupla", cor: "Matizadas" }, "NORALINE": { qtd: 1, cat: "Dupla", cor: "Rosas" }, "NUSA": { qtd: 1, cat: "Dupla", cor: "Amarelas" }, "P-200": { qtd: 1, cat: "Dupla", cor: "Matizadas" }, "PATHUMMA": { qtd: 1, cat: "Dupla", cor: "Rosas" }, "PEONY": { qtd: 1, cat: "Dupla", cor: "Rosas" }, "PHARAOH": { qtd: 1, cat: "Dupla", cor: "Amarelas" }, "PURPLE BLUE": { qtd: 1, cat: "Dupla", cor: "Escuras" }, "QUEEN RAY": { qtd: 1, cat: "Dupla", cor: "Rosas" }, "RF-001": { qtd: 1, cat: "Singela", cor: "Claras" }, "RF-002": { qtd: 1, cat: "Singela", cor: "Claras" }, "RIHANNA": { qtd: 1, cat: "Dupla", cor: "Escuras" }, "ROMANTIC EDGE": { qtd: 1, cat: "Dupla", cor: "Matizadas" }, "SANTA CLAUS": { qtd: 1, cat: "Dupla", cor: "Vermelhas" }, "SATURNO": { qtd: 1, cat: "Dupla", cor: "Escuras" }, "SENNA": { qtd: 1, cat: "Dupla", cor: "Vermelhas" }, "SIENA": { qtd: 1, cat: "Dupla", cor: "Amarelas" }, "SOCHI": { qtd: 1, cat: "Dupla", cor: "Claras" }, "SOPHIA": { qtd: 1, cat: "Dupla", cor: "Rosas" }, "STAR CLUSTER": { qtd: 1, cat: "Tripla+", cor: "Amarelas" }, "SWALLOW": { qtd: 1, cat: "Dupla", cor: "Claras" }, "RC-04": { qtd: 1, cat: "Dupla", cor: "Matizadas" }, "THAMIRES": { qtd: 1, cat: "Dupla", cor: "Rosas" }, "THE SECRET OF VICTORIA": { qtd: 1, cat: "Tripla+", cor: "Matizadas" }, "TRIPLE WISH": { qtd: 1, cat: "Tripla+", cor: "Matizadas" }, "TROPICAL": { qtd: 1, cat: "Dupla", cor: "Amarelas" }, "TS-69": { qtd: 1, cat: "Dupla", cor: "Matizadas" }, "TS-222": { qtd: 1, cat: "Dupla", cor: "Matizadas" }, "TS-330": { qtd: 1, cat: "Dupla", cor: "Matizadas" }, "TW4": { qtd: 1, cat: "Dupla", cor: "Matizadas" }, "UNPARALLELED": { qtd: 1, cat: "Tripla+", cor: "Matizadas" }, "VARIEGATA": { qtd: 1, cat: "Variegata", cor: "Rosas" }, "VAMPIRA": { qtd: 1, cat: "Tripla+", cor: "Escuras" }, "VIÚVA NEGRA": { qtd: 1, cat: "Tripla+", cor: "Escuras" }, "VOLCANO": { qtd: 1, cat: "Dupla", cor: "Vermelhas" }, "W59": { qtd: 1, cat: "Dupla", cor: "Matizadas" }, "YÚ JIǍO": { qtd: 1, cat: "Dupla", cor: "Claras" } };
 
 let selecionados = new Set();
-let filtroTexto = "";
-let apenasDisponiveis = false;
-let categoriaAtiva = "Todas";
-let corAtiva = "Todas";
+let filtroTexto="";
+let categoriaAtiva="Todas";
+let corAtiva="Todas";
+let apenasDisponiveis=false;
 
-const grid = document.getElementById("gridCatalogo");
-const statusFiltro = document.getElementById("statusFiltro");
-const inputPesquisa = document.getElementById("inputPesquisa");
-const checkProntaEntrega = document.getElementById("checkProntaEntrega");
+const grid=document.getElementById("gridCatalogo");
+const inputPesquisa=document.getElementById("inputPesquisa");
+const statusFiltro=document.getElementById("statusFiltro");
 
-function toggleDrawer() {
-  document.getElementById('drawer').classList.toggle('active');
-  document.getElementById('overlay').style.display = document.getElementById('drawer').classList.contains('active')? 'block' : 'none';
-}
-
-// CORRIGIDO: Agora reseta os filtros quando busca
-inputPesquisa.addEventListener("input", (e) => {
-  filtroTexto = e.target.value.toLowerCase();
-
-  // Se digitou algo, reseta os filtros do drawer
-  if (filtroTexto.length > 0) {
-    categoriaAtiva = "Todas";
-    corAtiva = "Todas";
-    apenasDisponiveis = false;
-    checkProntaEntrega.checked = false;
-    document.querySelectorAll('#filtroCategorias.pill').forEach(p => p.classList.remove('active'));
-    document.querySelectorAll('#filtroCores.pill').forEach(p => p.classList.remove('active'));
-    document.querySelector('#filtroCategorias .pill').classList.add('active');
-    document.querySelector('#filtroCores .pill').classList.add('active');
+inputPesquisa.addEventListener("input",(e)=>{
+  filtroTexto=e.target.value.toLowerCase();
+  if(filtroTexto){
+    categoriaAtiva="Todas";
+    corAtiva="Todas";
   }
-
   montarCatalogo();
 });
 
-checkProntaEntrega.addEventListener("change", (e) => { apenasDisponiveis = e.target.checked; montarCatalogo(); });
+function montarCatalogo(){
+  grid.innerHTML="";
+  Object.keys(estoque).forEach(nome=>{
+    if(filtroTexto && !nome.toLowerCase().includes(filtroTexto)) return;
 
-// CORRIGIDO: Agora desmarca se clicar de novo
-function filtrarCategoria(cat, elemento) {
-  if (categoriaAtiva === cat && cat !== "Todas") {
-    categoriaAtiva = "Todas";
-    document.querySelectorAll('#filtroCategorias.pill').forEach(p => p.classList.remove('active'));
-    document.querySelector('#filtroCategorias .pill').classList.add('active');
-  } else {
-    categoriaAtiva = cat;
-    document.querySelectorAll('#filtroCategorias.pill').forEach(p => p.classList.remove('active'));
-    elemento.classList.add('active');
-  }
-  montarCatalogo();
-}
+    const card=document.createElement("div");
+    card.className="item";
+    card.innerHTML=`<p>${nome}</p>`;
 
-// CORRIGIDO: Agora desmarca se clicar de novo
-function filtrarCor(cor, elemento) {
-  if (corAtiva === cor && cor !== "Todas") {
-    corAtiva = "Todas";
-    document.querySelectorAll('#filtroCores.pill').forEach(p => p.classList.remove('active'));
-    document.querySelector('#filtroCores .pill').classList.add('active');
-  } else {
-    corAtiva = cor;
-    document.querySelectorAll('#filtroCores.pill').forEach(p => p.classList.remove('active'));
-    elemento.classList.add('active');
-  }
-  montarCatalogo();
-}
-
-function atualizarTextoFiltro() {
-  let partes = [];
-  if (apenasDisponiveis) partes.push("pronta entrega");
-  if (categoriaAtiva!== "Todas") partes.push(categoriaAtiva.toLowerCase());
-  if (corAtiva!== "Todas") partes.push(corAtiva.toLowerCase());
-
-  if (partes.length > 0) {
-    statusFiltro.innerText = "Exibindo apenas ID's " + partes.join(" e ");
-    statusFiltro.style.display = 'inline-flex';
-  } else {
-    statusFiltro.style.display = 'none';
-  }
-}
-
-function formatarNomeArquivo(nome) {
-  return nome.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/ /g, "-").replace(/[()]/g, "");
-}
-
-function montarCatalogo() {
-  grid.innerHTML = "";
-  let itensExibidos = 0;
-  atualizarTextoFiltro();
-
-  Object.keys(estoque).sort().forEach(nome => {
-    const dados = estoque[nome];
-    if (apenasDisponiveis && dados.qtd === 0) return;
-    if (categoriaAtiva!== "Todas" && dados.cat!== categoriaAtiva) return;
-    if (corAtiva!== "Todas" && dados.cor!== corAtiva) return;
-    if (filtroTexto &&!nome.toLowerCase().includes(filtroTexto)) return;
-
-    itensExibidos++;
-    const nomeArquivo = formatarNomeArquivo(nome);
-    const card = document.createElement("div");
-    card.className = "item" + (selecionados.has(nome)? " selecionado" : "");
-    card.innerHTML = `
-      <video src="imagens/${nomeArquivo}.mp4" poster="imagens/${nomeArquivo}.jpg" muted loop playsinline autoplay onerror="this.style.display='none'; this.nextElementSibling.style.display='block'"></video>
-      <img src="imagens/${nomeArquivo}.jpg" style="display:none" onerror="this.src='imagens/sem-foto.jpg'">
-      <p>${nome}</p>
-      <div class="estoque-status ${dados.qtd > 0? 'disponivel' : 'encomenda'}">
-        ${dados.qtd > 0? 'Disponível: '+dados.qtd : 'Por Encomenda'}
-      </div>`;
-
-    card.onclick = () => {
-      if (selecionados.has(nome)) selecionados.delete(nome); else selecionados.add(nome);
-
-      // Limpa a busca quando seleciona um card
-      inputPesquisa.value = "";
-      filtroTexto = "";
-
+    card.onclick=()=>{
+      if(selecionados.has(nome)) selecionados.delete(nome);
+      else selecionados.add(nome);
       atualizarPainelAcoes();
-      montarCatalogo();
     };
+
     grid.appendChild(card);
   });
-  if (itensExibidos === 0) grid.innerHTML = `<div class="vazio">Nenhuma ID encontrada com esses filtros.</div>`;
 }
 
-// VOLTOU: FUNÇÃO QUE MOSTRA AS TAGS
-function atualizarPainelAcoes() {
-  const areaSelecao = document.getElementById("areaSelecao");
-  const containerTags = document.getElementById("containerTags");
-  const btnZap = document.getElementById("btnEnviar");
-  containerTags.innerHTML = "";
+function atualizarPainelAcoes(){
+  const area=document.getElementById("areaSelecao");
+  const tags=document.getElementById("containerTags");
+  const btn=document.getElementById("btnEnviar");
 
-  if (selecionados.size > 0) {
-    areaSelecao.style.display = "block";
-    selecionados.forEach(nome => {
-      const tag = document.createElement("div");
-      tag.className = "tag-item";
-      tag.innerHTML = `${nome} <button onclick="event.stopPropagation(); removerItem('${nome}')">×</button>`;
-      containerTags.appendChild(tag);
+  tags.innerHTML="";
+
+  if(selecionados.size){
+    area.style.display="block";
+    selecionados.forEach(n=>{
+      const tag=document.createElement("div");
+      tag.className="tag-item";
+      tag.innerHTML=n;
+      tags.appendChild(tag);
     });
-    btnZap.classList.remove("oculto");
-    btnZap.innerHTML = `Enviar interesse via WhatsApp (${selecionados.size})`;
-  } else {
-    areaSelecao.style.display = "none";
-    btnZap.classList.add("oculto");
+    btn.classList.remove("oculto");
+  }else{
+    area.style.display="none";
+    btn.classList.add("oculto");
   }
 }
 
-function enviarPedido() {
-  const ids = Array.from(selecionados);
-  const mensagem = `Olá, gostaria de saber a disponibilidade e valores das seguintes variedades:\n\n*IDs Selecionadas:*\n- ${ids.join("\n- ")}`;
-  window.open("https://wa.me/5581992665421?text=" + encodeURIComponent(mensagem), "_blank");
+function enviarPedido(){
+  const ids=[...selecionados];
+  window.open("https://wa.me/?text="+ids.join(", "));
 }
 
 montarCatalogo();
