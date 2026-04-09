@@ -87,48 +87,43 @@ body {
   position: sticky;
   top: 155px;
   z-index: 800;
-  padding: 12px 15px 8px; /* Ajuste no padding */
-  background-color: var(--card-white); /* Agora é branco */
-  border-bottom: 1px solid rgba(0,0,0,0.05); /* Linha sutil pra separar */
-  display: flex; /* Pra conseguir alinhar o botão */
-  justify-content: flex-end; /* Joga o botão pra direita */
+  padding: 6px 15px; /* Era 12px 15px 8px - agora bem mais fina */
+  background-color: var(--card-white);
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+  display: flex;
+  justify-content: flex-end;
   align-items: center;
+  min-height: 45px; /* Força uma altura mínima pra não ficar espremida */
 }
 
 .btn-abrir-filtros {
   background: var(--text-main);
   color: white;
-  margin: 0 0 10px 0; /* Remove margin auto da esquerda */
+  margin: 0; /* Remove a margin inferior que estava empurrando */
   display: flex;
   align-items: center;
-  gap: 10px; /* Diminuí um pouco o gap */
-  padding: 8px 20px; /* Botão menor */
+  gap: 10px;
+  padding: 8px 20px;
   border-radius: 50px;
   border: none;
   font-weight: 600;
-  font-size: 13px; /* Fonte um pouco menor */
+  font-size: 13px;
   cursor: pointer;
   box-shadow: 0 3px 12px rgba(0,0,0,0.15);
 }
 
-.btn-abrir-filtros svg { 
-  width: 16px; /* Ícone menor */
-  height: 16px; 
-  fill: white; 
-}
-
 .status-filtro {
-  font-size: 12px;
+  font-size: 11px; /* Diminuí 1px pra caber melhor */
   font-weight: 500;
   color: var(--text-main);
-  background: rgba(0, 0, 0, 0.05); /* Fundo mais neutro já que a barra é branca */
+  background: rgba(0, 0, 0, 0.05);
   display: inline-block;
-  padding: 5px 15px;
+  padding: 4px 12px; /* Padding menor */
   border-radius: 20px;
-  margin-bottom: 5px;
-  position: absolute; /* Pra não atrapalhar o alinhamento do botão */
-  left: 15px; /* Status fica na esquerda */
-  bottom: 8px;
+  position: absolute;
+  left: 15px;
+  bottom: 50%; /* Centraliza verticalmente */
+  transform: translateY(50%); /* Ajuste fino da centralização */
 }
 
 /* ===== TEXTO DE INSTRUÇÃO (ESTÁTICO NO CORPO) ===== */
@@ -215,7 +210,7 @@ body {
     <label class="switch-disponivel">
       <input type="checkbox" id="checkProntaEntrega">
       <span class="slider"></span>
-      Ver apenas pronta entrega
+      ID's pronta entrega
     </label>
   </div>
 
