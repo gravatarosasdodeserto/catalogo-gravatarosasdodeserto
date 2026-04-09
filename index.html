@@ -496,10 +496,15 @@ function montarCatalogo() {
       </div>`;
 
     card.onclick = () => {
-      if (selecionados.has(nome)) selecionados.delete(nome); else selecionados.add(nome);
-      atualizarPainelAcoes(); // VOLTOU: atualiza a lista de tags
-      montarCatalogo();
-    };
+  if (selecionados.has(nome)) selecionados.delete(nome); else selecionados.add(nome);
+  
+  // Limpa a busca quando seleciona um card
+  inputPesquisa.value = "";
+  filtroTexto = "";
+  
+  atualizarPainelAcoes();
+  montarCatalogo();
+};
     grid.appendChild(card);
   });
   if (itensExibidos === 0) grid.innerHTML = `<div class="vazio">Nenhuma ID encontrada com esses filtros.</div>`;
