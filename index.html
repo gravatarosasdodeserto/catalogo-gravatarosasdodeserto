@@ -89,7 +89,7 @@ body {
 /* ===== ÁREA DE FILTROS E STATUS ===== */
 .secao-filtros {
   position: sticky;
-  top: 155px; /* Ajuste conforme altura do seu cabeçalho */
+  top: 155px;
   z-index: 800;
   text-align: center;
   padding-top: 10px;
@@ -264,6 +264,7 @@ body {
 </div>
 
 <script>
+// ESTOQUE COM NOMES ORIGINAIS PARA REVISÃO
 const estoque = { 
   "AKACHI": { qtd: 0, cat: "Dupla", cor: "Vermelhas" },
   "AMATTA": { qtd: 1, cat: "Dupla", cor: "Rosas" },
@@ -274,9 +275,33 @@ const estoque = {
   "BLACK WIDOW": { qtd: 0, cat: "Tripla+", cor: "Escuras" },
   "BLOODY MARY": { qtd: 2, cat: "Dupla", cor: "Vermelhas" },
   "BRANCA DE NEVE": { qtd: 5, cat: "Singela", cor: "Claras" },
+  "BRIDAL BOUQUET": { qtd: 0, cat: "Tripla+", cor: "Claras" },
   "CÉU ESTRELADO": { qtd: 2, cat: "Tripla+", cor: "Escuras" },
+  "CÉU ESTRELADO VARIEGATA": { qtd: 1, cat: "Variegata", cor: "Escuras" },
+  "DARK KNIGHT": { qtd: 0, cat: "Dupla", cor: "Escuras" },
+  "EGG ROLL": { qtd: 1, cat: "Tripla+", cor: "Amarelas" },
+  "FANTASY": { qtd: 0, cat: "Dupla", cor: "Matizadas" },
+  "GOLDEN DRAGON": { qtd: 1, cat: "Tripla+", cor: "Amarelas" },
+  "GTA-LYSSA": { qtd: 0, cat: "Dupla", cor: "Escuras" },
+  "GTA-RED COMETS": { qtd: 1, cat: "Dupla", cor: "Vermelhas" },
   "GTA-SUN CLUSTER": { qtd: 3, cat: "Tripla+", cor: "Amarelas" },
-  "LH-20 (MOSAICO)": { qtd: 1, cat: "Singela", cor: "Matizadas" }
+  "ICE PINK": { qtd: 0, cat: "Singela", cor: "Rosas" },
+  "JULIET": { qtd: 1, cat: "Tripla+", cor: "Matizadas" },
+  "LH-20 (MOSAICO)": { qtd: 1, cat: "Singela", cor: "Matizadas" },
+  "L-14": { qtd: 0, cat: "Tripla+", cor: "Escuras" },
+  "MAZARINE": { qtd: 1, cat: "Dupla", cor: "Escuras" },
+  "MISS BRAZIL": { qtd: 0, cat: "Tripla+", cor: "Rosas" },
+  "NIGHT CITY": { qtd: 1, cat: "Dupla", cor: "Escuras" },
+  "OSCAR": { qtd: 0, cat: "Dupla", cor: "Vermelhas" },
+  "PURPLE PANTHER": { qtd: 1, cat: "Dupla", cor: "Escuras" },
+  "REVELATION": { qtd: 0, cat: "Tripla+", cor: "Matizadas" },
+  "SHARON": { qtd: 1, cat: "Tripla+", cor: "Amarelas" },
+  "SNOW WHITE": { qtd: 0, cat: "Singela", cor: "Claras" },
+  "SUMMER": { qtd: 1, cat: "Dupla", cor: "Amarelas" },
+  "VALENTINE": { qtd: 0, cat: "Tripla+", cor: "Vermelhas" },
+  "VAMPIRA": { qtd: 1, cat: "Tripla+", cor: "Escuras" },
+  "VIÚVA NEGRA": { qtd: 0, cat: "Tripla+", cor: "Escuras" },
+  "YELLOW BIRD": { qtd: 1, cat: "Dupla", cor: "Amarelas" }
 };
 
 let selecionados = new Set();
@@ -368,12 +393,13 @@ function atualizarPainelAcoes() {
   const btnZap = document.getElementById("btnEnviar");
   if (selecionados.size > 0) {
     btnZap.classList.remove("oculto");
-    btnZap.innerHTML = `Pedir informações (${selecionados.size})`;
+    btnZap.innerHTML = `Pedir informações (${selecionados.size})`; // TEXTO DO BOTÃO ORIGINAL
   } else { btnZap.classList.add("oculto"); }
 }
 
 function enviarPedido() {
   const ids = Array.from(selecionados);
+  // MENSAGEM ORIGINAL DO WHATSAPP
   const mensagem = `Olá!\n\nTenho interesse nas variedades:\n- ${ids.join("\n- ")}\n\nPoderia me passar mais informações?`;
   window.open("https://wa.me/5581992665421?text=" + encodeURIComponent(mensagem), "_blank");
 }
