@@ -85,21 +85,21 @@ body {
 /* ===== BARRA DE FILTROS (FIXA) ===== */
 .secao-filtros {
   position: sticky;
-  top: 155px;
-  z-index: 800;
-  padding: 6px 15px; /* Era 12px 15px 8px - agora bem mais fina */
-  background-color: var(--card-white);
-  border-bottom: 1px solid rgba(0,0,0,0.05);
+  top: 160px; /* Ajusta essa distância do topo se precisar */
+  z-index: 950;
+  padding: 0 15px; /* Só padding lateral */
+  background: transparent; /* Sem fundo */
+  border: none; /* Sem borda */
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  min-height: 45px; /* Força uma altura mínima pra não ficar espremida */
+  pointer-events: none; /* Pra não bloquear clique no que tiver atrás */
 }
 
 .btn-abrir-filtros {
   background: var(--text-main);
   color: white;
-  margin: 0; /* Remove a margin inferior que estava empurrando */
+  margin: 8px 0; /* Dá um respiro vertical */
   display: flex;
   align-items: center;
   gap: 10px;
@@ -109,21 +109,25 @@ body {
   font-weight: 600;
   font-size: 13px;
   cursor: pointer;
-  box-shadow: 0 3px 12px rgba(0,0,0,0.15);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.25); /* Sombra mais forte pra destacar */
+  pointer-events: auto; /* Reativa o clique só no botão */
 }
 
 .status-filtro {
-  font-size: 11px; /* Diminuí 1px pra caber melhor */
+  font-size: 11px;
   font-weight: 500;
   color: var(--text-main);
-  background: rgba(0, 0, 0, 0.05);
+  background: rgba(255, 255, 255, 0.9); /* Fundo branco só no texto */
+  backdrop-filter: blur(5px); /* Desfoque no que tá atrás pra ler melhor */
   display: inline-block;
-  padding: 4px 12px; /* Padding menor */
+  padding: 4px 12px;
   border-radius: 20px;
   position: absolute;
   left: 15px;
-  bottom: 50%; /* Centraliza verticalmente */
-  transform: translateY(50%); /* Ajuste fino da centralização */
+  top: 50%;
+  transform: translateY(-50%);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  pointer-events: auto;
 }
 
 /* ===== TEXTO DE INSTRUÇÃO (ESTÁTICO NO CORPO) ===== */
