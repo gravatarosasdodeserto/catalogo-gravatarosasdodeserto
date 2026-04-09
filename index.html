@@ -582,6 +582,18 @@ function enviarPedido() {
   window.open("https://wa.me/5581992665421?text=" + encodeURIComponent(mensagem), "_blank");
 }
 
+function removerItem(nome) {
+  selecionados.delete(nome);
+  atualizarPainelAcoes();
+  montarCatalogo();
+}
+
+  function limparTudo() {
+  selecionados.clear();
+  atualizarPainelAcoes();
+  montarCatalogo();
+}
+  
 montarCatalogo();
 </script>
 
