@@ -447,7 +447,7 @@ inputPesquisa.addEventListener("input", (e) => {
     apenasDisponiveis = false;
     checkProntaEntrega.checked = false;
     document.querySelectorAll('#filtroCategorias .pill').forEach(p => p.classList.remove('active'));
-    document.querySelectorAll('#filtroCores.pill').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('#filtroCores. pill').forEach(p => p.classList.remove('active'));
     document.querySelector('#filtroCategorias .pill').classList.add('active');
     document.querySelector('#filtroCores .pill').classList.add('active');
   }
@@ -475,11 +475,11 @@ function filtrarCategoria(cat, elemento) {
 function filtrarCor(cor, elemento) {
   if (corAtiva === cor && cor !== "Todas") {
     corAtiva = "Todas";
-    document.querySelectorAll('#filtroCores.pill').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('#filtroCores .pill').forEach(p => p.classList.remove('active'));
     document.querySelector('#filtroCores .pill').classList.add('active');
   } else {
     corAtiva = cor;
-    document.querySelectorAll('#filtroCores.pill').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('#filtroCores .pill').forEach(p => p.classList.remove('active'));
     elemento.classList.add('active');
   }
   montarCatalogo();
