@@ -82,13 +82,14 @@ body {
 .logo { position: relative; z-index: 3; }
 .logo img { width: 150px; height: auto; filter: drop-shadow(0 4px 15px rgba(0,0,0,0.4)); }
 
-/* ===== FILTROS E STATUS ===== */
+/* ===== BARRA DE FILTROS (FIXA) ===== */
 .secao-filtros {
   position: sticky;
   top: 155px;
   z-index: 800;
   text-align: center;
-  padding-top: 10px;
+  padding: 15px 0 5px;
+  background-color: var(--body-bg); /* Garante que cubra o conteúdo ao rolar */
 }
 
 .btn-abrir-filtros {
@@ -116,10 +117,17 @@ body {
   display: inline-block;
   padding: 5px 15px;
   border-radius: 20px;
-  margin-bottom: 10px;
+  margin-bottom: 5px;
 }
 
-.instrucao-texto { font-size: 12px; opacity: 0.6; margin: 10px 0 20px; }
+/* ===== TEXTO DE INSTRUÇÃO (ESTÁTICO NO CORPO) ===== */
+.instrucao-texto { 
+  text-align: center;
+  font-size: 12px; 
+  opacity: 0.6; 
+  margin: 20px 0 10px; 
+}
+
 .oculto { display: none !important; }
 
 /* ===== DRAWER ===== */
@@ -144,7 +152,7 @@ body {
 .switch-disponivel input:checked + .slider::before { transform: translateX(16px); }
 
 /* ===== GRID ===== */
-.catalogo { display: grid; grid-template-columns: repeat(auto-fill, minmax(165px, 1fr)); gap: 15px; padding: 0 15px; max-width: 1200px; margin: 10px auto; }
+.catalogo { display: grid; grid-template-columns: repeat(auto-fill, minmax(165px, 1fr)); gap: 15px; padding: 0 15px; max-width: 1200px; margin: 0 auto; }
 .item { background: var(--card-white); padding: 10px; border-radius: 20px; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
 .item.selecionado { background: var(--card-selected) !important; transform: scale(0.96); }
 .item video, .item img { width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 14px; }
@@ -177,7 +185,6 @@ body {
       <span>Filtrar variedades</span>
     </button>
     <div id="statusFiltro" class="status-filtro oculto"></div>
-    <p class="instrucao-texto">Clique nas fotos para selecionar as variedades que você deseja.</p>
 </div>
 
 <div class="overlay" id="overlay" onclick="toggleDrawer()"></div>
@@ -218,6 +225,8 @@ body {
     </div>
   </div>
 </div>
+
+<p class="instrucao-texto">Clique nas fotos para selecionar as variedades que você deseja.</p>
 
 <div class="catalogo" id="gridCatalogo"></div>
 
