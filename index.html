@@ -471,6 +471,14 @@ function filtrarCategoria(cat, elemento) {
   montarCatalogo();
 }
 
+function normalizarTexto(texto) {
+  return texto
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]/g, "");
+}
+
 // CORRIGIDO: Agora desmarca se clicar de novo
 function filtrarCor(cor, elemento) {
   if (corAtiva === cor && cor !== "Todas") {
@@ -513,7 +521,10 @@ function montarCatalogo() {
     if (apenasDisponiveis && dados.qtd === 0) return;
     if (categoriaAtiva!== "Todas" && dados.cat!== categoriaAtiva) return;
     if (corAtiva!== "Todas" && dados.cor!== corAtiva) return;
-    if (filtroTexto &&!nome.toLowerCase().includes(filtroTexto)) return;
+  if (
+  filtroTexto &&
+  !normalizarTexto(nome).includes(normalizarTexto(filtroTexto))
+) return;
 
     itensExibidos++;
     const nomeArquivo = formatarNomeArquivo(nome);
