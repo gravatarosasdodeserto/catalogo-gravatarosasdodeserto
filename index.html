@@ -648,13 +648,14 @@ function enviarPedido() {
   let mensagem = "";
 
   if (ids.length === 1) {
-    mensagem = `Olá! Gostaria de saber a disponibilidade e o valor do enxerto da seguinte ID:\n- ${ids[0]}`;
+    mensagem = `Olá! Tenho interesse na ID ${ids[0]} e queria saber mais informações e o valor.`;
   } else {
-    mensagem = `Olá! Gostaria de saber a disponibilidade e os valores dos enxertos das seguintes IDs:\n- ${ids.join("\n- ")}`;
+    mensagem = `Olá! Tenho interesse nas IDs ${ids.join(", ")} e queria saber mais informações e valores.`;
   }
 
   window.open("https://wa.me/5581992665421?text=" + encodeURIComponent(mensagem), "_blank");
 }
+  
 function removerItem(nome) {
   selecionados.delete(nome);
   atualizarPainelAcoes();
