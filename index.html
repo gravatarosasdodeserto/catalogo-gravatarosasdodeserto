@@ -29,10 +29,9 @@ body {
   line-height: 1.5;
 }
 
-/* ===== CABEÇALHO (Otimizado: Curto + Cristo de Gravatá Centralizado) ===== */
+/* ===== CABEÇALHO ATUALIZADO (Mais alto + Borda Branca) ===== */
 .topbar {
-  /* AJUSTE AQUI: Reverti para altura mais baixa, focada no logo */
-  padding: 40px 0; 
+  padding: 80px 0; /* Altura aumentada */
   position: sticky;
   top: 0;
   z-index: 1000;
@@ -42,20 +41,21 @@ body {
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.18); 
   overflow: hidden;
   background-color: var(--header-bg);
+  /* Detalhe solicitado: borda branca fina na base */
+  border-bottom: 2px solid #ffffff; 
 }
 
 .topbar::before {
   content: "";
   position: absolute;
   inset: 0;
-  /* AJUSTE AQUI: Usando o novo arquivo de imagem do Cristo CORRETO gerado */
   background-image: url('imagens/gravata-cabecalho.jpg'); 
   background-size: cover;
   background-position: center;
   z-index: 1;
 }
 
-/* ===== EFEITO SHORWOOM (Faixa Grossa e Linhas) ===== */
+/* ===== EFEITO SHOWROOM (Ajustado para 80px de padding) ===== */
 .white-frame {
   position: absolute;
   width: 100%;
@@ -66,16 +66,14 @@ body {
   align-items: center;
 }
 
-/* Faixa Central Grossa e Semitransparente */
 .white-frame::before {
   content: "";
   position: absolute;
   width: 100%;
-  height: 120px; 
-  background-color: rgba(255, 255, 255, 0.7); /* Branco 70% transparente */
+  height: 160px; 
+  background-color: rgba(255, 255, 255, 0.7); 
 }
 
-/* Linha Fina Superior */
 .line-top {
   position: absolute;
   top: 0;
@@ -83,10 +81,9 @@ body {
   width: 100%;
   height: 1px;
   background-color: #ffffff;
-  transform: translateY(-60px); 
+  transform: translateY(-80px); 
 }
 
-/* Linha Fina Inferior */
 .line-bottom {
   position: absolute;
   bottom: 0;
@@ -94,7 +91,7 @@ body {
   width: 100%;
   height: 1px;
   background-color: #ffffff;
-  transform: translateY(60px); 
+  transform: translateY(80px); 
 }
 
 .logo {
