@@ -91,28 +91,43 @@ body {
   background: transparent;
   border: none;
   display: flex;
-  justify-content: flex-end;
-  align-items: flex-start;
+  justify-content: space-between; /* Um em cada ponta */
+  align-items: center; /* Centraliza os dois */
   pointer-events: none;
-  min-height: auto;
+  gap: 10px;
+}
+
+.status-filtro {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-main);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(5px);
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 14px;
+  border-radius: 50px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+  pointer-events: auto;
+  line-height: 1;
+  /* Remove position, left, top, transform */
 }
 
 .btn-abrir-filtros {
   background: var(--text-main);
   color: white;
-  margin: 4px 0;
   display: flex;
   align-items: center;
-  gap: 6px; /* Gap menor entre ícone e texto */
-  padding: 6px 14px; /* Padding bem menor */
+  gap: 6px;
+  padding: 6px 14px;
   border-radius: 50px;
   border: none;
   font-weight: 600;
-  font-size: 12px; /* Fonte menor */
+  font-size: 12px;
   cursor: pointer;
   box-shadow: 0 3px 10px rgba(0,0,0,0.2);
   pointer-events: auto;
-  line-height: 1; /* Remove altura extra da fonte */
+  line-height: 1;
 }
 
 .btn-abrir-filtros svg { 
@@ -242,12 +257,19 @@ body {
 </div>
 
 <div class="secao-filtros">
-   <button class="btn-abrir-filtros" onclick="toggleDrawer()">
-  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M3 4.5H21M7 12H17M10 19.5H14" stroke="white" stroke-width="2" stroke-linecap="round"/>
-  </svg>
-  <span>Filtrar</span>
-</button>
+  <!-- O balão tem que estar AQUI DENTRO -->
+  <div class="status-filtro" id="statusFiltro" style="display: none;">
+    Exibindo apenas ID's...
+  </div>
+  
+  <!-- E o botão também -->
+  <button class="btn-abrir-filtros" onclick="toggleDrawer()">
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M3 4.5H21M7 12H17M10 19.5H14" stroke="white" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+    <span>Filtrar</span>
+  </button>
+</div>
     <div id="statusFiltro" class="status-filtro oculto"></div>
 </div>
 
