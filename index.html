@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -436,7 +437,25 @@ function toggleDrawer() {
   document.getElementById('overlay').style.display = document.getElementById('drawer').classList.contains('active')? 'block' : 'none';
 }
 
-inputPesquisa.addEventListener("input", (e) => { filtroTexto = e.target.value.toLowerCase(); montarCatalogo(); });
+// CORRIGIDO: Agora reseta os filtros quando busca
+inputPesquisa.addEventListener("input", (e) => {
+  filtroTexto = e.target.value.toLowerCase();
+
+  // Se digitou algo, reseta os filtros do drawer
+  if (filtroTexto.length > 0) {
+    categoriaAtiva = "Todas";
+    corAtiva = "Todas";
+    apenasDisponiveis = false;
+    checkProntaEntrega.checked = false;
+    document.querySelectorAll('#filtroCategorias.pill').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('#filtroCores.pill').forEach(p => p.classList.remove('active'));
+    document.querySelector('#filtroCategorias.pill').classList.add('active');
+    document.querySelector('#filtroCores.pill').classList.add('active');
+  }
+
+  montarCatalogo();
+});
+
 checkProntaEntrega.addEventListener("change", (e) => { apenasDisponiveis = e.target.checked; montarCatalogo(); });
 
 function filtrarCategoria(cat, elemento) {
@@ -496,15 +515,15 @@ function montarCatalogo() {
       </div>`;
 
     card.onclick = () => {
-  if (selecionados.has(nome)) selecionados.delete(nome); else selecionados.add(nome);
-  
-  // Limpa a busca quando seleciona um card
-  inputPesquisa.value = "";
-  filtroTexto = "";
-  
-  atualizarPainelAcoes();
-  montarCatalogo();
-};
+      if (selecionados.has(nome)) selecionados.delete(nome); else selecionados.add(nome);
+
+      // Limpa a busca quando seleciona um card
+      inputPesquisa.value = "";
+      filtroTexto = "";
+
+      atualizarPainelAcoes();
+      montarCatalogo();
+    };
     grid.appendChild(card);
   });
   if (itensExibidos === 0) grid.innerHTML = `<div class="vazio">Nenhuma ID encontrada com esses filtros.</div>`;
