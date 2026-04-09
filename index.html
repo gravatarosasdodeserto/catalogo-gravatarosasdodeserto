@@ -222,8 +222,19 @@ body {
 .switch-disponivel input:checked +.slider::before { transform: translateX(16px); }
 
 /* ===== GRID ===== */
-.catalogo { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 15px; padding: 0 15px; max-width: 1200px; margin: 0 auto; }
-.item { background: var(--card-white); padding: 10px; border-radius: 20px; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.05); transition: all 0.2s; }
+.catalogo {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 15px;
+
+    width: 100%;
+    max-width: 100%; /* REMOVE A LIMITAÇÃO */
+    padding: 0 20px; /* leve respiro lateral */
+
+    margin: 0; /* remove centralização */
+}
+  
+  .item { background: var(--card-white); padding: 10px; border-radius: 20px; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.05); transition: all 0.2s; }
 .item.selecionado { background: var(--card-selected)!important; transform: scale(0.96); }
 .item video,.item img { width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 14px; }
 .item p { text-align: center; font-size: 13px; font-weight: 600; margin: 10px 0 2px 0; }
