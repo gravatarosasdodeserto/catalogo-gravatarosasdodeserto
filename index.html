@@ -122,22 +122,26 @@ body {
 }
 
 .status-filtro {
-  font-size: 13px; /* Mesmo do botão */
-  font-weight: 600; /* Mesmo do botão */
+  font-size: 11px;
+  font-weight: 600;
   color: var(--text-main);
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(5px);
-  display: inline-flex; /* Flex pra centralizar verticalmente */
-  align-items: center; /* Centraliza o texto */
-  padding: 8px 20px; /* Mesmo padding do botão */
-  border-radius: 50px; /* Mesmo radius do botão */
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 14px; /* Mesmo do botão pequeno */
+  border-radius: 50px;
   position: absolute;
   left: 15px;
   top: 50%;
   transform: translateY(-50%);
-  box-shadow: 0 4px 15px rgba(0,0,0,0.15); /* Mesma sombra do botão */
+  box-shadow: 0 3px 10px rgba(0,0,0,0.15);
   pointer-events: auto;
-  line-height: 1; /* Garante altura consistente */
+  line-height: 1;
+  max-width: 55%; /* Não deixa ocupar a tela toda */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis; /* Coloca ... se o texto for gigante */
 }
 
 /* ===== TEXTO DE INSTRUÇÃO (ESTÁTICO NO CORPO) ===== */
@@ -195,6 +199,33 @@ body {
 .campo-busca { width: 100%; padding: 12px 20px; border-radius: 50px; border: 1.5px solid rgba(0,0,0,0.1); background: white; outline: none; text-align: center; }
 .btn-whatsapp { width: 100%; padding: 15px; background: var(--text-main); color: white; border: none; border-radius: 50px; font-weight: 600; cursor: pointer; }
 .vazio { grid-column: 1/-1; text-align: center; padding: 60px; opacity: 0.5; }
+
+  /* No celular, joga o balão pra baixo do botão */
+@media (max-width: 480px) {
+  .secao-filtros {
+    flex-direction: column; /* Empilha um embaixo do outro */
+    align-items: flex-end; /* Botão continua na direita */
+    gap: 6px;
+    padding: 8px 15px;
+    min-height: auto;
+  }
+
+  .status-filtro {
+    position: relative; /* Tira o absolute */
+    left: auto;
+    top: auto;
+    transform: none;
+    align-self: flex-start; /* Joga ele pra esquerda */
+    font-size: 10px;
+    padding: 5px 12px;
+    max-width: 100%;
+  }
+  
+  .btn-abrir-filtros {
+    margin: 0; /* Tira margin pra ficar colado no topo */
+  }
+}
+
 </style>
 </head>
 <body>
