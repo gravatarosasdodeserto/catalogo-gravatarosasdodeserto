@@ -87,37 +87,48 @@ body {
   position: sticky;
   top: 155px;
   z-index: 800;
-  text-align: center;
-  padding: 15px 0 5px;
-  background-color: var(--body-bg); /* Garante que cubra o conteúdo ao rolar */
+  padding: 12px 15px 8px; /* Ajuste no padding */
+  background-color: var(--card-white); /* Agora é branco */
+  border-bottom: 1px solid rgba(0,0,0,0.05); /* Linha sutil pra separar */
+  display: flex; /* Pra conseguir alinhar o botão */
+  justify-content: flex-end; /* Joga o botão pra direita */
+  align-items: center;
 }
 
 .btn-abrir-filtros {
   background: var(--text-main);
   color: white;
-  margin: 0 auto 10px;
+  margin: 0 0 10px 0; /* Remove margin auto da esquerda */
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 10px 25px;
+  gap: 10px; /* Diminuí um pouco o gap */
+  padding: 8px 20px; /* Botão menor */
   border-radius: 50px;
   border: none;
   font-weight: 600;
+  font-size: 13px; /* Fonte um pouco menor */
   cursor: pointer;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  box-shadow: 0 3px 12px rgba(0,0,0,0.15);
 }
 
-.btn-abrir-filtros svg { width: 18px; height: 18px; fill: white; }
+.btn-abrir-filtros svg { 
+  width: 16px; /* Ícone menor */
+  height: 16px; 
+  fill: white; 
+}
 
 .status-filtro {
   font-size: 12px;
   font-weight: 500;
   color: var(--text-main);
-  background: rgba(255, 255, 255, 0.4);
+  background: rgba(0, 0, 0, 0.05); /* Fundo mais neutro já que a barra é branca */
   display: inline-block;
   padding: 5px 15px;
   border-radius: 20px;
   margin-bottom: 5px;
+  position: absolute; /* Pra não atrapalhar o alinhamento do botão */
+  left: 15px; /* Status fica na esquerda */
+  bottom: 8px;
 }
 
 /* ===== TEXTO DE INSTRUÇÃO (ESTÁTICO NO CORPO) ===== */
