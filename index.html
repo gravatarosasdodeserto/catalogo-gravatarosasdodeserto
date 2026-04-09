@@ -121,11 +121,19 @@ body {
 }
 
 /* ===== TEXTO DE INSTRUÇÃO (ESTÁTICO NO CORPO) ===== */
-.instrucao-texto { 
+.instrucao-texto {  
   text-align: center;
-  font-size: 12px; 
-  opacity: 0.6; 
-  margin: 20px 0 10px; 
+  font-size: 13px; /* Aumentei um pouco para melhor leitura */
+  opacity: 0.8;    /* Ficava muito clarinho com 0.6 */
+  margin: 20px auto; 
+  padding: 0 20px;
+  line-height: 1.5; /* Melhora o espaçamento entre as linhas */
+}
+
+.instrucao-texto span {
+  display: block;  /* Faz o texto de encomenda ficar na linha de baixo */
+  font-size: 11px;
+  font-weight: 500;
 }
 
 .oculto { display: none !important; }
@@ -226,8 +234,10 @@ body {
   </div>
 </div>
 
-<p>Selecione as ID's desejadas para solicitar informações sobre os enxertos.</p>
+<div class="instrucao-texto">
+    <p>Selecione as ID's desejadas para solicitar informações sobre os enxertos.</p>
     <span>Variedades sem pronta entrega podem ser encomendadas sem custo.</span>
+</div>
 
 <div class="catalogo" id="gridCatalogo"></div>
 
