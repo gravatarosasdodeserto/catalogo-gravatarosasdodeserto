@@ -26,7 +26,7 @@ body {
   line-height: 1.5;
 }
 
-/* ===== CABEÇALHO (Equilíbrio de 50px) ===== */
+/* ===== CABEÇALHO (Ajustado para 50px) ===== */
 .topbar {
   padding: 50px 0; 
   position: sticky;
@@ -162,7 +162,7 @@ body {
 .disponivel { color: #2d5a27; }
 .encomenda { color: #8a8471; opacity: 0.7; }
 
-/* ===== RODAPÉ FIXO (Com Borda Branca) ===== */
+/* ===== RODAPÉ FIXO (Borda Branca) ===== */
 .rodape-acoes {
   position: fixed; bottom: 0; left: 0; width: 100%;
   background: rgba(229, 224, 216, 0.98); backdrop-filter: blur(12px);
@@ -235,7 +235,7 @@ body {
   <div class="container-rodape">
     <div class="caixa-selecao" id="areaSelecao">
       <div class="topo-caixa">
-        <span>ID's selecionadas:</span>
+        <span id="labelSelecao">ID's selecionadas:</span>
         <span class="limpar" onclick="limparTudo()">Limpar tudo</span>
       </div>
       <div id="containerTags"></div>
@@ -246,7 +246,6 @@ body {
 </div>
 
 <script>
-// Mantendo sua base de dados original
 const estoque = { "AÇUCENA (MUTANTE)": 1, "AKACHI": 0, "AMATTA": 1, "ARYA": 0, "BLOODY MARY": 0, "BP-116": 0, "BRANCA DE NEVE": 0, "BRIDAL BOUQUET": 0, "CANAN 55": 0, "CANAN 170": 0, "CAPIXABA": 0, "CÉU ESTRELADO": 2, "CÉU ESTRELADO VARIEGATA": 0, "COPENHAGEN": 0, "DAFNE": 0, "DIỆU CHÂU": 0, "COCA-COLA": 0, "DOUBLE STAR": 0, "DUQUESA": 0, "EGG ROLL": 0, "ELARA": 0, "ELLIE": 0, "EV19-XANADÚ": 0, "FERRARI": 0, "GOLDEN FAITH": 0, "GRAPE CHOCOLATE": 0, "GUARÁ PITANGA": 0, "GTA-AIKA": 0, "GTA-BOLD": 0, "GTA-CANDY CRUSH": 0, "GTA-CÓSMICA": 0, "GTA-CREPÚSCULO": 0, "GTA-DESERT DOLL": 0, "GTA-DIANA": 0, "GTA-EMMA FROST": 0, "GTA-FAY": 0, "GTA-FLORZINHA": 0, "GTA-FLUTTERSHY": 0, "GTA-FRACTA": 0, "GTA-GOLDEN PINK": 0, "GTA-ICE DRAGON": 0, "GTA-KIMBERLY": 0, "GTA-LITTLE KISS": 0, "GTA-LOLLIPOP BLACK": 0, "GTA-LYSSA": 0, "GTA-LYTA": 0, "GTA-MISS GRAVATÁ": 0, "GTA-NYX": 0, "GTA-PERONA": 0, "GTA-PINK VENOM": 0, "GTA-PINKIE PIE": 0, "GTA-RED COMETS": 0, "GTA-RED STORM": 0, "GTA-RED WIDOW": 0, "GTA-SANSA": 0, "GTA-SHE HA": 0, "GTA-SUN CLUSTER": 0, "GTA-SWEET BLUSH": 0, "GTA-TRINITY": 0, "GTA-TRUE FAITH": 0, "GTA-YUNA": 0, "HELENA": 0, "INDIGO GLAZE": 0, "INFINITY": 0, "JHULLY": 0, "JULIUS CAESAR": 0, "KING OF KINGS": 0, "KINDLY": 0, "L-06": 0, "LAILA": 0, "LILAC FROST (MUTANTE)": 0, "LM-440": 0, "LM-50": 0, "LM-02": 0, "LUNA": 0, "MAGNIFICAT": 0, "MARIA": 0, "MIDNIGHT": 0, "MỘNG CẦM": 0, "MORAN": 0, "NANCY": 0, "NEMO": 0, "NORALINE": 0, "NUSA": 0, "P-200": 0, "PATHUMMA": 0, "PEONY": 0, "PHARAOH": 0, "PURPLE BLUE": 0, "QUEEN RAY": 0, "RF-001": 0, "RF-002": 0, "RIHANNA": 0, "ROMANTIC EDGE": 0, "SANTA CLAUS": 0, "SATURNO": 0, "SENNA": 0, "SIENA": 0, "SOCHI": 0, "SOPHIA": 0, "STAR CLUSTER": 0, "SWALLOW": 0, "RC-04": 0, "THAMIRES": 0, "THE SECRET OF VICTORIA": 0, "TRIPLE WISH": 0, "TROPICAL": 0, "TS-69": 0, "TS-222": 0, "TS-330": 0, "TW4": 0, "UNPARALLELED": 0, "VARIEGATA": 0, "VAMPIRA": 0, "VIÚVA NEGRA": 0, "VOLCANO": 0, "W59": 0, "YÚ JIǍO": 0 };
 
 let selecionados = new Set();
@@ -295,9 +294,15 @@ function atualizarPainelAcoes() {
   const areaSelecao = document.getElementById("areaSelecao");
   const containerTags = document.getElementById("containerTags");
   const btnZap = document.getElementById("btnEnviar");
+  const labelSelecao = document.getElementById("labelSelecao");
+  
   containerTags.innerHTML = "";
   if (selecionados.size > 0) {
     areaSelecao.style.display = "block";
+    
+    // Ajuste solicitado: Singular ou Plural no título do campo
+    labelSelecao.innerText = selecionados.size === 1 ? "ID selecionada:" : "ID's selecionadas:";
+    
     selecionados.forEach(nome => {
       const tag = document.createElement("div");
       tag.className = "tag-item";
@@ -305,7 +310,6 @@ function atualizarPainelAcoes() {
       containerTags.appendChild(tag);
     });
     btnZap.classList.remove("oculto");
-    // REVERTIDO: Texto original do botão
     btnZap.innerHTML = selecionados.size === 1 ? `Pedir informações sobre a ID selecionada` : `Pedir informações sobre as ${selecionados.size} ID's selecionadas`;
   } else { 
     areaSelecao.style.display = "none"; 
@@ -318,7 +322,6 @@ function limparTudo() { selecionados.clear(); atualizarPainelAcoes(); montarCata
 
 function enviarPedido() {
   const ids = Array.from(selecionados);
-  // REVERTIDO: Texto original da mensagem do WhatsApp
   const intro = ids.length === 1 ? "Tenho interesse em adquirir enxerto da seguinte variedade:\n\n- " : "Tenho interesse em adquirir enxertos das seguintes variedades:\n\n- ";
   const mensagem = `Olá!\n\n${intro}${ids.join("\n- ")}\n\nPoderia me dar mais informações? Tenho a seguinte duvida...`;
   window.open("https://wa.me/5581992665421?text=" + encodeURIComponent(mensagem), "_blank");
