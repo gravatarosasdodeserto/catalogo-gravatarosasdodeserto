@@ -577,9 +577,23 @@ function atualizarPainelAcoes() {
 }
 
 function enviarPedido() {
+  if(selecionados.size === 0) return;
+
   const ids = Array.from(selecionados);
-  const mensagem = `Olá, gostaria de saber a disponibilidade e valores das seguintes variedades:\n\n*IDs Selecionadas:*\n- ${ids.join("\n- ")}`;
-  window.open("https://wa.me/5581992665421?text=" + encodeURIComponent(mensagem), "_blank");
+  const mensagem = ids.length === 1
+    ? "Tenho interesse em adquirir enxerto da seguinte variedade:\n\n- "
+    : "Tenho interesse em adquirir enxertos das seguintes variedades:\n\n- ";
+
+  const mensagem = [
+    "Olá!",
+    "",
+    texto + ids.join("\n- "),
+    "",
+    "Poderia me dar mais informações? Tenho a seguinte duvida..."
+  ].join("\n");
+
+  let url = "https://wa.me/5581992665421?text=" + encodeURIComponent(mensagem);
+  window.open(url, "_blank");
 }
 
 montarCatalogo();
