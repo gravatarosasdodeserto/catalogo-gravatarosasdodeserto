@@ -122,14 +122,14 @@ body {
 }
 
 .status-filtro {
-  font-size: 11px;
+  font-size: 12px; /* Mesmo do botão */
   font-weight: 600;
   color: var(--text-main);
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(5px);
   display: inline-flex;
   align-items: center;
-  padding: 6px 14px; /* Mesmo do botão pequeno */
+  padding: 6px 14px; /* Exatamente igual ao botão */
   border-radius: 50px;
   position: absolute;
   left: 15px;
@@ -137,11 +137,11 @@ body {
   transform: translateY(-50%);
   box-shadow: 0 3px 10px rgba(0,0,0,0.15);
   pointer-events: auto;
-  line-height: 1;
-  max-width: 55%; /* Não deixa ocupar a tela toda */
+  line-height: 1; /* Mesmo do botão */
+  max-width: 55%;
   white-space: nowrap;
   overflow: hidden;
-  text-overflow: ellipsis; /* Coloca ... se o texto for gigante */
+  text-overflow: ellipsis;
 }
 
 /* ===== TEXTO DE INSTRUÇÃO (ESTÁTICO NO CORPO) ===== */
@@ -203,26 +203,29 @@ body {
   /* No celular, joga o balão pra baixo do botão */
 @media (max-width: 480px) {
   .secao-filtros {
-    flex-direction: column; /* Empilha um embaixo do outro */
-    align-items: flex-end; /* Botão continua na direita */
+    flex-direction: column;
+    align-items: flex-end;
     gap: 6px;
     padding: 8px 15px;
     min-height: auto;
   }
 
   .status-filtro {
-    position: relative; /* Tira o absolute */
+    position: relative;
     left: auto;
     top: auto;
     transform: none;
-    align-self: flex-start; /* Joga ele pra esquerda */
-    font-size: 10px;
-    padding: 5px 12px;
+    align-self: flex-start;
+    font-size: 11px; /* Mesmo do botão no mobile */
+    padding: 5px 12px; /* Mesmo do botão no mobile */
     max-width: 100%;
+    line-height: 1;
   }
   
   .btn-abrir-filtros {
-    margin: 0; /* Tira margin pra ficar colado no topo */
+    margin: 0;
+    font-size: 11px; /* Garante que bate */
+    padding: 5px 12px; /* Garante que bate */
   }
 }
 
