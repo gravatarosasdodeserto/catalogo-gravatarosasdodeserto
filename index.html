@@ -25,7 +25,7 @@ body {
   padding-bottom: 150px; 
 }
 
-/* ===== CABEÇALHO SHOWROOM ===== */
+/* ===== CABEÇALHO ===== */
 .topbar {
   padding: 50px 0; 
   position: sticky;
@@ -80,13 +80,9 @@ body {
 .line-bottom { bottom: 0; transform: translateY(50px); }
 
 .logo { position: relative; z-index: 3; }
-.logo img { 
-  width: 150px; 
-  height: auto;
-  filter: drop-shadow(0 4px 15px rgba(0,0,0,0.4));
-}
+.logo img { width: 150px; height: auto; filter: drop-shadow(0 4px 15px rgba(0,0,0,0.4)); }
 
-/* ===== ÁREA DE FILTROS E STATUS ===== */
+/* ===== FILTROS E STATUS ===== */
 .secao-filtros {
   position: sticky;
   top: 155px;
@@ -120,37 +116,15 @@ body {
   display: inline-block;
   padding: 5px 15px;
   border-radius: 20px;
-  opacity: 0.8;
   margin-bottom: 10px;
 }
 
+.instrucao-texto { font-size: 12px; opacity: 0.6; margin: 10px 0 20px; }
 .oculto { display: none !important; }
 
-/* ===== MENU LATERAL (DRAWER) ===== */
-.overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.5);
-  z-index: 2000;
-  display: none;
-  backdrop-filter: blur(3px);
-}
-
-.drawer-filtros {
-  position: fixed;
-  right: -300px;
-  top: 0;
-  width: 300px;
-  height: 100%;
-  background: var(--body-bg);
-  z-index: 2001;
-  transition: 0.3s;
-  padding: 30px 20px;
-  box-shadow: -5px 0 25px rgba(0,0,0,0.2);
-  display: flex;
-  flex-direction: column;
-}
-
+/* ===== DRAWER ===== */
+.overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 2000; display: none; backdrop-filter: blur(3px); }
+.drawer-filtros { position: fixed; right: -300px; top: 0; width: 300px; height: 100%; background: var(--body-bg); z-index: 2001; transition: 0.3s; padding: 30px 20px; box-shadow: -5px 0 25px rgba(0,0,0,0.2); display: flex; flex-direction: column; }
 .drawer-filtros.active { right: 0; }
 .fechar-drawer { background: none; border: none; font-size: 24px; cursor: pointer; text-align: right; margin-bottom: 20px; color: var(--text-main); }
 
@@ -169,13 +143,8 @@ body {
 .switch-disponivel input:checked + .slider { background: var(--text-main); }
 .switch-disponivel input:checked + .slider::before { transform: translateX(16px); }
 
-/* ===== GRID DO CATÁLOGO ===== */
-.catalogo {
-  display: grid; 
-  grid-template-columns: repeat(auto-fill, minmax(165px, 1fr));
-  gap: 15px; padding: 0 15px; max-width: 1200px; margin: 10px auto;
-}
-
+/* ===== GRID ===== */
+.catalogo { display: grid; grid-template-columns: repeat(auto-fill, minmax(165px, 1fr)); gap: 15px; padding: 0 15px; max-width: 1200px; margin: 10px auto; }
 .item { background: var(--card-white); padding: 10px; border-radius: 20px; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
 .item.selecionado { background: var(--card-selected) !important; transform: scale(0.96); }
 .item video, .item img { width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 14px; }
@@ -185,12 +154,7 @@ body {
 .encomenda { color: #8a8471; opacity: 0.7; }
 
 /* ===== RODAPÉ ===== */
-.rodape-acoes {
-  position: fixed; bottom: 0; left: 0; width: 100%;
-  background: rgba(229, 224, 216, 0.98); backdrop-filter: blur(12px);
-  padding: 10px 20px 25px; z-index: 1000; border-top: 2px solid #ffffff; 
-}
-
+.rodape-acoes { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(229, 224, 216, 0.98); backdrop-filter: blur(12px); padding: 10px 20px 25px; z-index: 1000; border-top: 2px solid #ffffff; }
 .container-rodape { max-width: 500px; margin: 0 auto; display: flex; flex-direction: column; gap: 8px; }
 .campo-busca { width: 100%; padding: 12px 20px; border-radius: 50px; border: 1.5px solid rgba(0,0,0,0.1); background: white; outline: none; text-align: center; }
 .btn-whatsapp { width: 100%; padding: 15px; background: var(--text-main); color: white; border: none; border-radius: 50px; font-weight: 600; cursor: pointer; }
@@ -213,6 +177,7 @@ body {
       <span>Filtrar variedades</span>
     </button>
     <div id="statusFiltro" class="status-filtro oculto"></div>
+    <p class="instrucao-texto">Clique nas fotos para selecionar as variedades que você deseja.</p>
 </div>
 
 <div class="overlay" id="overlay" onclick="toggleDrawer()"></div>
@@ -264,7 +229,7 @@ body {
 </div>
 
 <script>
-  
+// ESTOQUE COMPLETO - 117 IDs
 const estoque = { 
   "AÇUCENA (MUTANTE)": { qtd: 1, cat: "Mutante", cor: "Claras" },
   "AKACHI": { qtd: 1, cat: "Dupla", cor: "Vermelhas" },
@@ -433,7 +398,9 @@ function atualizarTextoFiltro() {
   }
 }
 
-function formatarNomeArquivo(nome) { return nome.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/ /g, "-").replace(/[()]/g, ""); }
+function formatarNomeArquivo(nome) { 
+  return nome.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/ /g, "-").replace(/[()]/g, ""); 
+}
 
 function montarCatalogo() {
   grid.innerHTML = "";
@@ -461,8 +428,6 @@ function montarCatalogo() {
     
     card.onclick = () => { 
       if (selecionados.has(nome)) selecionados.delete(nome); else selecionados.add(nome);
-      inputPesquisa.value = "";
-      filtroTexto = "";
       atualizarPainelAcoes(); 
       montarCatalogo(); 
     };
@@ -475,14 +440,13 @@ function atualizarPainelAcoes() {
   const btnZap = document.getElementById("btnEnviar");
   if (selecionados.size > 0) {
     btnZap.classList.remove("oculto");
-    btnZap.innerHTML = `Pedir informações (${selecionados.size})`; // TEXTO DO BOTÃO ORIGINAL
+    btnZap.innerHTML = `Enviar interesse via WhatsApp (${selecionados.size})`;
   } else { btnZap.classList.add("oculto"); }
 }
 
 function enviarPedido() {
   const ids = Array.from(selecionados);
-  // MENSAGEM ORIGINAL DO WHATSAPP
-  const mensagem = `Olá!\n\nTenho interesse nas variedades:\n- ${ids.join("\n- ")}\n\nPoderia me passar mais informações?`;
+  const mensagem = `Olá, gostaria de saber a disponibilidade e valores das seguintes variedades:\n\n*IDs Selecionadas:*\n- ${ids.join("\n- ")}`;
   window.open("https://wa.me/5581992665421?text=" + encodeURIComponent(mensagem), "_blank");
 }
 
