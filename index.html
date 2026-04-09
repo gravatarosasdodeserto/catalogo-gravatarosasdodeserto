@@ -88,20 +88,14 @@ body {
   transform: translateY(50px); 
 }
 
-.logo {
-  position: relative;
-  z-index: 3;
-  display: flex;
-  justify-content: center;
-}
-
+.logo { position: relative; z-index: 3; }
 .logo img { 
   width: 170px; 
   height: auto;
   filter: drop-shadow(0 0 1px rgba(255,255,255,0.8)) drop-shadow(0 4px 15px rgba(0,0,0,0.4));
 }
 
-/* ===== PAINEL DE FILTROS ORGANIZADO ===== */
+/* ===== PAINEL DE FILTROS ===== */
 .container-filtros {
   max-width: 900px;
   margin: 20px auto;
@@ -111,11 +105,7 @@ body {
   backdrop-filter: blur(5px);
 }
 
-.grupo-filtro {
-  margin-bottom: 20px;
-  text-align: center;
-}
-
+.grupo-filtro { margin-bottom: 20px; text-align: center; }
 .titulo-filtro {
   font-size: 11px;
   text-transform: uppercase;
@@ -125,12 +115,7 @@ body {
   opacity: 0.6;
 }
 
-.scroll-filtros {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 8px;
-}
+.scroll-filtros { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
 
 .pill {
   padding: 8px 18px;
@@ -143,32 +128,17 @@ body {
   transition: 0.2s;
 }
 
-.pill.active {
-  background: var(--text-main);
-  color: white;
-  border-color: var(--text-main);
-}
+.pill.active { background: var(--text-main); color: white; border-color: var(--text-main); }
 
 .wrapper-switch {
-  display: flex;
-  justify-content: center;
-  margin-top: 15px;
-  padding-top: 15px;
-  border-top: 1px solid rgba(0,0,0,0.05);
+  display: flex; justify-content: center; margin-top: 15px;
+  padding-top: 15px; border-top: 1px solid rgba(0,0,0,0.05);
 }
 
-.switch-disponivel {
-  display: inline-flex; align-items: center; gap: 10px; 
-  font-size: 13px; font-weight: 600; cursor: pointer;
-}
-
+.switch-disponivel { display: inline-flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 600; cursor: pointer; }
 .switch-disponivel input { display: none; }
-.switch-disponivel .slider {
-  width: 34px; height: 18px; background: #c7c1b5; border-radius: 20px; position: relative; transition: 0.3s;
-}
-.switch-disponivel .slider::before {
-  content: ""; position: absolute; width: 12px; height: 12px; left: 3px; top: 3px; background: white; border-radius: 50%; transition: 0.3s;
-}
+.switch-disponivel .slider { width: 34px; height: 18px; background: #c7c1b5; border-radius: 20px; position: relative; transition: 0.3s; }
+.switch-disponivel .slider::before { content: ""; position: absolute; width: 12px; height: 12px; left: 3px; top: 3px; background: white; border-radius: 50%; transition: 0.3s; }
 .switch-disponivel input:checked + .slider { background: var(--text-main); }
 .switch-disponivel input:checked + .slider::before { transform: translateX(16px); }
 
@@ -179,22 +149,15 @@ body {
   gap: 20px; padding: 0 20px; max-width: 1200px; margin: 0 auto;
 }
 
-@media (min-width: 1024px) {
-  .catalogo {
-    grid-template-columns: repeat(auto-fill, minmax(185px, 1fr));
-    max-width: 95%;
-  }
-}
+@media (min-width: 1024px) { .catalogo { grid-template-columns: repeat(auto-fill, minmax(185px, 1fr)); } }
 
 .item {
   background: var(--card-white);
   padding: 12px; border-radius: 20px; cursor: pointer;
   box-shadow: 0 4px 10px rgba(0,0,0,0.05); transition: 0.2s;
-  border: 1px solid rgba(0,0,0,0.02);
 }
 
 .item.selecionado { background: var(--card-selected) !important; transform: scale(0.96); }
-
 .item video, .item img { width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 14px; }
 .item p { text-align: center; font-size: 14px; font-weight: 600; margin: 12px 0 2px 0; }
 .estoque-status { text-align: center; font-size: 10px; font-weight: 700; text-transform: uppercase; }
@@ -209,29 +172,11 @@ body {
 }
 
 .container-rodape { max-width: 500px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
-
-.caixa-selecao {
-  display: none; background: #ffffff; padding: 8px 12px; border-radius: 20px;
-  max-height: 80px; overflow-y: auto; margin-bottom: 5px;
-}
-
-.tag-item {
-  font-size: 10px; background: #f0f0eb; padding: 6px 12px; border-radius: 10px;
-  display: inline-flex; align-items: center; gap: 6px; margin: 0 4px 4px 0;
-}
-
+.caixa-selecao { display: none; background: #ffffff; padding: 8px 12px; border-radius: 20px; max-height: 80px; overflow-y: auto; margin-bottom: 5px; }
+.tag-item { font-size: 10px; background: #f0f0eb; padding: 6px 12px; border-radius: 10px; display: inline-flex; align-items: center; gap: 6px; margin: 0 4px 4px 0; }
 .tag-item button { border: none; background: none; color: #8b2d2d; cursor: pointer; font-weight: bold; }
-
-.campo-busca {
-  width: 100%; padding: 15px 20px; border-radius: 50px; border: 1.5px solid rgba(0,0,0,0.1); 
-  background: white; outline: none; text-align: center;
-}
-
-.btn-whatsapp {
-  width: 100%; padding: 18px; background: var(--text-main); color: white;
-  border: none; border-radius: 50px; font-weight: 600; cursor: pointer;
-}
-
+.campo-busca { width: 100%; padding: 15px 20px; border-radius: 50px; border: 1.5px solid rgba(0,0,0,0.1); background: white; outline: none; text-align: center; }
+.btn-whatsapp { width: 100%; padding: 18px; background: var(--text-main); color: white; border: none; border-radius: 50px; font-weight: 600; cursor: pointer; }
 .oculto { display: none; }
 .vazio { grid-column: 1/-1; text-align: center; padding: 60px; opacity: 0.5; }
 </style>
@@ -255,21 +200,20 @@ body {
       <div class="pill" onclick="filtrarCategoria('Dupla', this)">Dupla</div>
       <div class="pill" onclick="filtrarCategoria('Tripla+', this)">Tripla+</div>
       <div class="pill" onclick="filtrarCategoria('Mutante', this)">Mutante</div>
-      <div class="pill" onclick="filtrarCategoria('Efeito Mosaico', this)">Mosaico</div>
       <div class="pill" onclick="filtrarCategoria('Variegata', this)">Variegata</div>
     </div>
   </div>
 
   <div class="grupo-filtro">
-    <div class="titulo-filtro">Cores Predominantes</div>
+    <div class="titulo-filtro">Famílias de Cores</div>
     <div class="scroll-filtros" id="filtroCores">
-      <div class="pill active" onclick="filtrarCor('Todas', this)">Todas as cores</div>
-      <div class="pill" onclick="filtrarCor('Escuras', this)">Escuras/Negras</div>
-      <div class="pill" onclick="filtrarCor('Amarelas', this)">Amarelas/Laranjas</div>
+      <div class="pill active" onclick="filtrarCor('Todas', this)">Todas</div>
+      <div class="pill" onclick="filtrarCor('Escuras', this)">Escuras</div>
+      <div class="pill" onclick="filtrarCor('Claras', this)">Claras</div>
+      <div class="pill" onclick="filtrarCor('Amarelas', this)">Amarelas</div>
       <div class="pill" onclick="filtrarCor('Vermelhas', this)">Vermelhas</div>
       <div class="pill" onclick="filtrarCor('Rosas', this)">Rosas</div>
-      <div class="pill" onclick="filtrarCor('Claras', this)">Claras/Brancas</div>
-      <div class="pill" onclick="filtrarCor('Matizadas', this)">Matizadas/Riscadas</div>
+      <div class="pill" onclick="filtrarCor('Matizadas', this)">Matizadas</div>
     </div>
   </div>
 
@@ -295,21 +239,15 @@ body {
 </div>
 
 <script>
-// BASE DE DADOS: Agora com Categoria e Cor para cada item
 const estoque = { 
   "AÇUCENA (MUTANTE)": { qtd: 1, cat: "Mutante", cor: "Claras" }, 
   "CÉU ESTRELADO": { qtd: 2, cat: "Tripla+", cor: "Escuras" },
-  "CÉU ESTRELADO VARIEGATA": { qtd: 0, cat: "Variegata", cor: "Escuras" },
-  "GTA-RED COMETS": { qtd: 0, cat: "Dupla", cor: "Vermelhas" },
-  "GTA-SUN CLUSTER": { qtd: 0, cat: "Tripla+", cor: "Amarelas" },
-  "GTA-LYSSA": { qtd: 0, cat: "Dupla", cor: "Escuras" },
-  "VAMPIRA": { qtd: 0, cat: "Tripla+", cor: "Escuras" },
-  "VIÚVA NEGRA": { qtd: 0, cat: "Tripla+", cor: "Escuras" },
+  "GTA-SUN CLUSTER": { qtd: 1, cat: "Tripla+", cor: "Amarelas" },
   "AKACHI": { qtd: 0, cat: "Dupla", cor: "Vermelhas" },
-  "AMATTA": { qtd: 1, cat: "Dupla", cor: "Vermelhas" },
-  "ARYA": { qtd: 0, cat: "Tripla+", cor: "Claras" },
-  "BLOODY MARY": { qtd: 0, cat: "Dupla", cor: "Vermelhas" },
-  "LH-20 (MOSAICO)": { qtd: 1, cat: "Efeito Mosaico", cor: "Matizadas" }
+  "AMATTA": { qtd: 1, cat: "Dupla", cor: "Rosas" },
+  "LH-20 (MOSAICO)": { qtd: 1, cat: "Singela", cor: "Matizadas" }, // Exemplo: Mosaico agora entra na forma real (Singela) e cor Matizada
+  "BRANCA DE NEVE": { qtd: 5, cat: "Singela", cor: "Claras" },
+  "VAMPIRA": { qtd: 0, cat: "Tripla+", cor: "Escuras" }
 };
 
 let selecionados = new Set();
