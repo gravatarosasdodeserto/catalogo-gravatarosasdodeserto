@@ -142,9 +142,8 @@ body {
     max-width: 520px;
     margin: 25px auto 10px;
     padding: 14px 18px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
+
+    text-align: center;
 
     background: rgba(255, 255, 255, 0.55);
     border-radius: 18px;
@@ -154,6 +153,19 @@ body {
     box-shadow: 
         0 6px 20px rgba(0,0,0,0.06),
         inset 0 1px 0 rgba(255,255,255,0.7);
+}
+
+.instrucao-texto p {
+    margin: 0;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.instrucao-texto span {
+    display: block;
+    margin-top: 5px;
+    font-size: 11px;
+    color: rgba(58, 54, 24, 0.65);
 }
 
 .instrucao-icon {
@@ -308,11 +320,8 @@ body {
 </div>
 
 <div class="instrucao-texto">
-    <div class="instrucao-icon">✦</div>
-    <div class="instrucao-conteudo">
-        <p>Selecione as ID's desejadas para solicitar informações sobre os enxertos.</p>
-        <span>Variedades sem pronta entrega podem ser encomendadas sem custo.</span>
-    </div>
+    <p>Selecione as ID's desejadas para solicitar informações sobre os enxertos.</p>
+    <span>Variedades sem pronta entrega podem ser encomendadas sem custo.</span>
 </div>
 
 <div class="catalogo" id="gridCatalogo"></div>
