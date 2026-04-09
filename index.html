@@ -13,6 +13,7 @@
   --card-white: #ffffff;    
   --card-selected: #cbc4b7; 
   --text-main: #3a3618;    
+  --accent: #5d5831;
 }
 
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -51,68 +52,45 @@ body {
   z-index: 1;
 }
 
-/* ===== EFEITO SHOWROOM ===== */
-.white-frame {
-  position: absolute;
-  width: 100%;
-  height: auto;
-  z-index: 2;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.white-frame::before {
-  content: "";
-  position: absolute;
-  width: 100%;
-  height: 100px; 
-  background-color: rgba(255, 255, 255, 0.7); 
-}
-
-.line-top {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 1px;
-  background-color: #ffffff;
-  transform: translateY(-50px); 
-}
-
-.line-bottom {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 1px;
-  background-color: #ffffff;
-  transform: translateY(50px); 
-}
-
-.logo {
-  position: relative;
-  z-index: 3;
-  display: flex;
-  justify-content: center;
-}
-
-.logo img { 
-  width: 170px; 
-  height: auto;
-  filter: drop-shadow(0 0 1px rgba(255,255,255,0.8)) drop-shadow(0 4px 15px rgba(0,0,0,0.4));
-}
+.logo { position: relative; z-index: 3; display: flex; justify-content: center; }
+.logo img { width: 170px; height: auto; filter: drop-shadow(0 4px 15px rgba(0,0,0,0.4)); }
 
 /* ===== SEÇÃO DE FILTROS ===== */
 .secao-filtros {
-  max-width: 600px;
+  max-width: 800px;
   margin: 30px auto;
   text-align: center;
   padding: 0 20px;
 }
 
 .instrucoes-topo p { margin: 0; font-size: 16px; font-weight: 600; }
-.instrucoes-topo span { font-size: 13px; opacity: 0.8; display: block; margin: 8px 0 20px 0; line-height: 1.4; }
+.instrucoes-topo span { font-size: 13px; opacity: 0.8; display: block; margin: 8px 0 20px 0; }
+
+/* Botões de Categoria e Cor */
+.container-filtros-pills {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.pill {
+  padding: 8px 16px;
+  background: rgba(255,255,255,0.5);
+  border: 1px solid rgba(0,0,0,0.1);
+  border-radius: 50px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.pill.active {
+  background: var(--text-main);
+  color: white;
+  border-color: var(--text-main);
+}
 
 .switch-disponivel {
   display: inline-flex; 
@@ -140,17 +118,13 @@ body {
 .catalogo {
   display: grid; 
   grid-template-columns: repeat(auto-fill, minmax(165px, 1fr));
-  gap: 20px; 
-  padding: 0 20px; 
-  max-width: 1200px; 
-  margin: 0 auto;
+  gap: 20px; padding: 0 20px; max-width: 1200px; margin: 0 auto;
 }
 
-/* Ajuste para PC: Ocupa a tela toda e mantém cards grandes */
 @media (min-width: 1024px) {
   .catalogo {
     grid-template-columns: repeat(auto-fill, minmax(185px, 1fr));
-    max-width: 95%; /* Remove o espaço excessivo nas laterais */
+    max-width: 95%;
     gap: 25px;
   }
 }
@@ -223,17 +197,29 @@ body {
 
 <div class="topbar">
   <div class="logo"><img src="logo.png"></div>
-  <div class="white-frame">
-    <div class="line-top"></div>
-    <div class="line-bottom"></div>
-  </div>
 </div>
 
 <div class="secao-filtros">
   <div class="instrucoes-topo">
-    <p>Selecione as ID's desejadas para solicitar informações sobre os enxertos.</p>
+    <p>Selecione as ID's desejadas para solicitar informações.</p>
     <span>Variedades sem pronta entrega podem ser encomendadas sem custo.</span>
   </div>
+
+  <div class="container-filtros-pills" id="filtroCategorias">
+    <div class="pill active" onclick="filtrarCategoria('Todas', this)">Todas</div>
+    <div class="pill" onclick="filtrarCategoria('Especiais', this)">Especiais</div>
+    <div class="pill" onclick="filtrarCategoria('Mutantes', this)">Mutantes</div>
+    <div class="pill" onclick="filtrarCategoria('Arabicum', this)">Arabicum</div>
+  </div>
+
+  <div class="container-filtros-pills" id="filtroCores">
+    <div class="pill active" onclick="filtrarCor('Todas', this)">Todas as cores</div>
+    <div class="pill" onclick="filtrarCor('Negras', this)">Negras/Roxas</div>
+    <div class="pill" onclick="filtrarCor('Amarelas', this)">Amarelas</div>
+    <div class="pill" onclick="filtrarCor('Vermelhas', this)">Vermelhas</div>
+    <div class="pill" onclick="filtrarCor('Claras', this)">Claras/Brancas</div>
+  </div>
+
   <label class="switch-disponivel">
     <input type="checkbox" id="checkProntaEntrega">
     <span class="slider"></span>
@@ -252,17 +238,40 @@ body {
       </div>
       <div id="containerTags"></div>
     </div>
-    <input type="text" id="inputPesquisa" class="campo-busca" placeholder="Buscar por ID...">
+    <input type="text" id="inputPesquisa" class="campo-busca" placeholder="Buscar por nome da ID...">
     <button id="btnEnviar" class="btn-whatsapp oculto" onclick="enviarPedido()"></button>
   </div>
 </div>
 
 <script>
-const estoque = { "AÇUCENA (MUTANTE)": 1, "AKACHI": 0, "AMATTA": 1, "ARYA": 0, "BLOODY MARY": 0, "BP-116": 0, "BRANCA DE NEVE": 0, "BRIDAL BOUQUET": 0, "CANAN 55": 0, "CANAN 170": 0, "CAPIXABA": 0, "CÉU ESTRELADO": 2, "CÉU ESTRELADO VARIEGATA": 0, "COPENHAGEN": 0, "DAFNE": 0, "DIỆU CHÂU": 0, "COCA-COLA": 0, "DOUBLE STAR": 0, "DUQUESA": 0, "EGG ROLL": 0, "ELARA": 0, "ELLIE": 0, "EV19-XANADÚ": 0, "FERRARI": 0, "GOLDEN FAITH": 0, "GRAPE CHOCOLATE": 0, "GUARÁ PITANGA": 0, "GTA-AIKA": 0, "GTA-BOLD": 0, "GTA-CANDY CRUSH": 0, "GTA-CÓSMICA": 0, "GTA-CREPÚSCULO": 0, "GTA-DESERT DOLL": 0, "GTA-DIANA": 0, "GTA-EMMA FROST": 0, "GTA-FAY": 0, "GTA-FLORZINHA": 0, "GTA-FLUTTERSHY": 0, "GTA-FRACTA": 0, "GTA-GOLDEN PINK": 0, "GTA-ICE DRAGON": 0, "GTA-KIMBERLY": 0, "GTA-LITTLE KISS": 0, "GTA-LOLLIPOP BLACK": 0, "GTA-LYSSA": 0, "GTA-LYTA": 0, "GTA-MISS GRAVATÁ": 0, "GTA-NYX": 0, "GTA-PERONA": 0, "GTA-PINK VENOM": 0, "GTA-PINKIE PIE": 0, "GTA-RED COMETS": 0, "GTA-RED STORM": 0, "GTA-RED WIDOW": 0, "GTA-SANSA": 0, "GTA-SHE HA": 0, "GTA-SUN CLUSTER": 0, "GTA-SWEET BLUSH": 0, "GTA-TRINITY": 0, "GTA-TRUE FAITH": 0, "GTA-YUNA": 0, "HELENA": 0, "INDIGO GLAZE": 0, "INFINITY": 0, "JHULLY": 0, "JULIUS CAESAR": 0, "KING OF KINGS": 0, "KINDLY": 0, "L-06": 0, "LAILA": 0, "LILAC FROST (MUTANTE)": 0, "LM-440": 0, "LM-50": 0, "LM-02": 0, "LUNA": 0, "MAGNIFICAT": 0, "MARIA": 0, "MIDNIGHT": 0, "MỘNG CẦM": 0, "MORAN": 0, "NANCY": 0, "NEMO": 0, "NORALINE": 0, "NUSA": 0, "P-200": 0, "PATHUMMA": 0, "PEONY": 0, "PHARAOH": 0, "PURPLE BLUE": 0, "QUEEN RAY": 0, "RF-001": 0, "RF-002": 0, "RIHANNA": 0, "ROMANTIC EDGE": 0, "SANTA CLAUS": 0, "SATURNO": 0, "SENNA": 0, "SIENA": 0, "SOCHI": 0, "SOPHIA": 0, "STAR CLUSTER": 0, "SWALLOW": 0, "RC-04": 0, "THAMIRES": 0, "THE SECRET OF VICTORIA": 0, "TRIPLE WISH": 0, "TROPICAL": 0, "TS-69": 0, "TS-222": 0, "TS-330": 0, "TW4": 0, "UNPARALLELED": 0, "VARIEGATA": 0, "VAMPIRA": 0, "VIÚVA NEGRA": 0, "VOLCANO": 0, "W59": 0, "YÚ JIǍO": 0 };
+// ESTRUTURA ATUALIZADA: { qtd, cat, cor }
+// Você deve completar os outros itens seguindo este modelo
+const estoque = { 
+  "AÇUCENA (MUTANTE)": { qtd: 1, cat: "Mutantes", cor: "Claras" }, 
+  "AKACHI": { qtd: 0, cat: "Especiais", cor: "Vermelhas" }, 
+  "AMATTA": { qtd: 1, cat: "Especiais", cor: "Vermelhas" }, 
+  "ARYA": { qtd: 0, cat: "Especiais", cor: "Claras" }, 
+  "BLOODY MARY": { qtd: 0, cat: "Especiais", cor: "Vermelhas" }, 
+  "CÉU ESTRELADO": { qtd: 2, cat: "Especiais", cor: "Negras" },
+  "CÉU ESTRELADO VARIEGATA": { qtd: 0, cat: "Mutantes", cor: "Negras" },
+  "GTA-RED COMETS": { qtd: 0, cat: "Especiais", cor: "Vermelhas" },
+  "GTA-SUN CLUSTER": { qtd: 0, cat: "Especiais", cor: "Amarelas" },
+  "GTA-GOLDEN PINK": { qtd: 0, cat: "Especiais", cor: "Amarelas" },
+  "GTA-LYSSA": { qtd: 0, cat: "Especiais", cor: "Negras" },
+  // Para as que você ainda não classificou, deixe como "Especiais" e "Todas" por enquanto:
+  "BP-116": { qtd: 0, cat: "Especiais", cor: "Todas" },
+  "BRANCA DE NEVE": { qtd: 0, cat: "Especiais", cor: "Claras" },
+  "BRIDAL BOUQUET": { qtd: 0, cat: "Especiais", cor: "Claras" },
+  "CANAN 55": { qtd: 0, cat: "Especiais", cor: "Todas" },
+  "VAMPIRA": { qtd: 0, cat: "Especiais", cor: "Negras" },
+  "VIÚVA NEGRA": { qtd: 0, cat: "Especiais", cor: "Negras" }
+};
 
 let selecionados = new Set();
 let filtroTexto = "";
 let apenasDisponiveis = false;
+let categoriaAtiva = "Todas";
+let corAtiva = "Todas";
 
 const grid = document.getElementById("gridCatalogo");
 const inputPesquisa = document.getElementById("inputPesquisa");
@@ -271,35 +280,56 @@ const checkProntaEntrega = document.getElementById("checkProntaEntrega");
 inputPesquisa.addEventListener("input", (e) => { filtroTexto = e.target.value.toLowerCase(); montarCatalogo(); });
 checkProntaEntrega.addEventListener("change", (e) => { apenasDisponiveis = e.target.checked; montarCatalogo(); });
 
+function filtrarCategoria(cat, elemento) {
+  categoriaAtiva = cat;
+  document.querySelectorAll('#filtroCategorias .pill').forEach(p => p.classList.remove('active'));
+  elemento.classList.add('active');
+  montarCatalogo();
+}
+
+function filtrarCor(cor, elemento) {
+  corAtiva = cor;
+  document.querySelectorAll('#filtroCores .pill').forEach(p => p.classList.remove('active'));
+  elemento.classList.add('active');
+  montarCatalogo();
+}
+
 function formatarNomeArquivo(nome) { return nome.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/ /g, "-").replace(/[()]/g, ""); }
 
 function montarCatalogo() {
   grid.innerHTML = "";
   let itensExibidos = 0;
+  
   Object.keys(estoque).sort().forEach(nome => {
-    const qtd = estoque[nome];
-    if (apenasDisponiveis && qtd === 0) return;
+    const dados = estoque[nome];
+    
+    // Lógica de Filtros Combinados
+    if (apenasDisponiveis && dados.qtd === 0) return;
+    if (categoriaAtiva !== "Todas" && dados.cat !== categoriaAtiva) return;
+    if (corAtiva !== "Todas" && dados.cor !== corAtiva) return;
     if (filtroTexto && !nome.toLowerCase().includes(filtroTexto)) return;
+
     itensExibidos++;
     const nomeArquivo = formatarNomeArquivo(nome);
     const card = document.createElement("div");
     card.className = "item" + (selecionados.has(nome) ? " selecionado" : "");
-    card.innerHTML = `<video src="imagens/${nomeArquivo}.mp4" poster="imagens/${nomeArquivo}.jpg" muted loop playsinline autoplay onerror="this.style.display='none'; this.nextElementSibling.style.display='block'"></video><img src="imagens/${nomeArquivo}.jpg" style="display:none" onerror="this.src='imagens/sem-foto.jpg'"><p>${nome}</p><div class="estoque-status ${qtd > 0 ? 'disponivel' : 'encomenda'}">${qtd > 0 ? 'Enxertos disponíveis: '+qtd+' (envio imediato)' : 'Enxertos disponíveis: 0 (pode encomendar)'}</div>`;
+    card.innerHTML = `
+      <video src="imagens/${nomeArquivo}.mp4" poster="imagens/${nomeArquivo}.jpg" muted loop playsinline autoplay onerror="this.style.display='none'; this.nextElementSibling.style.display='block'"></video>
+      <img src="imagens/${nomeArquivo}.jpg" style="display:none" onerror="this.src='imagens/sem-foto.jpg'">
+      <p>${nome}</p>
+      <div class="estoque-status ${dados.qtd > 0 ? 'disponivel' : 'encomenda'}">
+        ${dados.qtd > 0 ? 'Disponível: '+dados.qtd : 'Por Encomenda'}
+      </div>`;
     
     card.onclick = () => { 
-      if (selecionados.has(nome)) {
-        selecionados.delete(nome);
-      } else {
-        selecionados.add(nome);
-      }
-      filtroTexto = ""; 
-      inputPesquisa.value = ""; 
-      montarCatalogo(); 
+      if (selecionados.has(nome)) selecionados.delete(nome);
+      else selecionados.add(nome);
       atualizarPainelAcoes(); 
+      montarCatalogo(); 
     };
     grid.appendChild(card);
   });
-  if (itensExibidos === 0) grid.innerHTML = `<div class="vazio">Nenhuma ID encontrada.</div>`;
+  if (itensExibidos === 0) grid.innerHTML = `<div class="vazio">Nenhuma ID encontrada com esses filtros.</div>`;
 }
 
 function atualizarPainelAcoes() {
@@ -312,7 +342,6 @@ function atualizarPainelAcoes() {
   if (selecionados.size > 0) {
     areaSelecao.style.display = "block";
     labelSelecao.innerText = selecionados.size === 1 ? "ID selecionada:" : "ID's selecionadas:";
-    
     selecionados.forEach(nome => {
       const tag = document.createElement("div");
       tag.className = "tag-item";
@@ -320,7 +349,7 @@ function atualizarPainelAcoes() {
       containerTags.appendChild(tag);
     });
     btnZap.classList.remove("oculto");
-    btnZap.innerHTML = selecionados.size === 1 ? `Pedir informações sobre a ID selecionada` : `Pedir informações sobre as ${selecionados.size} ID's selecionadas`;
+    btnZap.innerHTML = selecionados.size === 1 ? `Pedir informações sobre a ID` : `Pedir informações sobre ${selecionados.size} ID's`;
   } else { 
     areaSelecao.style.display = "none"; 
     btnZap.classList.add("oculto"); 
@@ -332,8 +361,8 @@ function limparTudo() { selecionados.clear(); atualizarPainelAcoes(); montarCata
 
 function enviarPedido() {
   const ids = Array.from(selecionados);
-  const intro = ids.length === 1 ? "Tenho interesse em adquirir enxerto da seguinte variedade:\n\n- " : "Tenho interesse em adquirir enxertos das seguintes variedades:\n\n- ";
-  const mensagem = `Olá!\n\n${intro}${ids.join("\n- ")}\n\nPoderia me dar mais informações? Tenho a seguinte duvida...`;
+  const intro = ids.length === 1 ? "Tenho interesse na variedade:\n- " : "Tenho interesse nas variedades:\n- ";
+  const mensagem = `Olá!\n\n${intro}${ids.join("\n- ")}\n\nPoderia me dar mais informações?`;
   window.open("https://wa.me/5581992665421?text=" + encodeURIComponent(mensagem), "_blank");
 }
 montarCatalogo();
