@@ -85,29 +85,28 @@ body {
 /* ===== BARRA DE FILTROS (FIXA) ===== */
 .secao-filtros {
   position: sticky;
-  top: 160px;
+  top: 152px;
   z-index: 950;
-  padding: 4px 15px;
-  background: transparent;
+  padding: 4px 15px; /* bem fininho */
+  background: #ffffff; /* fundo branco */
   border: none;
   display: flex;
   justify-content: space-between;
   align-items: center;
   pointer-events: none;
   gap: 10px;
+  height: 32px; /* trava a altura pra ficar fino mesmo */
+  border-bottom: 1px solid rgba(0,0,0,0.06); /* linha sutil de separação */
 }
-
 .status-filtro {
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 600;
   color: var(--text-main);
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(5px);
+  background: rgba(58, 54, 24, 0.08); /* fundo bege sutil já que a barra é branca */
   display: inline-flex;
   align-items: center;
-  padding: 6px 14px;
+  padding: 4px 12px; /* mais baixo */
   border-radius: 50px;
-  box-shadow: 0 3px 10px rgba(0,0,0,0.15);
   pointer-events: auto;
   line-height: 1;
   white-space: nowrap;
@@ -120,21 +119,21 @@ body {
   color: white;
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 6px 14px;
+  gap: 5px;
+  padding: 4px 12px; /* mais baixo */
   border-radius: 50px;
   border: none;
   font-weight: 600;
-  font-size: 12px;
+  font-size: 11px;
   cursor: pointer;
-  box-shadow: 0 3px 10px rgba(0,0,0,0.2);
   pointer-events: auto;
   line-height: 1;
+  height: 24px; /* altura fixa */
 }
 
 .btn-abrir-filtros svg {
-  width: 14px;
-  height: 14px;
+  width: 12px; /* ícone menor pra caber */
+  height: 12px;
   flex-shrink: 0;
 }
 
