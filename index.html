@@ -648,9 +648,9 @@ function enviarPedido() {
   let mensagem = "";
 
   if (ids.length === 1) {
-    mensagem = `Olá! Tenho interesse na ID ${ids[0]} e queria saber mais informações e o valor.`;
+    mensagem = `Olá! Tenho interesse no enxerto da ID ${ids[0]} e queria saber mais informações e o valor.`;
   } else {
-    mensagem = `Olá! Tenho interesse nas IDs ${ids.join(", ")} e queria saber mais informações e valores.`;
+    mensagem = `Olá! Tenho interesse nos enxertos das IDs ${ids.join(", ")} e queria saber mais informações e valores.`;
   }
 
   window.open("https://wa.me/5581992665421?text=" + encodeURIComponent(mensagem), "_blank");
