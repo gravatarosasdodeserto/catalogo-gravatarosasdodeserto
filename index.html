@@ -160,63 +160,6 @@ body {
 .instrucao-texto { width: calc(100% - 40px); margin: 20px auto; padding: 15px; text-align: center; background: white; border-radius: 18px; font-size: 13px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
 .vazio { grid-column: 1/-1; text-align: center; padding: 50px; opacity: 0.6; }
 </style>
-</head>
-<body>
-
-<div class="topbar">
-  <div class="logo"><img src="logo.png" alt="Logo"></div>
-  <div class="white-frame">
-    <div class="line-top"></div>
-    <div class="line-bottom"></div>
-  </div>
-</div>
-
-<div class="secao-filtros">
-  <div class="status-filtro" id="statusFiltro" style="display: none;"></div>
-  <button class="btn-abrir-filtros" onclick="toggleDrawer()">
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16m-7 6h7"/></svg>
-    Filtrar
-  </button>
-</div>
-
-<div class="overlay" id="overlay" onclick="toggleDrawer()"></div>
-
-<div class="drawer-filtros" id="drawer">
-  <button class="fechar-drawer" onclick="toggleDrawer()">✕</button>
-  
-  <div class="grupo-filtro" style="margin-top: 60px;">
-    <label style="font-weight: 600; font-size: 14px; cursor: pointer;">
-      <input type="checkbox" id="checkProntaEntrega"> Apenas Pronta Entrega
-    </label>
-  </div>
-
-  <div class="grupo-filtro">
-    <p style="font-weight: 600; margin-bottom: 10px; font-size: 12px; text-transform: uppercase; opacity: 0.6;">Camadas</p>
-    <div id="filtroCategorias"></div>
-  </div>
-
-  <div class="grupo-filtro">
-    <p style="font-weight: 600; margin-bottom: 10px; font-size: 12px; text-transform: uppercase; opacity: 0.6;">Cores</p>
-    <div id="filtroCores"></div>
-  </div>
-</div>
-
-<div class="instrucao-texto">
-    Selecione as ID's desejadas para solicitar informações.
-</div>
-
-<div class="catalogo" id="gridCatalogo">
-    <div class="vazio">Carregando catálogo...</div>
-</div>
-
-<div class="rodape-acoes">
-  <div class="container-rodape">
-    <div class="caixa-selecao" id="areaSelecao">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-size: 11px; font-weight: 700;">
-        <span>SELECIONADOS:</span>
-        <span style="color: #8b2d2d; cursor: pointer; text-decoration: underline;" onclick="limparTudo()">Limpar</span>
-      </div>
-      <div id="containerTags"></div>
     </div>
     <input type="text" id="inputPesquisa" class="campo-busca" placeholder="Buscar ID pelo nome...">
     <button id="btnEnviar" class="btn-whatsapp oculto" onclick="enviarPedido()"></button>
@@ -243,7 +186,7 @@ async function carregarEstoque() {
     const csv = await resposta.text();
     const linhas = csv.split(/\r?\n/);
     
-    // Processamento do cabeçalho
+    // 1. Normaliza o cabeçalho (remove acentos e espaços)
     const cabecalho = linhas.shift().split(',').map(h => 
       h.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
     );
@@ -255,11 +198,13 @@ async function carregarEstoque() {
     const idxMidia = cabecalho.indexOf('midia');
 
     estoque = {};
+    categoriasUnicas.clear();
+    coresUnicas.clear();
 
     linhas.forEach(linha => {
       if (!linha.trim()) return;
       
-      // Regex para separar colunas respeitando aspas do CSV
+      // Regex para separar colunas respeitando aspas
       const colunas = linha.match(/(".*?"|[^",]+)(?=\s*,|\s*$)/g) || [];
       const limpar = (str) => str ? str.trim().replace(/^"|"$/g, '') : '';
 
@@ -272,8 +217,8 @@ async function carregarEstoque() {
 
       estoque[nome] = {
         qtd: parseInt(limpar(colunas[idxQtd])) || 0,
-        cat: cat || 'Não informado',
-        cor: cor || 'Não informado',
+        cat: cat || 'Outros',
+        cor: cor || 'Outras',
         midia: midia
       };
 
@@ -284,8 +229,8 @@ async function carregarEstoque() {
     gerarFiltrosDinamicos();
     montarCatalogo();
   } catch (erro) {
-    console.error("Erro ao carregar:", erro);
-    grid.innerHTML = `<div class="vazio">Erro ao carregar os dados. Verifique a conexão.</div>`;
+    console.error("Erro na carga:", erro);
+    grid.innerHTML = `<div class="vazio">Erro ao carregar dados. Verifique a conexão.</div>`;
   }
 }
 
@@ -311,7 +256,6 @@ function montarCatalogo() {
   Object.keys(estoque).sort().forEach(nome => {
     const dados = estoque[nome];
     
-    // Lógica de Filtros
     if (apenasDisponiveis && dados.qtd === 0) return;
     if (categoriaAtiva !== "Todas" && dados.cat !== categoriaAtiva) return;
     if (corAtiva !== "Todas" && dados.cor !== corAtiva) return;
@@ -321,17 +265,17 @@ function montarCatalogo() {
     const midia = dados.midia ? dados.midia.trim() : '';
     const isVideo = midia.toLowerCase().endsWith('.mp4');
     
-    // No GitHub Pages, espaços e caracteres especiais precisam de encode
-    const caminhoFinal = midia ? `imagens/${encodeURIComponent(midia)}` : 'imagens/sem-foto.jpg';
+    // O encodeURIComponent é essencial para nomes com espaços ou símbolos no GitHub
+    const urlFinal = midia ? `imagens/${encodeURIComponent(midia)}` : 'imagens/sem-foto.jpg';
 
     const card = document.createElement("div");
     card.className = "item" + (selecionados.has(nome) ? " selecionado" : "");
     
     card.innerHTML = `
       ${isVideo ? 
-        `<video src="${caminhoFinal}" muted loop playsinline autoplay onerror="this.style.display='none'; this.nextElementSibling.style.display='block'"></video>
+        `<video src="${urlFinal}" muted loop playsinline autoplay onerror="this.style.display='none'; this.nextElementSibling.style.display='block'"></video>
          <img src="imagens/sem-foto.jpg" style="display:none">` : 
-        `<img src="${caminhoFinal}" onerror="this.src='imagens/sem-foto.jpg'">`
+        `<img src="${urlFinal}" onerror="this.src='imagens/sem-foto.jpg'; console.warn('Falha:', '${midia}')">`
       }
       <p>${nome}</p>
       <div class="estoque-status ${dados.qtd > 0 ? 'disponivel' : 'encomenda'}">
@@ -405,8 +349,7 @@ function atualizarPainelAcoes() {
 }
 
 function enviarPedido() {
-  const texto = Array.from(selecionados).join(", ");
-  const msg = `Olá! Gostaria de saber valores e disponibilidade das seguintes IDs: ${texto}`;
+  const msg = `Olá! Gostaria de informações sobre: ${Array.from(selecionados).join(", ")}`;
   window.open(`https://wa.me/5581992665421?text=${encodeURIComponent(msg)}`, "_blank");
 }
 
@@ -416,7 +359,11 @@ function limparTudo() {
   atualizarPainelAcoes();
 }
 
+// Inicialização
 carregarEstoque();
-</script>
+        </script>
+  
+
+  
 </body>
 </html>
