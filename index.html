@@ -313,9 +313,9 @@ async function carregarEstoque() {
     try {
         const resp = await fetch(urlPlanilha);
         const csv = await resp.text();
+        // Divide as linhas respeitando quebras de linha dentro de aspas
         const linhas = csv.split(/\r?\n/).filter(l => l.trim() !== "");
         
-        // Mapeia o cabeçalho corretamente
         const cabecalhoRaw = linhas.shift().split(',');
         const cabecalho = cabecalhoRaw.map(h => h.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""));
 
@@ -324,8 +324,8 @@ async function carregarEstoque() {
 
         estoque = {};
         linhas.forEach(linha => {
-            // Divide a linha respeitando aspas (caso haja vírgula dentro da célula)
-            const col = linha.match(/(".*?"|[^",]+)(?=\s*,|\s*$)/g) || [];
+            // Regex robusta para CSV: lida com aspas e vírgulas internas
+            const col = linha.match(/(".*?"|[^",\r\n]+)(?=\s*,|\s*$|\s*\r?\n)/g) || [];
             const limpar = (s) => s ? s.trim().replace(/^"|"$/g, '') : '';
             
             const nome = limpar(col[idxNome]);
@@ -336,21 +336,17 @@ async function carregarEstoque() {
                 filtros: {}
             };
 
-            // Busca o valor correto para cada coluna de filtro baseada no índice real dela
             colunasDeFiltro.forEach(colNome => {
                 const idxReal = cabecalho.indexOf(colNome);
-                if (idxReal !== -1) {
-                    estoque[nome].filtros[colNome] = limpar(col[idxReal]) || '';
-                } else {
-                    estoque[nome].filtros[colNome] = '';
-                }
+                let valor = idxReal !== -1 ? limpar(col[idxReal]) : '';
+                // Se a coluna for cores ou padrão, aceita múltiplos valores separados por | ou /
+                estoque[nome].filtros[colNome] = valor;
             });
         });
         
         gerarInterfaceFiltros();
         montarCatalogo();
     } catch (e) {
-        console.error(e);
         grid.innerHTML = `<div class="vazio">Erro ao carregar dados.</div>`;
     }
 }
@@ -371,17 +367,24 @@ function gerarInterfaceFiltros() {
     colunasDeFiltro.forEach(col => {
         const valoresUnicos = new Set();
         Object.values(estoque).forEach(item => {
-            const val = item.filtros[col];
-            if (val && val !== "") valoresUnicos.add(val);
+            const campo = item.filtros[col];
+            if (campo) {
+                // Divide valores como "Amarelas|Rosas" em botões separados
+                const partes = campo.split(/[|/]/); 
+                partes.forEach(p => {
+                    const formatado = p.trim();
+                    if (formatado) valoresUnicos.add(formatado);
+                });
+            }
         });
         
-        // Só cria o grupo de filtro se houver opções na coluna
         if (valoresUnicos.size > 0) {
-            const tituloFormatado = col === 'padrao' ? 'Padrão' : col.charAt(0).toUpperCase() + col.slice(1);
-            
+            let titulo = col.charAt(0).toUpperCase() + col.slice(1);
+            if(col === 'padrao') titulo = 'Padrão';
+
             filtrosHtml += `
                 <div class="grupo-filtro">
-                    <div class="titulo-filtro">${tituloFormatado}</div>
+                    <div class="titulo-filtro">${titulo}</div>
                     <div class="opcoes-filtro">
                         <div class="pill ${!filtrosAtivos[col] || filtrosAtivos[col] === 'Todas' ? 'active' : ''}" 
                              onclick="definirFiltro('${col}', 'Todas', this)">Todas</div>
@@ -395,7 +398,6 @@ function gerarInterfaceFiltros() {
     });
 
     drawer.innerHTML = headerHtml + filtrosHtml;
-    
     document.getElementById("checkProntaEntrega").addEventListener("change", (e) => { 
         apenasDisponiveis = e.target.checked; 
         montarCatalogo(); 
@@ -416,27 +418,32 @@ function montarCatalogo() {
 
     Object.keys(estoque).sort().forEach(nome => {
         const dados = estoque[nome];
-        
         if (apenasDisponiveis && dados.qtd === 0) return;
 
         let passaFiltro = true;
         for (let col in filtrosAtivos) {
-            if (filtrosAtivos[col] && filtrosAtivos[col] !== "Todas" && dados.filtros[col] !== filtrosAtivos[col]) {
-                passaFiltro = false;
-                break;
+            const selecao = filtrosAtivos[col];
+            if (selecao && selecao !== "Todas") {
+                // Verifica se o valor selecionado está contido nos filtros do item (lida com múltiplos)
+                const valoresItem = dados.filtros[col].split(/[|/]/).map(v => v.trim());
+                if (!valoresItem.includes(selecao)) {
+                    passaFiltro = false;
+                    break;
+                }
             }
         }
+        
         if (!passaFiltro) return;
-
         if (filtroTexto && !nome.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").includes(filtroTexto)) return;
 
         itensExibidos++;
-        const nomeArquivo = nome.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/ /g, "-").replace(/[()]/g, "");
+        const nomeArq = nome.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/ /g, "-").replace(/[()]/g, "");
+        
         const card = document.createElement("div");
         card.className = "item" + (selecionados.has(nome) ? " selecionado" : "");
         card.innerHTML = `
-            <video src="imagens/${nomeArquivo}.mp4" poster="imagens/${nomeArquivo}.jpg" muted loop playsinline autoplay onerror="this.style.display='none'; this.nextElementSibling.style.display='block'"></video>
-            <img src="imagens/${nomeArquivo}.jpg" style="display:none" onerror="this.src='imagens/sem-foto.jpg'">
+            <video src="imagens/${nomeArq}.mp4" poster="imagens/${nomeArq}.jpg" muted loop playsinline autoplay onerror="this.style.display='none'; this.nextElementSibling.style.display='block'"></video>
+            <img src="imagens/${nomeArq}.jpg" style="display:none" onerror="this.src='imagens/sem-foto.jpg'">
             <p>${nome}</p>
             <div class="estoque-status ${dados.qtd > 0 ? 'disponivel' : 'encomenda'}">
                 ${dados.qtd > 0 ? 'Disponível: ' + dados.qtd : 'Por Encomenda'}
@@ -494,7 +501,6 @@ inputPesquisa.addEventListener("input", (e) => {
 
 carregarEstoque();
 </script>
-  
 
 </body>
 </html>
