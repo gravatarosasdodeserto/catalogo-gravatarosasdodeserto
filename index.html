@@ -245,32 +245,7 @@ body {
       ID's pronta entrega
     </label>
   </div>
-
-  <div class="grupo-filtro">
-    <div class="titulo-filtro">Tipo e Camadas</div>
-    <div class="opcoes-filtro" id="filtroCategorias">
-      <div class="pill active" onclick="filtrarCategoria('Todas', this)">Todas</div>
-      <div class="pill" onclick="filtrarCategoria('Singela', this)">Singela</div>
-      <div class="pill" onclick="filtrarCategoria('Dupla', this)">Dupla</div>
-      <div class="pill" onclick="filtrarCategoria('Tripla+', this)">Tripla+</div>
-      <div class="pill" onclick="filtrarCategoria('Mutante', this)">Mutante</div>
-      <div class="pill" onclick="filtrarCategoria('Variegata', this)">Variegata</div>
-    </div>
   </div>
-
-  <div class="grupo-filtro">
-    <div class="titulo-filtro">Famílias de Cores</div>
-    <div class="opcoes-filtro" id="filtroCores">
-      <div class="pill active" onclick="filtrarCor('Todas', this)">Todas as cores</div>
-      <div class="pill" onclick="filtrarCor('Escuras', this)">Escuras</div>
-      <div class="pill" onclick="filtrarCor('Claras', this)">Claras</div>
-      <div class="pill" onclick="filtrarCor('Amarelas', this)">Amarelas</div>
-      <div class="pill" onclick="filtrarCor('Vermelhas', this)">Vermelhas</div>
-      <div class="pill" onclick="filtrarCor('Rosas', this)">Rosas</div>
-      <div class="pill" onclick="filtrarCor('Matizadas', this)">Matizadas</div>
-    </div>
-  </div>
-</div>
 
 <div class="instrucao-texto">
     <p>Selecione as ID's desejadas para solicitar informações sobre os enxertos.</p>
@@ -313,7 +288,6 @@ async function carregarEstoque() {
     try {
         const resp = await fetch(urlPlanilha);
         const csv = await resp.text();
-        // Divide as linhas respeitando quebras de linha dentro de aspas
         const linhas = csv.split(/\r?\n/).filter(l => l.trim() !== "");
         
         const cabecalhoRaw = linhas.shift().split(',');
@@ -324,7 +298,6 @@ async function carregarEstoque() {
 
         estoque = {};
         linhas.forEach(linha => {
-            // Regex robusta para CSV: lida com aspas e vírgulas internas
             const col = linha.match(/(".*?"|[^",\r\n]+)(?=\s*,|\s*$|\s*\r?\n)/g) || [];
             const limpar = (s) => s ? s.trim().replace(/^"|"$/g, '') : '';
             
@@ -339,7 +312,6 @@ async function carregarEstoque() {
             colunasDeFiltro.forEach(colNome => {
                 const idxReal = cabecalho.indexOf(colNome);
                 let valor = idxReal !== -1 ? limpar(col[idxReal]) : '';
-                // Se a coluna for cores ou padrão, aceita múltiplos valores separados por | ou /
                 estoque[nome].filtros[colNome] = valor;
             });
         });
@@ -369,7 +341,6 @@ function gerarInterfaceFiltros() {
         Object.values(estoque).forEach(item => {
             const campo = item.filtros[col];
             if (campo) {
-                // Divide valores como "Amarelas|Rosas" em botões separados
                 const partes = campo.split(/[|/]/); 
                 partes.forEach(p => {
                     const formatado = p.trim();
@@ -424,7 +395,6 @@ function montarCatalogo() {
         for (let col in filtrosAtivos) {
             const selecao = filtrosAtivos[col];
             if (selecao && selecao !== "Todas") {
-                // Verifica se o valor selecionado está contido nos filtros do item (lida com múltiplos)
                 const valoresItem = dados.filtros[col].split(/[|/]/).map(v => v.trim());
                 if (!valoresItem.includes(selecao)) {
                     passaFiltro = false;
@@ -465,6 +435,7 @@ function atualizarPainelAcoes() {
     const containerTags = document.getElementById("containerTags");
     const btnZap = document.getElementById("btnEnviar");
     containerTags.innerHTML = "";
+
     if (selecionados.size > 0) {
         areaSelecao.style.display = "block";
         selecionados.forEach(nome => {
@@ -473,8 +444,15 @@ function atualizarPainelAcoes() {
             tag.innerHTML = `${nome} <button onclick="event.stopPropagation(); removerItem('${nome}')">×</button>`;
             containerTags.appendChild(tag);
         });
+        
         btnZap.classList.remove("oculto");
-        btnZap.innerHTML = `Solicitar informações (${selecionados.size})`;
+        
+        // Texto dinâmico do botão (Singular vs Plural)
+        if (selecionados.size === 1) {
+            btnZap.innerHTML = "Solicitar informação sobre a ID selecionada";
+        } else {
+            btnZap.innerHTML = `Solicitar informações sobre as ${selecionados.size} IDs selecionadas`;
+        }
     } else {
         areaSelecao.style.display = "none";
         btnZap.classList.add("oculto");
@@ -483,7 +461,16 @@ function atualizarPainelAcoes() {
 
 function enviarPedido() {
     const ids = Array.from(selecionados);
-    window.open("https://wa.me/5581992665421?text=" + encodeURIComponent("Olá! Tenho interesse nas IDs: " + ids.join(", ")), "_blank");
+    let mensagem = "";
+
+    // Mensagem dinâmica para o WhatsApp
+    if (ids.length === 1) {
+        mensagem = `Olá! Tenho interesse no enxerto da ID ${ids[0]} e queria saber mais informações e o valor.`;
+    } else {
+        mensagem = `Olá! Tenho interesse nos enxertos das IDs ${ids.join(", ")} e queria saber mais informações e valores.`;
+    }
+
+    window.open("https://wa.me/5581992665421?text=" + encodeURIComponent(mensagem), "_blank");
 }
 
 function toggleDrawer() {
