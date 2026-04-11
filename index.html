@@ -296,10 +296,6 @@ body {
 </div>
 
 <script>
-
-  
-  
-<script>
 let estoque = {};
 let selecionados = new Set();
 let filtroTexto = "";
@@ -307,7 +303,10 @@ let apenasDisponiveis = false;
 let categoriaAtiva = "Todas";
 let corAtiva = "Todas";
 
-// Link da planilha com parâmetro de tempo para evitar cache no navegador do celular
+// Coleção para armazenar o que for encontrado na planilha
+let categoriasEncontradas = new Set();
+let coresEncontradas = new Set();
+
 const urlPlanilha = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQHtdljGrbqvDGysgNUi7MVlGI19jY6WYrIJSckkcX7ylbKP02BWqgt0qHPUTTxqg/pub?gid=1893895788&single=true&output=csv&t=' + new Date().getTime();
 
 const grid = document.getElementById("gridCatalogo");
@@ -318,12 +317,9 @@ const checkProntaEntrega = document.getElementById("checkProntaEntrega");
 async function carregarEstoque() {
     try {
         const resp = await fetch(urlPlanilha);
-        if (!resp.ok) throw new Error("Não foi possível acessar a planilha");
-        
         const csv = await resp.text();
         const linhas = csv.split(/\r?\n/).filter(l => l.trim() !== "");
         
-        // Normaliza o cabeçalho para evitar erros com espaços ou acentos
         const cabecalho = linhas.shift().split(',').map(h => h.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""));
 
         const idxNome = cabecalho.indexOf('nome');
@@ -331,153 +327,151 @@ async function carregarEstoque() {
         const idxCamadas = cabecalho.indexOf('camadas');
         const idxCores = cabecalho.indexOf('cores');
 
-        if (idxNome === -1) {
-            grid.innerHTML = `<div class="vazio">Erro: Coluna "Nome" não encontrada na planilha.</div>`;
-            return;
-        }
-
         estoque = {};
+        categoriasEncontradas.clear();
+        coresEncontradas.clear();
+
         linhas.forEach(linha => {
-            // Regex para separar por vírgula, ignorando vírgulas dentro de aspas
             const col = linha.match(/(".*?"|[^",]+)(?=\s*,|\s*$)/g) || [];
             const limpar = (s) => s ? s.trim().replace(/^"|"$/g, '') : '';
             
             const nome = limpar(col[idxNome]);
             if (!nome) return;
 
+            const cat = limpar(col[idxCamadas]) || 'Outros';
+            const cor = limpar(col[idxCores]) || 'Outras';
+
             estoque[nome] = {
                 qtd: parseInt(limpar(col[idxQtd])) || 0,
-                cat: limpar(col[idxCamadas]) || 'Outros',
-                cor: limpar(col[idxCores]) || 'Outras'
+                cat: cat,
+                cor: cor
             };
+
+            // Adiciona aos filtros automáticos
+            categoriasEncontradas.add(cat);
+            coresEncontradas.add(cor);
         });
         
+        gerarBotoesFiltro();
         montarCatalogo();
     } catch (e) {
-        console.error(e);
-        grid.innerHTML = `<div class="vazio">Erro ao carregar dados. Verifique se a planilha está "Publicada na Web" como CSV.</div>`;
+        grid.innerHTML = `<div class="vazio">Erro ao carregar dados.</div>`;
     }
 }
 
-function toggleDrawer() {
-  document.getElementById('drawer').classList.toggle('active');
-  document.getElementById('overlay').style.display = document.getElementById('drawer').classList.contains('active')? 'block' : 'none';
+function gerarBotoesFiltro() {
+    const containerCat = document.getElementById("filtroCategorias");
+    const containerCor = document.getElementById("filtroCores");
+
+    // Limpa e cria botões de Camadas
+    containerCat.innerHTML = `<div class="pill ${categoriaAtiva === 'Todas' ? 'active' : ''}" onclick="filtrarCategoria('Todas', this)">Todas</div>`;
+    Array.from(categoriasEncontradas).sort().forEach(cat => {
+        containerCat.innerHTML += `<div class="pill ${categoriaAtiva === cat ? 'active' : ''}" onclick="filtrarCategoria('${cat}', this)">${cat}</div>`;
+    });
+
+    // Limpa e cria botões de Cores
+    containerCor.innerHTML = `<div class="pill ${corAtiva === 'Todas' ? 'active' : ''}" onclick="filtrarCor('Todas', this)">Todas as cores</div>`;
+    Array.from(coresEncontradas).sort().forEach(cor => {
+        containerCor.innerHTML += `<div class="pill ${corAtiva === cor ? 'active' : ''}" onclick="filtrarCor('${cor}', this)">${cor}</div>`;
+    });
 }
 
-inputPesquisa.addEventListener("input", (e) => {
-  filtroTexto = e.target.value.toLowerCase();
-  if (filtroTexto.length > 0) {
-    categoriaAtiva = "Todas"; corAtiva = "Todas"; apenasDisponiveis = false;
-    checkProntaEntrega.checked = false;
-    document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
-    document.querySelectorAll('.opcoes-filtro').forEach(div => div.firstElementChild.classList.add('active'));
-  }
-  montarCatalogo();
-});
-
-checkProntaEntrega.addEventListener("change", (e) => { apenasDisponiveis = e.target.checked; montarCatalogo(); });
-
 function filtrarCategoria(cat, elemento) {
-  categoriaAtiva = (categoriaAtiva === cat && cat !== "Todas") ? "Todas" : cat;
-  document.querySelectorAll('#filtroCategorias .pill').forEach(p => p.classList.remove('active'));
-  if(categoriaAtiva === "Todas") document.querySelector('#filtroCategorias .pill').classList.add('active');
-  else elemento.classList.add('active');
-  montarCatalogo();
+    categoriaAtiva = cat;
+    document.querySelectorAll('#filtroCategorias .pill').forEach(p => p.classList.remove('active'));
+    elemento.classList.add('active');
+    montarCatalogo();
 }
 
 function filtrarCor(cor, elemento) {
-  corAtiva = (corAtiva === cor && cor !== "Todas") ? "Todas" : cor;
-  document.querySelectorAll('#filtroCores .pill').forEach(p => p.classList.remove('active'));
-  if(corAtiva === "Todas") document.querySelector('#filtroCores .pill').classList.add('active');
-  else elemento.classList.add('active');
-  montarCatalogo();
+    corAtiva = cor;
+    document.querySelectorAll('#filtroCores .pill').forEach(p => p.classList.remove('active'));
+    elemento.classList.add('active');
+    montarCatalogo();
 }
 
 function normalizarTexto(texto) {
-  return texto.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]/g, "");
+    return texto.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]/g, "");
 }
 
 function formatarNomeArquivo(nome) {
-  return nome.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/ /g, "-").replace(/[()]/g, "");
-}
-
-function atualizarTextoFiltro() {
-  let partes = [];
-  if (apenasDisponiveis) partes.push("pronta entrega");
-  if (categoriaAtiva!== "Todas") partes.push(categoriaAtiva.toLowerCase());
-  if (corAtiva!== "Todas") partes.push(corAtiva.toLowerCase());
-  if (partes.length > 0) {
-    statusFiltro.innerText = "Exibindo apenas ID's " + partes.join(" e ");
-    statusFiltro.style.display = 'inline-flex';
-  } else { statusFiltro.style.display = 'none'; }
+    return nome.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/ /g, "-").replace(/[()]/g, "");
 }
 
 function montarCatalogo() {
-  grid.innerHTML = "";
-  let itensExibidos = 0;
-  atualizarTextoFiltro();
+    grid.innerHTML = "";
+    let itensExibidos = 0;
 
-  Object.keys(estoque).sort().forEach(nome => {
-    const dados = estoque[nome];
-    if (apenasDisponiveis && dados.qtd === 0) return;
-    if (categoriaAtiva!== "Todas" && dados.cat!== categoriaAtiva) return;
-    if (corAtiva!== "Todas" && dados.cor!== corAtiva) return;
-    if (filtroTexto && !normalizarTexto(nome).includes(normalizarTexto(filtroTexto))) return;
+    Object.keys(estoque).sort().forEach(nome => {
+        const dados = estoque[nome];
+        
+        if (apenasDisponiveis && dados.qtd === 0) return;
+        if (categoriaAtiva !== "Todas" && dados.cat !== categoriaAtiva) return;
+        if (corAtiva !== "Todas" && dados.cor !== corAtiva) return;
+        if (filtroTexto && !normalizarTexto(nome).includes(normalizarTexto(filtroTexto))) return;
 
-    itensExibidos++;
-    const nomeArquivo = formatarNomeArquivo(nome);
-    const card = document.createElement("div");
-    card.className = "item" + (selecionados.has(nome)? " selecionado" : "");
-    card.innerHTML = `
-      <video src="imagens/${nomeArquivo}.mp4" poster="imagens/${nomeArquivo}.jpg" muted loop playsinline autoplay onerror="this.style.display='none'; this.nextElementSibling.style.display='block'"></video>
-      <img src="imagens/${nomeArquivo}.jpg" style="display:none" onerror="this.src='imagens/sem-foto.jpg'">
-      <p>${nome}</p>
-      <div class="estoque-status ${dados.qtd > 0? 'disponivel' : 'encomenda'}">
-        ${dados.qtd > 0? 'Disponível: '+dados.qtd : 'Por Encomenda'}
-      </div>`;
+        itensExibidos++;
+        const nomeArquivo = formatarNomeArquivo(nome);
+        const card = document.createElement("div");
+        card.className = "item" + (selecionados.has(nome) ? " selecionado" : "");
+        card.innerHTML = `
+            <video src="imagens/${nomeArquivo}.mp4" poster="imagens/${nomeArquivo}.jpg" muted loop playsinline autoplay onerror="this.style.display='none'; this.nextElementSibling.style.display='block'"></video>
+            <img src="imagens/${nomeArquivo}.jpg" style="display:none" onerror="this.src='imagens/sem-foto.jpg'">
+            <p>${nome}</p>
+            <div class="estoque-status ${dados.qtd > 0 ? 'disponivel' : 'encomenda'}">
+                ${dados.qtd > 0 ? 'Disponível: ' + dados.qtd : 'Por Encomenda'}
+            </div>`;
 
-    card.onclick = () => {
-      if (selecionados.has(nome)) selecionados.delete(nome); else selecionados.add(nome);
-      inputPesquisa.value = ""; filtroTexto = "";
-      atualizarPainelAcoes();
-      montarCatalogo();
-    };
-    grid.appendChild(card);
-  });
-  if (itensExibidos === 0) grid.innerHTML = `<div class="vazio">Nenhuma ID encontrada.</div>`;
+        card.onclick = () => {
+            if (selecionados.has(nome)) selecionados.delete(nome); else selecionados.add(nome);
+            atualizarPainelAcoes();
+            card.classList.toggle('selecionado');
+        };
+        grid.appendChild(card);
+    });
+    
+    if (itensExibidos === 0) grid.innerHTML = `<div class="vazio">Nenhuma ID encontrada.</div>`;
 }
 
 function atualizarPainelAcoes() {
-  const areaSelecao = document.getElementById("areaSelecao");
-  const containerTags = document.getElementById("containerTags");
-  const btnZap = document.getElementById("btnEnviar");
-  containerTags.innerHTML = "";
-  if (selecionados.size > 0) {
-    areaSelecao.style.display = "block";
-    selecionados.forEach(nome => {
-      const tag = document.createElement("div");
-      tag.className = "tag-item";
-      tag.innerHTML = `${nome} <button onclick="event.stopPropagation(); removerItem('${nome}')">×</button>`;
-      containerTags.appendChild(tag);
-    });
-    btnZap.classList.remove("oculto");
-    btnZap.innerHTML = selecionados.size === 1 ? "Solicitar informação sobre a ID" : `Solicitar informações (${selecionados.size})`;
-  } else {
-    areaSelecao.style.display = "none";
-    btnZap.classList.add("oculto");
-  }
+    const areaSelecao = document.getElementById("areaSelecao");
+    const containerTags = document.getElementById("containerTags");
+    const btnZap = document.getElementById("btnEnviar");
+    containerTags.innerHTML = "";
+    if (selecionados.size > 0) {
+        areaSelecao.style.display = "block";
+        selecionados.forEach(nome => {
+            const tag = document.createElement("div");
+            tag.className = "tag-item";
+            tag.innerHTML = `${nome} <button onclick="event.stopPropagation(); removerItem('${nome}')">×</button>`;
+            containerTags.appendChild(tag);
+        });
+        btnZap.classList.remove("oculto");
+        btnZap.innerHTML = `Solicitar informações (${selecionados.size})`;
+    } else {
+        areaSelecao.style.display = "none";
+        btnZap.classList.add("oculto");
+    }
 }
 
 function enviarPedido() {
-  const ids = Array.from(selecionados);
-  let mensagem = ids.length === 1 ? `Olá! Tenho interesse na ID ${ids[0]}.` : `Olá! Tenho interesse nas IDs: ${ids.join(", ")}.`;
-  window.open("https://wa.me/5581992665421?text=" + encodeURIComponent(mensagem), "_blank");
+    const ids = Array.from(selecionados);
+    window.open("https://wa.me/5581992665421?text=" + encodeURIComponent("Olá! Tenho interesse nas IDs: " + ids.join(", ")), "_blank");
 }
-  
+
+function toggleDrawer() {
+    document.getElementById('drawer').classList.toggle('active');
+    document.getElementById('overlay').style.display = document.getElementById('drawer').classList.contains('active') ? 'block' : 'none';
+}
+
 function removerItem(nome) { selecionados.delete(nome); atualizarPainelAcoes(); montarCatalogo(); }
 function limparTudo() { selecionados.clear(); atualizarPainelAcoes(); montarCatalogo(); }
-  
+
+inputPesquisa.addEventListener("input", (e) => { filtroTexto = e.target.value.toLowerCase(); montarCatalogo(); });
+checkProntaEntrega.addEventListener("change", (e) => { apenasDisponiveis = e.target.checked; montarCatalogo(); });
+
 carregarEstoque();
 </script>
+
 </body>
 </html>
