@@ -359,7 +359,6 @@ body {
   </div>
 </div>
 
-
 <script>
 let estoque = {};
 let selecionados = new Set();
@@ -386,10 +385,9 @@ async function carregarEstoque() {
 
     const idxNome = cabecalho.indexOf('nome');
     const idxQtd = cabecalho.indexOf('qtd');
-    const idxCat = cabecalho.indexOf('cat');
-    const idxCor = cabecalho.indexOf('cor');
-    const idxFoto = cabecalho.indexOf('foto');
-    const idxVideo = cabecalho.indexOf('video');
+    const idxCamadas = cabecalho.indexOf('camadas');
+    const idxCores = cabecalho.indexOf('cores');
+    const idxMidia = cabecalho.indexOf('midia');
 
     linhas.forEach(linha => {
       if (!linha.trim()) return;
@@ -399,15 +397,25 @@ async function carregarEstoque() {
       const nome = limpar(colunas[idxNome]);
       if (!nome) return;
 
-      const cat = limpar(colunas[idxCat]) || 'Sem categoria';
-      const cor = limpar(colunas[idxCor]) || 'Sem cor';
+      const cat = limpar(colunas[idxCamadas]) || 'Sem categoria';
+      const cor = limpar(colunas[idxCores]) || 'Sem cor';
+      const midia = limpar(colunas[idxMidia]) || '';
+
+      let foto = '';
+      let video = '';
+
+      if (midia.toLowerCase().endsWith('.mp4')) {
+        video = midia;
+      } else if (midia) {
+        foto = midia;
+      }
 
       estoque[nome] = {
         qtd: Number(limpar(colunas[idxQtd])) || 0,
         cat: cat,
         cor: cor,
-        foto: limpar(colunas[idxFoto]),
-        video: limpar(colunas[idxVideo])
+        foto: foto,
+        video: video
       };
 
       categoriasUnicas.add(cat);
@@ -511,7 +519,7 @@ function montarCatalogo() {
 
   Object.keys(estoque).sort().forEach(nome => {
     const dados = estoque[nome];
-    console.log(nome, '| foto:', dados.foto, '| video:', dados.video); // <-- COLA ESSA LINHA
+    console.log(nome, '| foto:', dados.foto, '| video:', dados.video);
 
     if (apenasDisponiveis && dados.qtd === 0) return;
     if (categoriaAtiva!== "Todas" && dados.cat!== categoriaAtiva) return;
@@ -520,18 +528,18 @@ function montarCatalogo() {
 
     itensExibidos++;
     const fotoLimpa = dados.foto? dados.foto.trim() : '';
-const videoLimpo = dados.video? dados.video.trim() : '';
-const nomeFoto = fotoLimpa? `imagens/${fotoLimpa}` : 'imagens/sem-foto.jpg';
-const nomeVideo = videoLimpo? `imagens/${videoLimpo}` : '';
-const temVideo = dados.video && dados.video.trim()!== '';
-const temFoto = dados.foto && dados.foto.trim()!== '';
+    const videoLimpo = dados.video? dados.video.trim() : '';
+    const nomeFoto = fotoLimpa? `imagens/${fotoLimpa}` : 'imagens/sem-foto.jpg';
+    const nomeVideo = videoLimpo? `imagens/${videoLimpo}` : '';
+    const temVideo = videoLimpo!== '';
+    const temFoto = fotoLimpa!== '';
 
-const card = document.createElement("div");
-card.className = "item" + (selecionados.has(nome)? " selecionado" : "");
-card.innerHTML = `
-  ${temVideo? `<video src="${nomeVideo}" ${temFoto? `poster="${nomeFoto}"` : ''} muted loop playsinline autoplay onerror="this.style.display='none'; this.nextElementSibling.style.display='block'"></video>` : ''}
-  <img src="${nomeFoto}" ${temVideo? 'style="display:none"' : ''} onerror="this.src='imagens/sem-foto.jpg'">
-  <p>${nome}</p>
+    const card = document.createElement("div");
+    card.className = "item" + (selecionados.has(nome)? " selecionado" : "");
+    card.innerHTML = `
+      ${temVideo? `<video src="${nomeVideo}" ${temFoto? `poster="${nomeFoto}"` : ''} muted loop playsinline autoplay onerror="this.style.display='none'; this.nextElementSibling.style.display='block'"></video>` : ''}
+      <img src="${nomeFoto}" ${temVideo? 'style="display:none"' : ''} onerror="this.src='imagens/sem-foto.jpg'">
+      <p>${nome}</p>
       <div class="estoque-status ${dados.qtd > 0? 'disponivel' : 'encomenda'}">
         ${dados.qtd > 0? 'Disponível: '+dados.qtd : 'Por Encomenda'}
       </div>`;
