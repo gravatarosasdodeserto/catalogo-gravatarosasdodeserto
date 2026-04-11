@@ -245,7 +245,7 @@ body {
       ID's pronta entrega
     </label>
   </div>
-  </div>
+</div>
 
 <div class="instrucao-texto">
     <p>Selecione as ID's desejadas para solicitar informações sobre os enxertos.</p>
@@ -420,9 +420,19 @@ function montarCatalogo() {
             </div>`;
 
         card.onclick = () => {
-            if (selecionados.has(nome)) selecionados.delete(nome); else selecionados.add(nome);
+            // Se o item estava sendo selecionado através de uma pesquisa...
+            if (filtroTexto !== "") {
+                inputPesquisa.value = ""; // Limpa visualmente o campo
+                filtroTexto = "";        // Limpa a variável do filtro
+                // Adicionamos o item e redesenhamos TUDO (retornando à lista completa)
+                if (selecionados.has(nome)) selecionados.delete(nome); else selecionados.add(nome);
+                montarCatalogo(); 
+            } else {
+                // Comportamento normal sem pesquisa ativa
+                if (selecionados.has(nome)) selecionados.delete(nome); else selecionados.add(nome);
+                card.classList.toggle('selecionado');
+            }
             atualizarPainelAcoes();
-            card.classList.toggle('selecionado');
         };
         grid.appendChild(card);
     });
@@ -447,7 +457,6 @@ function atualizarPainelAcoes() {
         
         btnZap.classList.remove("oculto");
         
-        // Texto dinâmico do botão (Singular vs Plural)
         if (selecionados.size === 1) {
             btnZap.innerHTML = "Solicitar informação sobre a ID selecionada";
         } else {
@@ -462,14 +471,11 @@ function atualizarPainelAcoes() {
 function enviarPedido() {
     const ids = Array.from(selecionados);
     let mensagem = "";
-
-    // Mensagem dinâmica para o WhatsApp
     if (ids.length === 1) {
         mensagem = `Olá! Tenho interesse no enxerto da ID ${ids[0]} e queria saber mais informações e o valor.`;
     } else {
         mensagem = `Olá! Tenho interesse nos enxertos das IDs ${ids.join(", ")} e queria saber mais informações e valores.`;
     }
-
     window.open("https://wa.me/5581992665421?text=" + encodeURIComponent(mensagem), "_blank");
 }
 
