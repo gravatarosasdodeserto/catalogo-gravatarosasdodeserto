@@ -87,31 +87,38 @@ body {
   position: sticky;
   top: 152px;
   z-index: 950;
-  padding: 4px 15px;
+  padding: 6px 15px;
   background: #ffffff;
-  border: none;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  pointer-events: none;
-  gap: 10px;
-  height: 32px;
+  flex-direction: column;
+  gap: 5px;
   border-bottom: 1px solid rgba(0,0,0,0.06);
 }
-.status-filtro {
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--text-main);
-  background: rgba(58, 54, 24, 0.08);
-  display: inline-flex;
-  align-items: center;
-  padding: 4px 12px;
-  border-radius: 50px;
-  pointer-events: auto;
-  line-height: 1;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+
+.filtros-topo-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    min-height: 28px;
+}
+
+.resumo-filtros {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    max-width: 75%; /* Garante que as tags não empurrem o botão Filtrar */
+}
+
+.tag-filtro-ativa {
+    font-size: 9px;
+    background: rgba(58, 54, 24, 0.08);
+    color: var(--text-main);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-weight: 700;
+    text-transform: uppercase;
+    white-space: nowrap;
 }
 
 .btn-abrir-filtros {
@@ -126,12 +133,11 @@ body {
   font-weight: 600;
   font-size: 11px;
   cursor: pointer;
-  pointer-events: auto;
-  line-height: 1;
   height: 24px;
+  flex-shrink: 0;
 }
 
-.btn-abrir-filtros svg { width: 12px; height: 12px; flex-shrink: 0; }
+.btn-abrir-filtros svg { width: 12px; height: 12px; }
 
 /* ===== TEXTO DE INSTRUÇÃO ===== */
 .instrucao-texto {
@@ -143,7 +149,7 @@ body {
     border-radius: 18px;
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255,255,255,0.6);
-    box-shadow: 0 6px 20px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.7);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.06);
 }
 
 .instrucao-texto p { margin: 0; font-size: 13px; font-weight: 500; }
@@ -225,27 +231,20 @@ body {
 </div>
 
 <div class="secao-filtros">
-  <div class="status-filtro" id="statusFiltro" style="display: none;">Exibindo apenas ID's...</div>
-  <button class="btn-abrir-filtros" onclick="toggleDrawer()">
-    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M3 4.5H21M7 12H17M10 19.5H14" stroke="white" stroke-width="2" stroke-linecap="round"/>
-    </svg>
-    <span>Filtrar</span>
-  </button>
+  <div class="filtros-topo-wrapper">
+    <div class="resumo-filtros" id="listaFiltrosAtivos"></div>
+    <button class="btn-abrir-filtros" onclick="toggleDrawer()">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M3 4.5H21M7 12H17M10 19.5H14" stroke="white" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      <span>Filtrar</span>
+    </button>
+  </div>
 </div>
 
 <div class="overlay" id="overlay" onclick="toggleDrawer()"></div>
 
-<div class="drawer-filtros" id="drawer">
-  <button class="fechar-drawer" onclick="toggleDrawer()">✕</button>
-  <div class="wrapper-switch">
-    <label class="switch-disponivel">
-      <input type="checkbox" id="checkProntaEntrega">
-      <span class="slider"></span>
-      ID's pronta entrega
-    </label>
-  </div>
-</div>
+<div class="drawer-filtros" id="drawer"></div>
 
 <div class="instrucao-texto">
     <p>Selecione as ID's desejadas para solicitar informações sobre os enxertos.</p>
@@ -283,6 +282,7 @@ const urlPlanilha = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQHtdljGrbq
 const grid = document.getElementById("gridCatalogo");
 const drawer = document.getElementById("drawer");
 const inputPesquisa = document.getElementById("inputPesquisa");
+const listaFiltrosAtivos = document.getElementById("listaFiltrosAtivos");
 
 async function carregarEstoque() {
     try {
@@ -335,7 +335,6 @@ function gerarInterfaceFiltros() {
         </div>`;
     
     let filtrosHtml = "";
-    
     colunasDeFiltro.forEach(col => {
         const valoresUnicos = new Set();
         Object.values(estoque).forEach(item => {
@@ -371,6 +370,7 @@ function gerarInterfaceFiltros() {
     drawer.innerHTML = headerHtml + filtrosHtml;
     document.getElementById("checkProntaEntrega").addEventListener("change", (e) => { 
         apenasDisponiveis = e.target.checked; 
+        atualizarTagsFiltros();
         montarCatalogo(); 
     });
 }
@@ -380,7 +380,26 @@ function definirFiltro(coluna, valor, elemento) {
     const grupo = elemento.parentElement;
     grupo.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
     elemento.classList.add('active');
+    atualizarTagsFiltros();
     montarCatalogo();
+}
+
+function atualizarTagsFiltros() {
+    listaFiltrosAtivos.innerHTML = "";
+    if (apenasDisponiveis) {
+        const tag = document.createElement("div");
+        tag.className = "tag-filtro-ativa";
+        tag.innerText = "PRONTA ENTREGA";
+        listaFiltrosAtivos.appendChild(tag);
+    }
+    for (let col in filtrosAtivos) {
+        if (filtrosAtivos[col] && filtrosAtivos[col] !== "Todas") {
+            const tag = document.createElement("div");
+            tag.className = "tag-filtro-ativa";
+            tag.innerText = filtrosAtivos[col].toUpperCase();
+            listaFiltrosAtivos.appendChild(tag);
+        }
+    }
 }
 
 function montarCatalogo() {
@@ -420,15 +439,12 @@ function montarCatalogo() {
             </div>`;
 
         card.onclick = () => {
-            // Se o item estava sendo selecionado através de uma pesquisa...
             if (filtroTexto !== "") {
-                inputPesquisa.value = ""; // Limpa visualmente o campo
-                filtroTexto = "";        // Limpa a variável do filtro
-                // Adicionamos o item e redesenhamos TUDO (retornando à lista completa)
+                inputPesquisa.value = "";
+                filtroTexto = "";
                 if (selecionados.has(nome)) selecionados.delete(nome); else selecionados.add(nome);
                 montarCatalogo(); 
             } else {
-                // Comportamento normal sem pesquisa ativa
                 if (selecionados.has(nome)) selecionados.delete(nome); else selecionados.add(nome);
                 card.classList.toggle('selecionado');
             }
@@ -456,7 +472,6 @@ function atualizarPainelAcoes() {
         });
         
         btnZap.classList.remove("oculto");
-        
         if (selecionados.size === 1) {
             btnZap.innerHTML = "Solicitar informação sobre a ID selecionada";
         } else {
