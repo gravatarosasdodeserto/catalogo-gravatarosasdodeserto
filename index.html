@@ -296,6 +296,10 @@ body {
 </div>
 
 <script>
+
+  
+  
+<script>
 let estoque = {};
 let selecionados = new Set();
 let filtroTexto = "";
@@ -303,8 +307,8 @@ let apenasDisponiveis = false;
 let categoriaAtiva = "Todas";
 let corAtiva = "Todas";
 
-// LINK DA PLANILHA CSV
-const urlPlanilha = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQHtdljGrbqvDGysgNUi7MVlGI19jY6WYrIJSckkcX7ylbKP02BWqgt0qHPUTTxqg/pub?gid=1893895788&single=true&output=csv';
+// Link da planilha com parâmetro de tempo para evitar cache no navegador do celular
+const urlPlanilha = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQHtdljGrbqvDGysgNUi7MVlGI19jY6WYrIJSckkcX7ylbKP02BWqgt0qHPUTTxqg/pub?gid=1893895788&single=true&output=csv&t=' + new Date().getTime();
 
 const grid = document.getElementById("gridCatalogo");
 const statusFiltro = document.getElementById("statusFiltro");
@@ -314,8 +318,12 @@ const checkProntaEntrega = document.getElementById("checkProntaEntrega");
 async function carregarEstoque() {
     try {
         const resp = await fetch(urlPlanilha);
+        if (!resp.ok) throw new Error("Não foi possível acessar a planilha");
+        
         const csv = await resp.text();
-        const linhas = csv.split(/\r?\n/);
+        const linhas = csv.split(/\r?\n/).filter(l => l.trim() !== "");
+        
+        // Normaliza o cabeçalho para evitar erros com espaços ou acentos
         const cabecalho = linhas.shift().split(',').map(h => h.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""));
 
         const idxNome = cabecalho.indexOf('nome');
@@ -323,10 +331,17 @@ async function carregarEstoque() {
         const idxCamadas = cabecalho.indexOf('camadas');
         const idxCores = cabecalho.indexOf('cores');
 
+        if (idxNome === -1) {
+            grid.innerHTML = `<div class="vazio">Erro: Coluna "Nome" não encontrada na planilha.</div>`;
+            return;
+        }
+
         estoque = {};
         linhas.forEach(linha => {
+            // Regex para separar por vírgula, ignorando vírgulas dentro de aspas
             const col = linha.match(/(".*?"|[^",]+)(?=\s*,|\s*$)/g) || [];
             const limpar = (s) => s ? s.trim().replace(/^"|"$/g, '') : '';
+            
             const nome = limpar(col[idxNome]);
             if (!nome) return;
 
@@ -336,9 +351,11 @@ async function carregarEstoque() {
                 cor: limpar(col[idxCores]) || 'Outras'
             };
         });
+        
         montarCatalogo();
     } catch (e) {
-        grid.innerHTML = `<div class="vazio">Erro ao carregar dados da planilha.</div>`;
+        console.error(e);
+        grid.innerHTML = `<div class="vazio">Erro ao carregar dados. Verifique se a planilha está "Publicada na Web" como CSV.</div>`;
     }
 }
 
@@ -427,7 +444,7 @@ function montarCatalogo() {
     };
     grid.appendChild(card);
   });
-  if (itensExibidos === 0) grid.innerHTML = `<div class="vazio">Nenhuma ID encontrada com esses filtros.</div>`;
+  if (itensExibidos === 0) grid.innerHTML = `<div class="vazio">Nenhuma ID encontrada.</div>`;
 }
 
 function atualizarPainelAcoes() {
@@ -444,7 +461,7 @@ function atualizarPainelAcoes() {
       containerTags.appendChild(tag);
     });
     btnZap.classList.remove("oculto");
-    btnZap.innerHTML = selecionados.size === 1 ? "Solicitar informação sobre a ID selecionada" : `Solicitar informações sobre as ${selecionados.size} IDs selecionadas`;
+    btnZap.innerHTML = selecionados.size === 1 ? "Solicitar informação sobre a ID" : `Solicitar informações (${selecionados.size})`;
   } else {
     areaSelecao.style.display = "none";
     btnZap.classList.add("oculto");
@@ -453,7 +470,7 @@ function atualizarPainelAcoes() {
 
 function enviarPedido() {
   const ids = Array.from(selecionados);
-  let mensagem = ids.length === 1 ? `Olá! Tenho interesse no enxerto da ID ${ids[0]} e queria saber mais informações e o valor.` : `Olá! Tenho interesse nos enxertos das IDs ${ids.join(", ")} e queria saber mais informações e valores.`;
+  let mensagem = ids.length === 1 ? `Olá! Tenho interesse na ID ${ids[0]}.` : `Olá! Tenho interesse nas IDs: ${ids.join(", ")}.`;
   window.open("https://wa.me/5581992665421?text=" + encodeURIComponent(mensagem), "_blank");
 }
   
@@ -462,6 +479,5 @@ function limparTudo() { selecionados.clear(); atualizarPainelAcoes(); montarCata
   
 carregarEstoque();
 </script>
-
 </body>
 </html>
