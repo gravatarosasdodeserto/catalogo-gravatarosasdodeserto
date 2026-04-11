@@ -517,15 +517,17 @@ function montarCatalogo() {
     if (filtroTexto &&!normalizarTexto(nome).includes(normalizarTexto(filtroTexto))) return;
 
     itensExibidos++;
-    const temVideo = dados.video && dados.video.startsWith('http');
-    const temFoto = dados.foto && dados.foto.startsWith('http');
+    const nomeFoto = dados.foto? `imagens/${dados.foto}` : 'imagens/sem-foto.jpg';
+const nomeVideo = dados.video? `imagens/${dados.video}` : '';
+const temVideo = dados.video && dados.video.trim()!== '';
+const temFoto = dados.foto && dados.foto.trim()!== '';
 
-    const card = document.createElement("div");
-    card.className = "item" + (selecionados.has(nome)? " selecionado" : "");
-    card.innerHTML = `
-      ${temVideo? `<video src="${dados.video}" ${temFoto? `poster="${dados.foto}"` : ''} muted loop playsinline autoplay onerror="this.style.display='none'; this.nextElementSibling.style.display='block'"></video>` : ''}
-      <img src="${temFoto? dados.foto : 'imagens/sem-foto.jpg'}" ${temVideo? 'style="display:none"' : ''} onerror="this.src='imagens/sem-foto.jpg'">
-      <p>${nome}</p>
+const card = document.createElement("div");
+card.className = "item" + (selecionados.has(nome)? " selecionado" : "");
+card.innerHTML = `
+  ${temVideo? `<video src="${nomeVideo}" ${temFoto? `poster="${nomeFoto}"` : ''} muted loop playsinline autoplay onerror="this.style.display='none'; this.nextElementSibling.style.display='block'"></video>` : ''}
+  <img src="${nomeFoto}" ${temVideo? 'style="display:none"' : ''} onerror="this.src='imagens/sem-foto.jpg'">
+  <p>${nome}</p>
       <div class="estoque-status ${dados.qtd > 0? 'disponivel' : 'encomenda'}">
         ${dados.qtd > 0? 'Disponível: '+dados.qtd : 'Por Encomenda'}
       </div>`;
