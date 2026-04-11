@@ -300,15 +300,14 @@ let estoque = {};
 let selecionados = new Set();
 let filtroTexto = "";
 let apenasDisponiveis = false;
-let filtrosAtivos = {}; // Agora armazena múltiplos filtros {coluna: valor}
-let colunasDeFiltro = ["camadas", "cores", "padrao", "especiais"]; // Colunas que viram grupos
+let filtrosAtivos = {}; 
+let colunasDeFiltro = ["camadas", "cores", "padrao", "especiais"]; 
 
 const urlPlanilha = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQHtdljGrbqvDGysgNUi7MVlGI19jY6WYrIJSckkcX7ylbKP02BWqgt0qHPUTTxqg/pub?gid=1893895788&single=true&output=csv&t=' + new Date().getTime();
 
 const grid = document.getElementById("gridCatalogo");
 const drawer = document.getElementById("drawer");
 const inputPesquisa = document.getElementById("inputPesquisa");
-const checkProntaEntrega = document.getElementById("checkProntaEntrega");
 
 async function carregarEstoque() {
     try {
@@ -316,13 +315,16 @@ async function carregarEstoque() {
         const csv = await resp.text();
         const linhas = csv.split(/\r?\n/).filter(l => l.trim() !== "");
         
-        const cabecalho = linhas.shift().split(',').map(h => h.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""));
+        // Mapeia o cabeçalho corretamente
+        const cabecalhoRaw = linhas.shift().split(',');
+        const cabecalho = cabecalhoRaw.map(h => h.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""));
 
         const idxNome = cabecalho.indexOf('nome');
         const idxQtd = cabecalho.indexOf('qtd');
 
         estoque = {};
         linhas.forEach(linha => {
+            // Divide a linha respeitando aspas (caso haja vírgula dentro da célula)
             const col = linha.match(/(".*?"|[^",]+)(?=\s*,|\s*$)/g) || [];
             const limpar = (s) => s ? s.trim().replace(/^"|"$/g, '') : '';
             
@@ -334,22 +336,26 @@ async function carregarEstoque() {
                 filtros: {}
             };
 
-            // Mapeia cada coluna de filtro definida
+            // Busca o valor correto para cada coluna de filtro baseada no índice real dela
             colunasDeFiltro.forEach(colNome => {
-                const idx = cabecalho.indexOf(colNome);
-                estoque[nome].filtros[colNome] = idx !== -1 ? limpar(col[idx]) || 'Outros' : 'Outros';
+                const idxReal = cabecalho.indexOf(colNome);
+                if (idxReal !== -1) {
+                    estoque[nome].filtros[colNome] = limpar(col[idxReal]) || '';
+                } else {
+                    estoque[nome].filtros[colNome] = '';
+                }
             });
         });
         
         gerarInterfaceFiltros();
         montarCatalogo();
     } catch (e) {
+        console.error(e);
         grid.innerHTML = `<div class="vazio">Erro ao carregar dados.</div>`;
     }
 }
 
 function gerarInterfaceFiltros() {
-    // Mantém o botão de fechar e o switch de pronta entrega
     const headerHtml = `
         <button class="fechar-drawer" onclick="toggleDrawer()">✕</button>
         <div class="wrapper-switch">
@@ -364,27 +370,32 @@ function gerarInterfaceFiltros() {
     
     colunasDeFiltro.forEach(col => {
         const valoresUnicos = new Set();
-        Object.values(estoque).forEach(item => valoresUnicos.add(item.filtros[col]));
+        Object.values(estoque).forEach(item => {
+            const val = item.filtros[col];
+            if (val && val !== "") valoresUnicos.add(val);
+        });
         
-        const tituloFormatado = col.charAt(0).toUpperCase() + col.slice(1);
-        
-        filtrosHtml += `
-            <div class="grupo-filtro">
-                <div class="titulo-filtro">${tituloFormatado}</div>
-                <div class="opcoes-filtro">
-                    <div class="pill ${!filtrosAtivos[col] || filtrosAtivos[col] === 'Todas' ? 'active' : ''}" 
-                         onclick="definirFiltro('${col}', 'Todas', this)">Todas</div>
-                    ${Array.from(valoresUnicos).sort().map(val => `
-                        <div class="pill ${filtrosAtivos[col] === val ? 'active' : ''}" 
-                             onclick="definirFiltro('${col}', '${val}', this)">${val}</div>
-                    `).join('')}
-                </div>
-            </div>`;
+        // Só cria o grupo de filtro se houver opções na coluna
+        if (valoresUnicos.size > 0) {
+            const tituloFormatado = col === 'padrao' ? 'Padrão' : col.charAt(0).toUpperCase() + col.slice(1);
+            
+            filtrosHtml += `
+                <div class="grupo-filtro">
+                    <div class="titulo-filtro">${tituloFormatado}</div>
+                    <div class="opcoes-filtro">
+                        <div class="pill ${!filtrosAtivos[col] || filtrosAtivos[col] === 'Todas' ? 'active' : ''}" 
+                             onclick="definirFiltro('${col}', 'Todas', this)">Todas</div>
+                        ${Array.from(valoresUnicos).sort().map(val => `
+                            <div class="pill ${filtrosAtivos[col] === val ? 'active' : ''}" 
+                                 onclick="definirFiltro('${col}', '${val}', this)">${val}</div>
+                        `).join('')}
+                    </div>
+                </div>`;
+        }
     });
 
     drawer.innerHTML = headerHtml + filtrosHtml;
     
-    // Reatribui o evento ao novo checkbox criado dinamicamente
     document.getElementById("checkProntaEntrega").addEventListener("change", (e) => { 
         apenasDisponiveis = e.target.checked; 
         montarCatalogo(); 
@@ -393,12 +404,9 @@ function gerarInterfaceFiltros() {
 
 function definirFiltro(coluna, valor, elemento) {
     filtrosAtivos[coluna] = valor;
-    
-    // Atualiza visual das pills apenas deste grupo
     const grupo = elemento.parentElement;
     grupo.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
     elemento.classList.add('active');
-    
     montarCatalogo();
 }
 
@@ -409,20 +417,17 @@ function montarCatalogo() {
     Object.keys(estoque).sort().forEach(nome => {
         const dados = estoque[nome];
         
-        // Regra de Pronta Entrega
         if (apenasDisponiveis && dados.qtd === 0) return;
 
-        // Regra de Filtros Dinâmicos
         let passaFiltro = true;
         for (let col in filtrosAtivos) {
-            if (filtrosAtivos[col] !== "Todas" && dados.filtros[col] !== filtrosAtivos[col]) {
+            if (filtrosAtivos[col] && filtrosAtivos[col] !== "Todas" && dados.filtros[col] !== filtrosAtivos[col]) {
                 passaFiltro = false;
                 break;
             }
         }
         if (!passaFiltro) return;
 
-        // Regra de Busca por Texto
         if (filtroTexto && !nome.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").includes(filtroTexto)) return;
 
         itensExibidos++;
@@ -489,6 +494,7 @@ inputPesquisa.addEventListener("input", (e) => {
 
 carregarEstoque();
 </script>
+  
 
 </body>
 </html>
