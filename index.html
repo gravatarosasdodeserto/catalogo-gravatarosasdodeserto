@@ -511,14 +511,18 @@ function montarCatalogo() {
 
   Object.keys(estoque).sort().forEach(nome => {
     const dados = estoque[nome];
+    console.log(nome, '| foto:', dados.foto, '| video:', dados.video); // <-- COLA ESSA LINHA
+
     if (apenasDisponiveis && dados.qtd === 0) return;
     if (categoriaAtiva!== "Todas" && dados.cat!== categoriaAtiva) return;
     if (corAtiva!== "Todas" && dados.cor!== corAtiva) return;
     if (filtroTexto &&!normalizarTexto(nome).includes(normalizarTexto(filtroTexto))) return;
 
     itensExibidos++;
-    const nomeFoto = dados.foto? `imagens/${dados.foto}` : 'imagens/sem-foto.jpg';
-const nomeVideo = dados.video? `imagens/${dados.video}` : '';
+    const fotoLimpa = dados.foto? dados.foto.trim() : '';
+const videoLimpo = dados.video? dados.video.trim() : '';
+const nomeFoto = fotoLimpa? `imagens/${fotoLimpa}` : 'imagens/sem-foto.jpg';
+const nomeVideo = videoLimpo? `imagens/${videoLimpo}` : '';
 const temVideo = dados.video && dados.video.trim()!== '';
 const temFoto = dados.foto && dados.foto.trim()!== '';
 
