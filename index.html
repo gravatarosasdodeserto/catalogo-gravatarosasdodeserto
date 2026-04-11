@@ -431,4 +431,37 @@ function montarCatalogo() {
 }
 
 function atualizarPainelAcoes() {
-    
+  const areaSelecao = document.getElementById("areaSelecao");
+  const containerTags = document.getElementById("containerTags");
+  const btnZap = document.getElementById("btnEnviar");
+  containerTags.innerHTML = "";
+  if (selecionados.size > 0) {
+    areaSelecao.style.display = "block";
+    selecionados.forEach(nome => {
+      const tag = document.createElement("div");
+      tag.className = "tag-item";
+      tag.innerHTML = `${nome} <button onclick="event.stopPropagation(); removerItem('${nome}')">×</button>`;
+      containerTags.appendChild(tag);
+    });
+    btnZap.classList.remove("oculto");
+    btnZap.innerHTML = selecionados.size === 1 ? "Solicitar informação sobre a ID selecionada" : `Solicitar informações sobre as ${selecionados.size} IDs selecionadas`;
+  } else {
+    areaSelecao.style.display = "none";
+    btnZap.classList.add("oculto");
+  }
+}
+
+function enviarPedido() {
+  const ids = Array.from(selecionados);
+  let mensagem = ids.length === 1 ? `Olá! Tenho interesse no enxerto da ID ${ids[0]} e queria saber mais informações e o valor.` : `Olá! Tenho interesse nos enxertos das IDs ${ids.join(", ")} e queria saber mais informações e valores.`;
+  window.open("https://wa.me/5581992665421?text=" + encodeURIComponent(mensagem), "_blank");
+}
+  
+function removerItem(nome) { selecionados.delete(nome); atualizarPainelAcoes(); montarCatalogo(); }
+function limparTudo() { selecionados.clear(); atualizarPainelAcoes(); montarCatalogo(); }
+  
+carregarEstoque();
+</script>
+
+</body>
+</html>
