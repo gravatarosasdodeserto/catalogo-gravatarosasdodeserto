@@ -359,7 +359,7 @@ body {
   </div>
 </div>
 
-<script>
+  <script>
 let estoque = {};
 let selecionados = new Set();
 let filtroTexto = "";
@@ -397,8 +397,8 @@ async function carregarEstoque() {
       const nome = limpar(colunas[idxNome]);
       if (!nome) return;
 
-      const cat = limpar(colunas[idxCamadas]) || 'Sem categoria';
-      const cor = limpar(colunas[idxCores]) || 'Sem cor';
+      const cat = limpar(colunas[idxCamadas]);
+      const cor = limpar(colunas[idxCores]);
       const midia = limpar(colunas[idxMidia]) || '';
 
       let foto = '';
@@ -412,14 +412,15 @@ async function carregarEstoque() {
 
       estoque[nome] = {
         qtd: Number(limpar(colunas[idxQtd])) || 0,
-        cat: cat,
-        cor: cor,
+        cat: cat || 'Sem categoria',
+        cor: cor || 'Sem cor',
         foto: foto,
         video: video
       };
 
-      categoriasUnicas.add(cat);
-      coresUnicas.add(cor);
+      const ehValido = (txt) => txt && isNaN(txt) &&!txt.includes('.');
+      if (ehValido(cat)) categoriasUnicas.add(cat);
+      if (ehValido(cor)) coresUnicas.add(cor);
     });
 
     gerarFiltrosDinamicos();
@@ -529,8 +530,8 @@ function montarCatalogo() {
     itensExibidos++;
     const fotoLimpa = dados.foto? dados.foto.trim() : '';
     const videoLimpo = dados.video? dados.video.trim() : '';
-    const nomeFoto = fotoLimpa? `imagens/${fotoLimpa}` : 'imagens/sem-foto.jpg';
-    const nomeVideo = videoLimpo? `imagens/${videoLimpo}` : '';
+    const nomeFoto = fotoLimpa? `imagens/${encodeURI(fotoLimpa)}` : 'imagens/sem-foto.jpg';
+    const nomeVideo = videoLimpo? `imagens/${encodeURI(videoLimpo)}` : '';
     const temVideo = videoLimpo!== '';
     const temFoto = fotoLimpa!== '';
 
@@ -606,7 +607,8 @@ function limparTudo() {
 }
 
 carregarEstoque();
-</script>
+    </script>
 
+  
 </body>
 </html>
