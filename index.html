@@ -5,69 +5,321 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Catálogo | Gravatá Rosas do Deserto</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
 <style>
-:root { --header-bg: #fcfaf7; --body-bg: #e5e0d8; --card-white: #ffffff; --card-selected: #cbc4b7; --text-main: #3a3618; }
+:root {
+  --header-bg: #fcfaf7;
+  --body-bg: #e5e0d8;
+  --card-white: #ffffff;
+  --card-selected: #cbc4b7;
+  --text-main: #3a3618;
+}
+
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-body { font-family: 'Poppins', sans-serif; background-color: var(--body-bg); color: var(--text-main); margin: 0; padding-bottom: 230px; }
-.topbar { padding: 50px 0; position: sticky; top: 0; z-index: 900; display: flex; justify-content: center; align-items: center; background-color: var(--header-bg); border-bottom: 2px solid #ffffff; }
-.logo img { width: 150px; height: auto; }
-.secao-filtros { position: sticky; top: 152px; z-index: 950; padding: 10px; background: #ffffff; display: flex; justify-content: space-between; border-bottom: 1px solid #ddd; }
-.btn-abrir-filtros { background: var(--text-main); color: white; padding: 10px 20px; border-radius: 50px; border: none; font-weight: 600; }
-.catalogo { display: grid; grid-template-columns: repeat(auto-fill, minmax(145px, 1fr)); gap: 15px; padding: 20px; }
-.item { background: var(--card-white); padding: 10px; border-radius: 20px; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
-.item.selecionado { background: var(--card-selected); }
-.item video, .item img { width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 14px; display: block; }
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: var(--body-bg);
+  color: var(--text-main);
+  margin: 0;
+  padding-bottom: 230px;
+}
+
+/* ===== CABEÇALHO ===== */
+.topbar {
+  padding: 50px 0;
+  position: sticky;
+  top: 0;
+  z-index: 900;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.18);
+  overflow: hidden;
+  background-color: var(--header-bg);
+  border-bottom: 2px solid #ffffff;
+}
+
+.topbar::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url('imagens/gravata-cabecalho.jpg');
+  background-size: cover;
+  background-position: center;
+  z-index: 1;
+}
+
+.white-frame {
+  position: absolute;
+  width: 100%;
+  height: auto;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.white-frame::before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100px;
+  background-color: rgba(255, 255, 255, 0.7);
+}
+
+.line-top,.line-bottom {
+  position: absolute;
+  width: 100%;
+  height: 1px;
+  background-color: #ffffff;
+  z-index: 2;
+}
+
+.line-top { top: 0; transform: translateY(-50px); }
+.line-bottom { bottom: 0; transform: translateY(50px); }
+
+.logo { position: relative; z-index: 3; }
+.logo img { width: 150px; height: auto; filter: drop-shadow(0 4px 15px rgba(0,0,0,0.4)); }
+
+/* ===== BARRA DE FILTROS (FIXA) ===== */
+.secao-filtros {
+  position: sticky;
+  top: 152px;
+  z-index: 950;
+  padding: 4px 15px;
+  background: #ffffff;
+  border: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  pointer-events: none;
+  gap: 10px;
+  height: 32px;
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+}
+.status-filtro {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-main);
+  background: rgba(58, 54, 24, 0.08);
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  border-radius: 50px;
+  pointer-events: auto;
+  line-height: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.btn-abrir-filtros {
+  background: var(--text-main);
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 12px;
+  border-radius: 50px;
+  border: none;
+  font-weight: 600;
+  font-size: 11px;
+  cursor: pointer;
+  pointer-events: auto;
+  line-height: 1;
+  height: 24px;
+}
+
+.btn-abrir-filtros svg { width: 12px; height: 12px; flex-shrink: 0; }
+
+/* ===== TEXTO DE INSTRUÇÃO ===== */
+.instrucao-texto {
+    width: calc(100% - 40px);
+    margin: 25px auto 10px;
+    padding: 14px 18px;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.55);
+    border-radius: 18px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.6);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.7);
+}
+
+.instrucao-texto p { margin: 0; font-size: 13px; font-weight: 500; }
+.instrucao-texto span { display: block; margin-top: 5px; font-size: 11px; color: rgba(58, 54, 24, 0.65); }
+
+.oculto { display: none!important; }
+
+/* ===== DRAWER ===== */
+.overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 2000; display: none; backdrop-filter: blur(3px); }
+.drawer-filtros { position: fixed; right: -300px; top: 0; width: 300px; height: 100%; background: var(--body-bg); z-index: 2001; transition: 0.3s; padding: 30px 20px; box-shadow: -5px 0 25px rgba(0,0,0,0.2); display: flex; flex-direction: column; overflow-y: auto; }
+.drawer-filtros.active { right: 0; }
+.fechar-drawer { background: none; border: none; font-size: 24px; cursor: pointer; text-align: right; margin-bottom: 20px; color: var(--text-main); }
+
+.grupo-filtro { margin-bottom: 25px; }
+.titulo-filtro { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; margin-bottom: 12px; opacity: 0.6; }
+.opcoes-filtro { display: flex; flex-wrap: wrap; gap: 8px; }
+
+.pill { padding: 6px 14px; background: #ffffff; border: 1px solid rgba(0,0,0,0.05); border-radius: 50px; font-size: 12px; cursor: pointer; }
+.pill.active { background: var(--text-main); color: white; }
+
+.wrapper-switch { margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid rgba(0,0,0,0.1); }
+.switch-disponivel { display: inline-flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 600; cursor: pointer; }
+.switch-disponivel input { display: none; }
+.switch-disponivel .slider { width: 34px; height: 18px; background: #c7c1b5; border-radius: 20px; position: relative; transition: 0.3s; }
+.switch-disponivel .slider::before { content: ""; position: absolute; width: 12px; height: 12px; left: 3px; top: 3px; background: white; border-radius: 50%; transition: 0.3s; }
+.switch-disponivel input:checked +.slider { background: var(--text-main); }
+.switch-disponivel input:checked +.slider::before { transform: translateX(16px); }
+
+/* ===== GRID ===== */
+.catalogo {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 15px;
+    width: 100%;
+    padding: 0 20px;
+    margin: 0;
+}
+
+.item { background: var(--card-white); padding: 10px; border-radius: 20px; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.05); transition: all 0.2s; }
+.item.selecionado { background: var(--card-selected)!important; transform: scale(0.96); }
+.item video,.item img { width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 14px; }
 .item p { text-align: center; font-size: 13px; font-weight: 600; margin: 10px 0 2px 0; }
 .estoque-status { text-align: center; font-size: 10px; font-weight: 700; text-transform: uppercase; }
 .disponivel { color: #2d5a27; }
-.encomenda { color: #8a8471; }
-.rodape-acoes { position: fixed; bottom: 0; left: 0; width: 100%; background: white; padding: 15px; z-index: 1000; border-top: 2px solid #ddd; }
-.campo-busca { width: 100%; padding: 12px; border-radius: 50px; border: 1px solid #ddd; text-align: center; margin-bottom: 10px; }
-.btn-whatsapp { width: 100%; padding: 15px; background: var(--text-main); color: white; border: none; border-radius: 50px; font-weight: 600; }
-.oculto { display: none; }
-.overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 2000; display: none; }
-.drawer-filtros { position: fixed; right: -300px; top: 0; width: 300px; height: 100%; background: var(--body-bg); z-index: 2001; transition: 0.3s; padding: 40px 20px; overflow-y: auto; }
-.drawer-filtros.active { right: 0; }
-.pill { padding: 8px 15px; background: #ffffff; border-radius: 50px; font-size: 12px; cursor: pointer; margin: 4px; display: inline-block; }
-.pill.active { background: var(--text-main); color: white; }
+.encomenda { color: #8a8471; opacity: 0.7; }
+
+/* ===== RODAPÉ ===== */
+.rodape-acoes { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(229, 224, 216, 0.98); backdrop-filter: blur(12px); padding: 10px 20px 25px; z-index: 1000; border-top: 2px solid #ffffff; }
+.container-rodape { max-width: 500px; margin: 0 auto; display: flex; flex-direction: column; gap: 8px; }
+
+.caixa-selecao {
+  display: none;
+  background: #ffffff;
+  padding: 6px 10px;
+  border-radius: 15px;
+  max-height: 70px;
+  overflow-y: auto;
+  border: 1px solid rgba(0,0,0,0.05);
+  margin-bottom: 2px;
+}
+.topo-caixa { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; font-size: 10px; font-weight: 600; }
+.limpar { color: #8b2d2d; cursor: pointer; text-decoration: underline; }
+.tag-item { font-size: 10px; background: #f0f0eb; padding: 4px 10px; border-radius: 8px; display: inline-flex; align-items: center; gap: 6px; margin: 0 4px 4px 0; }
+.tag-item button { border: none; background: none; color: #8b2d2d; cursor: pointer; font-weight: bold; font-size: 12px; }
+
+.campo-busca { width: 100%; padding: 12px 20px; border-radius: 50px; border: 1.5px solid rgba(0,0,0,0.1); background: white; outline: none; text-align: center; }
+.btn-whatsapp { width: 100%; padding: 15px; background: var(--text-main); color: white; border: none; border-radius: 50px; font-weight: 600; cursor: pointer; }
+.vazio { grid-column: 1/-1; text-align: center; padding: 60px; opacity: 0.5; }
 </style>
 </head>
 <body>
-<div class="topbar"><div class="logo"><img src="logo.png"></div></div>
-<div class="secao-filtros"><div id="statusFiltro"></div><button class="btn-abrir-filtros" onclick="toggleDrawer()">Filtrar</button></div>
-<div class="overlay" id="overlay" onclick="toggleDrawer()"></div>
-<div class="drawer-filtros" id="drawer">
-    <h3 onclick="toggleDrawer()">✕ Fechar</h3>
-    <label><input type="checkbox" id="checkProntaEntrega"> Apenas Pronta Entrega</label>
-    <p><strong>Camadas:</strong></p><div id="filtroCategorias"></div>
-    <p><strong>Cores:</strong></p><div id="filtroCores"></div>
+
+<div class="topbar">
+  <div class="logo"><img src="logo.png"></div>
+  <div class="white-frame">
+    <div class="line-top"></div>
+    <div class="line-bottom"></div>
+  </div>
 </div>
-<div class="catalogo" id="gridCatalogo"></div>
+
+<div class="secao-filtros">
+  <div class="status-filtro" id="statusFiltro" style="display: none;">Exibindo apenas ID's...</div>
+  <button class="btn-abrir-filtros" onclick="toggleDrawer()">
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M3 4.5H21M7 12H17M10 19.5H14" stroke="white" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+    <span>Filtrar</span>
+  </button>
+</div>
+
+<div class="overlay" id="overlay" onclick="toggleDrawer()"></div>
+
+<div class="drawer-filtros" id="drawer">
+  <button class="fechar-drawer" onclick="toggleDrawer()">✕</button>
+  <div class="wrapper-switch">
+    <label class="switch-disponivel">
+      <input type="checkbox" id="checkProntaEntrega">
+      <span class="slider"></span>
+      ID's pronta entrega
+    </label>
+  </div>
+
+  <div class="grupo-filtro">
+    <div class="titulo-filtro">Tipo e Camadas</div>
+    <div class="opcoes-filtro" id="filtroCategorias">
+      <div class="pill active" onclick="filtrarCategoria('Todas', this)">Todas</div>
+      <div class="pill" onclick="filtrarCategoria('Singela', this)">Singela</div>
+      <div class="pill" onclick="filtrarCategoria('Dupla', this)">Dupla</div>
+      <div class="pill" onclick="filtrarCategoria('Tripla+', this)">Tripla+</div>
+      <div class="pill" onclick="filtrarCategoria('Mutante', this)">Mutante</div>
+      <div class="pill" onclick="filtrarCategoria('Variegata', this)">Variegata</div>
+    </div>
+  </div>
+
+  <div class="grupo-filtro">
+    <div class="titulo-filtro">Famílias de Cores</div>
+    <div class="opcoes-filtro" id="filtroCores">
+      <div class="pill active" onclick="filtrarCor('Todas', this)">Todas as cores</div>
+      <div class="pill" onclick="filtrarCor('Escuras', this)">Escuras</div>
+      <div class="pill" onclick="filtrarCor('Claras', this)">Claras</div>
+      <div class="pill" onclick="filtrarCor('Amarelas', this)">Amarelas</div>
+      <div class="pill" onclick="filtrarCor('Vermelhas', this)">Vermelhas</div>
+      <div class="pill" onclick="filtrarCor('Rosas', this)">Rosas</div>
+      <div class="pill" onclick="filtrarCor('Matizadas', this)">Matizadas</div>
+    </div>
+  </div>
+</div>
+
+<div class="instrucao-texto">
+    <p>Selecione as ID's desejadas para solicitar informações sobre os enxertos.</p>
+    <span>Variedades sem pronta entrega podem ser encomendadas sem custo.</span>
+</div>
+
+<div class="catalogo" id="gridCatalogo">
+  <p style="text-align:center; grid-column: 1/-1; padding: 50px;">Carregando ID's...</p>
+</div>
+
 <div class="rodape-acoes">
-    <div id="areaSelecao" style="display:none; margin-bottom:10px; font-size:12px;"><strong>Selecionados:</strong> <span id="containerTags"></span></div>
-    <input type="text" id="inputPesquisa" class="campo-busca" placeholder="Buscar ID...">
+  <div class="container-rodape">
+    <div class="caixa-selecao" id="areaSelecao">
+      <div class="topo-caixa">
+        <span>ID's selecionadas:</span>
+        <span class="limpar" onclick="limparTudo()">Limpar tudo</span>
+      </div>
+      <div id="containerTags"></div>
+    </div>
+    <input type="text" id="inputPesquisa" class="campo-busca" placeholder="Buscar ID pelo nome...">
     <button id="btnEnviar" class="btn-whatsapp oculto" onclick="enviarPedido()"></button>
+  </div>
 </div>
 
 <script>
-let estoque = {}; let selecionados = new Set();
-let filtroTexto = ""; let apenasDisponiveis = false;
-let categoriaAtiva = "Todas"; let corAtiva = "Todas";
-let categoriasUnicas = new Set(); let coresUnicas = new Set();
+let estoque = {};
+let selecionados = new Set();
+let filtroTexto = "";
+let apenasDisponiveis = false;
+let categoriaAtiva = "Todas";
+let corAtiva = "Todas";
+
+// LINK DA PLANILHA CSV
+const urlPlanilha = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQHtdljGrbqvDGysgNUi7MVlGI19jY6WYrIJSckkcX7ylbKP02BWqgt0qHPUTTxqg/pub?gid=1893895788&single=true&output=csv';
+
+const grid = document.getElementById("gridCatalogo");
+const statusFiltro = document.getElementById("statusFiltro");
+const inputPesquisa = document.getElementById("inputPesquisa");
+const checkProntaEntrega = document.getElementById("checkProntaEntrega");
 
 async function carregarEstoque() {
-    // LINK CORRIGIDO PARA CSV:
-    const url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQHtdljGrbqvDGysgNUi7MVlGI19jY6WYrIJSckkcX7ylbKP02BWqgt0qHPUTTxqg/pub?gid=1893895788&single=true&output=csv';
-    
     try {
-        const resp = await fetch(url);
+        const resp = await fetch(urlPlanilha);
         const csv = await resp.text();
         const linhas = csv.split(/\r?\n/);
         const cabecalho = linhas.shift().split(',').map(h => h.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""));
 
         const idxNome = cabecalho.indexOf('nome');
         const idxQtd = cabecalho.indexOf('qtd');
-        const idxMidia = cabecalho.indexOf('midia');
         const idxCamadas = cabecalho.indexOf('camadas');
         const idxCores = cabecalho.indexOf('cores');
 
@@ -80,66 +332,103 @@ async function carregarEstoque() {
 
             estoque[nome] = {
                 qtd: parseInt(limpar(col[idxQtd])) || 0,
-                midia: limpar(col[idxMidia]),
                 cat: limpar(col[idxCamadas]) || 'Outros',
                 cor: limpar(col[idxCores]) || 'Outras'
             };
-            categoriasUnicas.add(estoque[nome].cat);
-            coresUnicas.add(estoque[nome].cor);
         });
-        gerarFiltros();
         montarCatalogo();
-    } catch (e) { document.getElementById("gridCatalogo").innerHTML = "Erro na Planilha."; }
+    } catch (e) {
+        grid.innerHTML = `<div class="vazio">Erro ao carregar dados da planilha.</div>`;
+    }
 }
 
-function gerarFiltros() {
-    const dCat = document.getElementById('filtroCategorias');
-    const dCor = document.getElementById('filtroCores');
-    dCat.innerHTML = '<div class="pill active" onclick="setCat(\'Todas\', this)">Todas</div>';
-    Array.from(categoriasUnicas).sort().forEach(c => dCat.innerHTML += `<div class="pill" onclick="setCat('${c}', this)">${c}</div>`);
-    dCor.innerHTML = '<div class="pill active" onclick="setCor(\'Todas\', this)">Todas</div>';
-    Array.from(coresUnicas).sort().forEach(c => dCor.innerHTML += `<div class="pill" onclick="setCor('${c}', this)">${c}</div>`);
+function toggleDrawer() {
+  document.getElementById('drawer').classList.toggle('active');
+  document.getElementById('overlay').style.display = document.getElementById('drawer').classList.contains('active')? 'block' : 'none';
 }
 
-function setCat(c, el) { categoriaAtiva = c; document.querySelectorAll('#filtroCategorias .pill').forEach(p => p.classList.remove('active')); el.classList.add('active'); montarCatalogo(); }
-function setCor(c, el) { corAtiva = c; document.querySelectorAll('#filtroCores .pill').forEach(p => p.classList.remove('active')); el.classList.add('active'); montarCatalogo(); }
+inputPesquisa.addEventListener("input", (e) => {
+  filtroTexto = e.target.value.toLowerCase();
+  if (filtroTexto.length > 0) {
+    categoriaAtiva = "Todas"; corAtiva = "Todas"; apenasDisponiveis = false;
+    checkProntaEntrega.checked = false;
+    document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.opcoes-filtro').forEach(div => div.firstElementChild.classList.add('active'));
+  }
+  montarCatalogo();
+});
+
+checkProntaEntrega.addEventListener("change", (e) => { apenasDisponiveis = e.target.checked; montarCatalogo(); });
+
+function filtrarCategoria(cat, elemento) {
+  categoriaAtiva = (categoriaAtiva === cat && cat !== "Todas") ? "Todas" : cat;
+  document.querySelectorAll('#filtroCategorias .pill').forEach(p => p.classList.remove('active'));
+  if(categoriaAtiva === "Todas") document.querySelector('#filtroCategorias .pill').classList.add('active');
+  else elemento.classList.add('active');
+  montarCatalogo();
+}
+
+function filtrarCor(cor, elemento) {
+  corAtiva = (corAtiva === cor && cor !== "Todas") ? "Todas" : cor;
+  document.querySelectorAll('#filtroCores .pill').forEach(p => p.classList.remove('active'));
+  if(corAtiva === "Todas") document.querySelector('#filtroCores .pill').classList.add('active');
+  else elemento.classList.add('active');
+  montarCatalogo();
+}
+
+function normalizarTexto(texto) {
+  return texto.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]/g, "");
+}
+
+function formatarNomeArquivo(nome) {
+  return nome.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/ /g, "-").replace(/[()]/g, "");
+}
+
+function atualizarTextoFiltro() {
+  let partes = [];
+  if (apenasDisponiveis) partes.push("pronta entrega");
+  if (categoriaAtiva!== "Todas") partes.push(categoriaAtiva.toLowerCase());
+  if (corAtiva!== "Todas") partes.push(corAtiva.toLowerCase());
+  if (partes.length > 0) {
+    statusFiltro.innerText = "Exibindo apenas ID's " + partes.join(" e ");
+    statusFiltro.style.display = 'inline-flex';
+  } else { statusFiltro.style.display = 'none'; }
+}
 
 function montarCatalogo() {
-    const grid = document.getElementById("gridCatalogo");
-    grid.innerHTML = "";
-    Object.keys(estoque).sort().forEach(nome => {
-        const d = estoque[nome];
-        if (apenasDisponiveis && d.qtd === 0) return;
-        if (categoriaAtiva !== "Todas" && d.cat !== categoriaAtiva) return;
-        if (corAtiva !== "Todas" && d.cor !== corAtiva) return;
-        if (filtroTexto && !nome.toLowerCase().includes(filtroTexto)) return;
+  grid.innerHTML = "";
+  let itensExibidos = 0;
+  atualizarTextoFiltro();
 
-        const m = d.midia.trim();
-        const url = m ? `imagens/${encodeURIComponent(m)}` : 'imagens/sem-foto.jpg';
-        const card = document.createElement("div");
-        card.className = "item" + (selecionados.has(nome) ? " selecionado" : "");
-        card.innerHTML = `<img src="${url}" onerror="this.src='imagens/sem-foto.jpg'"><p>${nome}</p><div class="${d.qtd > 0 ? 'disponivel' : 'encomenda'}">${d.qtd > 0 ? 'Disponível' : 'Encomenda'}</div>`;
-        card.onclick = () => {
-            selecionados.has(nome) ? selecionados.delete(nome) : selecionados.add(nome);
-            card.classList.toggle('selecionado');
-            document.getElementById("btnEnviar").classList.toggle('oculto', selecionados.size === 0);
-            document.getElementById("areaSelecao").style.display = selecionados.size > 0 ? 'block' : 'none';
-            document.getElementById("containerTags").innerText = Array.from(selecionados).join(", ");
-            document.getElementById("btnEnviar").innerText = `Solicitar ${selecionados.size} itens`;
-        };
-        grid.appendChild(card);
-    });
+  Object.keys(estoque).sort().forEach(nome => {
+    const dados = estoque[nome];
+    if (apenasDisponiveis && dados.qtd === 0) return;
+    if (categoriaAtiva!== "Todas" && dados.cat!== categoriaAtiva) return;
+    if (corAtiva!== "Todas" && dados.cor!== corAtiva) return;
+    if (filtroTexto && !normalizarTexto(nome).includes(normalizarTexto(filtroTexto))) return;
+
+    itensExibidos++;
+    const nomeArquivo = formatarNomeArquivo(nome);
+    const card = document.createElement("div");
+    card.className = "item" + (selecionados.has(nome)? " selecionado" : "");
+    card.innerHTML = `
+      <video src="imagens/${nomeArquivo}.mp4" poster="imagens/${nomeArquivo}.jpg" muted loop playsinline autoplay onerror="this.style.display='none'; this.nextElementSibling.style.display='block'"></video>
+      <img src="imagens/${nomeArquivo}.jpg" style="display:none" onerror="this.src='imagens/sem-foto.jpg'">
+      <p>${nome}</p>
+      <div class="estoque-status ${dados.qtd > 0? 'disponivel' : 'encomenda'}">
+        ${dados.qtd > 0? 'Disponível: '+dados.qtd : 'Por Encomenda'}
+      </div>`;
+
+    card.onclick = () => {
+      if (selecionados.has(nome)) selecionados.delete(nome); else selecionados.add(nome);
+      inputPesquisa.value = ""; filtroTexto = "";
+      atualizarPainelAcoes();
+      montarCatalogo();
+    };
+    grid.appendChild(card);
+  });
+  if (itensExibidos === 0) grid.innerHTML = `<div class="vazio">Nenhuma ID encontrada com esses filtros.</div>`;
 }
 
-function enviarPedido() {
-    window.open(`https://wa.me/5581992665421?text=Interesse em: ${Array.from(selecionados).join(", ")}`);
-}
-
-function toggleDrawer() { document.getElementById('drawer').classList.toggle('active'); document.getElementById('overlay').style.display = document.getElementById('drawer').classList.contains('active') ? 'block' : 'none'; }
-document.getElementById("inputPesquisa").addEventListener("input", (e) => { filtroTexto = e.target.value.toLowerCase(); montarCatalogo(); });
-document.getElementById("checkProntaEntrega").addEventListener("change", (e) => { apenasDisponiveis = e.target.checked; montarCatalogo(); });
-
-carregarEstoque();
-</script>
-</body>
-</html>
+function atualizarPainelAcoes() {
+    
