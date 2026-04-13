@@ -1,229 +1,207 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Pro | Gravatá Rosas</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-    <style>
-        :root { --primary: #3a3618; --bg: #f4f1ee; --white: #ffffff; --success: #2d5a27; --border: #e0e0e0; --accent: #8b2d2d; }
-        body { font-family: 'Poppins', sans-serif; background: var(--bg); margin: 0; padding: 10px; color: var(--primary); }
-        .container { max-width: 1100px; margin: 0 auto; background: var(--white); padding: 20px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
-        .topo-fixo { position: sticky; top: 0; background: var(--white); padding: 10px 0; z-index: 100; border-bottom: 2px solid var(--bg); display: flex; flex-direction: column; gap: 10px; }
-        .acoes-topo { display: flex; gap: 10px; }
-        .busca-admin { flex-grow: 1; padding: 12px; border-radius: 10px; border: 1.5px solid var(--border); font-size: 16px; outline: none; }
-        .btn-nova-id { background: var(--primary); color: white; border: none; padding: 0 20px; border-radius: 10px; cursor: pointer; font-weight: 600; font-size: 14px; }
-        table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 13px; }
-        th { background: var(--primary); color: white; padding: 10px; text-align: left; position: sticky; top: 120px; z-index: 50; }
-        td { padding: 8px; border-bottom: 1px solid #eee; vertical-align: middle; }
-        .thumb-admin { width: 50px; height: 50px; border-radius: 8px; object-fit: cover; background: #eee; }
-        .edit-input { width: 100%; padding: 5px; border: 1px solid var(--border); border-radius: 4px; font-size: 12px; box-sizing: border-box; }
-        .qtd-input { width: 60px; text-align: center; font-weight: bold; }
-        .btn-salvar { background: var(--success); color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-weight: 600; width: 100%; }
-        .btn-salvar:disabled { background: #ccc; }
-        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 2000; align-items: center; justify-content: center; padding: 20px; }
-        .modal-content { background: white; padding: 25px; border-radius: 15px; width: 100%; max-width: 400px; position: relative; }
-        .close-modal { position: absolute; top: 15px; right: 15px; cursor: pointer; font-size: 20px; }
-        .status-toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); padding: 12px 25px; border-radius: 50px; color: white; display: none; z-index: 3000; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Pro | Gravatá Rosas</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+:root { --primary:#3a3618; --bg:#f4f1ee; --white:#fff; --success:#2d5a27; --border:#e0e0e0; }
+body { font-family:Poppins; background:var(--bg); margin:0; padding:10px; }
+.container { max-width:1100px; margin:auto; background:#fff; padding:20px; border-radius:15px; }
+table { width:100%; margin-top:20px; border-collapse:collapse; }
+td,th { padding:8px; border-bottom:1px solid #eee; }
+.thumb-admin { width:50px; height:50px; object-fit:cover; border-radius:8px; }
+.edit-input { width:100%; padding:5px; }
+.btn-salvar { background:var(--success); color:white; border:none; padding:8px; cursor:pointer; }
+.modal { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); align-items:center; justify-content:center; }
+.modal-content { background:white; padding:20px; border-radius:10px; }
+.status-toast { position:fixed; bottom:20px; left:50%; transform:translateX(-50%); padding:10px 20px; color:white; display:none; border-radius:50px; }
+</style>
 </head>
+
 <body>
 
 <div class="container">
-    <div class="topo-fixo">
-        <h2 style="margin:0; font-size: 18px;">Gerenciador de Catálogo Gravatá</h2>
-        <div class="acoes-topo">
-            <input type="text" id="inputBusca" class="busca-admin" placeholder="Buscar ID..." oninput="filtrarTabela()">
-            <button class="btn-nova-id" onclick="abrirModal()">+ Nova ID</button>
-        </div>
-    </div>
-    <div id="loader" style="text-align:center; padding: 50px;">Carregando dados...</div>
-    <table id="tabelaAdmin" style="display:none;">
-        <thead>
-            <tr>
-                <th>Foto</th>
-                <th>Nome / ID</th>
-                <th>Estoque</th>
-                <th>Filtros</th>
-                <th>Link Mídia (Drive)</th>
-                <th>Ação</th>
-            </tr>
-        </thead>
-        <tbody id="tabelaCorpo"></tbody>
-    </table>
+
+<h2>Gerenciador</h2>
+
+<button onclick="abrirModal()">+ Nova ID</button>
+
+<div id="loader">Carregando...</div>
+
+<table id="tabelaAdmin" style="display:none;">
+<thead>
+<tr>
+<th>Foto</th>
+<th>Nome</th>
+<th>Qtd</th>
+<th>Filtros</th>
+<th>Mídia</th>
+<th>Ação</th>
+</tr>
+</thead>
+<tbody id="tabelaCorpo"></tbody>
+</table>
+
 </div>
 
+<!-- MODAL -->
 <div id="modalNovaID" class="modal">
-    <div class="modal-content">
-        <span class="close-modal" onclick="fecharModal()">×</span>
-        <h3>Adicionar Nova Rosa</h3>
-        <form id="formNovaID" onsubmit="criarNovaID(event)">
-            <label>Nome da ID (Obrigatório)</label>
-            <input type="text" id="new-nome" class="edit-input" required>
-            <label>Quantidade</label>
-            <input type="number" id="new-qtd" class="edit-input" value="0">
-            <label>Cores</label>
-            <input type="text" id="new-cores" class="edit-input">
-            <label>Camadas</label>
-            <input type="text" id="new-camadas" class="edit-input">
-            <label>Padrão</label>
-            <input type="text" id="new-padrao" class="edit-input">
-            <label>ID Mídia</label>
-            <input type="text" id="new-midia" class="edit-input">
-            <button type="submit" id="btnCriar" class="btn-salvar" style="margin-top:20px;">CRIAR ID NA PLANILHA</button>
-        </form>
-    </div>
+<div class="modal-content">
+<form onsubmit="criarNovaID(event)">
+<input id="new-nome" placeholder="Nome" required>
+<input id="new-qtd" type="number" value="0">
+<input id="new-cores" placeholder="Cores">
+<input id="new-camadas" placeholder="Camadas">
+<input id="new-padrao" placeholder="Padrão">
+<input id="new-midia" placeholder="ID imagem Drive">
+<button type="submit">CRIAR</button>
+</form>
+<button onclick="fecharModal()">Fechar</button>
 </div>
+</div>
+
 <div id="status" class="status-toast"></div>
 
 <script>
-const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxs8MmNSgkb43F1vZDCtFE6AiRvWtjlTp67QxpLMcfA9mnWInHQOBm8iZuEqpF6Ctg0hA/exec';
 
-const urlPlanilha = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSochNnj1ihxWjFv_87wiDS9-ZakV1LrmdQWfZMAZMGRHf9pqCBXKQpkfQ6BDMlxwYE8E2JkWUVRYOG/pub?gid=1893895788&single=true&output=csv&t=' + Math.random();
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxs8MmNSgkb43F1vZDCtFE6AiRvWtjlTp67QxpLMcfA9mnWInHQOBm8iZuEqpF6Ctg0hA/exec";
+
+const urlPlanilha = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSochNnj1ihxWjFv_87wiDS9-ZakV1LrmdQWfZMAZMGRHf9pqCBXKQpkfQ6BDMlxwYE8E2JkWUVRYOG/pub?gid=1893895788&single=true&output=csv&t=" + Math.random();
 
 let dadosCompletos = [];
 
-function cleanID(name) { return name.replace(/[^a-zA-Z0-9]/g, '_'); }
+function cleanID(name){ return name.replace(/[^a-zA-Z0-9]/g,'_'); }
 
-async function carregarDados() {
-    try {
+// ===================== CARREGAR =====================
+async function carregarDados(){
+    try{
         const resp = await fetch(urlPlanilha);
         const text = await resp.text();
 
-        const linhas = text.split(/\r?\n/).filter(l => l.trim() !== "");
-        const matrix = linhas.map(line => {
-            const cells = line.match(/(".*?"|[^",\r\n]+)(?=\s*,|\s*$|\s*\r?\n)/g) || [];
-            return cells.map(c => c.trim().replace(/^"|"$/g, ''));
+        const linhas = text.split(/\r?\n/).filter(l=>l);
+        const header = linhas.shift().split(',');
+
+        dadosCompletos = linhas.map(l=>{
+            let obj={};
+            l.split(',').forEach((c,i)=>obj[header[i].toLowerCase()]=c);
+            return obj;
         });
 
-        const cabecalho = matrix.shift().map(h => h.toLowerCase().trim());
+        document.getElementById("loader").style.display="none";
+        document.getElementById("tabelaAdmin").style.display="table";
 
-        dadosCompletos = matrix.map(col => {
-            let obj = {};
-            cabecalho.forEach((tit, i) => obj[tit] = col[i] || "");
-            return obj;
-        }).filter(d => d.nome);
+        renderizarTabela();
 
-        document.getElementById('loader').style.display = 'none';
-        document.getElementById('tabelaAdmin').style.display = 'table';
-
-        renderizarTabela(dadosCompletos);
-    } catch (e) {
-        console.error(e);
-    }
+    }catch(e){ console.error(e); }
 }
 
-function renderizarTabela(itens) {
-    const corpo = document.getElementById("tabelaCorpo");
-    corpo.innerHTML = "";
+// ===================== RENDER =====================
+function renderizarTabela(){
+    const corpo=document.getElementById("tabelaCorpo");
+    corpo.innerHTML="";
 
-    itens.forEach(item => {
-        const idLimpa = cleanID(item.nome);
+    dadosCompletos.forEach(item=>{
+        const id=cleanID(item.nome);
 
-        let fotoSrc = item.midia
-            ? (item.midia.startsWith("http")
-                ? item.midia
-                : `https://drive.google.com/uc?export=view&id=${item.midia}`)
-            : `imagens/${item.nome.toLowerCase().replace(/ /g, "-")}.jpg`;
+        let img=item.midia
+            ? `https://drive.google.com/uc?export=view&id=${item.midia}`
+            : "imagens/sem-foto.jpg";
 
-        const tr = document.createElement("tr");
+        const tr=document.createElement("tr");
 
-        tr.innerHTML = `
-            <td><img src="${fotoSrc}" class="thumb-admin" onerror="this.src='imagens/sem-foto.jpg'"></td>
-            <td><strong>${item.nome}</strong></td>
-            <td><input type="number" id="qtd-${idLimpa}" value="${item.qtd}"></td>
-            <td>
-                <input type="text" id="cores-${idLimpa}" value="${item.cores || ''}">
-                <input type="text" id="camadas-${idLimpa}" value="${item.camadas || ''}">
-                <input type="text" id="padrao-${idLimpa}" value="${item.padrao || ''}">
-            </td>
-            <td><input type="text" id="midia-${idLimpa}" value="${item.midia || ''}"></td>
-            <td><button onclick="salvarAlteracao('${item.nome}')">SALVAR</button></td>
+        tr.innerHTML=`
+        <td><img src="${img}" class="thumb-admin"></td>
+        <td>${item.nome}</td>
+        <td><input id="qtd-${id}" value="${item.qtd||0}"></td>
+        <td>
+            <input id="cores-${id}" value="${item.cores||''}">
+            <input id="camadas-${id}" value="${item.camadas||''}">
+            <input id="padrao-${id}" value="${item.padrao||''}">
+        </td>
+        <td><input id="midia-${id}" value="${item.midia||''}"></td>
+        <td><button onclick="salvar('${item.nome}')">Salvar</button></td>
         `;
 
         corpo.appendChild(tr);
     });
 }
 
-// ✅ CRIAR
-async function criarNovaID(e) {
+// ===================== CRIAR =====================
+async function criarNovaID(e){
     e.preventDefault();
 
-    const payload = {
-        action: "create",
-        nome: document.getElementById("new-nome").value,
-        qtd: document.getElementById("new-qtd").value,
-        cores: document.getElementById("new-cores").value,
-        camadas: document.getElementById("new-camadas").value,
-        padrao: document.getElementById("new-padrao").value,
-        midia: document.getElementById("new-midia").value
+    const payload={
+        action:"create",
+        nome:document.getElementById("new-nome").value,
+        qtd:document.getElementById("new-qtd").value,
+        cores:document.getElementById("new-cores").value,
+        camadas:document.getElementById("new-camadas").value,
+        padrao:document.getElementById("new-padrao").value,
+        midia:document.getElementById("new-midia").value
     };
 
-    try {
-        const res = await fetch(WEB_APP_URL, {
-            method: 'POST',
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(payload)
+    try{
+        await fetch(WEB_APP_URL,{
+            method:"POST",
+            mode:"no-cors",
+            body:JSON.stringify(payload)
         });
 
-        const data = await res.json();
-        console.log(data);
+        toast("Criado!", "#2d5a27");
 
-        toast("Criado com sucesso!", "#2d5a27");
-    } catch (err) {
-        console.error(err);
-        toast("Erro ao conectar com a planilha", "#8b2d2d");
+    }catch{
+        toast("Erro!", "#8b2d2d");
     }
 }
 
-// ✅ SALVAR
-async function salvarAlteracao(nome) {
-    const idLimpa = cleanID(nome);
+// ===================== SALVAR =====================
+async function salvar(nome){
 
-    const payload = {
-        action: "update",
-        nome: nome,
-        qtd: document.getElementById(`qtd-${idLimpa}`).value,
-        cores: document.getElementById(`cores-${idLimpa}`).value,
-        camadas: document.getElementById(`camadas-${idLimpa}`).value,
-        padrao: document.getElementById(`padrao-${idLimpa}`).value,
-        midia: document.getElementById(`midia-${idLimpa}`).value
+    const id=cleanID(nome);
+
+    const payload={
+        action:"update",
+        nome:nome,
+        qtd:document.getElementById(`qtd-${id}`).value,
+        cores:document.getElementById(`cores-${id}`).value,
+        camadas:document.getElementById(`camadas-${id}`).value,
+        padrao:document.getElementById(`padrao-${id}`).value,
+        midia:document.getElementById(`midia-${id}`).value
     };
 
-    try {
-        const res = await fetch(WEB_APP_URL, {
-            method: 'POST',
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(payload)
+    try{
+        await fetch(WEB_APP_URL,{
+            method:"POST",
+            mode:"no-cors",
+            body:JSON.stringify(payload)
         });
 
-        const data = await res.json();
-        console.log(data);
+        toast("Salvo!", "#2d5a27");
 
-        toast("Salvo com sucesso!", "#2d5a27");
-    } catch (err) {
-        console.error(err);
-        toast("Erro ao conectar com a planilha", "#8b2d2d");
+    }catch{
+        toast("Erro!", "#8b2d2d");
     }
 }
 
-function abrirModal() {
-    document.getElementById("modalNovaID").style.display = "flex";
-}
+// =====================
+function abrirModal(){ document.getElementById("modalNovaID").style.display="flex"; }
+function fecharModal(){ document.getElementById("modalNovaID").style.display="none"; }
 
-function fecharModal() {
-    document.getElementById("modalNovaID").style.display = "none";
-}
-
-function toast(txt, cor) {
-    const t = document.getElementById("status");
-    t.innerText = txt;
-    t.style.backgroundColor = cor;
-    t.style.display = "block";
-    setTimeout(() => t.style.display = "none", 3000);
+function toast(txt,cor){
+    const t=document.getElementById("status");
+    t.innerText=txt;
+    t.style.background=cor;
+    t.style.display="block";
+    setTimeout(()=>t.style.display="none",2000);
 }
 
 carregarDados();
+
 </script>
+
 </body>
 </html>
