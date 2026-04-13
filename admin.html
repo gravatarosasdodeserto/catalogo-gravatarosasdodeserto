@@ -9,31 +9,21 @@
         :root { --primary: #3a3618; --bg: #f4f1ee; --white: #ffffff; --success: #2d5a27; --border: #e0e0e0; --accent: #8b2d2d; }
         body { font-family: 'Poppins', sans-serif; background: var(--bg); margin: 0; padding: 10px; color: var(--primary); }
         .container { max-width: 1100px; margin: 0 auto; background: var(--white); padding: 20px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
-        
         .topo-fixo { position: sticky; top: 0; background: var(--white); padding: 10px 0; z-index: 100; border-bottom: 2px solid var(--bg); display: flex; flex-direction: column; gap: 10px; }
         .acoes-topo { display: flex; gap: 10px; }
         .busca-admin { flex-grow: 1; padding: 12px; border-radius: 10px; border: 1.5px solid var(--border); font-size: 16px; outline: none; }
-        
         .btn-nova-id { background: var(--primary); color: white; border: none; padding: 0 20px; border-radius: 10px; cursor: pointer; font-weight: 600; font-size: 14px; }
-
         table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 13px; }
         th { background: var(--primary); color: white; padding: 10px; text-align: left; position: sticky; top: 120px; z-index: 50; }
         td { padding: 8px; border-bottom: 1px solid #eee; vertical-align: middle; }
-
         .thumb-admin { width: 50px; height: 50px; border-radius: 8px; object-fit: cover; background: #eee; }
         .edit-input { width: 100%; padding: 5px; border: 1px solid var(--border); border-radius: 4px; font-size: 12px; box-sizing: border-box; }
         .qtd-input { width: 60px; text-align: center; font-weight: bold; }
-        
         .btn-salvar { background: var(--success); color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-weight: 600; width: 100%; }
         .btn-salvar:disabled { background: #ccc; }
-
-        /* Estilo do Modal (Formulário de nova ID) */
         .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 2000; align-items: center; justify-content: center; padding: 20px; }
         .modal-content { background: white; padding: 25px; border-radius: 15px; width: 100%; max-width: 400px; position: relative; }
-        .modal-content h3 { margin-top: 0; }
-        .modal-content label { font-size: 12px; font-weight: 600; display: block; margin-top: 10px; }
         .close-modal { position: absolute; top: 15px; right: 15px; cursor: pointer; font-size: 20px; }
-
         .status-toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); padding: 12px 25px; border-radius: 50px; color: white; display: none; z-index: 3000; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
     </style>
 </head>
@@ -47,9 +37,7 @@
             <button class="btn-nova-id" onclick="abrirModal()">+ Nova ID</button>
         </div>
     </div>
-
     <div id="loader" style="text-align:center; padding: 50px;">Carregando dados...</div>
-
     <table id="tabelaAdmin" style="display:none;">
         <thead>
             <tr>
@@ -71,28 +59,21 @@
         <h3>Adicionar Nova Rosa</h3>
         <form id="formNovaID" onsubmit="criarNovaID(event)">
             <label>Nome da ID (Obrigatório)</label>
-            <input type="text" id="new-nome" class="edit-input" required placeholder="Ex: Akachi">
-            
-            <label>Quantidade em Estoque</label>
+            <input type="text" id="new-nome" class="edit-input" required>
+            <label>Quantidade</label>
             <input type="number" id="new-qtd" class="edit-input" value="0">
-            
             <label>Cores</label>
-            <input type="text" id="new-cores" class="edit-input" placeholder="Ex: Vermelha | Vinho">
-            
+            <input type="text" id="new-cores" class="edit-input">
             <label>Camadas</label>
-            <input type="text" id="new-camadas" class="edit-input" placeholder="Ex: Tripla">
-            
+            <input type="text" id="new-camadas" class="edit-input">
             <label>Padrão</label>
-            <input type="text" id="new-padrao" class="edit-input" placeholder="Ex: Degradê">
-
-            <label>ID da Mídia (Google Drive)</label>
-            <input type="text" id="new-midia" class="edit-input" placeholder="Link ou ID da foto">
-
-            <button type="submit" id="btnCriar" class="btn-salvar" style="margin-top:20px; padding: 15px;">CRIAR ID NA PLANILHA</button>
+            <input type="text" id="new-padrao" class="edit-input">
+            <label>ID Mídia</label>
+            <input type="text" id="new-midia" class="edit-input">
+            <button type="submit" id="btnCriar" class="btn-salvar" style="margin-top:20px;">CRIAR ID NA PLANILHA</button>
         </form>
     </div>
 </div>
-
 <div id="status" class="status-toast"></div>
 
 <script>
@@ -100,6 +81,9 @@
     const urlPlanilha = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQHtdljGrbqvDGysgNUi7MVlGI19jY6WYrIJSckkcX7ylbKP02BWqgt0qHPUTTxqg/pub?gid=1893895788&single=true&output=csv&t=' + Math.random();
 
     let dadosCompletos = [];
+
+    // Limpa nomes para usar como ID de elementos HTML
+    function cleanID(name) { return name.replace(/[^a-zA-Z0-9]/g, '_'); }
 
     async function carregarDados() {
         try {
@@ -116,29 +100,30 @@
                 cabecalho.forEach((tit, i) => obj[tit] = col[i] || "");
                 return obj;
             }).filter(d => d.nome);
-
             document.getElementById('loader').style.display = 'none';
             document.getElementById('tabelaAdmin').style.display = 'table';
             renderizarTabela(dadosCompletos);
-        } catch (e) { alert("Erro ao carregar dados."); }
+        } catch (e) { console.error(e); }
     }
 
     function renderizarTabela(itens) {
         const corpo = document.getElementById("tabelaCorpo");
         corpo.innerHTML = "";
         itens.sort((a,b) => a.nome.localeCompare(b.nome)).forEach(item => {
+            const idLimpa = cleanID(item.nome);
             const tr = document.createElement("tr");
             let fotoSrc = item.midia ? (item.midia.startsWith("http") ? item.midia : `https://drive.google.com/uc?export=view&id=${item.midia}`) : `imagens/${item.nome.toLowerCase().replace(/ /g, "-")}.jpg`;
             tr.innerHTML = `
                 <td><img src="${fotoSrc}" class="thumb-admin" onerror="this.src='imagens/sem-foto.jpg'"></td>
                 <td><strong>${item.nome}</strong></td>
-                <td><input type="number" class="edit-input qtd-input" id="qtd-${item.nome}" value="${item.qtd}"></td>
+                <td><input type="number" class="edit-input qtd-input" id="qtd-${idLimpa}" value="${item.qtd}"></td>
                 <td>
-                    <input type="text" class="edit-input" id="cores-${item.nome}" value="${item.cores}" placeholder="Cores">
-                    <input type="text" class="edit-input" id="camadas-${item.nome}" value="${item.camadas}" placeholder="Camada" style="margin-top:3px">
+                    <input type="text" class="edit-input" id="cores-${idLimpa}" value="${item.cores || ''}" placeholder="Cores">
+                    <input type="text" class="edit-input" id="camadas-${idLimpa}" value="${item.camadas || ''}" placeholder="Camada" style="margin-top:3px">
+                    <input type="text" class="edit-input" id="padrao-${idLimpa}" value="${item.padrao || ''}" placeholder="Padrão" style="margin-top:3px">
                 </td>
-                <td><input type="text" class="edit-input" id="midia-${item.nome}" value="${item.midia}"></td>
-                <td><button id="btn-${item.nome}" class="btn-salvar" onclick="salvarAlteracao('${item.nome}')">SALVAR</button></td>
+                <td><input type="text" class="edit-input" id="midia-${idLimpa}" value="${item.midia || ''}"></td>
+                <td><button id="btn-${idLimpa}" class="btn-salvar" onclick="salvarAlteracao('${item.nome}')">SALVAR</button></td>
             `;
             corpo.appendChild(tr);
         });
@@ -156,34 +141,33 @@
             padrao: document.getElementById("new-padrao").value,
             midia: document.getElementById("new-midia").value
         };
-
         btn.disabled = true;
-        btn.innerText = "Criando na Planilha...";
-
         try {
             await fetch(WEB_APP_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) });
-            toast("Nova ID criada! Atualize a página em instantes.", "#2d5a27");
+            toast("Criado! Aguarde 2 min e atualize.", "#2d5a27");
             fecharModal();
             document.getElementById("formNovaID").reset();
-        } catch (err) { toast("Erro ao criar ID", "#8b2d2d"); }
-        btn.disabled = false; btn.innerText = "CRIAR ID NA PLANILHA";
+        } catch (err) { toast("Erro", "#8b2d2d"); }
+        btn.disabled = false;
     }
 
     async function salvarAlteracao(nome) {
-        const btn = document.getElementById(`btn-${nome}`);
+        const idLimpa = cleanID(nome);
+        const btn = document.getElementById(`btn-${idLimpa}`);
         const payload = {
             action: "update",
             nome: nome,
-            qtd: document.getElementById(`qtd-${nome}`).value,
-            cores: document.getElementById(`cores-${nome}`).value,
-            camadas: document.getElementById(`camadas-${nome}`).value,
-            midia: document.getElementById(`midia-${nome}`).value
+            qtd: document.getElementById(`qtd-${idLimpa}`).value,
+            cores: document.getElementById(`cores-${idLimpa}`).value,
+            camadas: document.getElementById(`camadas-${idLimpa}`).value,
+            padrao: document.getElementById(`padrao-${idLimpa}`).value,
+            midia: document.getElementById(`midia-${idLimpa}`).value
         };
         btn.disabled = true;
         try {
             await fetch(WEB_APP_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) });
-            toast(`${nome} salvo!`, "#2d5a27");
-        } catch (err) { toast("Erro ao salvar", "#8b2d2d"); }
+            toast("Salvo!", "#2d5a27");
+        } catch (err) { toast("Erro", "#8b2d2d"); }
         btn.disabled = false;
     }
 
