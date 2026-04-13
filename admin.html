@@ -3,416 +3,358 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Página do Administrador | Gravatá Rosas</title>
+<title>Admin | Gravatá Rosas</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
 <style>
-:root{
-    --primary:#3a3618;
-    --bg:#f4f1ee;
-    --white:#fff;
-    --success:#2d5a27;
-    --danger:#8b2d2d;
+:root {
+  --header-bg:#fcfaf7;
+  --body-bg:#e5e0d8;
+  --text:#3a3618;
+  --card:#fff;
+  --danger:#8b2d2d;
+  --ok:#2d5a27;
 }
 
 body{
-    font-family:Poppins;
-    background:var(--bg);
-    margin:0;
-    padding:15px;
+  margin:0;
+  font-family:Poppins;
+  background:var(--body-bg);
+  color:var(--text);
 }
 
-/* HEADER */
-.topbar-admin{
-    background:#fff;
-    padding:15px;
-    border-radius:15px;
-    margin-bottom:15px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    box-shadow:0 3px 10px rgba(0,0,0,0.05);
+/* ===== HEADER IGUAL INDEX ===== */
+.topbar{
+  padding:30px 0;
+  position:sticky;
+  top:0;
+  z-index:1000;
+  background:var(--header-bg);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  box-shadow:0 6px 20px rgba(0,0,0,.15);
 }
 
-.botoes-topo{
-    display:flex;
-    gap:10px;
+.logo img{
+  width:130px;
 }
 
-.btn-voltar{
-    text-decoration:none;
-    background:#e5e0d8;
-    color:#3a3618;
-    padding:8px 12px;
-    border-radius:8px;
-    font-size:13px;
+/* BOTÃO VOLTAR */
+.voltar{
+  position:absolute;
+  left:15px;
+  top:15px;
+  background:#fff;
+  border:1px solid #ccc;
+  border-radius:20px;
+  padding:6px 10px;
+  font-size:12px;
+  cursor:pointer;
 }
 
-.btn-novo{
-    background:#2d5a27;
-    color:#fff;
-    border:none;
-    padding:8px 12px;
-    border-radius:8px;
-    cursor:pointer;
-}
-
-/* TABLE */
+/* CONTAINER */
 .container{
-    max-width:1100px;
-    margin:auto;
-    background:#fff;
-    padding:15px;
-    border-radius:15px;
+  padding:15px;
+  max-width:1000px;
+  margin:auto;
 }
 
-table{
-    width:100%;
-    border-collapse:collapse;
+/* TABELA MOBILE FRIENDLY */
+.card{
+  background:var(--card);
+  border-radius:15px;
+  padding:12px;
+  margin-bottom:15px;
+  box-shadow:0 4px 10px rgba(0,0,0,.08);
 }
 
-td,th{
-    padding:8px;
-    border-bottom:1px solid #eee;
-    font-size:13px;
+.img{
+  width:70px;
+  height:70px;
+  object-fit:cover;
+  border-radius:10px;
 }
 
-.thumb-admin{
-    width:55px;
-    height:55px;
-    object-fit:cover;
-    border-radius:8px;
+label{
+  font-size:11px;
+  opacity:.7;
+  display:block;
+  margin-top:6px;
 }
 
-/* INPUTS */
 input{
-    width:100%;
-    padding:6px;
-    border:1px solid #ddd;
-    border-radius:6px;
+  width:100%;
+  padding:8px;
+  border-radius:10px;
+  border:1px solid #ddd;
+  font-family:Poppins;
+  font-size:13px;
 }
 
-/* BUTTONS */
-.btn-salvar{
-    background:var(--success);
-    color:white;
-    border:none;
-    padding:7px;
-    border-radius:6px;
-    cursor:pointer;
-    margin-bottom:5px;
+.row{
+  display:flex;
+  gap:10px;
 }
 
-.btn-excluir{
-    background:var(--danger);
-    color:white;
-    border:none;
-    padding:7px;
-    border-radius:6px;
-    cursor:pointer;
+.col{
+  flex:1;
+}
+
+.actions{
+  display:flex;
+  gap:10px;
+  margin-top:10px;
+}
+
+button{
+  border:none;
+  padding:10px;
+  border-radius:12px;
+  cursor:pointer;
+  font-weight:600;
+}
+
+.save{ background:var(--ok); color:#fff; flex:1; }
+.del{ background:var(--danger); color:#fff; flex:1; }
+
+.new{
+  background:#3a3618;
+  color:#fff;
+  width:100%;
+  margin-bottom:15px;
 }
 
 /* MODAL */
 .modal{
-    display:none;
-    position:fixed;
-    inset:0;
-    background:rgba(0,0,0,0.6);
-    align-items:center;
-    justify-content:center;
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.5);
+  align-items:center;
+  justify-content:center;
 }
 
 .modal-content{
-    background:white;
-    padding:20px;
-    border-radius:10px;
-    width:300px;
+  background:#fff;
+  padding:15px;
+  border-radius:15px;
+  width:90%;
+  max-width:400px;
 }
 
 /* TOAST */
-.status-toast{
-    position:fixed;
-    bottom:20px;
-    left:50%;
-    transform:translateX(-50%);
-    padding:10px 20px;
-    color:white;
-    display:none;
-    border-radius:50px;
+.toast{
+  position:fixed;
+  bottom:20px;
+  left:50%;
+  transform:translateX(-50%);
+  background:#000;
+  color:#fff;
+  padding:10px 15px;
+  border-radius:20px;
+  display:none;
 }
 </style>
 </head>
 
 <body>
 
-<!-- HEADER -->
-<div class="topbar-admin">
-    <h2>Gerenciador de Catálogo</h2>
-
-    <div class="botoes-topo">
-        <a href="index.html" class="btn-voltar">← Catálogo</a>
-        <button onclick="abrirModal()" class="btn-novo">+ Nova ID</button>
-    </div>
+<div class="topbar">
+  <button class="voltar" onclick="location.href='index.html'">← Catálogo</button>
+  <div class="logo">
+    <img src="logo.png">
+  </div>
 </div>
 
 <div class="container">
 
-<div id="loader">Carregando...</div>
+<button class="new" onclick="abrirModal()">+ Nova ID</button>
 
-<table id="tabelaAdmin" style="display:none;">
-<thead>
-<tr>
-<th>Foto</th>
-<th>Nome</th>
-<th>Qtd</th>
-<th>Filtros</th>
-<th>Imagem</th>
-<th>Ações</th>
-</tr>
-</thead>
-<tbody id="tabelaCorpo"></tbody>
-</table>
+<div id="lista"></div>
 
 </div>
 
 <!-- MODAL -->
-<div id="modalNovaID" class="modal">
-<div class="modal-content">
-<form onsubmit="criarNovaID(event)">
-<input id="new-nome" placeholder="Nome" required>
-<input id="new-qtd" type="number" value="0">
-<input id="new-cores" placeholder="Cores">
-<input id="new-camadas" placeholder="Camadas">
-<input id="new-padrao" placeholder="Padrão">
+<div class="modal" id="modal">
+  <div class="modal-content">
+    <h4>Nova ID</h4>
 
-<label>Imagem</label>
-<input type="file" id="new-file" accept="image/*">
+    <input id="n_nome" placeholder="Nome">
 
-<button type="submit">CRIAR</button>
-</form>
-<button onclick="fecharModal()">Fechar</button>
+    <label>Qtd</label>
+    <input id="n_qtd" type="number">
+
+    <label>Camadas</label>
+    <input id="n_camadas">
+
+    <label>Cores</label>
+    <input id="n_cores">
+
+    <label>Padrão</label>
+    <input id="n_padrao">
+
+    <label>Link da imagem</label>
+    <input id="n_midia">
+
+    <br><br>
+    <button class="save" onclick="criar()">Criar</button>
+    <button class="del" onclick="fecharModal()">Fechar</button>
+  </div>
 </div>
-</div>
 
-<div id="status" class="status-toast"></div>
+<div class="toast" id="toast"></div>
 
 <script>
 
-const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxs8MmNSgkb43F1vZDCtFE6AiRvWtjlTp67QxpLMcfA9mnWInHQOBm8iZuEqpF6Ctg0hA/exec";
+const URL = "https://script.google.com/macros/s/AKfycbxs8MmNSgkb43F1vZDCtFE6AiRvWtjlTp67QxpLMcfA9mnWInHQOBm8iZuEqpF6Ctg0hA/exec";
+const CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSochNnj1ihxWjFv_87wiDS9-ZakV1LrmdQWfZMAZMGRHf9pqCBXKQpkfQ6BDMlxwYE8E2JkWUVRYOG/pub?gid=1893895788&single=true&output=csv";
 
-const urlPlanilha = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSochNnj1ihxWjFv_87wiDS9-ZakV1LrmdQWfZMAZMGRHf9pqCBXKQpkfQ6BDMlxwYE8E2JkWUVRYOG/pub?gid=1893895788&single=true&output=csv&t=" + Math.random();
+let dados = [];
 
-let dadosCompletos = [];
-
-function cleanID(name){
-    return name.replace(/[^a-zA-Z0-9]/g,'_');
-}
-
+/* CSV seguro */
 function parseCSV(text){
-    const lines = text.split(/\r?\n/).filter(l=>l.trim()!=="");
-    return lines.map(line=>{
-        const cells = line.match(/(".*?"|[^",\r\n]+)(?=\s*,|\s*$)/g) || [];
-        return cells.map(c=>c.replace(/^"|"$/g,''));
-    });
+  return text.split("\n").map(r => r.split(","));
 }
 
-// ===================== CARREGAR =====================
-async function carregarDados(){
-    try{
-        const resp = await fetch(urlPlanilha);
-        const text = await resp.text();
+async function carregar(){
+  const r = await fetch(CSV);
+  const t = await r.text();
+  const linhas = parseCSV(t);
 
-        const dados = parseCSV(text);
+  linhas.shift(); // header
 
-        const header = dados.shift().map(h =>
-            h.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").trim()
-        );
+  dados = linhas.map(l => ({
+    nome:l[0],
+    camadas:l[1],
+    cores:l[2],
+    padrao:l[3],
+    especiais:l[4],
+    qtd:l[5],
+    midia:l[6]
+  }));
 
-        const idx = {
-            nome: header.indexOf("nome"),
-            qtd: header.indexOf("qtd"),
-            cores: header.indexOf("cores"),
-            camadas: header.indexOf("camadas"),
-            padrao: header.indexOf("padrao"),
-            midia: header.indexOf("midia")
-        };
-
-        dadosCompletos = dados.map(col=>({
-            nome: col[idx.nome],
-            qtd: col[idx.qtd],
-            cores: col[idx.cores],
-            camadas: col[idx.camadas],
-            padrao: col[idx.padrao],
-            midia: col[idx.midia]
-        }));
-
-        document.getElementById("loader").style.display="none";
-        document.getElementById("tabelaAdmin").style.display="table";
-
-        renderizarTabela();
-
-    }catch(e){
-        console.error(e);
-    }
+  render();
 }
 
-// ===================== RENDER =====================
-function renderizarTabela(){
-    const corpo=document.getElementById("tabelaCorpo");
-    corpo.innerHTML="";
+function render(){
+  const el = document.getElementById("lista");
+  el.innerHTML = "";
 
-    dadosCompletos.forEach(item=>{
-        const id=cleanID(item.nome);
+  dados.forEach(d => {
 
-        let midiaID = (item.midia||"").replace(/&amp;/g,"").trim();
+    let img = d.midia?.startsWith("http")
+      ? d.midia
+      : `https://drive.google.com/uc?export=view&id=${d.midia}`;
 
-        let img = midiaID
-        ? `https://drive.google.com/uc?export=view&id=${midiaID}`
-        : "imagens/sem-foto.jpg";
+    const id = d.nome.replace(/\W/g,"_");
 
-        const tr=document.createElement("tr");
+    el.innerHTML += `
+    <div class="card">
 
-        tr.innerHTML=`
-        <td><img src="${img}" class="thumb-admin"></td>
+      <img src="${img}" class="img" onerror="this.src='imagens/sem-foto.jpg'">
 
-        <td>${item.nome}</td>
+      <label>Nome</label>
+      <input id="nome_${id}" value="${d.nome}">
 
-        <td><input id="qtd-${id}" value="${item.qtd||0}"></td>
+      <div class="row">
+        <div class="col">
+          <label>Qtd</label>
+          <input id="qtd_${id}" value="${d.qtd}">
+        </div>
+        <div class="col">
+          <label>Link da imagem</label>
+          <input id="midia_${id}" value="${d.midia}">
+        </div>
+      </div>
 
-        <td>
-            <input id="cores-${id}" value="${item.cores||''}">
-            <input id="camadas-${id}" value="${item.camadas||''}">
-            <input id="padrao-${id}" value="${item.padrao||''}">
-        </td>
+      <label>Camadas</label>
+      <input id="cam_${id}" value="${d.camadas}">
 
-        <td>
-            <label>Link da imagem</label>
-            <input id="midia-${id}" value="${item.midia||''}">
-            <input type="file" id="file-${id}">
-        </td>
+      <label>Cores</label>
+      <input id="cor_${id}" value="${d.cores}">
 
-        <td>
-            <button class="btn-salvar" onclick='salvar("${item.nome}")'>Salvar</button>
-            <button class="btn-excluir" onclick='excluir("${item.nome}")'>Excluir</button>
-        </td>
-        `;
+      <label>Padrão</label>
+      <input id="pad_${id}" value="${d.padrao}">
 
-        corpo.appendChild(tr);
-    });
+      <div class="actions">
+        <button class="save" onclick="salvar('${d.nome}')">Salvar</button>
+        <button class="del" onclick="excluir('${d.nome}')">Excluir</button>
+      </div>
+
+    </div>`;
+  });
 }
 
-// ===================== UPLOAD =====================
-async function uploadImage(file){
-
-    const base64 = await new Promise(res=>{
-        const r=new FileReader();
-        r.onload=()=>res(r.result.split(",")[1]);
-        r.readAsDataURL(file);
-    });
-
-    const resp = await fetch(WEB_APP_URL,{
-        method:"POST",
-        body:new URLSearchParams({
-            action:"upload",
-            file:base64,
-            mimeType:file.type,
-            fileName:file.name
-        })
-    });
-
-    const data = await resp.json();
-    return data.id;
-}
-
-// ===================== SALVAR =====================
 async function salvar(nome){
 
-    const id = cleanID(nome);
+  const id = nome.replace(/\W/g,"_");
 
-    let midiaID = document.getElementById(`midia-${id}`).value;
+  await fetch(URL,{
+    method:"POST",
+    body:new URLSearchParams({
+      action:"update",
+      nome,
+      qtd:document.getElementById("qtd_"+id).value,
+      cores:document.getElementById("cor_"+id).value,
+      camadas:document.getElementById("cam_"+id).value,
+      padrao:document.getElementById("pad_"+id).value,
+      midia:document.getElementById("midia_"+id).value
+    })
+  });
 
-    const file = document.getElementById(`file-${id}`);
-
-    if(file && file.files.length>0){
-        midiaID = await uploadImage(file.files[0]);
-    }
-
-    await fetch(WEB_APP_URL,{
-        method:"POST",
-        body:new URLSearchParams({
-            action:"update",
-            nome,
-            qtd:document.getElementById(`qtd-${id}`).value,
-            cores:document.getElementById(`cores-${id}`).value,
-            camadas:document.getElementById(`camadas-${id}`).value,
-            padrao:document.getElementById(`padrao-${id}`).value,
-            midia:midiaID
-        })
-    });
-
-    toast("Atualizado!");
-    carregarDados();
+  toast("Salvo!");
+  carregar();
 }
 
-// ===================== EXCLUIR =====================
 async function excluir(nome){
 
-    if(!confirm("Excluir esta ID?")) return;
+  if(!confirm("Excluir ID?")) return;
 
-    await fetch(WEB_APP_URL,{
-        method:"POST",
-        body:new URLSearchParams({
-            action:"delete",
-            nome
-        })
-    });
+  await fetch(URL,{
+    method:"POST",
+    body:new URLSearchParams({
+      action:"delete",
+      nome
+    })
+  });
 
-    toast("Excluído!");
-    carregarDados();
+  toast("Excluído!");
+  carregar();
 }
 
-// ===================== CRIAR =====================
-async function criarNovaID(e){
-    e.preventDefault();
+async function criar(){
 
-    const file=document.getElementById("new-file");
-    let midia="";
+  await fetch(URL,{
+    method:"POST",
+    body:new URLSearchParams({
+      action:"create",
+      nome:n_nome.value,
+      qtd:n_qtd.value,
+      camadas:n_camadas.value,
+      cores:n_cores.value,
+      padrao:n_padrao.value,
+      midia:n_midia.value
+    })
+  });
 
-    if(file.files.length>0){
-        midia=await uploadImage(file.files[0]);
-    }
-
-    await fetch(WEB_APP_URL,{
-        method:"POST",
-        body:new URLSearchParams({
-            action:"create",
-            nome:document.getElementById("new-nome").value,
-            qtd:document.getElementById("new-qtd").value,
-            cores:document.getElementById("new-cores").value,
-            camadas:document.getElementById("new-camadas").value,
-            padrao:document.getElementById("new-padrao").value,
-            midia
-        })
-    });
-
-    fecharModal();
-    toast("Criado!");
-    carregarDados();
+  fecharModal();
+  toast("Criado!");
+  carregar();
 }
 
-// ===================== UI =====================
-function abrirModal(){ document.getElementById("modalNovaID").style.display="flex"; }
-function fecharModal(){ document.getElementById("modalNovaID").style.display="none"; }
+function abrirModal(){ modal.style.display="flex"; }
+function fecharModal(){ modal.style.display="none"; }
 
-function toast(msg){
-    const t=document.getElementById("status");
-    t.innerText=msg;
-    t.style.display="block";
-    setTimeout(()=>t.style.display="none",2000);
+function toast(t){
+  const x=document.getElementById("toast");
+  x.innerText=t;
+  x.style.display="block";
+  setTimeout(()=>x.style.display="none",2000);
 }
 
-carregarDados();
+carregar();
 
 </script>
 
