@@ -77,127 +77,153 @@
 <div id="status" class="status-toast"></div>
 
 <script>
-    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxs8MmNSgkb43F1vZDCtFE6AiRvWtjlTp67QxpLMcfA9mnWInHQOBm8iZuEqpF6Ctg0hA/exec';
+const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxs8MmNSgkb43F1vZDCtFE6AiRvWtjlTp67QxpLMcfA9mnWInHQOBm8iZuEqpF6Ctg0hA/exec';
 
-const urlPlanilha = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSochNnj1ihxWjFv_87wiDS9-ZakV1LrmdQWfZMAZMGRHf9pqCBXKQpkfQ6BDMlxwYE8E2JkWUVRYOG/pub?gid=1893895788&single=true&output=csv' + '&t=' + Math.random();
+const urlPlanilha = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSochNnj1ihxWjFv_87wiDS9-ZakV1LrmdQWfZMAZMGRHf9pqCBXKQpkfQ6BDMlxwYE8E2JkWUVRYOG/pub?gid=1893895788&single=true&output=csv&t=' + Math.random();
 
-    let dadosCompletos = [];
+let dadosCompletos = [];
 
-    // Limpa nomes para usar como ID de elementos HTML
-    function cleanID(name) { return name.replace(/[^a-zA-Z0-9]/g, '_'); }
+function cleanID(name) { return name.replace(/[^a-zA-Z0-9]/g, '_'); }
 
-    async function carregarDados() {
-        try {
-            const resp = await fetch(urlPlanilha);
-            const text = await resp.text();
-            const linhas = text.split(/\r?\n/).filter(l => l.trim() !== "");
-            const matrix = linhas.map(line => {
-                const cells = line.match(/(".*?"|[^",\r\n]+)(?=\s*,|\s*$|\s*\r?\n)/g) || [];
-                return cells.map(c => c.trim().replace(/^"|"$/g, ''));
-            });
-            const cabecalho = matrix.shift().map(h => h.toLowerCase().trim());
-            dadosCompletos = matrix.map(col => {
-                let obj = {};
-                cabecalho.forEach((tit, i) => obj[tit] = col[i] || "");
-                return obj;
-            }).filter(d => d.nome);
-            document.getElementById('loader').style.display = 'none';
-            document.getElementById('tabelaAdmin').style.display = 'table';
-            renderizarTabela(dadosCompletos);
-        } catch (e) { console.error(e); }
-    }
+async function carregarDados() {
+    try {
+        const resp = await fetch(urlPlanilha);
+        const text = await resp.text();
 
-    function renderizarTabela(itens) {
-        const corpo = document.getElementById("tabelaCorpo");
-        corpo.innerHTML = "";
-        itens.sort((a,b) => a.nome.localeCompare(b.nome)).forEach(item => {
-            const idLimpa = cleanID(item.nome);
-            const tr = document.createElement("tr");
-            let fotoSrc = item.midia ? (item.midia.startsWith("http") ? item.midia : `https://drive.google.com/uc?export=view&id=${item.midia}`) : `imagens/${item.nome.toLowerCase().replace(/ /g, "-")}.jpg`;
-            tr.innerHTML = `
-                <td><img src="${fotoSrc}" class="thumb-admin" onerror="this.src='imagens/sem-foto.jpg'"></td>
-                <td><strong>${item.nome}</strong></td>
-                <td><input type="number" class="edit-input qtd-input" id="qtd-${idLimpa}" value="${item.qtd}"></td>
-                <td>
-                    <input type="text" class="edit-input" id="cores-${idLimpa}" value="${item.cores || ''}" placeholder="Cores">
-                    <input type="text" class="edit-input" id="camadas-${idLimpa}" value="${item.camadas || ''}" placeholder="Camada" style="margin-top:3px">
-                    <input type="text" class="edit-input" id="padrao-${idLimpa}" value="${item.padrao || ''}" placeholder="Padrão" style="margin-top:3px">
-                </td>
-                <td><input type="text" class="edit-input" id="midia-${idLimpa}" value="${item.midia || ''}"></td>
-                <td><button id="btn-${idLimpa}" class="btn-salvar" onclick="salvarAlteracao('${item.nome}')">SALVAR</button></td>
-            `;
-            corpo.appendChild(tr);
+        const linhas = text.split(/\r?\n/).filter(l => l.trim() !== "");
+        const matrix = linhas.map(line => {
+            const cells = line.match(/(".*?"|[^",\r\n]+)(?=\s*,|\s*$|\s*\r?\n)/g) || [];
+            return cells.map(c => c.trim().replace(/^"|"$/g, ''));
         });
+
+        const cabecalho = matrix.shift().map(h => h.toLowerCase().trim());
+
+        dadosCompletos = matrix.map(col => {
+            let obj = {};
+            cabecalho.forEach((tit, i) => obj[tit] = col[i] || "");
+            return obj;
+        }).filter(d => d.nome);
+
+        document.getElementById('loader').style.display = 'none';
+        document.getElementById('tabelaAdmin').style.display = 'table';
+
+        renderizarTabela(dadosCompletos);
+    } catch (e) {
+        console.error(e);
     }
+}
 
-    async function criarNovaID(e) {
-        e.preventDefault();
-        const btn = document.getElementById("btnCriar");
-        const payload = {
-            action: "create",
-            nome: document.getElementById("new-nome").value,
-            qtd: document.getElementById("new-qtd").value,
-            cores: document.getElementById("new-cores").value,
-            camadas: document.getElementById("new-camadas").value,
-            padrao: document.getElementById("new-padrao").value,
-            midia: document.getElementById("new-midia").value
-        };
+function renderizarTabela(itens) {
+    const corpo = document.getElementById("tabelaCorpo");
+    corpo.innerHTML = "";
 
-    async function salvarAlteracao(nome) {
+    itens.forEach(item => {
+        const idLimpa = cleanID(item.nome);
+
+        let fotoSrc = item.midia
+            ? (item.midia.startsWith("http")
+                ? item.midia
+                : `https://drive.google.com/uc?export=view&id=${item.midia}`)
+            : `imagens/${item.nome.toLowerCase().replace(/ /g, "-")}.jpg`;
+
+        const tr = document.createElement("tr");
+
+        tr.innerHTML = `
+            <td><img src="${fotoSrc}" class="thumb-admin" onerror="this.src='imagens/sem-foto.jpg'"></td>
+            <td><strong>${item.nome}</strong></td>
+            <td><input type="number" id="qtd-${idLimpa}" value="${item.qtd}"></td>
+            <td>
+                <input type="text" id="cores-${idLimpa}" value="${item.cores || ''}">
+                <input type="text" id="camadas-${idLimpa}" value="${item.camadas || ''}">
+                <input type="text" id="padrao-${idLimpa}" value="${item.padrao || ''}">
+            </td>
+            <td><input type="text" id="midia-${idLimpa}" value="${item.midia || ''}"></td>
+            <td><button onclick="salvarAlteracao('${item.nome}')">SALVAR</button></td>
+        `;
+
+        corpo.appendChild(tr);
+    });
+}
+
+// ✅ CRIAR
+async function criarNovaID(e) {
+    e.preventDefault();
+
+    const payload = {
+        action: "create",
+        nome: document.getElementById("new-nome").value,
+        qtd: document.getElementById("new-qtd").value,
+        cores: document.getElementById("new-cores").value,
+        camadas: document.getElementById("new-camadas").value,
+        padrao: document.getElementById("new-padrao").value,
+        midia: document.getElementById("new-midia").value
+    };
+
+    try {
+        const res = await fetch(WEB_APP_URL, {
+            method: 'POST',
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+        });
+
+        const data = await res.json();
+        console.log(data);
+
+        toast("Criado com sucesso!", "#2d5a27");
+    } catch (err) {
+        console.error(err);
+        toast("Erro ao conectar com a planilha", "#8b2d2d");
+    }
+}
+
+// ✅ SALVAR
+async function salvarAlteracao(nome) {
     const idLimpa = cleanID(nome);
-    const btn = document.getElementById(`btn-${idLimpa}`);
-    
+
     const payload = {
         action: "update",
         nome: nome,
         qtd: document.getElementById(`qtd-${idLimpa}`).value,
         cores: document.getElementById(`cores-${idLimpa}`).value,
         camadas: document.getElementById(`camadas-${idLimpa}`).value,
-        padrao: document.getElementById(`padrao-${idLimpa}`).value, // Garante que envia o Padrao
+        padrao: document.getElementById(`padrao-${idLimpa}`).value,
         midia: document.getElementById(`midia-${idLimpa}`).value
     };
 
-    btn.disabled = true;
     try {
-        // Removido o no-cors para garantir que o Google Script receba os dados
-        await fetch(WEB_APP_URL, { 
-            method: 'POST', 
-            body: JSON.stringify(payload) 
+        const res = await fetch(WEB_APP_URL, {
+            method: 'POST',
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
         });
-        toast(`${nome} salvo com sucesso!`, "#2d5a27");
-    } catch (err) { 
-        toast("Erro ao salvar", "#8b2d2d"); 
-    } finally {
-        btn.disabled = false;
+
+        const data = await res.json();
+        console.log(data);
+
+        toast("Salvo com sucesso!", "#2d5a27");
+    } catch (err) {
+        console.error(err);
+        toast("Erro ao conectar com a planilha", "#8b2d2d");
     }
 }
 
-    btn.disabled = true;
-    try {
-        // Removi o 'no-cors' para você conseguir ver se deu erro de verdade
-        await fetch(WEB_APP_URL, { 
-            method: 'POST', 
-            body: JSON.stringify(payload) 
-        });
-        toast(`${nome} salvo com sucesso!`, "#2d5a27");
-    } catch (err) { 
-        toast("Erro ao conectar com a planilha", "#8b2d2d"); 
-    } finally {
-        btn.disabled = false;
-    }
+function abrirModal() {
+    document.getElementById("modalNovaID").style.display = "flex";
 }
-    function abrirModal() { document.getElementById("modalNovaID").style.display = "flex"; }
-    function fecharModal() { document.getElementById("modalNovaID").style.display = "none"; }
-    function filtrarTabela() {
-        const t = document.getElementById("inputBusca").value.toLowerCase();
-        renderizarTabela(dadosCompletos.filter(i => i.nome.toLowerCase().includes(t)));
-    }
-    function toast(txt, cor) {
-        const t = document.getElementById("status");
-        t.innerText = txt; t.style.backgroundColor = cor; t.style.display = "block";
-        setTimeout(() => t.style.display = "none", 3000);
-    }
-    carregarDados();
+
+function fecharModal() {
+    document.getElementById("modalNovaID").style.display = "none";
+}
+
+function toast(txt, cor) {
+    const t = document.getElementById("status");
+    t.innerText = txt;
+    t.style.backgroundColor = cor;
+    t.style.display = "block";
+    setTimeout(() => t.style.display = "none", 3000);
+}
+
+carregarDados();
 </script>
 </body>
 </html>
