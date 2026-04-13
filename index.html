@@ -122,6 +122,30 @@ body {
     white-space: nowrap;
 }
 
+/* Botão Admin Discreto */
+.btn-admin-setup {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  z-index: 1001;
+  cursor: pointer;
+  opacity: 0.3; /* Fica bem clarinho para ser discreto */
+  transition: opacity 0.3s;
+  background: none;
+  border: none;
+  padding: 5px;
+}
+
+.btn-admin-setup:hover {
+  opacity: 1; /* Só brilha ao passar o mouse */
+}
+
+.btn-admin-setup svg {
+  fill: var(--text-main);
+  width: 18px;
+  height: 18px;
+}
+
 .btn-abrir-filtros {
   background: var(--text-main);
   color: white;
