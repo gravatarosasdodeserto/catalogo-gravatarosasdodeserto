@@ -75,7 +75,9 @@ const urlPlanilha = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSochNnj1ih
 
 let dadosCompletos = [];
 
-function cleanID(name){ return name.replace(/[^a-zA-Z0-9]/g,'_'); }
+function cleanID(name){
+    return name.replace(/[^a-zA-Z0-9]/g,'_');
+}
 
 // ===================== CARREGAR =====================
 async function carregarDados(){
@@ -97,7 +99,9 @@ async function carregarDados(){
 
         renderizarTabela();
 
-    }catch(e){ console.error(e); }
+    }catch(e){
+        console.error(e);
+    }
 }
 
 // ===================== RENDER =====================
@@ -116,14 +120,23 @@ function renderizarTabela(){
 
         tr.innerHTML=`
         <td><img src="${img}" class="thumb-admin"></td>
+
         <td>${item.nome}</td>
+
         <td><input id="qtd-${id}" value="${item.qtd||0}"></td>
+
         <td>
             <input id="cores-${id}" value="${item.cores||''}">
             <input id="camadas-${id}" value="${item.camadas||''}">
             <input id="padrao-${id}" value="${item.padrao||''}">
         </td>
-        <td><input id="midia-${id}" value="${item.midia||''}"></td>
+
+        <td>
+            <input id="midia-${id}" value="${item.midia||''}">
+            <br><br>
+            <input type="file" id="file-${id}" accept="image/*">
+        </td>
+
         <td><button onclick='salvar("${item.nome}")'>Salvar</button></td>
         `;
 
@@ -131,6 +144,30 @@ function renderizarTabela(){
     });
 }
 
+// ===================== UPLOAD BASE64 =====================
+async function uploadImage(file){
+
+    const base64 = await new Promise((resolve)=>{
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result.split(",")[1]);
+        reader.readAsDataURL(file);
+    });
+
+    const resp = await fetch(WEB_APP_URL, {
+        method:"POST",
+        body:new URLSearchParams({
+            action:"upload",
+            file: base64,
+            mimeType: file.type,
+            fileName: file.name
+        })
+    });
+
+    const data = await resp.json();
+    return data.id;
+}
+
+// ===================== CRIAR NOVA ID =====================
 async function criarNovaID(e){
     e.preventDefault();
 
@@ -138,70 +175,69 @@ async function criarNovaID(e){
     let midiaID = "";
 
     if(fileInput && fileInput.files.length > 0){
-
-        const file = fileInput.files[0];
-
-        const base64 = await new Promise((resolve, reject)=>{
-            const reader = new FileReader();
-
-            reader.onload = () => resolve(reader.result.split(",")[1]);
-            reader.onerror = reject;
-
-            reader.readAsDataURL(file);
-        });
-
-        try{
-            const uploadResp = await fetch(WEB_APP_URL, {
-                method: "POST",
-                body: new URLSearchParams({
-                    action: "upload",
-                    file: base64,
-                    mimeType: file.type,
-                    fileName: file.name
-                })
-            });
-
-            const uploadData = await uploadResp.json();
-
-            if(uploadData && uploadData.id){
-                midiaID = uploadData.id;
-            }
-
-        }catch(err){
-            console.error("Erro no upload:", err);
-            toast("Erro no upload da imagem", "#8b2d2d");
-            return; // interrompe criação se quiser evitar ID sem imagem falha
-        }
+        midiaID = await uploadImage(fileInput.files[0]);
     }
+
     const payload = {
-        action: "create",
-        nome: document.getElementById("new-nome").value,
-        qtd: document.getElementById("new-qtd").value,
-        cores: document.getElementById("new-cores").value,
-        camadas: document.getElementById("new-camadas").value,
-        padrao: document.getElementById("new-padrao").value,
+        action:"create",
+        nome:document.getElementById("new-nome").value,
+        qtd:document.getElementById("new-qtd").value,
+        cores:document.getElementById("new-cores").value,
+        camadas:document.getElementById("new-camadas").value,
+        padrao:document.getElementById("new-padrao").value,
         midia: midiaID
     };
 
-    try{
-        await fetch(WEB_APP_URL, {
-            method: "POST",
-            body: new URLSearchParams(payload)
-        });
+    await fetch(WEB_APP_URL,{
+        method:"POST",
+        body:new URLSearchParams(payload)
+    });
 
-        toast("Criado com sucesso!", "#2d5a27");
-
-        // limpa input de imagem
-        if(fileInput) fileInput.value = "";
-
-    }catch(err){
-        console.error(err);
-        toast("Erro ao criar ID", "#8b2d2d");
-    }
+    toast("Criado com imagem!", "#2d5a27");
 }
-// =====================
-function abrirModal(){ document.getElementById("modalNovaID").style.display="flex"; }
-function fecharModal(){ document.getElementById("modalNovaID").style.display="none"; }
+
+// ===================== SALVAR (UPDATE + TROCA DE IMAGEM) =====================
+async function salvar(nome){
+
+    const id = cleanID(nome);
+
+    let midiaID = document.getElementById(`midia-${id}`).value;
+
+    const fileInput = document.getElementById(`file-${id}`);
+
+    // 🔥 se escolheu nova imagem, faz upload e substitui
+    if(fileInput && fileInput.files.length > 0){
+        midiaID = await uploadImage(fileInput.files[0]);
+    }
+
+    const payload = {
+        action:"update",
+        nome:nome,
+        qtd:document.getElementById(`qtd-${id}`).value,
+        cores:document.getElementById(`cores-${id}`).value,
+        camadas:document.getElementById(`camadas-${id}`).value,
+        padrao:document.getElementById(`padrao-${id}`).value,
+        midia: midiaID
+    };
+
+    await fetch(WEB_APP_URL,{
+        method:"POST",
+        body:new URLSearchParams(payload)
+    });
+
+    toast("Atualizado com sucesso!", "#2d5a27");
+
+    if(fileInput) fileInput.value = "";
+}
+
+// ===================== UI =====================
+function abrirModal(){
+    document.getElementById("modalNovaID").style.display="flex";
+}
+
+function fecharModal(){
+    document.getElementById("modalNovaID").style.display="none";
+}
 
 function toast(txt,cor){
     const t=document.getElementById("status");
@@ -212,7 +248,6 @@ function toast(txt,cor){
 }
 
 carregarDados();
-
 </script>
 
 </body>
