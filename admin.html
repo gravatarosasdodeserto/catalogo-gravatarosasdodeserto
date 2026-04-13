@@ -9,49 +9,65 @@
 
 <style>
 :root{
-  --bg:#e5e0d8;
-  --card:#ffffff;
+  --header-bg:#fcfaf7;
+  --body-bg:#e5e0d8;
   --text:#3a3618;
-  --ok:#2d5a27;
+  --card:#fff;
   --danger:#8b2d2d;
-  --border:#e8e8e8;
+  --ok:#2d5a27;
 }
 
-*{
-  box-sizing:border-box;
-}
+*{ box-sizing:border-box; }
 
 body{
   margin:0;
   font-family:Poppins;
-  background:var(--bg);
+  background:var(--body-bg);
   color:var(--text);
 }
 
-/* ===== HEADER ===== */
+/* ===== HEADER IGUAL INDEX ===== */
 .topbar{
+  padding:50px 0;
   position:sticky;
   top:0;
   z-index:1000;
-  background:#fcfaf7;
   display:flex;
   justify-content:center;
   align-items:center;
-  padding:18px;
-  box-shadow:0 6px 18px rgba(0,0,0,.12);
+  background:var(--header-bg);
+  overflow:hidden;
+  box-shadow:0 8px 25px rgba(0,0,0,0.18);
+}
+
+.topbar::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background-image:url('imagens/gravata-cabecalho.jpg');
+  background-size:cover;
+  background-position:center;
+  opacity:0.9;
+  z-index:0;
+}
+
+.logo{
+  position:relative;
+  z-index:2;
 }
 
 .logo img{
-  width:120px;
+  width:150px;
+  filter:drop-shadow(0 4px 15px rgba(0,0,0,0.4));
 }
 
-/* BOTÃO VOLTAR */
 .voltar{
   position:absolute;
-  left:12px;
-  top:12px;
-  background:#fff;
-  border:1px solid #ccc;
+  left:15px;
+  top:15px;
+  z-index:3;
+  background:rgba(255,255,255,0.8);
+  border:1px solid #3a3618;
   border-radius:20px;
   padding:6px 10px;
   font-size:12px;
@@ -59,67 +75,65 @@ body{
 
 /* ===== CONTAINER ===== */
 .container{
-  padding:12px;
-  max-width:900px;
+  padding:15px;
+  max-width:1000px;
   margin:auto;
 }
 
-/* ===== CARD ===== */
-.card{
-  background:var(--card);
-  border-radius:16px;
-  padding:14px;
-  margin-bottom:14px;
-  box-shadow:0 3px 10px rgba(0,0,0,.08);
-  display:flex;
-  flex-direction:column;
-  gap:8px;
-}
-
-/* IMAGEM MAIOR E CENTRAL */
-.img-box{
-  display:flex;
-  justify-content:center;
-  align-items:center;
-}
-
-.img{
-  width:160px;
-  height:160px;
-  object-fit:cover;
-  border-radius:14px;
-  box-shadow:0 4px 12px rgba(0,0,0,.15);
-}
-
-/* LABEL */
-label{
-  font-size:11px;
-  opacity:.7;
-  margin-top:4px;
-}
-
-/* INPUTS */
-input{
+/* BUSCA */
+.busca{
   width:100%;
-  padding:10px;
-  border-radius:12px;
-  border:1px solid var(--border);
-  font-family:Poppins;
+  padding:12px;
+  border-radius:50px;
+  border:1px solid #ccc;
+  margin-bottom:12px;
+  text-align:center;
   font-size:14px;
 }
 
-/* BLOCO HORIZONTAL CONTROLADO */
+/* CARD */
+.card{
+  background:var(--card);
+  border-radius:15px;
+  padding:12px;
+  margin-bottom:15px;
+  box-shadow:0 4px 10px rgba(0,0,0,.08);
+}
+
+/* IMAGEM */
+.img{
+  width:120px;
+  height:120px;
+  object-fit:cover;
+  border-radius:12px;
+  display:block;
+  margin:0 auto 10px;
+}
+
+/* INPUTS */
+label{
+  font-size:11px;
+  opacity:.7;
+  display:block;
+  margin-top:6px;
+}
+
+input{
+  width:100%;
+  padding:8px;
+  border-radius:10px;
+  border:1px solid #ddd;
+}
+
+/* ROW */
 .row{
   display:flex;
   gap:10px;
 }
 
-.row .col{
-  flex:1;
-  min-width:0;
-}
+.col{ flex:1; }
 
-/* AÇÕES */
+/* BUTTONS */
 .actions{
   display:flex;
   gap:10px;
@@ -128,32 +142,20 @@ input{
 
 button{
   border:none;
-  padding:12px;
+  padding:10px;
   border-radius:12px;
-  font-weight:600;
   cursor:pointer;
+  font-weight:600;
 }
 
-.save{
-  background:var(--ok);
-  color:white;
-  flex:1;
-}
+.save{ background:var(--ok); color:#fff; flex:1; }
+.del{ background:var(--danger); color:#fff; flex:1; }
 
-.del{
-  background:var(--danger);
-  color:white;
-  flex:1;
-}
-
-/* BOTÃO NOVO */
 .new{
   background:#3a3618;
   color:#fff;
   width:100%;
-  padding:12px;
-  border-radius:14px;
-  margin-bottom:14px;
+  margin-bottom:10px;
 }
 
 /* TOAST */
@@ -164,7 +166,7 @@ button{
   transform:translateX(-50%);
   background:#000;
   color:#fff;
-  padding:10px 16px;
+  padding:10px 15px;
   border-radius:20px;
   display:none;
 }
@@ -184,6 +186,9 @@ button{
 
 <button class="new" onclick="abrirModal()">+ Nova ID</button>
 
+<!-- 🔎 BUSCA -->
+<input class="busca" placeholder="Buscar ID..." oninput="filtrar(this.value)">
+
 <div id="lista"></div>
 
 </div>
@@ -192,7 +197,7 @@ button{
 <div class="modal" id="modal">
   <div class="modal-content">
 
-    <h3>Nova ID</h3>
+    <h4>Nova ID</h4>
 
     <input id="n_nome" placeholder="Nome">
 
@@ -227,9 +232,10 @@ const URL = "https://script.google.com/macros/s/AKfycbxs8MmNSgkb43F1vZDCtFE6AiRv
 const CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSochNnj1ihxWjFv_87wiDS9-ZakV1LrmdQWfZMAZMGRHf9pqCBXKQpkfQ6BDMlxwYE8E2JkWUVRYOG/pub?gid=1893895788&single=true&output=csv";
 
 let dados = [];
+let filtro = "";
 
-function parseCSV(text){
-  return text.split("\n").map(r => r.split(","));
+function parseCSV(t){
+  return t.split("\n").map(r => r.split(","));
 }
 
 async function carregar(){
@@ -257,7 +263,9 @@ function render(){
   const el = document.getElementById("lista");
   el.innerHTML = "";
 
-  dados.forEach(d => {
+  dados
+  .filter(d => d.nome.toLowerCase().includes(filtro.toLowerCase()))
+  .forEach(d => {
 
     const id = d.nome.replace(/\W/g,"_");
 
@@ -268,9 +276,7 @@ function render(){
     el.innerHTML += `
     <div class="card">
 
-      <div class="img-box">
-        <img src="${img}" class="img" onerror="this.src='imagens/sem-foto.jpg'">
-      </div>
+      <img src="${img}" class="img">
 
       <label>Nome</label>
       <input id="nome_${id}" value="${d.nome}">
@@ -278,20 +284,14 @@ function render(){
       <label>Qtd</label>
       <input id="qtd_${id}" value="${d.qtd}">
 
-      <label>Link da imagem (somente visual)</label>
-      <input value="${d.midia}" disabled>
+      <label>Link da imagem</label>
+      <input id="midia_${id}" value="${d.midia}">
 
-      <div class="row">
-        <div class="col">
-          <label>Camadas</label>
-          <input id="cam_${id}" value="${d.camadas}">
-        </div>
+      <label>Camadas</label>
+      <input id="cam_${id}" value="${d.camadas}">
 
-        <div class="col">
-          <label>Cores</label>
-          <input id="cor_${id}" value="${d.cores}">
-        </div>
-      </div>
+      <label>Cores</label>
+      <input id="cor_${id}" value="${d.cores}">
 
       <label>Padrão</label>
       <input id="pad_${id}" value="${d.padrao}">
@@ -303,6 +303,11 @@ function render(){
 
     </div>`;
   });
+}
+
+function filtrar(v){
+  filtro = v;
+  render();
 }
 
 async function salvar(nome){
@@ -317,7 +322,8 @@ async function salvar(nome){
       qtd:document.getElementById("qtd_"+id).value,
       cores:document.getElementById("cor_"+id).value,
       camadas:document.getElementById("cam_"+id).value,
-      padrao:document.getElementById("pad_"+id).value
+      padrao:document.getElementById("pad_"+id).value,
+      midia:document.getElementById("midia_"+id).value
     })
   });
 
@@ -327,7 +333,7 @@ async function salvar(nome){
 
 async function excluir(nome){
 
-  if(!confirm("Excluir ID?")) return;
+  if(!confirm("Excluir?")) return;
 
   await fetch(URL,{
     method:"POST",
