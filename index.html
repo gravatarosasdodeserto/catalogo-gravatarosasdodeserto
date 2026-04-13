@@ -253,7 +253,8 @@ async function carregarEstoque() {
         const idxNome = cabecalho.indexOf('nome');
         const idxQtd = cabecalho.indexOf('qtd');
         const idxMidia = cabecalho.indexOf('midia');
-
+        const idxPadrao = cabecalho.findIndex(h => h.includes('padrao') || h.includes('padrão'));
+        
         estoque = {};
         dadosCompletos.forEach(col => {
             const nome = col[idxNome];
