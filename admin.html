@@ -143,8 +143,10 @@ function renderizarTabela(){
     dadosCompletos.forEach(item=>{
         const id=cleanID(item.nome);
 
-        let img=item.midia
-            ? `https://drive.google.com/uc?export=view&id=${item.midia}`
+        let midiaID = (item.midia || "").replace(/&amp;/g, "&").trim();
+        
+        let img = midiaID
+            ? `https://drive.google.com/uc?export=view&id=${midiaID}`
             : "imagens/sem-foto.jpg";
 
         const tr=document.createElement("tr");
