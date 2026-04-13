@@ -342,29 +342,51 @@ function montarCatalogo() {
     grid.innerHTML = "";
     let itensExibidos = 0;
 
-    // Ordena os nomes das rosas em ordem alfabética
     Object.keys(estoque).sort().forEach(nome => {
         const dados = estoque[nome];
         
-        // --- LÓGICA DE FILTROS ---
-        // Filtro de Pronta Entrega
         if (apenasDisponiveis && dados.qtd === 0) return;
-        
-        // Filtro de Pesquisa por texto
         if (filtroTexto && !nome.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").includes(filtroTexto)) return;
 
-        // Filtros de Categorias (Camadas, Cores, etc)
         let passaFiltro = true;
         for (let col in filtrosAtivos) {
             if (filtrosAtivos[col] && filtrosAtivos[col] !== "Todas") {
-                const valorNoEstoque = dados.filtros[col] || "";
-                // Verifica se o valor selecionado está contido na célula (suporta múltiplos valores com | ou /)
+                const valorNoEstoque = String(dados.filtros[col] || "");
                 if (!valorNoEstoque.includes(filtrosAtivos[col])) {
                     passaFiltro = false;
                     break;
                 }
             }
         }
+        if (!passaFiltro) return;
+
+        itensExibidos++;
+
+        // Lógica de Mídia: Prioriza ID do Drive, depois link, depois imagem local
+        const idMidia = dados.midia ? dados.midia.trim() : "";
+        let srcFinal = idMidia !== "" ? 
+            (idMidia.startsWith("http") ? idMidia : `https://drive.google.com/uc?export=view&id=${idMidia}`) : 
+            `imagens/${nome.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/ /g, "-").replace(/[()]/g, "")}.jpg`;
+
+        const card = document.createElement("div");
+        card.className = "item" + (selecionados.has(nome) ? " selecionado" : "");
+        card.innerHTML = `
+            <img src="${srcFinal}" alt="${nome}" onerror="handleImageError(this, '${nome}')">
+            <p>${nome}</p>
+            <div class="estoque-status ${dados.qtd > 0 ? 'disponivel' : 'encomenda'}">
+                ${dados.qtd > 0 ? 'Disponível: ' + dados.qtd : 'Por Encomenda'}
+            </div>`;
+
+        card.onclick = () => {
+            selecionados.has(nome) ? selecionados.delete(nome) : selecionados.add(nome);
+            card.classList.toggle('selecionado');
+            atualizarPainelAcoes();
+        };
+        grid.appendChild(card);
+    });
+
+    if (itensExibidos === 0) grid.innerHTML = `<div class="vazio">Nenhuma ID encontrada.</div>`;
+}
         if (!passaFiltro) return;
 
         itensExibidos++;
