@@ -390,7 +390,84 @@ function montarCatalogo() {
     
     if (itensExibidos === 0) grid.innerHTML = `<div class="vazio">Nenhuma ID encontrada.</div>`;
 }
+function gerarInterfaceFiltros() {
+    const headerHtml = `
+        <button class="fechar-drawer" onclick="toggleDrawer()">✕</button>
+        <div class="wrapper-switch">
+            <label class="switch-disponivel">
+                <input type="checkbox" id="checkProntaEntrega" ${apenasDisponiveis ? 'checked' : ''}>
+                <span class="slider"></span>
+                ID's pronta entrega
+            </label>
+        </div>`;
+    
+    let filtrosHtml = "";
+    colunasDeFiltro.forEach(col => {
+        const valoresUnicos = new Set();
+        Object.values(estoque).forEach(item => {
+            const campo = item.filtros[col];
+            if (campo) {
+                const partes = campo.split(/[|/]/); 
+                partes.forEach(p => {
+                    const formatado = p.trim();
+                    if (formatado) valoresUnicos.add(formatado);
+                });
+            }
+        });
+        
+        if (valoresUnicos.size > 0) {
+            let titulo = col.charAt(0).toUpperCase() + col.slice(1);
+            if(col === 'padrao') titulo = 'Padrão';
 
+            filtrosHtml += `
+                <div class="grupo-filtro">
+                    <div class="titulo-filtro">${titulo}</div>
+                    <div class="opcoes-filtro">
+                        <div class="pill ${!filtrosAtivos[col] || filtrosAtivos[col] === 'Todas' ? 'active' : ''}" 
+                             onclick="definirFiltro('${col}', 'Todas', this)">Todas</div>
+                        ${Array.from(valoresUnicos).sort().map(val => `
+                            <div class="pill ${filtrosAtivos[col] === val ? 'active' : ''}" 
+                                 onclick="definirFiltro('${col}', '${val}', this)">${val}</div>
+                        `).join('')}
+                    </div>
+                </div>`;
+        }
+    });
+
+    drawer.innerHTML = headerHtml + filtrosHtml;
+    document.getElementById("checkProntaEntrega").addEventListener("change", (e) => { 
+        apenasDisponiveis = e.target.checked; 
+        atualizarTagsFiltros();
+        montarCatalogo(); 
+    });
+}
+
+function definirFiltro(coluna, valor, elemento) {
+    filtrosAtivos[coluna] = valor;
+    const grupo = elemento.parentElement;
+    grupo.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+    elemento.classList.add('active');
+    atualizarTagsFiltros();
+    montarCatalogo();
+}
+
+function atualizarTagsFiltros() {
+    listaFiltrosAtivos.innerHTML = "";
+    if (apenasDisponiveis) {
+        const tag = document.createElement("div");
+        tag.className = "tag-filtro-ativa";
+        tag.innerText = "PRONTA ENTREGA";
+        listaFiltrosAtivos.appendChild(tag);
+    }
+    for (let col in filtrosAtivos) {
+        if (filtrosAtivos[col] && filtrosAtivos[col] !== "Todas") {
+            const tag = document.createElement("div");
+            tag.className = "tag-filtro-ativa";
+            tag.innerText = filtrosAtivos[col].toUpperCase();
+            listaFiltrosAtivos.appendChild(tag);
+        }
+    }
+}
 function atualizarPainelAcoes() {
     const areaSelecao = document.getElementById("areaSelecao");
     const containerTags = document.getElementById("containerTags");
