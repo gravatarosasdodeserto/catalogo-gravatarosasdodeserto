@@ -145,16 +145,22 @@ async function criarNovaID(e){
     };
 
     try{
-        await fetch(WEB_APP_URL,{
+        const res = await fetch(WEB_APP_URL,{
             method:"POST",
-            mode:"no-cors",
+            headers:{
+                "Content-Type":"application/json"
+            },
             body:JSON.stringify(payload)
         });
 
-        toast("Criado!", "#2d5a27");
+        const data = await res.json();
+        console.log(data);
 
-    }catch{
-        toast("Erro!", "#8b2d2d");
+        toast("Criado com sucesso!", "#2d5a27");
+
+    }catch(err){
+        console.error(err);
+        toast("Erro ao salvar", "#8b2d2d");
     }
 }
 
@@ -174,19 +180,24 @@ async function salvar(nome){
     };
 
     try{
-        await fetch(WEB_APP_URL,{
+        const res = await fetch(WEB_APP_URL,{
             method:"POST",
-            mode:"no-cors",
+            headers:{
+                "Content-Type":"application/json"
+            },
             body:JSON.stringify(payload)
         });
 
-        toast("Salvo!", "#2d5a27");
+        const data = await res.json();
+        console.log(data);
 
-    }catch{
-        toast("Erro!", "#8b2d2d");
+        toast("Salvo com sucesso!", "#2d5a27");
+
+    }catch(err){
+        console.error(err);
+        toast("Erro ao salvar", "#8b2d2d");
     }
 }
-
 // =====================
 function abrirModal(){ document.getElementById("modalNovaID").style.display="flex"; }
 function fecharModal(){ document.getElementById("modalNovaID").style.display="none"; }
