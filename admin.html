@@ -91,6 +91,9 @@ function cleanID(name){
 async function carregarDados(){
     try{
 
+        const resp = await fetch(urlPlanilha);
+        const text = await resp.text();
+
         const dados = parseCSV(text);
 
         const header = dados.shift().map(h =>
@@ -126,7 +129,7 @@ async function carregarDados(){
         renderizarTabela();
 
     }catch(e){
-        console.error(e);
+        console.error("ERRO REAL:", e);
     }
 }
 
