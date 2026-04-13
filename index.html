@@ -411,10 +411,14 @@ function montarCatalogo() {
     grid.innerHTML = "";
     let itensExibidos = 0;
 
+    // Ordena as IDs por nome e percorre o estoque
     Object.keys(estoque).sort().forEach(nome => {
         const dados = estoque[nome];
+        
+        // Filtro de Pronta Entrega
         if (apenasDisponiveis && dados.qtd === 0) return;
 
+        // Filtros das Categorias (Camadas, Cores, etc)
         let passaFiltro = true;
         for (let col in filtrosAtivos) {
             const selecao = filtrosAtivos[col];
@@ -428,16 +432,32 @@ function montarCatalogo() {
         }
         
         if (!passaFiltro) return;
+
+        // Filtro de Busca por Texto
         if (filtroTexto && !nome.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").includes(filtroTexto)) return;
 
         itensExibidos++;
-        const nomeArq = nome.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/ /g, "-").replace(/[()]/g, "");
+
+        // Lógica de Mídia: Prioriza o link da coluna 'Midia' (Google Drive)
+        const linkMidia = dados.midia || "";
+        // Verifica se é vídeo pela extensão ou tipo de arquivo no link
+        const ehVideo = linkMidia.toLowerCase().includes(".mp4") || linkMidia.toLowerCase().includes("video");
         
+        // Se não houver link na planilha, tenta o padrão antigo da pasta local como fallback
+        const nomeArq = nome.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/ /g, "-").replace(/[()]/g, "");
+        const fallbackImg = `imagens/${nomeArq}.jpg`;
+
         const card = document.createElement("div");
         card.className = "item" + (selecionados.has(nome) ? " selecionado" : "");
+        
         card.innerHTML = `
-            <video src="imagens/${nomeArq}.mp4" poster="imagens/${nomeArq}.jpg" muted loop playsinline autoplay onerror="this.style.display='none'; this.nextElementSibling.style.display='block'"></video>
-            <img src="imagens/${nomeArq}.jpg" style="display:none" onerror="this.src='imagens/sem-foto.jpg'">
+            ${linkMidia ? 
+                (ehVideo ? 
+                    `<video src="${linkMidia}" muted loop playsinline autoplay onerror="this.parentElement.innerHTML += '<img src=\\'${fallbackImg}\\' onerror=\\'this.src=\"imagens/sem-foto.jpg\"\\'>'; this.style.display='none';"></video>` : 
+                    `<img src="${linkMidia}" onerror="this.src='${fallbackImg}'; this.onerror=function(){this.src='imagens/sem-foto.jpg'};">`
+                ) : 
+                `<img src="${fallbackImg}" onerror="this.src='imagens/sem-foto.jpg'">`
+            }
             <p>${nome}</p>
             <div class="estoque-status ${dados.qtd > 0 ? 'disponivel' : 'encomenda'}">
                 ${dados.qtd > 0 ? 'Disponível: ' + dados.qtd : 'Por Encomenda'}
