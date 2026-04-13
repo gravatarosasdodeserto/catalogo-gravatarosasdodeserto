@@ -133,61 +133,69 @@ function renderizarTabela(){
 async function criarNovaID(e){
     e.preventDefault();
 
-    const payload={
-        action:"create",
-        nome:document.getElementById("new-nome").value,
-        qtd:document.getElementById("new-qtd").value,
-        cores:document.getElementById("new-cores").value,
-        camadas:document.getElementById("new-camadas").value,
-        padrao:document.getElementById("new-padrao").value,
-        midia:document.getElementById("new-midia").value
-    };
+    const fileInput = document.getElementById("new-file");
+    let midiaID = "";
 
-    try{
-        await fetch(WEB_APP_URL,{
-            method:"POST",
-            mode:"no-cors",
-            headers:{
-                "Content-Type":"application/x-www-form-urlencoded"
-            },
-            body:new URLSearchParams(payload)
+    if(fileInput && fileInput.files.length > 0){
+
+        const file = fileInput.files[0];
+
+        const base64 = await new Promise((resolve, reject)=>{
+            const reader = new FileReader();
+
+            reader.onload = () => resolve(reader.result.split(",")[1]);
+            reader.onerror = reject;
+
+            reader.readAsDataURL(file);
         });
 
-        toast("Criado!", "#2d5a27");
+        try{
+            const uploadResp = await fetch(WEB_APP_URL, {
+                method: "POST",
+                body: new URLSearchParams({
+                    action: "upload",
+                    file: base64,
+                    mimeType: file.type,
+                    fileName: file.name
+                })
+            });
 
-    }catch{
-        toast("Erro!", "#8b2d2d");
+            const uploadData = await uploadResp.json();
+
+            if(uploadData && uploadData.id){
+                midiaID = uploadData.id;
+            }
+
+        }catch(err){
+            console.error("Erro no upload:", err);
+            toast("Erro no upload da imagem", "#8b2d2d");
+            return; // interrompe criação se quiser evitar ID sem imagem falha
+        }
     }
-}
-
-async function salvar(nome){
-
-    const id=cleanID(nome);
-
-    const payload={
-        action:"update",
-        nome:nome,
-        qtd:document.getElementById(`qtd-${id}`).value,
-        cores:document.getElementById(`cores-${id}`).value,
-        camadas:document.getElementById(`camadas-${id}`).value,
-        padrao:document.getElementById(`padrao-${id}`).value,
-        midia:document.getElementById(`midia-${id}`).value
+    const payload = {
+        action: "create",
+        nome: document.getElementById("new-nome").value,
+        qtd: document.getElementById("new-qtd").value,
+        cores: document.getElementById("new-cores").value,
+        camadas: document.getElementById("new-camadas").value,
+        padrao: document.getElementById("new-padrao").value,
+        midia: midiaID
     };
 
     try{
-        await fetch(WEB_APP_URL,{
-            method:"POST",
-            mode:"no-cors",
-            headers:{
-                "Content-Type":"application/x-www-form-urlencoded"
-            },
-            body:new URLSearchParams(payload)
+        await fetch(WEB_APP_URL, {
+            method: "POST",
+            body: new URLSearchParams(payload)
         });
 
-        toast("Salvo!", "#2d5a27");
+        toast("Criado com sucesso!", "#2d5a27");
 
-    }catch{
-        toast("Erro!", "#8b2d2d");
+        // limpa input de imagem
+        if(fileInput) fileInput.value = "";
+
+    }catch(err){
+        console.error(err);
+        toast("Erro ao criar ID", "#8b2d2d");
     }
 }
 // =====================
