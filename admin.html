@@ -142,15 +142,6 @@ const urlPlanilha = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSochNnj1ih
             padrao: document.getElementById("new-padrao").value,
             midia: document.getElementById("new-midia").value
         };
-        btn.disabled = true;
-        try {
-            await fetch(WEB_APP_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) });
-            toast("Criado! Aguarde 2 min e atualize.", "#2d5a27");
-            fecharModal();
-            document.getElementById("formNovaID").reset();
-        } catch (err) { toast("Erro", "#8b2d2d"); }
-        btn.disabled = false;
-    }
 
     async function salvarAlteracao(nome) {
     const idLimpa = cleanID(nome);
