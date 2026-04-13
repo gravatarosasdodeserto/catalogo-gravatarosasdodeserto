@@ -342,46 +342,86 @@ function montarCatalogo() {
     grid.innerHTML = "";
     let itensExibidos = 0;
 
+    // Ordena os nomes das rosas em ordem alfabética
     Object.keys(estoque).sort().forEach(nome => {
         const dados = estoque[nome];
         
-        // Filtros (Simplificados para o exemplo)
+        // --- LÓGICA DE FILTROS ---
+        // Filtro de Pronta Entrega
         if (apenasDisponiveis && dados.qtd === 0) return;
+        
+        // Filtro de Pesquisa por texto
         if (filtroTexto && !nome.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").includes(filtroTexto)) return;
+
+        // Filtros de Categorias (Camadas, Cores, etc)
+        let passaFiltro = true;
+        for (let col in filtrosAtivos) {
+            if (filtrosAtivos[col] && filtrosAtivos[col] !== "Todas") {
+                const valorNoEstoque = dados.filtros[col] || "";
+                // Verifica se o valor selecionado está contido na célula (suporta múltiplos valores com | ou /)
+                if (!valorNoEstoque.includes(filtrosAtivos[col])) {
+                    passaFiltro = false;
+                    break;
+                }
+            }
+        }
+        if (!passaFiltro) return;
 
         itensExibidos++;
 
-        const idMidia = dados.midia.trim();
+        // --- LÓGICA DE IMAGEM (O CORAÇÃO DO PROBLEMA) ---
+        const idMidia = dados.midia ? dados.midia.trim() : "";
         let srcFinal = "";
 
-        // PRIORIDADE 1: Google Drive (se houver ID na coluna Midia)
         if (idMidia !== "") {
-            srcFinal = idMidia.startsWith("http") ? idMidia : `https://drive.google.com/uc?export=view&id=${idMidia}`;
+            // Se o dado na coluna 'Midia' começar com http, é o link completo do Drive
+            // Caso contrário, assumimos que é apenas o ID e montamos o link de visualização
+            srcFinal = idMidia.startsWith("http") 
+                ? idMidia 
+                : `https://drive.google.com/uc?export=view&id=${idMidia}`;
         } else {
-            // PRIORIDADE 2: Pasta Imagens do GitHub (nome do arquivo)
-            const nomeFormatado = nome.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/ /g, "-").replace(/[()]/g, "");
+            // Se a coluna Midia estiver vazia, tenta buscar na pasta 'imagens' do GitHub
+            // Formata o nome: "Açucena (Mutante)" vira "acucena-mutante"
+            const nomeFormatado = nome.toLowerCase()
+                .normalize("NFD")
+                .replace(/[\u0300-\u036f]/g, "")
+                .replace(/ /g, "-")
+                .replace(/[()]/g, "");
+            
             srcFinal = `imagens/${nomeFormatado}.jpg`;
         }
 
+        // --- CRIAÇÃO DO CARD HTML ---
         const card = document.createElement("div");
         card.className = "item" + (selecionados.has(nome) ? " selecionado" : "");
         
-        // Lógica de Erro: Se falhar a primeira tentativa, tenta o nome em maiúsculo, se falhar, sem-foto.
         card.innerHTML = `
             <img src="${srcFinal}" 
+                 alt="${nome}"
                  onerror="handleImageError(this, '${nome}')">
             <p>${nome}</p>
             <div class="estoque-status ${dados.qtd > 0 ? 'disponivel' : 'encomenda'}">
                 ${dados.qtd > 0 ? 'Disponível: ' + dados.qtd : 'Por Encomenda'}
             </div>`;
 
+        // Evento de clique para selecionar
         card.onclick = () => {
-            if (selecionados.has(nome)) selecionados.delete(nome); else selecionados.add(nome);
+            if (selecionados.has(nome)) {
+                selecionados.delete(nome);
+            } else {
+                selecionados.add(nome);
+            }
             card.classList.toggle('selecionado');
             atualizarPainelAcoes();
         };
+
         grid.appendChild(card);
     });
+
+    // Se nenhum item passar pelos filtros
+    if (itensExibidos === 0) {
+        grid.innerHTML = `<div class="vazio">Nenhuma ID encontrada com esses filtros.</div>`;
+    }
 }
 
 function handleImageError(img, nomeOriginal) {
