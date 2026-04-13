@@ -83,7 +83,23 @@ body {
 .logo { position: relative; z-index: 3; }
 .logo img { width: 150px; height: auto; filter: drop-shadow(0 4px 15px rgba(0,0,0,0.4)); }
 
-/* ===== BARRA DE FILTROS (FIXA) ===== */
+/* Botão Admin Discreto */
+.btn-admin-setup {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  z-index: 1001;
+  cursor: pointer;
+  opacity: 0.3;
+  transition: opacity 0.3s;
+  background: none;
+  border: none;
+  padding: 5px;
+}
+.btn-admin-setup:hover { opacity: 1; }
+.btn-admin-setup svg { fill: var(--text-main); width: 18px; height: 18px; }
+
+/* ===== BARRA DE FILTROS ===== */
 .secao-filtros {
   position: sticky;
   top: 152px;
@@ -95,88 +111,14 @@ body {
   gap: 5px;
   border-bottom: 1px solid rgba(0,0,0,0.06);
 }
+.filtros-topo-wrapper { display: flex; justify-content: space-between; align-items: center; width: 100%; min-height: 28px; }
+.resumo-filtros { display: flex; flex-wrap: wrap; gap: 4px; max-width: 75%; }
+.tag-filtro-ativa { font-size: 9px; background: rgba(58, 54, 24, 0.08); color: var(--text-main); padding: 2px 8px; border-radius: 4px; font-weight: 700; text-transform: uppercase; }
 
-.filtros-topo-wrapper {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    min-height: 28px;
-}
-
-.resumo-filtros {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 4px;
-    max-width: 75%;
-}
-
-.tag-filtro-ativa {
-    font-size: 9px;
-    background: rgba(58, 54, 24, 0.08);
-    color: var(--text-main);
-    padding: 2px 8px;
-    border-radius: 4px;
-    font-weight: 700;
-    text-transform: uppercase;
-    white-space: nowrap;
-}
-
-/* Botão Admin Discreto */
-.btn-admin-setup {
-  position: absolute;
-  top: 10px;
-  right: 15px;
-  z-index: 1001;
-  cursor: pointer;
-  opacity: 0.3; /* Fica bem clarinho para ser discreto */
-  transition: opacity 0.3s;
-  background: none;
-  border: none;
-  padding: 5px;
-}
-
-.btn-admin-setup:hover {
-  opacity: 1; /* Só brilha ao passar o mouse */
-}
-
-.btn-admin-setup svg {
-  fill: var(--text-main);
-  width: 18px;
-  height: 18px;
-}
-
-.btn-abrir-filtros {
-  background: var(--text-main);
-  color: white;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  padding: 4px 12px;
-  border-radius: 50px;
-  border: none;
-  font-weight: 600;
-  font-size: 11px;
-  cursor: pointer;
-  height: 24px;
-  flex-shrink: 0;
-}
-
+.btn-abrir-filtros { background: var(--text-main); color: white; display: flex; align-items: center; gap: 5px; padding: 4px 12px; border-radius: 50px; border: none; font-weight: 600; font-size: 11px; cursor: pointer; height: 24px; }
 .btn-abrir-filtros svg { width: 12px; height: 12px; }
 
-/* ===== TEXTO DE INSTRUÇÃO ===== */
-.instrucao-texto {
-    width: calc(100% - 40px);
-    margin: 25px auto 10px;
-    padding: 14px 18px;
-    text-align: center;
-    background: rgba(255, 255, 255, 0.55);
-    border-radius: 18px;
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255,255,255,0.6);
-    box-shadow: 0 6px 20px rgba(0,0,0,0.06);
-}
-
+.instrucao-texto { width: calc(100% - 40px); margin: 25px auto 10px; padding: 14px 18px; text-align: center; background: rgba(255, 255, 255, 0.55); border-radius: 18px; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.6); box-shadow: 0 6px 20px rgba(0,0,0,0.06); }
 .instrucao-texto p { margin: 0; font-size: 13px; font-weight: 500; }
 .instrucao-texto span { display: block; margin-top: 5px; font-size: 11px; color: rgba(58, 54, 24, 0.65); }
 
@@ -184,38 +126,20 @@ body {
 
 /* ===== DRAWER ===== */
 .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 2000; display: none; backdrop-filter: blur(3px); }
-.drawer-filtros { position: fixed; right: -300px; top: 0; width: 300px; height: 100%; background: var(--body-bg); z-index: 2001; transition: 0.3s; padding: 30px 20px; box-shadow: -5px 0 25px rgba(0,0,0,0.2); display: flex; flex-direction: column; overflow-y: auto; }
+.drawer-filtros { position: fixed; right: -300px; top: 0; width: 300px; height: 100%; background: var(--body-bg); z-index: 2001; transition: 0.3s; padding: 30px 20px; box-shadow: -5px 0 25px rgba(0,0,0,0.2); overflow-y: auto; }
 .drawer-filtros.active { right: 0; }
-.fechar-drawer { background: none; border: none; font-size: 24px; cursor: pointer; text-align: right; margin-bottom: 20px; color: var(--text-main); }
-
+.fechar-drawer { background: none; border: none; font-size: 24px; cursor: pointer; text-align: right; width: 100%; color: var(--text-main); }
 .grupo-filtro { margin-bottom: 25px; }
-.titulo-filtro { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; margin-bottom: 12px; opacity: 0.6; }
+.titulo-filtro { font-size: 11px; text-transform: uppercase; font-weight: 700; margin-bottom: 12px; opacity: 0.6; }
 .opcoes-filtro { display: flex; flex-wrap: wrap; gap: 8px; }
-
 .pill { padding: 6px 14px; background: #ffffff; border: 1px solid rgba(0,0,0,0.05); border-radius: 50px; font-size: 12px; cursor: pointer; }
 .pill.active { background: var(--text-main); color: white; }
 
-.wrapper-switch { margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid rgba(0,0,0,0.1); }
-.switch-disponivel { display: inline-flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 600; cursor: pointer; }
-.switch-disponivel input { display: none; }
-.switch-disponivel .slider { width: 34px; height: 18px; background: #c7c1b5; border-radius: 20px; position: relative; transition: 0.3s; }
-.switch-disponivel .slider::before { content: ""; position: absolute; width: 12px; height: 12px; left: 3px; top: 3px; background: white; border-radius: 50%; transition: 0.3s; }
-.switch-disponivel input:checked +.slider { background: var(--text-main); }
-.switch-disponivel input:checked +.slider::before { transform: translateX(16px); }
-
 /* ===== GRID ===== */
-.catalogo {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-    gap: 15px;
-    width: 100%;
-    padding: 0 20px;
-    margin: 0;
-}
-
+.catalogo { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 15px; width: 100%; padding: 0 20px; }
 .item { background: var(--card-white); padding: 10px; border-radius: 20px; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.05); transition: all 0.2s; }
 .item.selecionado { background: var(--card-selected)!important; transform: scale(0.96); }
-.item video,.item img { width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 14px; }
+.item img { width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 14px; }
 .item p { text-align: center; font-size: 13px; font-weight: 600; margin: 10px 0 2px 0; }
 .estoque-status { text-align: center; font-size: 10px; font-weight: 700; text-transform: uppercase; }
 .disponivel { color: #2d5a27; }
@@ -224,30 +148,16 @@ body {
 /* ===== RODAPÉ ===== */
 .rodape-acoes { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(229, 224, 216, 0.98); backdrop-filter: blur(12px); padding: 10px 20px 25px; z-index: 1000; border-top: 2px solid #ffffff; }
 .container-rodape { max-width: 500px; margin: 0 auto; display: flex; flex-direction: column; gap: 8px; }
-
-.caixa-selecao {
-  display: none;
-  background: #ffffff;
-  padding: 6px 10px;
-  border-radius: 15px;
-  max-height: 70px;
-  overflow-y: auto;
-  border: 1px solid rgba(0,0,0,0.05);
-  margin-bottom: 2px;
-}
-.topo-caixa { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; font-size: 10px; font-weight: 600; }
-.limpar { color: #8b2d2d; cursor: pointer; text-decoration: underline; }
+.caixa-selecao { display: none; background: #ffffff; padding: 6px 10px; border-radius: 15px; max-height: 70px; overflow-y: auto; border: 1px solid rgba(0,0,0,0.05); }
 .tag-item { font-size: 10px; background: #f0f0eb; padding: 4px 10px; border-radius: 8px; display: inline-flex; align-items: center; gap: 6px; margin: 0 4px 4px 0; }
-.tag-item button { border: none; background: none; color: #8b2d2d; cursor: pointer; font-weight: bold; font-size: 12px; }
-
-.campo-busca { width: 100%; padding: 12px 20px; border-radius: 50px; border: 1.5px solid rgba(0,0,0,0.1); background: white; outline: none; text-align: center; }
+.tag-item button { border: none; background: none; color: #8b2d2d; cursor: pointer; font-weight: bold; }
+.campo-busca { width: 100%; padding: 12px 20px; border-radius: 50px; border: 1.5px solid rgba(0,0,0,0.1); outline: none; text-align: center; }
 .btn-whatsapp { width: 100%; padding: 15px; background: var(--text-main); color: white; border: none; border-radius: 50px; font-weight: 600; cursor: pointer; }
-.vazio { grid-column: 1/-1; text-align: center; padding: 60px; opacity: 0.5; }
 </style>
 </head>
 <body>
 
-<button class="btn-admin-setup" onclick="acessarAdmin()" title="Configurações">
+<button class="btn-admin-setup" onclick="acessarAdmin()" title="Acesso Restrito">
     <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
         <path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.74,8.87 C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.81,11.68,4.81,12c0,0.33,0.02,0.65,0.07,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.47-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"/>
     </svg>
@@ -274,12 +184,11 @@ body {
 </div>
 
 <div class="overlay" id="overlay" onclick="toggleDrawer()"></div>
-
 <div class="drawer-filtros" id="drawer"></div>
 
 <div class="instrucao-texto">
-    <p>Selecione as ID's desejadas para solicitar informações sobre os enxertos.</p>
-    <span>Variedades sem pronta entrega podem ser encomendadas sem custo.</span>
+    <p>Selecione as ID's desejadas para solicitar informações.</p>
+    <span>Variedades sem estoque podem ser encomendadas.</span>
 </div>
 
 <div class="catalogo" id="gridCatalogo">
@@ -289,10 +198,6 @@ body {
 <div class="rodape-acoes">
   <div class="container-rodape">
     <div class="caixa-selecao" id="areaSelecao">
-      <div class="topo-caixa">
-        <span>ID's selecionadas:</span>
-        <span class="limpar" onclick="limparTudo()">Limpar tudo</span>
-      </div>
       <div id="containerTags"></div>
     </div>
     <input type="text" id="inputPesquisa" class="campo-busca" placeholder="Buscar ID pelo nome...">
@@ -306,7 +211,7 @@ let selecionados = new Set();
 let filtroTexto = "";
 let apenasDisponiveis = false;
 let filtrosAtivos = {}; 
-let colunasDeFiltro = ["camadas", "cores", "padrao", "especiais"]; 
+let colunasDeFiltro = ["camadas", "cores", "padrao"]; 
 
 const urlPlanilha = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQHtdljGrbqvDGysgNUi7MVlGI19jY6WYrIJSckkcX7ylbKP02BWqgt0qHPUTTxqg/pub?gid=1893895788&single=true&output=csv&t=' + Math.random();
 
@@ -315,16 +220,12 @@ const drawer = document.getElementById("drawer");
 const inputPesquisa = document.getElementById("inputPesquisa");
 const listaFiltrosAtivos = document.getElementById("listaFiltrosAtivos");
 
-// FUNÇÃO DE LEITURA DE CSV ROBUSTA
 function parseCSV(text) {
     const lines = text.split(/\r?\n/).filter(l => l.trim() !== "");
-    const result = [];
-    lines.forEach(line => {
-        // Esta regex separa por vírgula mas ignora vírgulas dentro de aspas
+    return lines.map(line => {
         const cells = line.match(/(".*?"|[^",\r\n]+)(?=\s*,|\s*$|\s*\r?\n)/g) || [];
-        result.push(cells.map(c => c.trim().replace(/^"|"$/g, '')));
+        return cells.map(c => c.trim().replace(/^"|"$/g, ''));
     });
-    return result;
 }
 
 async function carregarEstoque() {
@@ -332,81 +233,56 @@ async function carregarEstoque() {
         const resp = await fetch(urlPlanilha);
         const text = await resp.text();
         const dadosCompletos = parseCSV(text);
-        
         if (dadosCompletos.length < 1) return;
 
-        const cabecalho = dadosCompletos.shift().map(h => 
-            h.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
-        );
-
+        const cabecalho = dadosCompletos.shift().map(h => h.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""));
         const idxNome = cabecalho.indexOf('nome');
         const idxQtd = cabecalho.indexOf('qtd');
         const idxMidia = cabecalho.indexOf('midia');
 
         estoque = {};
         dadosCompletos.forEach(col => {
-            const nomeOriginal = col[idxNome];
-            if (!nomeOriginal) return;
-
-            estoque[nomeOriginal] = {
+            const nome = col[idxNome];
+            if (!nome) return;
+            estoque[nome] = {
                 qtd: parseInt(col[idxQtd]) || 0,
                 midia: col[idxMidia] || "", 
                 filtros: {}
             };
-
-            colunasDeFiltro.forEach(colNome => {
-                const idxReal = cabecalho.indexOf(colNome);
-                estoque[nomeOriginal].filtros[colNome] = idxReal !== -1 ? col[idxReal] : '';
+            colunasDeFiltro.forEach(f => {
+                const i = cabecalho.indexOf(f);
+                estoque[nome].filtros[f] = i !== -1 ? col[i] : '';
             });
         });
-        
         gerarInterfaceFiltros();
         montarCatalogo();
-    } catch (e) {
-        console.error("Erro:", e);
-        grid.innerHTML = `<div class="vazio">Erro ao carregar dados.</div>`;
-    }
+    } catch (e) { grid.innerHTML = "Erro ao carregar dados."; }
 }
 
 function montarCatalogo() {
     grid.innerHTML = "";
-    let itensExibidos = 0;
-
+    let count = 0;
     Object.keys(estoque).sort().forEach(nome => {
-        const dados = estoque[nome];
-        
-        if (apenasDisponiveis && dados.qtd === 0) return;
+        const d = estoque[nome];
+        if (apenasDisponiveis && d.qtd === 0) return;
         if (filtroTexto && !nome.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").includes(filtroTexto)) return;
-
-        let passaFiltro = true;
-        for (let col in filtrosAtivos) {
-            if (filtrosAtivos[col] && filtrosAtivos[col] !== "Todas") {
-                const valorNoEstoque = String(dados.filtros[col] || "");
-                if (!valorNoEstoque.includes(filtrosAtivos[col])) {
-                    passaFiltro = false;
-                    break;
-                }
+        
+        let passa = true;
+        for (let f in filtrosAtivos) {
+            if (filtrosAtivos[f] && filtrosAtivos[f] !== "Todas") {
+                if (!String(d.filtros[f]).includes(filtrosAtivos[f])) { passa = false; break; }
             }
         }
-        if (!passaFiltro) return;
+        if (!passa) return;
 
-        itensExibidos++;
-
-        // Lógica de Mídia: Prioriza ID do Drive, depois link, depois imagem local
-        const idMidia = dados.midia ? dados.midia.trim() : "";
-        let srcFinal = idMidia !== "" ? 
-            (idMidia.startsWith("http") ? idMidia : `https://drive.google.com/uc?export=view&id=${idMidia}`) : 
-            `imagens/${nome.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/ /g, "-").replace(/[()]/g, "")}.jpg`;
+        count++;
+        const idMidia = d.midia.trim();
+        let src = idMidia ? (idMidia.startsWith("http") ? idMidia : `https://drive.google.com/uc?export=view&id=${idMidia}`) : `imagens/${nome.toLowerCase().replace(/ /g, "-")}.jpg`;
 
         const card = document.createElement("div");
         card.className = "item" + (selecionados.has(nome) ? " selecionado" : "");
-        card.innerHTML = `
-            <img src="${srcFinal}" alt="${nome}" onerror="handleImageError(this, '${nome}')">
-            <p>${nome}</p>
-            <div class="estoque-status ${dados.qtd > 0 ? 'disponivel' : 'encomenda'}">
-                ${dados.qtd > 0 ? 'Disponível: ' + dados.qtd : 'Por Encomenda'}
-            </div>`;
-
+        card.innerHTML = `<img src="${src}" onerror="this.src='imagens/sem-foto.jpg'"><p>${nome}</p>
+            <div class="estoque-status ${d.qtd > 0 ? 'disponivel' : 'encomenda'}">${d.qtd > 0 ? 'Disponível' : 'Por Encomenda'}</div>`;
         card.onclick = () => {
             selecionados.has(nome) ? selecionados.delete(nome) : selecionados.add(nome);
             card.classList.toggle('selecionado');
@@ -414,229 +290,63 @@ function montarCatalogo() {
         };
         grid.appendChild(card);
     });
-
-    if (itensExibidos === 0) grid.innerHTML = `<div class="vazio">Nenhuma ID encontrada.</div>`;
-}
-        if (!passaFiltro) return;
-
-        itensExibidos++;
-
-        // --- LÓGICA DE IMAGEM (O CORAÇÃO DO PROBLEMA) ---
-        const idMidia = dados.midia ? dados.midia.trim() : "";
-        let srcFinal = "";
-
-        if (idMidia !== "") {
-            // Se o dado na coluna 'Midia' começar com http, é o link completo do Drive
-            // Caso contrário, assumimos que é apenas o ID e montamos o link de visualização
-            srcFinal = idMidia.startsWith("http") 
-                ? idMidia 
-                : `https://drive.google.com/uc?export=view&id=${idMidia}`;
-        } else {
-            // Se a coluna Midia estiver vazia, tenta buscar na pasta 'imagens' do GitHub
-            // Formata o nome: "Açucena (Mutante)" vira "acucena-mutante"
-            const nomeFormatado = nome.toLowerCase()
-                .normalize("NFD")
-                .replace(/[\u0300-\u036f]/g, "")
-                .replace(/ /g, "-")
-                .replace(/[()]/g, "");
-            
-            srcFinal = `imagens/${nomeFormatado}.jpg`;
-        }
-
-        // --- CRIAÇÃO DO CARD HTML ---
-        const card = document.createElement("div");
-        card.className = "item" + (selecionados.has(nome) ? " selecionado" : "");
-        
-        card.innerHTML = `
-            <img src="${srcFinal}" 
-                 alt="${nome}"
-                 onerror="handleImageError(this, '${nome}')">
-            <p>${nome}</p>
-            <div class="estoque-status ${dados.qtd > 0 ? 'disponivel' : 'encomenda'}">
-                ${dados.qtd > 0 ? 'Disponível: ' + dados.qtd : 'Por Encomenda'}
-            </div>`;
-
-        // Evento de clique para selecionar
-        card.onclick = () => {
-            if (selecionados.has(nome)) {
-                selecionados.delete(nome);
-            } else {
-                selecionados.add(nome);
-            }
-            card.classList.toggle('selecionado');
-            atualizarPainelAcoes();
-        };
-
-        grid.appendChild(card);
-    });
-
-    // Se nenhum item passar pelos filtros
-    if (itensExibidos === 0) {
-        grid.innerHTML = `<div class="vazio">Nenhuma ID encontrada com esses filtros.</div>`;
-    }
-}
-
-function handleImageError(img, nomeOriginal) {
-    const nomeBase = nomeOriginal.toUpperCase().replace(/ /g, "-");
-    
-    // Se falhou o link do Drive (contém google.com)
-    if (img.src.includes('google.com')) {
-        console.warn(`Link do Drive falhou para ${nomeOriginal}, tentando local...`);
-        img.src = `imagens/${nomeBase}.jpg`;
-        return;
-    }
-
-    // Se falhou o local e ainda não tentamos o fallback final
-    if (!img.src.includes('sem-foto.jpg')) {
-        if (!img.dataset.triedUppercase) {
-            img.dataset.triedUppercase = "true";
-            // Tenta com extensão .jpg ou .JPG se necessário
-            img.src = `imagens/${nomeBase}.jpg`;
-        } else {
-            img.src = 'imagens/sem-foto.jpg';
-        }
-    }
+    if (count === 0) grid.innerHTML = "Nenhuma ID encontrada.";
 }
 
 function gerarInterfaceFiltros() {
-    const headerHtml = `
-        <button class="fechar-drawer" onclick="toggleDrawer()">✕</button>
-        <div class="wrapper-switch">
-            <label class="switch-disponivel">
-                <input type="checkbox" id="checkProntaEntrega" ${apenasDisponiveis ? 'checked' : ''}>
-                <span class="slider"></span>
-                ID's pronta entrega
-            </label>
-        </div>`;
+    drawer.innerHTML = `<button class="fechar-drawer" onclick="toggleDrawer()">✕</button>
+        <div class="wrapper-switch"><label class="switch-disponivel"><input type="checkbox" onchange="apenasDisponiveis=this.checked; atualizarTagsFiltros(); montarCatalogo()"> <span class="slider"></span> ID's Pronta Entrega</label></div>`;
     
-    let filtrosHtml = "";
     colunasDeFiltro.forEach(col => {
-        const valoresUnicos = new Set();
-        Object.values(estoque).forEach(item => {
-            const campo = item.filtros[col];
-            if (campo) {
-                const partes = campo.split(/[|/]/); 
-                partes.forEach(p => {
-                    const formatado = p.trim();
-                    if (formatado) valoresUnicos.add(formatado);
-                });
-            }
-        });
-        
-        if (valoresUnicos.size > 0) {
-            let titulo = col.charAt(0).toUpperCase() + col.slice(1);
-            if(col === 'padrao') titulo = 'Padrão';
-
-            filtrosHtml += `
-                <div class="grupo-filtro">
-                    <div class="titulo-filtro">${titulo}</div>
-                    <div class="opcoes-filtro">
-                        <div class="pill ${!filtrosAtivos[col] || filtrosAtivos[col] === 'Todas' ? 'active' : ''}" 
-                             onclick="definirFiltro('${col}', 'Todas', this)">Todas</div>
-                        ${Array.from(valoresUnicos).sort().map(val => `
-                            <div class="pill ${filtrosAtivos[col] === val ? 'active' : ''}" 
-                                 onclick="definirFiltro('${col}', '${val}', this)">${val}</div>
-                        `).join('')}
-                    </div>
-                </div>`;
+        const vals = new Set();
+        Object.values(estoque).forEach(i => i.filtros[col].split(/[|/]/).forEach(v => v.trim() && vals.add(v.trim())));
+        if (vals.size > 0) {
+            let html = `<div class="grupo-filtro"><div class="titulo-filtro">${col}</div><div class="opcoes-filtro">
+                <div class="pill active" onclick="definirFiltro('${col}', 'Todas', this)">Todas</div>`;
+            Array.from(vals).sort().forEach(v => html += `<div class="pill" onclick="definirFiltro('${col}', '${v}', this)">${v}</div>`);
+            drawer.innerHTML += html + `</div></div>`;
         }
-    });
-
-    drawer.innerHTML = headerHtml + filtrosHtml;
-    document.getElementById("checkProntaEntrega").addEventListener("change", (e) => { 
-        apenasDisponiveis = e.target.checked; 
-        atualizarTagsFiltros();
-        montarCatalogo(); 
     });
 }
 
-function definirFiltro(coluna, valor, elemento) {
-    filtrosAtivos[coluna] = valor;
-    const grupo = elemento.parentElement;
-    grupo.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
-    elemento.classList.add('active');
+function definirFiltro(col, val, el) {
+    filtrosAtivos[col] = val;
+    el.parentElement.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+    el.classList.add('active');
     atualizarTagsFiltros();
     montarCatalogo();
 }
 
 function atualizarTagsFiltros() {
     listaFiltrosAtivos.innerHTML = "";
-    if (apenasDisponiveis) {
-        const tag = document.createElement("div");
-        tag.className = "tag-filtro-ativa";
-        tag.innerText = "PRONTA ENTREGA";
-        listaFiltrosAtivos.appendChild(tag);
-    }
-    for (let col in filtrosAtivos) {
-        if (filtrosAtivos[col] && filtrosAtivos[col] !== "Todas") {
-            const tag = document.createElement("div");
-            tag.className = "tag-filtro-ativa";
-            tag.innerText = filtrosAtivos[col].toUpperCase();
-            listaFiltrosAtivos.appendChild(tag);
-        }
-    }
+    if (apenasDisponiveis) listaFiltrosAtivos.innerHTML += `<div class="tag-filtro-ativa">PRONTA ENTREGA</div>`;
+    for (let f in filtrosAtivos) if (filtrosAtivos[f] !== "Todas") listaFiltrosAtivos.innerHTML += `<div class="tag-filtro-ativa">${filtrosAtivos[f]}</div>`;
 }
+
 function atualizarPainelAcoes() {
-    const areaSelecao = document.getElementById("areaSelecao");
-    const containerTags = document.getElementById("containerTags");
-    const btnZap = document.getElementById("btnEnviar");
-    containerTags.innerHTML = "";
-
+    const area = document.getElementById("areaSelecao");
+    const cont = document.getElementById("containerTags");
+    const btn = document.getElementById("btnEnviar");
+    cont.innerHTML = "";
     if (selecionados.size > 0) {
-        areaSelecao.style.display = "block";
-        selecionados.forEach(nome => {
-            const tag = document.createElement("div");
-            tag.className = "tag-item";
-            tag.innerHTML = `${nome} <button onclick="event.stopPropagation(); removerItem('${nome}')">×</button>`;
-            containerTags.appendChild(tag);
-        });
-        
-        btnZap.classList.remove("oculto");
-        if (selecionados.size === 1) {
-            btnZap.innerHTML = "Solicitar informação sobre a ID selecionada";
-        } else {
-            btnZap.innerHTML = `Solicitar informações sobre as ${selecionados.size} IDs selecionadas`;
-        }
-    } else {
-        areaSelecao.style.display = "none";
-        btnZap.classList.add("oculto");
-    }
+        area.style.display = "block";
+        selecionados.forEach(n => cont.innerHTML += `<div class="tag-item">${n} <button onclick="removerItem('${n}')">×</button></div>`);
+        btn.classList.remove("oculto");
+        btn.innerText = `Solicitar ${selecionados.size} selecionadas`;
+    } else { area.style.display = "none"; btn.classList.add("oculto"); }
 }
 
-function enviarPedido() {
-    const ids = Array.from(selecionados);
-    let mensagem = "";
-    if (ids.length === 1) {
-        mensagem = `Olá! Tenho interesse no enxerto da ID ${ids[0]} e queria saber mais informações e o valor.`;
-    } else {
-        mensagem = `Olá! Tenho interesse nos enxertos das IDs ${ids.join(", ")} e queria saber mais informações e valores.`;
-    }
-    window.open("https://wa.me/5581992665421?text=" + encodeURIComponent(mensagem), "_blank");
-}
-
-function toggleDrawer() {
-    document.getElementById('drawer').classList.toggle('active');
-    document.getElementById('overlay').style.display = document.getElementById('drawer').classList.contains('active') ? 'block' : 'none';
-}
-
-function removerItem(nome) { selecionados.delete(nome); atualizarPainelAcoes(); montarCatalogo(); }
+function removerItem(n) { selecionados.delete(n); atualizarPainelAcoes(); montarCatalogo(); }
 function limparTudo() { selecionados.clear(); atualizarPainelAcoes(); montarCatalogo(); }
-
-inputPesquisa.addEventListener("input", (e) => { 
-    filtroTexto = e.target.value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""); 
-    montarCatalogo(); 
-});
-
-carregarEstoque();
-function acessarAdmin() {
-    const senha = prompt("Digite a senha de acesso:");
-    if (senha === "123456") {
-        window.location.href = "admin.html";
-    } else if (senha !== null) {
-        alert("Senha incorreta!");
-    }
+function toggleDrawer() { drawer.classList.toggle('active'); document.getElementById('overlay').style.display = drawer.classList.contains('active') ? 'block' : 'none'; }
+function enviarPedido() {
+    const msg = `Olá! Tenho interesse nas IDs: ${Array.from(selecionados).join(", ")}`;
+    window.open("https://wa.me/5581992665421?text=" + encodeURIComponent(msg));
 }
-</script>
+function acessarAdmin() { if (prompt("Senha:") === "123456") window.location.href = "admin.html"; }
 
+inputPesquisa.addEventListener("input", (e) => { filtroTexto = e.target.value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""); montarCatalogo(); });
+carregarEstoque();
+</script>
 </body>
 </html>
