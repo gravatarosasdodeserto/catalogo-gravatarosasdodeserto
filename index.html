@@ -279,7 +279,7 @@ let filtrosAtivos = {};
 let colunasDeFiltro = ["camadas", "cores", "padrao", "especiais"]; 
 
 // URL da sua planilha publicada como CSV
-const urlPlanilha = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQHtdljGrbqvDGysgNUi7MVlGI19jY6WYrIJSckkcX7ylbKP02BWqgt0qHPUTTxqg/pub?gid=1893895788&single=true&output=csv&t=' + new Date().getTime();
+const urlPlanilha = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQHtdljGrbqvDGysgNUi7MVlGI19jY6WYrIJSckkcX7ylbKP02BWqgt0qHPUTTxqg/pub?gid=1893895788&single=true&output=csv&t=' + Math.random();
 
 const grid = document.getElementById("gridCatalogo");
 const drawer = document.getElementById("drawer");
