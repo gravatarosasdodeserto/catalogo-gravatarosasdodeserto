@@ -3,116 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin | Gerenciar Estoque Gravatá</title>
+    <title>Admin Pro | Gravatá Rosas</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --primary: #3a3618;
-            --bg: #f4f1ee;
-            --white: #ffffff;
-            --success: #2d5a27;
-        }
-
-        body { 
-            font-family: 'Poppins', sans-serif; 
-            background: var(--bg); 
-            margin: 0; 
-            padding: 20px; 
-            color: var(--primary); 
-        }
-
-        .container { 
-            max-width: 800px; 
-            margin: 0 auto; 
-            background: var(--white); 
-            padding: 25px; 
-            border-radius: 20px; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08); 
-        }
-
-        h2 { text-align: center; margin-bottom: 25px; font-weight: 600; }
+        :root { --primary: #3a3618; --bg: #f4f1ee; --white: #ffffff; --success: #2d5a27; --border: #e0e0e0; }
+        body { font-family: 'Poppins', sans-serif; background: var(--bg); margin: 0; padding: 10px; color: var(--primary); }
+        .container { max-width: 1100px; margin: 0 auto; background: var(--white); padding: 20px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
         
-        .busca-container { position: sticky; top: 0; background: var(--white); padding-bottom: 10px; z-index: 10; }
-        .busca-admin { 
-            width: 100%; 
-            padding: 15px; 
-            border-radius: 12px; 
-            border: 1.5px solid #eee; 
-            outline: none;
-            font-size: 16px;
-            transition: 0.3s;
-        }
-        .busca-admin:focus { border-color: var(--primary); }
-        
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        th { background: var(--primary); color: white; padding: 15px; text-align: left; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; }
-        td { padding: 12px 15px; border-bottom: 1px solid #f0f0f0; }
+        .topo-fixo { position: sticky; top: 0; background: var(--white); padding: 10px 0; z-index: 100; border-bottom: 2px solid var(--bg); }
+        .busca-admin { width: 100%; padding: 12px; border-radius: 10px; border: 1.5px solid var(--border); font-size: 16px; outline: none; }
 
-        .controles-estoque { display: flex; align-items: center; gap: 12px; }
-        input[type="number"] { 
-            width: 55px; 
-            padding: 8px; 
-            text-align: center; 
-            border-radius: 8px; 
-            border: 1px solid #ddd; 
-            font-weight: 600;
-            background: #fafafa;
-        }
-        
-        button { cursor: pointer; border: none; border-radius: 8px; transition: 0.2s; font-weight: 600; }
-        .btn-ajuste { 
-            background: #e5e0d8; 
-            color: var(--primary); 
-            width: 35px; 
-            height: 35px; 
-            font-size: 20px; 
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .btn-ajuste:active { transform: scale(0.9); }
-        
-        .btn-salvar { 
-            background: var(--success); 
-            color: white; 
-            padding: 10px 20px; 
-            font-size: 12px; 
-            width: 100%;
-        }
-        .btn-salvar:disabled { background: #ccc; cursor: not-allowed; }
-        
-        .status-msg { 
-            position: fixed; 
-            bottom: 20px; 
-            right: 20px; 
-            padding: 15px 25px; 
-            border-radius: 10px; 
-            color: white; 
-            font-weight: 500;
-            display: none;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-            z-index: 1000;
-        }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 13px; }
+        th { background: var(--primary); color: white; padding: 10px; text-align: left; position: sticky; top: 70px; }
+        td { padding: 8px; border-bottom: 1px solid #eee; vertical-align: middle; }
 
-        .loader { text-align: center; padding: 40px; font-weight: 500; color: #888; }
+        /* Estilo da Foto */
+        .thumb-admin { width: 50px; height: 50px; border-radius: 8px; object-fit: cover; background: #eee; cursor: pointer; }
+        
+        /* Inputs de Edição */
+        .edit-input { width: 100%; padding: 5px; border: 1px solid var(--border); border-radius: 4px; font-family: inherit; font-size: 12px; }
+        .qtd-input { width: 50px; text-align: center; font-weight: bold; }
+        
+        .btn-salvar { background: var(--success); color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-weight: 600; width: 100%; }
+        .btn-salvar:disabled { background: #ccc; }
+
+        .status-toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); padding: 12px 25px; border-radius: 50px; color: white; display: none; z-index: 1000; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+        
+        .tag-info { font-size: 10px; color: #888; display: block; margin-top: 2px; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h2>Painel Admin - Gravatá</h2>
-    
-    <div class="busca-container">
-        <input type="text" id="inputBusca" class="busca-admin" placeholder="Pesquisar ID ou variedade..." oninput="filtrarTabela()">
+    <div class="topo-fixo">
+        <h2 style="margin: 0 0 10px 0; font-size: 18px;">Gerenciador de Catálogo Completo</h2>
+        <input type="text" id="inputBusca" class="busca-admin" placeholder="Buscar por nome ou filtro..." oninput="filtrarTabela()">
     </div>
-    
-    <div id="loader" class="loader">Carregando estoque da planilha...</div>
 
-    <table id="tabelaAdmin" style="display: none;">
+    <div id="loader" style="text-align:center; padding: 50px;">Carregando dados da planilha...</div>
+
+    <table id="tabelaAdmin" style="display:none;">
         <thead>
             <tr>
-                <th>Variedade</th>
-                <th>Qtd</th>
+                <th>Foto</th>
+                <th>Nome / ID</th>
+                <th>Estoque</th>
+                <th>Filtros (Cores | Camadas | Padrão)</th>
+                <th>Link/ID Mídia (Drive)</th>
                 <th>Ação</th>
             </tr>
         </thead>
@@ -120,43 +57,38 @@
     </table>
 </div>
 
-<div id="msgStatus" class="status-msg"></div>
+<div id="status" class="status-toast"></div>
 
 <script>
-    // URL CONFIGURADA
     const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxs8MmNSgkb43F1vZDCtFE6AiRvWtjlTp67QxpLMcfA9mnWInHQOBm8iZuEqpF6Ctg0hA/exec';
-    
     const urlPlanilha = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQHtdljGrbqvDGysgNUi7MVlGI19jY6WYrIJSckkcX7ylbKP02BWqgt0qHPUTTxqg/pub?gid=1893895788&single=true&output=csv&t=' + Math.random();
 
-    let dadosEstoque = [];
+    let dadosCompletos = [];
 
     async function carregarDados() {
         try {
             const resp = await fetch(urlPlanilha);
             const text = await resp.text();
-            
-            // Função robusta para ler CSV (vírgula como separador)
             const linhas = text.split(/\r?\n/).filter(l => l.trim() !== "");
+            
             const matrix = linhas.map(line => {
                 const cells = line.match(/(".*?"|[^",\r\n]+)(?=\s*,|\s*$|\s*\r?\n)/g) || [];
                 return cells.map(c => c.trim().replace(/^"|"$/g, ''));
             });
 
             const cabecalho = matrix.shift().map(h => h.toLowerCase().trim());
-            const idxNome = cabecalho.indexOf('nome');
-            const idxQtd = cabecalho.indexOf('qtd');
-
-            dadosEstoque = matrix.map(col => ({
-                nome: col[idxNome],
-                qtd: parseInt(col[idxQtd]) || 0
-            })).filter(item => item.nome);
+            
+            dadosCompletos = matrix.map(col => {
+                let obj = {};
+                cabecalho.forEach((tit, i) => obj[tit] = col[i] || "");
+                return obj;
+            }).filter(d => d.nome);
 
             document.getElementById('loader').style.display = 'none';
             document.getElementById('tabelaAdmin').style.display = 'table';
-            renderizarTabela(dadosEstoque);
+            renderizarTabela(dadosCompletos);
         } catch (e) {
-            console.error(e);
-            document.getElementById('loader').innerText = "Erro ao carregar dados. Verifique a publicação da planilha.";
+            alert("Erro ao carregar dados.");
         }
     }
 
@@ -166,73 +98,90 @@
 
         itens.forEach(item => {
             const tr = document.createElement("tr");
+            
+            // Lógica de visualização da foto
+            let fotoSrc = item.midia ? 
+                (item.midia.startsWith("http") ? item.midia : `https://drive.google.com/uc?export=view&id=${item.midia}`) : 
+                `imagens/${item.nome.toLowerCase().replace(/ /g, "-")}.jpg`;
+
             tr.innerHTML = `
-                <td style="font-size: 14px; font-weight: 500;">${item.nome}</td>
                 <td>
-                    <div class="controles-estoque">
-                        <button class="btn-ajuste" onclick="alterarValor('${item.nome}', -1)">-</button>
-                        <input type="number" id="input-${item.nome}" value="${item.qtd}" readonly>
-                        <button class="btn-ajuste" onclick="alterarValor('${item.nome}', 1)">+</button>
+                    <img src="${fotoSrc}" class="thumb-admin" onerror="this.src='imagens/sem-foto.jpg'" onclick="window.open(this.src)">
+                </td>
+                <td>
+                    <strong>${item.nome}</strong>
+                </td>
+                <td>
+                    <input type="number" class="edit-input qtd-input" id="qtd-${item.nome}" value="${item.qtd}">
+                </td>
+                <td>
+                    <span class="tag-info">Cores:</span>
+                    <input type="text" class="edit-input" id="cores-${item.nome}" value="${item.cores || ''}">
+                    <span class="tag-info">Camadas / Padrão:</span>
+                    <div style="display:flex; gap:2px">
+                        <input type="text" class="edit-input" id="camadas-${item.nome}" value="${item.camadas || ''}" placeholder="Camada">
+                        <input type="text" class="edit-input" id="padrao-${item.nome}" value="${item.padrao || ''}" placeholder="Padrão">
                     </div>
                 </td>
                 <td>
-                    <button id="btn-${item.nome}" class="btn-salvar" onclick="salvarAlteracao('${item.nome}')">SALVAR</button>
+                    <input type="text" class="edit-input" id="midia-${item.nome}" value="${item.midia || ''}" placeholder="ID do Drive ou Link">
+                </td>
+                <td>
+                    <button id="btn-${item.nome}" class="btn-salvar" onclick="salvarTudo('${item.nome}')">SALVAR</button>
                 </td>
             `;
             corpo.appendChild(tr);
         });
     }
 
-    function alterarValor(nome, delta) {
-        const input = document.getElementById(`input-${nome}`);
-        let valor = parseInt(input.value) + delta;
-        if (valor < 0) valor = 0;
-        input.value = valor;
+    async function salvarTudo(nome) {
+        const btn = document.getElementById(`btn-${btnNome(nome)}`); // Ajuste para nomes com espaços
+        const payload = {
+            nome: nome,
+            qtd: document.getElementById(`qtd-${nome}`).value,
+            cores: document.getElementById(`cores-${nome}`).value,
+            camadas: document.getElementById(`camadas-${nome}`).value,
+            padrao: document.getElementById(`padrao-${nome}`).value,
+            midia: document.getElementById(`midia-${nome}`).value
+        };
+
+        const originalText = btn.innerText;
+        btn.disabled = true;
+        btn.innerText = "Sincronizando...";
+
+        try {
+            await fetch(WEB_APP_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            toast("Atualizado com sucesso!", "#2d5a27");
+        } catch (e) {
+            toast("Erro ao salvar.", "#8b2d2d");
+        } finally {
+            btn.disabled = false;
+            btn.innerText = originalText;
+        }
     }
+
+    function btnNome(n) { return n.replace(/["']/g, ""); }
 
     function filtrarTabela() {
         const termo = document.getElementById("inputBusca").value.toLowerCase();
-        const filtrados = dadosEstoque.filter(i => i.nome.toLowerCase().includes(termo));
+        const filtrados = dadosCompletos.filter(i => 
+            i.nome.toLowerCase().includes(termo) || 
+            (i.cores && i.cores.toLowerCase().includes(termo))
+        );
         renderizarTabela(filtrados);
     }
 
-    function mostrarFeedback(texto, cor) {
-        const msg = document.getElementById("msgStatus");
-        msg.innerText = texto;
-        msg.style.backgroundColor = cor;
-        msg.style.display = 'block';
-        setTimeout(() => { msg.style.display = 'none'; }, 3000);
-    }
-
-    async function salvarAlteracao(nome) {
-        const novaQtd = document.getElementById(`input-${nome}`).value;
-        const btn = document.getElementById(`btn-${nome}`);
-
-        btn.disabled = true;
-        btn.innerText = "Salvando...";
-
-        try {
-            // Sincronização com Google Apps Script
-            await fetch(WEB_APP_URL, {
-                method: 'POST',
-                mode: 'no-cors', 
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ nome: nome, qtd: novaQtd })
-            });
-
-            mostrarFeedback(`${nome} atualizado!`, "#2d5a27");
-            
-            // Atualiza o dado local na memória para não resetar na busca
-            const itemLocal = dadosEstoque.find(i => i.nome === nome);
-            if(itemLocal) itemLocal.qtd = parseInt(novaQtd);
-
-        } catch (e) {
-            console.error(e);
-            mostrarFeedback("Erro ao conectar com a planilha.", "#8b2d2d");
-        } finally {
-            btn.disabled = false;
-            btn.innerText = "SALVAR";
-        }
+    function toast(txt, cor) {
+        const t = document.getElementById("status");
+        t.innerText = txt;
+        t.style.backgroundColor = cor;
+        t.style.display = "block";
+        setTimeout(() => t.style.display = "none", 3000);
     }
 
     carregarDados();
