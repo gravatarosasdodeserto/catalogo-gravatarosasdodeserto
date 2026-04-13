@@ -123,7 +123,7 @@ function renderizarTabela(){
             <input id="padrao-${id}" value="${item.padrao||''}">
         </td>
         <td><input id="midia-${id}" value="${item.midia||''}"></td>
-        <td><button onclick="salvar('${item.nome}')">Salvar</button></td>
+        <td><button onclick='salvar("${item.nome}")'>Salvar</button></td>
         `;
 
         corpo.appendChild(tr);
