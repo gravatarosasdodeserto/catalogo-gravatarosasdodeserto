@@ -156,16 +156,30 @@ const urlPlanilha = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSochNnj1ih
     const idLimpa = cleanID(nome);
     const btn = document.getElementById(`btn-${idLimpa}`);
     
-    // O payload deve conter exatamente os nomes que o seu script do Google espera
     const payload = {
         action: "update",
         nome: nome,
         qtd: document.getElementById(`qtd-${idLimpa}`).value,
         cores: document.getElementById(`cores-${idLimpa}`).value,
         camadas: document.getElementById(`camadas-${idLimpa}`).value,
-        padrao: document.getElementById(`padrao-${idLimpa}`).value, // Adicionado aqui
+        padrao: document.getElementById(`padrao-${idLimpa}`).value, // Garante que envia o Padrao
         midia: document.getElementById(`midia-${idLimpa}`).value
     };
+
+    btn.disabled = true;
+    try {
+        // Removido o no-cors para garantir que o Google Script receba os dados
+        await fetch(WEB_APP_URL, { 
+            method: 'POST', 
+            body: JSON.stringify(payload) 
+        });
+        toast(`${nome} salvo com sucesso!`, "#2d5a27");
+    } catch (err) { 
+        toast("Erro ao salvar", "#8b2d2d"); 
+    } finally {
+        btn.disabled = false;
+    }
+}
 
     btn.disabled = true;
     try {
