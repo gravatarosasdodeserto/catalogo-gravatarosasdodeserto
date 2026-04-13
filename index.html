@@ -108,7 +108,7 @@ body {
     display: flex;
     flex-wrap: wrap;
     gap: 4px;
-    max-width: 75%; /* Garante que as tags não empurrem o botão Filtrar */
+    max-width: 75%;
 }
 
 .tag-filtro-ativa {
@@ -278,6 +278,7 @@ let apenasDisponiveis = false;
 let filtrosAtivos = {}; 
 let colunasDeFiltro = ["camadas", "cores", "padrao", "especiais"]; 
 
+// URL da sua planilha publicada como CSV
 const urlPlanilha = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQHtdljGrbqvDGysgNUi7MVlGI19jY6WYrIJSckkcX7ylbKP02BWqgt0qHPUTTxqg/pub?gid=1893895788&single=true&output=csv&t=' + new Date().getTime();
 
 const grid = document.getElementById("gridCatalogo");
@@ -296,9 +297,11 @@ async function carregarEstoque() {
 
         const idxNome = cabecalho.indexOf('nome');
         const idxQtd = cabecalho.indexOf('qtd');
+        const idxMidia = cabecalho.indexOf('midia'); // MAPEAMENTO DA NOVA COLUNA
 
         estoque = {};
         linhas.forEach(linha => {
+            // Regex para tratar CSV com aspas do Google
             const col = linha.match(/(".*?"|[^",\r\n]+)(?=\s*,|\s*$|\s*\r?\n)/g) || [];
             const limpar = (s) => s ? s.trim().replace(/^"|"$/g, '') : '';
             
@@ -307,6 +310,7 @@ async function carregarEstoque() {
 
             estoque[nome] = {
                 qtd: parseInt(limpar(col[idxQtd])) || 0,
+                midia: limpar(col[idxMidia]), // SALVA O LINK DO DRIVE
                 filtros: {}
             };
 
