@@ -8,27 +8,155 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
 <style>
-:root { --primary:#3a3618; --bg:#f4f1ee; --white:#fff; --success:#2d5a27; --border:#e0e0e0; }
-body { font-family:Poppins; background:var(--bg); margin:0; padding:10px; }
-.container { max-width:1100px; margin:auto; background:#fff; padding:20px; border-radius:15px; }
-table { width:100%; margin-top:20px; border-collapse:collapse; }
-td,th { padding:8px; border-bottom:1px solid #eee; }
-.thumb-admin { width:50px; height:50px; object-fit:cover; border-radius:8px; }
-.edit-input { width:100%; padding:5px; }
-.btn-salvar { background:var(--success); color:white; border:none; padding:8px; cursor:pointer; }
-.modal { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); align-items:center; justify-content:center; }
-.modal-content { background:white; padding:20px; border-radius:10px; }
-.status-toast { position:fixed; bottom:20px; left:50%; transform:translateX(-50%); padding:10px 20px; color:white; display:none; border-radius:50px; }
+:root{
+    --primary:#3a3618;
+    --bg:#f4f1ee;
+    --white:#fff;
+    --success:#2d5a27;
+    --danger:#8b2d2d;
+}
+
+body{
+    font-family:Poppins;
+    background:var(--bg);
+    margin:0;
+    padding:15px;
+}
+
+/* HEADER */
+.topbar-admin{
+    background:#fff;
+    padding:15px;
+    border-radius:15px;
+    margin-bottom:15px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    box-shadow:0 3px 10px rgba(0,0,0,0.05);
+}
+
+.botoes-topo{
+    display:flex;
+    gap:10px;
+}
+
+.btn-voltar{
+    text-decoration:none;
+    background:#e5e0d8;
+    color:#3a3618;
+    padding:8px 12px;
+    border-radius:8px;
+    font-size:13px;
+}
+
+.btn-novo{
+    background:#2d5a27;
+    color:#fff;
+    border:none;
+    padding:8px 12px;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+/* TABLE */
+.container{
+    max-width:1100px;
+    margin:auto;
+    background:#fff;
+    padding:15px;
+    border-radius:15px;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+td,th{
+    padding:8px;
+    border-bottom:1px solid #eee;
+    font-size:13px;
+}
+
+.thumb-admin{
+    width:55px;
+    height:55px;
+    object-fit:cover;
+    border-radius:8px;
+}
+
+/* INPUTS */
+input{
+    width:100%;
+    padding:6px;
+    border:1px solid #ddd;
+    border-radius:6px;
+}
+
+/* BUTTONS */
+.btn-salvar{
+    background:var(--success);
+    color:white;
+    border:none;
+    padding:7px;
+    border-radius:6px;
+    cursor:pointer;
+    margin-bottom:5px;
+}
+
+.btn-excluir{
+    background:var(--danger);
+    color:white;
+    border:none;
+    padding:7px;
+    border-radius:6px;
+    cursor:pointer;
+}
+
+/* MODAL */
+.modal{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.6);
+    align-items:center;
+    justify-content:center;
+}
+
+.modal-content{
+    background:white;
+    padding:20px;
+    border-radius:10px;
+    width:300px;
+}
+
+/* TOAST */
+.status-toast{
+    position:fixed;
+    bottom:20px;
+    left:50%;
+    transform:translateX(-50%);
+    padding:10px 20px;
+    color:white;
+    display:none;
+    border-radius:50px;
+}
 </style>
 </head>
 
 <body>
 
+<!-- HEADER -->
+<div class="topbar-admin">
+    <h2>Gerenciador de Catálogo</h2>
+
+    <div class="botoes-topo">
+        <a href="index.html" class="btn-voltar">← Catálogo</a>
+        <button onclick="abrirModal()" class="btn-novo">+ Nova ID</button>
+    </div>
+</div>
+
 <div class="container">
-
-<h2>Gerenciador</h2>
-
-<button onclick="abrirModal()">+ Nova ID</button>
 
 <div id="loader">Carregando...</div>
 
@@ -39,8 +167,8 @@ td,th { padding:8px; border-bottom:1px solid #eee; }
 <th>Nome</th>
 <th>Qtd</th>
 <th>Filtros</th>
-<th>Mídia</th>
-<th>Ação</th>
+<th>Imagem</th>
+<th>Ações</th>
 </tr>
 </thead>
 <tbody id="tabelaCorpo"></tbody>
@@ -57,8 +185,10 @@ td,th { padding:8px; border-bottom:1px solid #eee; }
 <input id="new-cores" placeholder="Cores">
 <input id="new-camadas" placeholder="Camadas">
 <input id="new-padrao" placeholder="Padrão">
+
+<label>Imagem</label>
 <input type="file" id="new-file" accept="image/*">
-<input id="new-midia" placeholder="ID imagem Drive">
+
 <button type="submit">CRIAR</button>
 </form>
 <button onclick="fecharModal()">Fechar</button>
@@ -68,14 +198,6 @@ td,th { padding:8px; border-bottom:1px solid #eee; }
 <div id="status" class="status-toast"></div>
 
 <script>
-
-function parseCSV(text) {
-    const lines = text.split(/\r?\n/).filter(l => l.trim() !== "");
-    return lines.map(line => {
-        const cells = line.match(/(".*?"|[^",\r\n]+)(?=\s*,|\s*$|\s*\r?\n)/g) || [];
-        return cells.map(c => c.trim().replace(/^"|"$/g, ''));
-    });
-}
 
 const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxs8MmNSgkb43F1vZDCtFE6AiRvWtjlTp67QxpLMcfA9mnWInHQOBm8iZuEqpF6Ctg0hA/exec";
 
@@ -87,40 +209,42 @@ function cleanID(name){
     return name.replace(/[^a-zA-Z0-9]/g,'_');
 }
 
+function parseCSV(text){
+    const lines = text.split(/\r?\n/).filter(l=>l.trim()!=="");
+    return lines.map(line=>{
+        const cells = line.match(/(".*?"|[^",\r\n]+)(?=\s*,|\s*$)/g) || [];
+        return cells.map(c=>c.replace(/^"|"$/g,''));
+    });
+}
+
 // ===================== CARREGAR =====================
 async function carregarDados(){
     try{
-
         const resp = await fetch(urlPlanilha);
         const text = await resp.text();
 
         const dados = parseCSV(text);
 
         const header = dados.shift().map(h =>
-            h.toLowerCase()
-             .normalize("NFD")
-             .replace(/[\u0300-\u036f]/g, "")
-             .trim()
+            h.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").trim()
         );
 
         const idx = {
             nome: header.indexOf("nome"),
-            camadas: header.indexOf("camadas"),
-            cores: header.indexOf("cores"),
-            padrao: header.indexOf("padrao"),
-            especiais: header.indexOf("especiais"),
             qtd: header.indexOf("qtd"),
+            cores: header.indexOf("cores"),
+            camadas: header.indexOf("camadas"),
+            padrao: header.indexOf("padrao"),
             midia: header.indexOf("midia")
         };
 
-        dadosCompletos = dados.map(col => ({
-            nome: col[idx.nome] || "",
-            camadas: col[idx.camadas] || "",
-            cores: col[idx.cores] || "",
-            padrao: col[idx.padrao] || "",
-            especiais: col[idx.especiais] || "",
-            qtd: col[idx.qtd] || 0,
-            midia: col[idx.midia] || ""
+        dadosCompletos = dados.map(col=>({
+            nome: col[idx.nome],
+            qtd: col[idx.qtd],
+            cores: col[idx.cores],
+            camadas: col[idx.camadas],
+            padrao: col[idx.padrao],
+            midia: col[idx.midia]
         }));
 
         document.getElementById("loader").style.display="none";
@@ -129,7 +253,7 @@ async function carregarDados(){
         renderizarTabela();
 
     }catch(e){
-        console.error("ERRO REAL:", e);
+        console.error(e);
     }
 }
 
@@ -141,11 +265,11 @@ function renderizarTabela(){
     dadosCompletos.forEach(item=>{
         const id=cleanID(item.nome);
 
-        let midiaID = (item.midia || "").replace(/&amp;/g, "&").trim();
-        
+        let midiaID = (item.midia||"").replace(/&amp;/g,"").trim();
+
         let img = midiaID
-            ? `https://drive.google.com/uc?export=view&id=${midiaID}`
-            : "imagens/sem-foto.jpg";
+        ? `https://drive.google.com/uc?export=view&id=${midiaID}`
+        : "imagens/sem-foto.jpg";
 
         const tr=document.createElement("tr");
 
@@ -163,18 +287,14 @@ function renderizarTabela(){
         </td>
 
         <td>
+            <label>Link da imagem</label>
             <input id="midia-${id}" value="${item.midia||''}">
-            <br><br>
-            <input type="file" id="file-${id}" accept="image/*">
+            <input type="file" id="file-${id}">
         </td>
 
         <td>
-            <button onclick='salvar("${item.nome}")' class="btn-salvar">Salvar</button>
-
-            <button onclick='excluir("${item.nome}")'
-                style="background:#8b2d2d;color:white;border:none;padding:8px;margin-top:5px;cursor:pointer;">
-                Excluir
-            </button>
+            <button class="btn-salvar" onclick='salvar("${item.nome}")'>Salvar</button>
+            <button class="btn-excluir" onclick='excluir("${item.nome}")'>Excluir</button>
         </td>
         `;
 
@@ -185,53 +305,24 @@ function renderizarTabela(){
 // ===================== UPLOAD =====================
 async function uploadImage(file){
 
-    const base64 = await new Promise((resolve)=>{
-        const reader = new FileReader();
-        reader.onload = () => resolve(reader.result.split(",")[1]);
-        reader.readAsDataURL(file);
+    const base64 = await new Promise(res=>{
+        const r=new FileReader();
+        r.onload=()=>res(r.result.split(",")[1]);
+        r.readAsDataURL(file);
     });
 
     const resp = await fetch(WEB_APP_URL,{
         method:"POST",
         body:new URLSearchParams({
             action:"upload",
-            file: base64,
-            mimeType: file.type,
-            fileName: file.name
+            file:base64,
+            mimeType:file.type,
+            fileName:file.name
         })
     });
 
     const data = await resp.json();
     return data.id;
-}
-
-// ===================== CRIAR =====================
-async function criarNovaID(e){
-    e.preventDefault();
-
-    const fileInput = document.getElementById("new-file");
-    let midiaID = "";
-
-    if(fileInput && fileInput.files.length > 0){
-        midiaID = await uploadImage(fileInput.files[0]);
-    }
-
-    const payload = {
-        action:"create",
-        nome:document.getElementById("new-nome").value,
-        qtd:document.getElementById("new-qtd").value,
-        cores:document.getElementById("new-cores").value,
-        camadas:document.getElementById("new-camadas").value,
-        padrao:document.getElementById("new-padrao").value,
-        midia: midiaID
-    };
-
-    await fetch(WEB_APP_URL,{
-        method:"POST",
-        body:new URLSearchParams(payload)
-    });
-
-    toast("Criado com sucesso!", "#2d5a27");
 }
 
 // ===================== SALVAR =====================
@@ -241,66 +332,88 @@ async function salvar(nome){
 
     let midiaID = document.getElementById(`midia-${id}`).value;
 
-    const fileInput = document.getElementById(`file-${id}`);
+    const file = document.getElementById(`file-${id}`);
 
-    if(fileInput && fileInput.files.length > 0){
-        midiaID = await uploadImage(fileInput.files[0]);
+    if(file && file.files.length>0){
+        midiaID = await uploadImage(file.files[0]);
     }
-
-    const payload = {
-        action:"update",
-        nome:nome,
-        qtd:document.getElementById(`qtd-${id}`).value,
-        cores:document.getElementById(`cores-${id}`).value,
-        camadas:document.getElementById(`camadas-${id}`).value,
-        padrao:document.getElementById(`padrao-${id}`).value,
-        midia: midiaID
-    };
 
     await fetch(WEB_APP_URL,{
         method:"POST",
-        body:new URLSearchParams(payload)
+        body:new URLSearchParams({
+            action:"update",
+            nome,
+            qtd:document.getElementById(`qtd-${id}`).value,
+            cores:document.getElementById(`cores-${id}`).value,
+            camadas:document.getElementById(`camadas-${id}`).value,
+            padrao:document.getElementById(`padrao-${id}`).value,
+            midia:midiaID
+        })
     });
 
-    toast("Atualizado!", "#2d5a27");
+    toast("Atualizado!");
+    carregarDados();
 }
 
-// ===================== EXCLUIR (NOVO) =====================
+// ===================== EXCLUIR =====================
 async function excluir(nome){
 
-    if(!confirm("Tem certeza que deseja excluir esta ID?")) return;
+    if(!confirm("Excluir esta ID?")) return;
 
     await fetch(WEB_APP_URL,{
         method:"POST",
         body:new URLSearchParams({
             action:"delete",
-            nome:nome
+            nome
         })
     });
 
-    toast("Excluído com sucesso!", "#8b2d2d");
+    toast("Excluído!");
+    carregarDados();
+}
 
+// ===================== CRIAR =====================
+async function criarNovaID(e){
+    e.preventDefault();
+
+    const file=document.getElementById("new-file");
+    let midia="";
+
+    if(file.files.length>0){
+        midia=await uploadImage(file.files[0]);
+    }
+
+    await fetch(WEB_APP_URL,{
+        method:"POST",
+        body:new URLSearchParams({
+            action:"create",
+            nome:document.getElementById("new-nome").value,
+            qtd:document.getElementById("new-qtd").value,
+            cores:document.getElementById("new-cores").value,
+            camadas:document.getElementById("new-camadas").value,
+            padrao:document.getElementById("new-padrao").value,
+            midia
+        })
+    });
+
+    fecharModal();
+    toast("Criado!");
     carregarDados();
 }
 
 // ===================== UI =====================
-function abrirModal(){
-    document.getElementById("modalNovaID").style.display="flex";
-}
+function abrirModal(){ document.getElementById("modalNovaID").style.display="flex"; }
+function fecharModal(){ document.getElementById("modalNovaID").style.display="none"; }
 
-function fecharModal(){
-    document.getElementById("modalNovaID").style.display="none";
-}
-
-function toast(txt,cor){
+function toast(msg){
     const t=document.getElementById("status");
-    t.innerText=txt;
-    t.style.background=cor;
+    t.innerText=msg;
     t.style.display="block";
     setTimeout(()=>t.style.display="none",2000);
 }
 
 carregarDados();
+
 </script>
 
 </body>
