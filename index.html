@@ -292,9 +292,14 @@ async function carregarEstoque() {
         const csv = await resp.text();
         const linhas = csv.split(/\r?\n/).filter(l => l.trim() !== "");
         
-        // Detecta se a planilha usa vírgula ou ponto e vírgula
-        const separador = linhas[0].includes(';') ? ';' : ',';
-        const cabecalho = linhas.shift().split(separador).map(h => h.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""));
+        // Pega o cabeçalho para mapear as colunas
+        const cabecalhoRaw = linhas.shift();
+        // Regex mágica que separa por vírgula mas ignora vírgulas dentro de aspas
+        const regexCSV = /,(?=(?:(?:[^"]*"){2})*[^"]*$)/;
+        
+        const cabecalho = cabecalhoRaw.split(regexCSV).map(h => 
+            h.trim().replace(/^"|"$/g, '').toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+        );
 
         const idxNome = cabecalho.indexOf('nome');
         const idxQtd = cabecalho.indexOf('qtd');
@@ -302,7 +307,7 @@ async function carregarEstoque() {
 
         estoque = {};
         linhas.forEach(linha => {
-            const col = linha.split(separador);
+            const col = linha.split(regexCSV);
             const limpar = (s) => s ? s.trim().replace(/^"|"$/g, '') : '';
             
             const nome = limpar(col[idxNome]);
@@ -323,8 +328,8 @@ async function carregarEstoque() {
         gerarInterfaceFiltros();
         montarCatalogo();
     } catch (e) {
-        console.error("Erro ao carregar:", e);
-        grid.innerHTML = `<div class="vazio">Erro ao carregar dados.</div>`;
+        console.error("Erro detalhado:", e);
+        grid.innerHTML = `<div class="vazio">Erro ao processar dados da planilha.</div>`;
     }
 }
 
