@@ -278,7 +278,7 @@ let apenasDisponiveis = false;
 let filtrosAtivos = {}; 
 let colunasDeFiltro = ["camadas", "cores", "padrao", "especiais"]; 
 
-// URL da sua planilha publicada como CSV
+// Note o Math.random() para garantir que o Google não te entregue dados velhos
 const urlPlanilha = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQHtdljGrbqvDGysgNUi7MVlGI19jY6WYrIJSckkcX7ylbKP02BWqgt0qHPUTTxqg/pub?gid=1893895788&single=true&output=csv&t=' + Math.random();
 
 const grid = document.getElementById("gridCatalogo");
@@ -292,17 +292,17 @@ async function carregarEstoque() {
         const csv = await resp.text();
         const linhas = csv.split(/\r?\n/).filter(l => l.trim() !== "");
         
-        const cabecalhoRaw = linhas.shift().split(',');
-        const cabecalho = cabecalhoRaw.map(h => h.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""));
+        // Detecta se a planilha usa vírgula ou ponto e vírgula
+        const separador = linhas[0].includes(';') ? ';' : ',';
+        const cabecalho = linhas.shift().split(separador).map(h => h.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""));
 
         const idxNome = cabecalho.indexOf('nome');
         const idxQtd = cabecalho.indexOf('qtd');
-        const idxMidia = cabecalho.indexOf('midia'); // MAPEAMENTO DA NOVA COLUNA
+        const idxMidia = cabecalho.indexOf('midia');
 
         estoque = {};
         linhas.forEach(linha => {
-            // Regex para tratar CSV com aspas do Google
-            const col = linha.match(/(".*?"|[^",\r\n]+)(?=\s*,|\s*$|\s*\r?\n)/g) || [];
+            const col = linha.split(separador);
             const limpar = (s) => s ? s.trim().replace(/^"|"$/g, '') : '';
             
             const nome = limpar(col[idxNome]);
@@ -310,100 +310,21 @@ async function carregarEstoque() {
 
             estoque[nome] = {
                 qtd: parseInt(limpar(col[idxQtd])) || 0,
-                midia: limpar(col[idxMidia]), // SALVA O LINK DO DRIVE
+                midia: limpar(col[idxMidia]), 
                 filtros: {}
             };
 
             colunasDeFiltro.forEach(colNome => {
                 const idxReal = cabecalho.indexOf(colNome);
-                let valor = idxReal !== -1 ? limpar(col[idxReal]) : '';
-                estoque[nome].filtros[colNome] = valor;
+                estoque[nome].filtros[colNome] = idxReal !== -1 ? limpar(col[idxReal]) : '';
             });
         });
         
         gerarInterfaceFiltros();
         montarCatalogo();
     } catch (e) {
+        console.error("Erro ao carregar:", e);
         grid.innerHTML = `<div class="vazio">Erro ao carregar dados.</div>`;
-    }
-}
-
-function gerarInterfaceFiltros() {
-    const headerHtml = `
-        <button class="fechar-drawer" onclick="toggleDrawer()">✕</button>
-        <div class="wrapper-switch">
-            <label class="switch-disponivel">
-                <input type="checkbox" id="checkProntaEntrega" ${apenasDisponiveis ? 'checked' : ''}>
-                <span class="slider"></span>
-                ID's pronta entrega
-            </label>
-        </div>`;
-    
-    let filtrosHtml = "";
-    colunasDeFiltro.forEach(col => {
-        const valoresUnicos = new Set();
-        Object.values(estoque).forEach(item => {
-            const campo = item.filtros[col];
-            if (campo) {
-                const partes = campo.split(/[|/]/); 
-                partes.forEach(p => {
-                    const formatado = p.trim();
-                    if (formatado) valoresUnicos.add(formatado);
-                });
-            }
-        });
-        
-        if (valoresUnicos.size > 0) {
-            let titulo = col.charAt(0).toUpperCase() + col.slice(1);
-            if(col === 'padrao') titulo = 'Padrão';
-
-            filtrosHtml += `
-                <div class="grupo-filtro">
-                    <div class="titulo-filtro">${titulo}</div>
-                    <div class="opcoes-filtro">
-                        <div class="pill ${!filtrosAtivos[col] || filtrosAtivos[col] === 'Todas' ? 'active' : ''}" 
-                             onclick="definirFiltro('${col}', 'Todas', this)">Todas</div>
-                        ${Array.from(valoresUnicos).sort().map(val => `
-                            <div class="pill ${filtrosAtivos[col] === val ? 'active' : ''}" 
-                                 onclick="definirFiltro('${col}', '${val}', this)">${val}</div>
-                        `).join('')}
-                    </div>
-                </div>`;
-        }
-    });
-
-    drawer.innerHTML = headerHtml + filtrosHtml;
-    document.getElementById("checkProntaEntrega").addEventListener("change", (e) => { 
-        apenasDisponiveis = e.target.checked; 
-        atualizarTagsFiltros();
-        montarCatalogo(); 
-    });
-}
-
-function definirFiltro(coluna, valor, elemento) {
-    filtrosAtivos[coluna] = valor;
-    const grupo = elemento.parentElement;
-    grupo.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
-    elemento.classList.add('active');
-    atualizarTagsFiltros();
-    montarCatalogo();
-}
-
-function atualizarTagsFiltros() {
-    listaFiltrosAtivos.innerHTML = "";
-    if (apenasDisponiveis) {
-        const tag = document.createElement("div");
-        tag.className = "tag-filtro-ativa";
-        tag.innerText = "PRONTA ENTREGA";
-        listaFiltrosAtivos.appendChild(tag);
-    }
-    for (let col in filtrosAtivos) {
-        if (filtrosAtivos[col] && filtrosAtivos[col] !== "Todas") {
-            const tag = document.createElement("div");
-            tag.className = "tag-filtro-ativa";
-            tag.innerText = filtrosAtivos[col].toUpperCase();
-            listaFiltrosAtivos.appendChild(tag);
-        }
     }
 }
 
@@ -413,19 +334,29 @@ function montarCatalogo() {
 
     Object.keys(estoque).sort().forEach(nome => {
         const dados = estoque[nome];
+        
+        // Filtros
         if (apenasDisponiveis && dados.qtd === 0) return;
-
-        // ... (mantenha seus filtros aqui) ...
+        let passaFiltro = true;
+        for (let col in filtrosAtivos) {
+            const selecao = filtrosAtivos[col];
+            if (selecao && selecao !== "Todas") {
+                const valoresItem = dados.filtros[col].split(/[|/]/).map(v => v.trim());
+                if (!valoresItem.includes(selecao)) { passaFiltro = false; break; }
+            }
+        }
+        if (!passaFiltro) return;
+        if (filtroTexto && !nome.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").includes(filtroTexto)) return;
 
         itensExibidos++;
 
-        const valorMidia = dados.midia ? dados.midia.trim() : "";
-        let srcFinal = "";
+        // --- LÓGICA DE IMAGEM BLINDADA ---
+        const valorMidia = dados.midia || "";
+        let urlPrincipal = "";
 
-        // Se houver algo na coluna Midia
         if (valorMidia !== "") {
-            // Se for apenas o ID, monta o link. Se for link completo, usa ele.
-            srcFinal = valorMidia.startsWith("http") ? valorMidia : `https://drive.google.com/uc?export=view&id=${valorMidia}`;
+            // Se for ID do drive, monta o link. Se for link completo, usa direto.
+            urlPrincipal = valorMidia.startsWith("http") ? valorMidia : `https://drive.google.com/uc?export=view&id=${valorMidia}`;
         }
 
         const nomeArq = nome.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/ /g, "-").replace(/[()]/g, "");
@@ -434,9 +365,9 @@ function montarCatalogo() {
         const card = document.createElement("div");
         card.className = "item" + (selecionados.has(nome) ? " selecionado" : "");
         
-        // LÓGICA: Tenta Drive -> Se erro, tenta GitHub -> Se erro, sem-foto
+        // Se houver urlPrincipal, tenta ela primeiro. Se falhar, tenta o fallback do GitHub.
         card.innerHTML = `
-            <img src="${srcFinal || fallbackImg}" 
+            <img src="${urlPrincipal || fallbackImg}" 
                  onerror="if(this.src.includes('drive.google.com')){ this.src='${fallbackImg}'; } else { this.src='imagens/sem-foto.jpg'; }">
             <p>${nome}</p>
             <div class="estoque-status ${dados.qtd > 0 ? 'disponivel' : 'encomenda'}">
@@ -445,8 +376,7 @@ function montarCatalogo() {
 
         card.onclick = () => {
             if (filtroTexto !== "") {
-                inputPesquisa.value = "";
-                filtroTexto = "";
+                inputPesquisa.value = ""; filtroTexto = "";
                 if (selecionados.has(nome)) selecionados.delete(nome); else selecionados.add(nome);
                 montarCatalogo(); 
             } else {
@@ -460,6 +390,7 @@ function montarCatalogo() {
     
     if (itensExibidos === 0) grid.innerHTML = `<div class="vazio">Nenhuma ID encontrada.</div>`;
 }
+
 function atualizarPainelAcoes() {
     const areaSelecao = document.getElementById("areaSelecao");
     const containerTags = document.getElementById("containerTags");
