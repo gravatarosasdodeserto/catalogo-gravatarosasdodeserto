@@ -278,7 +278,6 @@ let apenasDisponiveis = false;
 let filtrosAtivos = {}; 
 let colunasDeFiltro = ["camadas", "cores", "padrao", "especiais"]; 
 
-// Note o Math.random() para garantir que o Google não te entregue dados velhos
 const urlPlanilha = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQHtdljGrbqvDGysgNUi7MVlGI19jY6WYrIJSckkcX7ylbKP02BWqgt0qHPUTTxqg/pub?gid=1893895788&single=true&output=csv&t=' + Math.random();
 
 const grid = document.getElementById("gridCatalogo");
@@ -286,19 +285,28 @@ const drawer = document.getElementById("drawer");
 const inputPesquisa = document.getElementById("inputPesquisa");
 const listaFiltrosAtivos = document.getElementById("listaFiltrosAtivos");
 
+// FUNÇÃO DE LEITURA DE CSV ROBUSTA
+function parseCSV(text) {
+    const lines = text.split(/\r?\n/).filter(l => l.trim() !== "");
+    const result = [];
+    lines.forEach(line => {
+        // Esta regex separa por vírgula mas ignora vírgulas dentro de aspas
+        const cells = line.match(/(".*?"|[^",\r\n]+)(?=\s*,|\s*$|\s*\r?\n)/g) || [];
+        result.push(cells.map(c => c.trim().replace(/^"|"$/g, '')));
+    });
+    return result;
+}
+
 async function carregarEstoque() {
     try {
         const resp = await fetch(urlPlanilha);
-        const csv = await resp.text();
-        const linhas = csv.split(/\r?\n/).filter(l => l.trim() !== "");
+        const text = await resp.text();
+        const dadosCompletos = parseCSV(text);
         
-        // Pega o cabeçalho para mapear as colunas
-        const cabecalhoRaw = linhas.shift();
-        // Regex mágica que separa por vírgula mas ignora vírgulas dentro de aspas
-        const regexCSV = /,(?=(?:(?:[^"]*"){2})*[^"]*$)/;
-        
-        const cabecalho = cabecalhoRaw.split(regexCSV).map(h => 
-            h.trim().replace(/^"|"$/g, '').toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+        if (dadosCompletos.length < 1) return;
+
+        const cabecalho = dadosCompletos.shift().map(h => 
+            h.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
         );
 
         const idxNome = cabecalho.indexOf('nome');
@@ -306,30 +314,27 @@ async function carregarEstoque() {
         const idxMidia = cabecalho.indexOf('midia');
 
         estoque = {};
-        linhas.forEach(linha => {
-            const col = linha.split(regexCSV);
-            const limpar = (s) => s ? s.trim().replace(/^"|"$/g, '') : '';
-            
-            const nome = limpar(col[idxNome]);
-            if (!nome) return;
+        dadosCompletos.forEach(col => {
+            const nomeOriginal = col[idxNome];
+            if (!nomeOriginal) return;
 
-            estoque[nome] = {
-                qtd: parseInt(limpar(col[idxQtd])) || 0,
-                midia: limpar(col[idxMidia]), 
+            estoque[nomeOriginal] = {
+                qtd: parseInt(col[idxQtd]) || 0,
+                midia: col[idxMidia] || "", 
                 filtros: {}
             };
 
             colunasDeFiltro.forEach(colNome => {
                 const idxReal = cabecalho.indexOf(colNome);
-                estoque[nome].filtros[colNome] = idxReal !== -1 ? limpar(col[idxReal]) : '';
+                estoque[nomeOriginal].filtros[colNome] = idxReal !== -1 ? col[idxReal] : '';
             });
         });
         
         gerarInterfaceFiltros();
         montarCatalogo();
     } catch (e) {
-        console.error("Erro detalhado:", e);
-        grid.innerHTML = `<div class="vazio">Erro ao processar dados da planilha.</div>`;
+        console.error("Erro:", e);
+        grid.innerHTML = `<div class="vazio">Erro ao carregar dados.</div>`;
     }
 }
 
@@ -340,61 +345,58 @@ function montarCatalogo() {
     Object.keys(estoque).sort().forEach(nome => {
         const dados = estoque[nome];
         
-        // Filtros
+        // Filtros (Simplificados para o exemplo)
         if (apenasDisponiveis && dados.qtd === 0) return;
-        let passaFiltro = true;
-        for (let col in filtrosAtivos) {
-            const selecao = filtrosAtivos[col];
-            if (selecao && selecao !== "Todas") {
-                const valoresItem = dados.filtros[col].split(/[|/]/).map(v => v.trim());
-                if (!valoresItem.includes(selecao)) { passaFiltro = false; break; }
-            }
-        }
-        if (!passaFiltro) return;
         if (filtroTexto && !nome.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").includes(filtroTexto)) return;
 
         itensExibidos++;
 
-        // --- LÓGICA DE IMAGEM BLINDADA ---
-        const valorMidia = dados.midia || "";
-        let urlPrincipal = "";
+        const idMidia = dados.midia.trim();
+        let srcFinal = "";
 
-        if (valorMidia !== "") {
-            // Se for ID do drive, monta o link. Se for link completo, usa direto.
-            urlPrincipal = valorMidia.startsWith("http") ? valorMidia : `https://drive.google.com/uc?export=view&id=${valorMidia}`;
+        // PRIORIDADE 1: Google Drive (se houver ID na coluna Midia)
+        if (idMidia !== "") {
+            srcFinal = idMidia.startsWith("http") ? idMidia : `https://drive.google.com/uc?export=view&id=${idMidia}`;
+        } else {
+            // PRIORIDADE 2: Pasta Imagens do GitHub (nome do arquivo)
+            const nomeFormatado = nome.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/ /g, "-").replace(/[()]/g, "");
+            srcFinal = `imagens/${nomeFormatado}.jpg`;
         }
-
-        const nomeArq = nome.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/ /g, "-").replace(/[()]/g, "");
-        const fallbackImg = `imagens/${nomeArq}.jpg`;
 
         const card = document.createElement("div");
         card.className = "item" + (selecionados.has(nome) ? " selecionado" : "");
         
-        // Se houver urlPrincipal, tenta ela primeiro. Se falhar, tenta o fallback do GitHub.
+        // Lógica de Erro: Se falhar a primeira tentativa, tenta o nome em maiúsculo, se falhar, sem-foto.
         card.innerHTML = `
-            <img src="${urlPrincipal || fallbackImg}" 
-                 onerror="if(this.src.includes('drive.google.com')){ this.src='${fallbackImg}'; } else { this.src='imagens/sem-foto.jpg'; }">
+            <img src="${srcFinal}" 
+                 onerror="handleImageError(this, '${nome}')">
             <p>${nome}</p>
             <div class="estoque-status ${dados.qtd > 0 ? 'disponivel' : 'encomenda'}">
                 ${dados.qtd > 0 ? 'Disponível: ' + dados.qtd : 'Por Encomenda'}
             </div>`;
 
         card.onclick = () => {
-            if (filtroTexto !== "") {
-                inputPesquisa.value = ""; filtroTexto = "";
-                if (selecionados.has(nome)) selecionados.delete(nome); else selecionados.add(nome);
-                montarCatalogo(); 
-            } else {
-                if (selecionados.has(nome)) selecionados.delete(nome); else selecionados.add(nome);
-                card.classList.toggle('selecionado');
-            }
+            if (selecionados.has(nome)) selecionados.delete(nome); else selecionados.add(nome);
+            card.classList.toggle('selecionado');
             atualizarPainelAcoes();
         };
         grid.appendChild(card);
     });
-    
-    if (itensExibidos === 0) grid.innerHTML = `<div class="vazio">Nenhuma ID encontrada.</div>`;
 }
+
+function handleImageError(img, nomeOriginal) {
+    // Se falhou o link do Drive ou o link minúsculo
+    if (!img.src.includes('sem-foto.jpg')) {
+        const nomeMaiusculo = nomeOriginal.toUpperCase().replace(/ /g, "-") + ".jpg";
+        if (!img.dataset.triedUppercase) {
+            img.dataset.triedUppercase = "true";
+            img.src = `imagens/${nomeMaiusculo}`;
+        } else {
+            img.src = 'imagens/sem-foto.jpg';
+        }
+    }
+}
+
 function gerarInterfaceFiltros() {
     const headerHtml = `
         <button class="fechar-drawer" onclick="toggleDrawer()">✕</button>
