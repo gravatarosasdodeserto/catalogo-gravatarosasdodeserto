@@ -85,14 +85,37 @@ async function carregarDados(){
         const resp = await fetch(urlPlanilha);
         const text = await resp.text();
 
-        const linhas = text.split(/\r?\n/).filter(l=>l);
-        const header = linhas.shift().split(',');
+        const linhas = text
+            .split(/\r?\n/)
+            .filter(l => l.trim() !== "");
 
-        dadosCompletos = linhas.map(l=>{
-            let obj={};
-            l.split(',').forEach((c,i)=>obj[header[i].toLowerCase()]=c);
-            return obj;
-        });
+        const dados = parseCSV(text);
+
+        const header = dados.shift().map(h =>
+            h.toLowerCase()
+             .normalize("NFD")
+             .replace(/[\u0300-\u036f]/g, "")
+        );
+
+        const idx = {
+            nome: header.indexOf("nome"),
+            qtd: header.indexOf("qtd"),
+            cores: header.indexOf("cores"),
+            camadas: header.indexOf("camadas"),
+            padrao: header.indexOf("padrao"),
+            midia: header.indexOf("midia"),
+            especiais: header.indexOf("especiais")
+        };
+
+        dadosCompletos = dados.map(col => ({
+            nome: col[idx.nome] || "",
+            qtd: col[idx.qtd] || 0,
+            cores: col[idx.cores] || "",
+            camadas: col[idx.camadas] || "",
+            padrao: col[idx.padrao] || "",
+            midia: col[idx.midia] || "",
+            especiais: col[idx.especiais] || ""
+        }));
 
         document.getElementById("loader").style.display="none";
         document.getElementById("tabelaAdmin").style.display="table";
