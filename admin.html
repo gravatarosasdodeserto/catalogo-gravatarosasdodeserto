@@ -85,29 +85,12 @@ async function carregarDados(){
         const resp = await fetch(urlPlanilha);
         const text = await resp.text();
 
-        const linhas = text
-            .split(/\r?\n/)
-            .filter(l => l.trim());
+        const linhas = text.split(/\r?\n/).filter(l=>l);
+        const header = linhas.shift().split(',');
 
-        const header = linhas
-            .shift()
-            .split(',')
-            .map(h =>
-                h.toLowerCase()
-                 .trim()
-                 .normalize("NFD")
-                 .replace(/[\u0300-\u036f]/g, "")
-            );
-
-        dadosCompletos = linhas.map(l => {
-            const valores = l.split(',');
-
-            let obj = {};
-
-            header.forEach((h, i) => {
-                obj[h] = valores[i] ? valores[i].trim() : "";
-            });
-
+        dadosCompletos = linhas.map(l=>{
+            let obj={};
+            l.split(',').forEach((c,i)=>obj[header[i].toLowerCase()]=c);
             return obj;
         });
 
@@ -154,14 +137,21 @@ function renderizarTabela(){
             <input type="file" id="file-${id}" accept="image/*">
         </td>
 
-        <td><button onclick='salvar("${item.nome}")'>Salvar</button></td>
+        <td>
+            <button onclick='salvar("${item.nome}")' class="btn-salvar">Salvar</button>
+
+            <button onclick='excluir("${item.nome}")'
+                style="background:#8b2d2d;color:white;border:none;padding:8px;margin-top:5px;cursor:pointer;">
+                Excluir
+            </button>
+        </td>
         `;
 
         corpo.appendChild(tr);
     });
 }
 
-// ===================== UPLOAD BASE64 =====================
+// ===================== UPLOAD =====================
 async function uploadImage(file){
 
     const base64 = await new Promise((resolve)=>{
@@ -170,7 +160,7 @@ async function uploadImage(file){
         reader.readAsDataURL(file);
     });
 
-    const resp = await fetch(WEB_APP_URL, {
+    const resp = await fetch(WEB_APP_URL,{
         method:"POST",
         body:new URLSearchParams({
             action:"upload",
@@ -184,7 +174,7 @@ async function uploadImage(file){
     return data.id;
 }
 
-// ===================== CRIAR NOVA ID =====================
+// ===================== CRIAR =====================
 async function criarNovaID(e){
     e.preventDefault();
 
@@ -210,10 +200,10 @@ async function criarNovaID(e){
         body:new URLSearchParams(payload)
     });
 
-    toast("Criado com imagem!", "#2d5a27");
+    toast("Criado com sucesso!", "#2d5a27");
 }
 
-// ===================== SALVAR (UPDATE + TROCA DE IMAGEM) =====================
+// ===================== SALVAR =====================
 async function salvar(nome){
 
     const id = cleanID(nome);
@@ -222,7 +212,6 @@ async function salvar(nome){
 
     const fileInput = document.getElementById(`file-${id}`);
 
-    // 🔥 se escolheu nova imagem, faz upload e substitui
     if(fileInput && fileInput.files.length > 0){
         midiaID = await uploadImage(fileInput.files[0]);
     }
@@ -242,9 +231,25 @@ async function salvar(nome){
         body:new URLSearchParams(payload)
     });
 
-    toast("Atualizado com sucesso!", "#2d5a27");
+    toast("Atualizado!", "#2d5a27");
+}
 
-    if(fileInput) fileInput.value = "";
+// ===================== EXCLUIR (NOVO) =====================
+async function excluir(nome){
+
+    if(!confirm("Tem certeza que deseja excluir esta ID?")) return;
+
+    await fetch(WEB_APP_URL,{
+        method:"POST",
+        body:new URLSearchParams({
+            action:"delete",
+            nome:nome
+        })
+    });
+
+    toast("Excluído com sucesso!", "#8b2d2d");
+
+    carregarDados();
 }
 
 // ===================== UI =====================
