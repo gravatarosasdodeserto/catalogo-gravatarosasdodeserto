@@ -425,12 +425,21 @@ function montarCatalogo() {
 }
 
 function handleImageError(img, nomeOriginal) {
-    // Se falhou o link do Drive ou o link minúsculo
+    const nomeBase = nomeOriginal.toUpperCase().replace(/ /g, "-");
+    
+    // Se falhou o link do Drive (contém google.com)
+    if (img.src.includes('google.com')) {
+        console.warn(`Link do Drive falhou para ${nomeOriginal}, tentando local...`);
+        img.src = `imagens/${nomeBase}.jpg`;
+        return;
+    }
+
+    // Se falhou o local e ainda não tentamos o fallback final
     if (!img.src.includes('sem-foto.jpg')) {
-        const nomeMaiusculo = nomeOriginal.toUpperCase().replace(/ /g, "-") + ".jpg";
         if (!img.dataset.triedUppercase) {
             img.dataset.triedUppercase = "true";
-            img.src = `imagens/${nomeMaiusculo}`;
+            // Tenta com extensão .jpg ou .JPG se necessário
+            img.src = `imagens/${nomeBase}.jpg`;
         } else {
             img.src = 'imagens/sem-foto.jpg';
         }
