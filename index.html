@@ -413,56 +413,31 @@ function montarCatalogo() {
 
     Object.keys(estoque).sort().forEach(nome => {
         const dados = estoque[nome];
-        
         if (apenasDisponiveis && dados.qtd === 0) return;
 
-        let passaFiltro = true;
-        for (let col in filtrosAtivos) {
-            const selecao = filtrosAtivos[col];
-            if (selecao && selecao !== "Todas") {
-                const valoresItem = dados.filtros[col].split(/[|/]/).map(v => v.trim());
-                if (!valoresItem.includes(selecao)) {
-                    passaFiltro = false;
-                    break;
-                }
-            }
-        }
-        
-        if (!passaFiltro) return;
-        if (filtroTexto && !nome.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").includes(filtroTexto)) return;
+        // ... (mantenha seus filtros aqui) ...
 
         itensExibidos++;
 
-        // --- LÓGICA DE MÍDIA REFEITA PARA IDENTIFICAR IDs DO DRIVE ---
-        let valorMidia = dados.midia ? dados.midia.trim() : "";
-        let linkFinal = "";
+        const valorMidia = dados.midia ? dados.midia.trim() : "";
+        let srcFinal = "";
 
+        // Se houver algo na coluna Midia
         if (valorMidia !== "") {
-            if (valorMidia.startsWith("http")) {
-                // Se já for um link completo, usa ele
-                linkFinal = valorMidia;
-            } else {
-                // Se for apenas o ID (como está no seu CSV), monta o link do Google Drive
-                linkFinal = `https://drive.google.com/uc?export=view&id=${valorMidia}`;
-            }
+            // Se for apenas o ID, monta o link. Se for link completo, usa ele.
+            srcFinal = valorMidia.startsWith("http") ? valorMidia : `https://drive.google.com/uc?export=view&id=${valorMidia}`;
         }
 
         const nomeArq = nome.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/ /g, "-").replace(/[()]/g, "");
         const fallbackImg = `imagens/${nomeArq}.jpg`;
-        const ehVideo = linkFinal.toLowerCase().includes(".mp4") || linkFinal.toLowerCase().includes("video");
 
         const card = document.createElement("div");
         card.className = "item" + (selecionados.has(nome) ? " selecionado" : "");
         
+        // LÓGICA: Tenta Drive -> Se erro, tenta GitHub -> Se erro, sem-foto
         card.innerHTML = `
-            ${linkFinal ? 
-                (ehVideo ? 
-                    `<video src="${linkFinal}" muted loop playsinline autoplay onerror="this.style.display='none'; this.nextElementSibling.style.display='block'"></video>
-                     <img src="${fallbackImg}" style="display:none" onerror="this.src='imagens/sem-foto.jpg'">` : 
-                    `<img src="${linkFinal}" onerror="this.src='${fallbackImg}'; this.onerror=function(){this.src='imagens/sem-foto.jpg'};">`
-                ) : 
-                `<img src="${fallbackImg}" onerror="this.src='imagens/sem-foto.jpg'">`
-            }
+            <img src="${srcFinal || fallbackImg}" 
+                 onerror="if(this.src.includes('drive.google.com')){ this.src='${fallbackImg}'; } else { this.src='imagens/sem-foto.jpg'; }">
             <p>${nome}</p>
             <div class="estoque-status ${dados.qtd > 0 ? 'disponivel' : 'encomenda'}">
                 ${dados.qtd > 0 ? 'Disponível: ' + dados.qtd : 'Por Encomenda'}
