@@ -90,11 +90,6 @@ function cleanID(name){
 // ===================== CARREGAR =====================
 async function carregarDados(){
     try{
-        const resp = await fetch(urlPlanilha);
-const text = await resp.text();
-
-console.log("=== CSV BRUTO ===");
-console.log(text);
 
         const dados = parseCSV(text);
 
