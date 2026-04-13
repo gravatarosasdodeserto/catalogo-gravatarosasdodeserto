@@ -93,36 +93,33 @@ async function carregarDados(){
         const resp = await fetch(urlPlanilha);
         const text = await resp.text();
 
-        const linhas = text
-            .split(/\r?\n/)
-            .filter(l => l.trim() !== "");
-
         const dados = parseCSV(text);
 
         const header = dados.shift().map(h =>
             h.toLowerCase()
              .normalize("NFD")
              .replace(/[\u0300-\u036f]/g, "")
+             .trim()
         );
 
         const idx = {
             nome: header.indexOf("nome"),
-            qtd: header.indexOf("qtd"),
-            cores: header.indexOf("cores"),
             camadas: header.indexOf("camadas"),
+            cores: header.indexOf("cores"),
             padrao: header.indexOf("padrao"),
-            midia: header.indexOf("midia"),
-            especiais: header.indexOf("especiais")
+            especiais: header.indexOf("especiais"),
+            qtd: header.indexOf("qtd"),
+            midia: header.indexOf("midia")
         };
 
         dadosCompletos = dados.map(col => ({
             nome: col[idx.nome] || "",
-            qtd: col[idx.qtd] || 0,
-            cores: col[idx.cores] || "",
             camadas: col[idx.camadas] || "",
+            cores: col[idx.cores] || "",
             padrao: col[idx.padrao] || "",
-            midia: col[idx.midia] || "",
-            especiais: col[idx.especiais] || ""
+            especiais: col[idx.especiais] || "",
+            qtd: col[idx.qtd] || 0,
+            midia: col[idx.midia] || ""
         }));
 
         document.getElementById("loader").style.display="none";
