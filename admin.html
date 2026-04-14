@@ -395,6 +395,20 @@ async function criar(){
   carregar();
 }
 
+function previewUpload(event){
+  const file = event.target.files[0];
+  if(!file) return;
+
+  const reader = new FileReader();
+  reader.onload = e => {
+    const img = document.getElementById("previewImg");
+    img.src = e.target.result;
+    img.style.display = "block";
+  };
+  reader.readAsDataURL(file);
+}
+
+  
 // ================= SALVAR =================
 async function salvar(nome){
 
