@@ -149,11 +149,18 @@ button{
 
 <script>
 const URL = "https://script.google.com/macros/s/AKfycbxs8MmNSgkb43F1vZDCtFE6AiRvWtjlTp67QxpLMcfA9mnWInHQOBm8iZuEqpF6Ctg0hA/exec";
-// Link CSV Publicado (Leitura)
 const CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSochNnj1ihxWjFv_87wiDS9-ZakV1LrmdQWfZMAZMGRHf9pqCBXKQpkfQ6BDMlxwYE8E2JkWUVRYOG/pub?gid=1893895788&single=true&output=csv";
 
 let dados = []; 
 let filtro = "";
+
+// Função para tratar a imagem do Drive
+function getImg(m) {
+  if (!m || m.trim() === "" || m === "Não inf.") return "imagens/sem-foto.jpg";
+  if (m.startsWith("http")) return m;
+  const idLimpo = m.trim();
+  return `https://drive.google.com/thumbnail?sz=w600&id=${idLimpo}`;
+}
 
 function toast(msg) {
   const t = document.getElementById("toast");
@@ -165,12 +172,6 @@ function toast(msg) {
 function abrirModal() { document.getElementById("modal").style.display = "flex"; }
 function fecharModal() { document.getElementById("modal").style.display = "none"; }
 function filtrar(v) { filtro = v; render(); }
-
-function getImg(m) {
-  if (!m) return "imagens/sem-foto.jpg";
-  if (m.startsWith("http")) return m;
-  return `https://drive.google.com/uc?export=view&id=${m}`;
-}
 
 function parseCSV(text) {
   const lines = text.split(/\r?\n/).filter(l => l.trim());
@@ -227,9 +228,7 @@ async function carregar() {
       }));
       render();
     }
-  } catch (e) {
-    toast("Erro ao carregar dados.");
-  }
+  } catch (e) { toast("Erro ao carregar dados."); }
 }
 
 async function criar() {
