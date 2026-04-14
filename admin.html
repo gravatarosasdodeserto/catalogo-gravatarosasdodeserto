@@ -149,12 +149,12 @@ button{
 
 <script>
 const URL = "https://script.google.com/macros/s/AKfycbxs8MmNSgkb43F1vZDCtFE6AiRvWtjlTp67QxpLMcfA9mnWInHQOBm8iZuEqpF6Ctg0hA/exec";
+// Link CSV Atualizado com o novo ID e parâmetro de tempo para evitar cache
 const CSV = "https://docs.google.com/spreadsheets/d/1thZhA6KxzB9HP4mbCgD6W8Qfex_TRmU8pg2oo0ANer0/pub?gid=1893895788&single=true&output=csv";
 
 let dados = []; 
 let filtro = "";
 
-// ===== 1. FUNÇÕES DE UTILIDADE E INTERFACE =====
 function toast(msg) {
   const t = document.getElementById("toast");
   t.innerText = msg;
@@ -162,18 +162,9 @@ function toast(msg) {
   setTimeout(() => t.style.display = "none", 2000);
 }
 
-function abrirModal() {
-  document.getElementById("modal").style.display = "flex";
-}
-
-function fecharModal() {
-  document.getElementById("modal").style.display = "none";
-}
-
-function filtrar(v) {
-  filtro = v;
-  render();
-}
+function abrirModal() { document.getElementById("modal").style.display = "flex"; }
+function fecharModal() { document.getElementById("modal").style.display = "none"; }
+function filtrar(v) { filtro = v; render(); }
 
 function getImg(m) {
   if (!m) return "imagens/sem-foto.jpg";
@@ -181,7 +172,6 @@ function getImg(m) {
   return `https://drive.google.com/uc?export=view&id=${m}`;
 }
 
-// ===== 2. PROCESSAMENTO DE DADOS (CSV) =====
 function parseCSV(text) {
   const lines = text.split(/\r?\n/).filter(l => l.trim());
   return lines.map(line => {
@@ -190,58 +180,48 @@ function parseCSV(text) {
   });
 }
 
-// ===== 3. FUNÇÃO DE RENDERIZAÇÃO (Onde estava o erro) =====
 function render() {
   const el = document.getElementById("lista");
   el.innerHTML = "";
-
-  const itensFiltrados = dados.filter(d => 
-    d.nome.toLowerCase().includes(filtro.toLowerCase())
-  );
+  const itensFiltrados = dados.filter(d => d.nome.toLowerCase().includes(filtro.toLowerCase()));
+  
+  if(itensFiltrados.length === 0) {
+    el.innerHTML = "<p style='text-align:center; padding:20px;'>Nenhuma ID encontrada.</p>";
+    return;
+  }
 
   itensFiltrados.forEach(d => {
-    // Cria um ID seguro para os campos baseado no nome (remove espaços e acentos)
     const idSeguro = d.nome.replace(/\W/g, "_");
-
     el.innerHTML += `
     <div class="card">
       <img src="${getImg(d.midia)}" class="img" onerror="this.src='imagens/sem-foto.jpg'">
-
       <label>Nome:</label>
       <input id="nome_${idSeguro}" value="${d.nome}" readonly style="background:#f0f0f0">
-      
       <label>Qtd:</label>
       <input id="qtd_${idSeguro}" value="${d.qtd}" type="number">
-      
       <label>ID da Mídia (Drive):</label>
       <input id="midia_${idSeguro}" value="${d.midia}">
-      
       <label>Camadas:</label>
       <input id="cam_${idSeguro}" value="${d.camadas}">
-      
       <label>Cores:</label>
       <input id="cor_${idSeguro}" value="${d.cores}">
-      
       <label>Padrão:</label>
       <input id="pad_${idSeguro}" value="${d.padrao}">
-
       <div class="actions">
-        <button class="save" onclick="salvar('${d.nome}')">Salvar Alterações</button>
+        <button class="save" onclick="salvar('${d.nome}')">Salvar</button>
         <button class="del" onclick="excluir('${d.nome}')">Excluir</button>
       </div>
     </div>`;
   });
 }
 
-// ===== 4. CARREGAMENTO INICIAL =====
 async function carregar() {
   try {
-    const r = await fetch(CSV + "&t=" + Date.now());
+    const r = await fetch(CSV + "&cache=" + Date.now());
     const t = await r.text();
     const linhas = parseCSV(t);
-
-    if (linhas.length > 0) {
-      linhas.shift(); // Remove cabeçalho
+    if (linhas.length > 1) { // Verifica se tem mais que apenas o cabeçalho
+      linhas.shift(); 
       dados = linhas.map(l => ({
         nome: l[0] || "",
         camadas: l[1] || "",
@@ -253,56 +233,39 @@ async function carregar() {
       render();
     }
   } catch (e) {
-    console.error("Erro ao carregar CSV:", e);
-    toast("Erro ao carregar dados da planilha.");
+    console.error(e);
+    toast("Erro ao carregar dados.");
   }
 }
 
-// ===== 5. AÇÕES (COMUNICAÇÃO COM GOOGLE SCRIPT) =====
 async function criar() {
   try {
     const nome = document.getElementById("n_nome").value;
     if (!nome) return toast("Nome obrigatório!");
-
     const file = document.getElementById("n_imagem").files[0];
     let base64 = "", mime = "", fileName = "";
-
     if (file) {
       base64 = await new Promise(res => {
         const r = new FileReader();
         r.onload = () => res(r.result.split(",")[1]);
         r.readAsDataURL(file);
       });
-      mime = file.type;
-      fileName = file.name;
+      mime = file.type; fileName = file.name;
     }
-
     const res = await fetch(URL, {
       method: "POST",
       body: new URLSearchParams({
-        action: "create",
-        nome: nome,
+        action: "create", nome,
         qtd: document.getElementById("n_qtd").value,
         camadas: document.getElementById("n_camadas").value,
         cores: document.getElementById("n_cores").value,
         padrao: document.getElementById("n_padrao").value,
-        imageBase64: base64,
-        mimeType: mime,
-        fileName: fileName
+        imageBase64: base64, mimeType: mime, fileName: fileName
       })
     });
-
     const txt = await res.text();
-    if (txt.includes("OK")) {
-      toast("Criado!");
-      fecharModal();
-      carregar();
-    } else {
-      toast("Erro: " + txt);
-    }
-  } catch (e) {
-    toast("Erro na conexão!");
-  }
+    if (txt.includes("OK")) { toast("Criado!"); fecharModal(); carregar(); }
+  } catch (e) { toast("Erro na conexão!"); }
 }
 
 async function salvar(nomeOriginal) {
@@ -311,8 +274,7 @@ async function salvar(nomeOriginal) {
     const res = await fetch(URL, {
       method: "POST",
       body: new URLSearchParams({
-        action: "update",
-        nome: nomeOriginal,
+        action: "update", nome: nomeOriginal,
         qtd: document.getElementById("qtd_" + id).value,
         camadas: document.getElementById("cam_" + id).value,
         cores: document.getElementById("cor_" + id).value,
@@ -322,29 +284,21 @@ async function salvar(nomeOriginal) {
     });
     const txt = await res.text();
     txt.includes("OK") ? toast("Salvo!") : toast("Erro ao salvar");
-  } catch (e) {
-    toast("Erro de conexão");
-  }
+  } catch (e) { toast("Erro de conexão"); }
 }
 
 async function excluir(nome) {
-  if (!confirm("Tem certeza que deseja excluir " + nome + "?")) return;
+  if (!confirm("Excluir " + nome + "?")) return;
   try {
     const res = await fetch(URL, {
       method: "POST",
-      body: new URLSearchParams({ action: "delete", nome: nome })
+      body: new URLSearchParams({ action: "delete", nome })
     });
     const txt = await res.text();
-    if (txt.includes("OK")) {
-      toast("Excluído!");
-      carregar();
-    }
-  } catch (e) {
-    toast("Erro ao excluir");
-  }
+    if (txt.includes("OK")) { toast("Excluído!"); carregar(); }
+  } catch (e) { toast("Erro ao excluir"); }
 }
 
-// INICIALIZAÇÃO
 carregar();
 </script>
 
