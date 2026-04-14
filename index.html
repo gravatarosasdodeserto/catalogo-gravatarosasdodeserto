@@ -234,7 +234,7 @@ const inputPesquisa = document.getElementById("inputPesquisa");
 const containerTags = document.getElementById("containerTags");
 const areaSelecao = document.getElementById("areaSelecao");
 
-// NOVA FUNÇÃO: Tenta carregar imagem, se for vídeo o usuário clica ou o sistema detecta
+// FUNÇÃO DE MÍDIA LIMPA (Sem setas ou quadrados pretos)
 function getMidiaHTML(m) {
   if (!m || m.trim() === "" || m === "Não inf.") {
     return `<img src="imagens/sem-foto.jpg" style="width:100%; aspect-ratio:1/1; object-fit:cover; border-radius:14px;">`;
@@ -242,20 +242,16 @@ function getMidiaHTML(m) {
   
   const id = m.trim();
   const thumbUrl = `https://drive.google.com/thumbnail?sz=w600&id=${id}`;
-  
-  // Link de visualização direta que o Drive aceita melhor para streaming
-  const videoUrl = `https://drive.google.com/file/d/${id}/preview`;
+  // Link de stream direto (mais leve que iframe)
+  const videoUrl = `https://drive.google.com/uc?export=download&id=${id}`;
 
   return `
-    <div style="position:relative; width:100%; aspect-ratio:1/1; overflow:hidden; border-radius:14px; background:#f0f0f0;">
+    <div class="media-box" style="position:relative; width:100%; aspect-ratio:1/1; overflow:hidden; border-radius:14px; background:#f0f0f0;">
       <img src="${thumbUrl}" style="width:100%; height:100%; object-fit:cover; display:block;" onerror="this.src='imagens/sem-foto.jpg'">
-      
-      <iframe src="${videoUrl}" 
-        style="position:absolute; top:0; left:0; width:100%; height:100%; border:none; pointer-events:none;" 
-        allow="autoplay">
-      </iframe>
-      
-      <div style="position:absolute; inset:0; z-index:10;"></div>
+      <video src="${videoUrl}" autoplay loop muted playsinline 
+        style="position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; opacity:0; transition: opacity 0.5s;" 
+        oncanplay="this.style.opacity=1" onerror="this.remove()">
+      </video>
     </div>`;
 }
 
@@ -279,7 +275,6 @@ async function carregarEstoque() {
     const text = await resp.text();
     const dados = parseCSV(text);
     dados.shift(); 
-
     estoque = {};
     dados.forEach(l => {
       const nome = l[0];
@@ -292,7 +287,6 @@ async function carregarEstoque() {
         midia: l[6] || ""
       };
     });
-
     gerarInterfaceFiltros();
     montarCatalogo();
   } catch (e) { grid.innerHTML = "<p>Erro ao carregar ID's.</p>"; }
@@ -303,7 +297,6 @@ function gerarInterfaceFiltros() {
   colunasDeFiltro.forEach(col => {
     const valoresUnicos = new Set();
     Object.values(estoque).forEach(item => { if (item[col]) valoresUnicos.add(item[col]); });
-
     let html = `<div class="grupo-filtro"><p class="titulo-filtro">${col.toUpperCase()}</p><div class="opcoes-filtro">`;
     html += `<div class="pill ${!filtrosAtivos[col] ? 'active' : ''}" onclick="aplicarFiltro('${col}', '')">Todas</div>`;
     Array.from(valoresUnicos).sort().forEach(val => {
@@ -321,6 +314,7 @@ function aplicarFiltro(coluna, valor) {
   montarCatalogo();
 }
 
+// MONTAGEM DO CATÁLOGO OTIMIZADA (Não apaga tudo ao selecionar)
 function montarCatalogo() {
   grid.innerHTML = "";
   Object.keys(estoque).sort().forEach(nome => {
@@ -332,16 +326,22 @@ function montarCatalogo() {
 
     const card = document.createElement("div");
     card.className = "item" + (selecionados.has(nome) ? " selecionado" : "");
+    card.id = "card_" + nome.replace(/\W/g, "_"); // ID único para cada card
     card.innerHTML = `
       ${getMidiaHTML(d.midia)}
       <p>${nome}</p>
       <div class="estoque-status ${d.qtd > 0 ? 'disponivel' : 'encomenda'}">
         ${d.qtd > 0 ? 'Disponível' : 'Por Encomenda'}
       </div>`;
+    
     card.onclick = () => {
-      if (selecionados.has(nome)) selecionados.delete(nome);
-      else selecionados.add(nome);
-      montarCatalogo();
+      if (selecionados.has(nome)) {
+        selecionados.delete(nome);
+        card.classList.remove("selecionado");
+      } else {
+        selecionados.add(nome);
+        card.classList.add("selecionado");
+      }
       atualizarPainelAcoes();
     };
     grid.appendChild(card);
@@ -366,9 +366,16 @@ function atualizarTags() {
   selecionados.forEach(nome => {
     const tag = document.createElement("div");
     tag.className = "tag-item";
-    tag.innerHTML = `${nome} <button onclick="event.stopPropagation(); selecionados.delete('${nome}'); montarCatalogo(); atualizarPainelAcoes();">&times;</button>`;
+    tag.innerHTML = `${nome} <button onclick="removerSelecao('${nome}')">&times;</button>`;
     containerTags.appendChild(tag);
   });
+}
+
+function removerSelecao(nome) {
+  selecionados.delete(nome);
+  const card = document.getElementById("card_" + nome.replace(/\W/g, "_"));
+  if (card) card.classList.remove("selecionado");
+  atualizarPainelAcoes();
 }
 
 function enviarPedido() {
