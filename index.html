@@ -228,255 +228,134 @@ let filtrosAtivos = {};
 let colunasDeFiltro = ["camadas", "cores", "padrao"];
 
 const urlPlanilha =
-  'https://docs.google.com/spreadsheets/d/e/2PACX-1vSochNnj1ihxWjFv_87wiDS9-ZakV1LrmdQWfZMAZMGRHf9pqCBXKQpkfQ6BDMlxwYE8E2JkWUVRYOG/pub?gid=1893895788&single=true&output=csv'
-  + '&t=' + Math.random();
+  'https://docs.google.com/spreadsheets/d/e/2PACX-1vSochNnj1ihxWjFv_87wiDS9-ZakV1LrmdQWfZMAZMGRHf9pqCBXKQpkfQ6BDMlxwYE8E2JkWUVRYOG/pub?gid=1893895788&single=true&output=csv';
 
 const grid = document.getElementById("gridCatalogo");
 const drawer = document.getElementById("drawer");
 const inputPesquisa = document.getElementById("inputPesquisa");
 const listaFiltrosAtivos = document.getElementById("listaFiltrosAtivos");
 
-// ===================== CSV PARSER MAIS SEGURO =====================
+// CSV ROBUSTO
 function parseCSV(text) {
-    const lines = text.split(/\r?\n/).filter(l => l.trim() !== "");
-    return lines.map(line => {
-        const cells = line.match(/(".*?"|[^",\r\n]+)(?=\s*,|\s*$)/g) || [];
-        return cells.map(c => c.trim().replace(/^"|"$/g, ''));
-    });
+  const lines = text.split(/\r?\n/).filter(l => l.trim() !== "");
+  return lines.map(line => {
+    const cells = line.match(/(".*?"|[^",\r\n]+)(?=\s*,|\s*$)/g) || [];
+    return cells.map(c => c.trim().replace(/^"|"$/g, ''));
+  });
 }
 
-// ===================== CARREGAR ESTOQUE =====================
-async function carregarEstoque() {
-    try {
-        const resp = await fetch(urlPlanilha);
-        const text = await resp.text();
-
-        const dadosCompletos = parseCSV(text);
-        if (dadosCompletos.length < 1) return;
-
-        // 🔥 HEADER NORMALIZADO (mais forte)
-        const cabecalho = dadosCompletos
-            .shift()
-            .map(h => h.toString()
-                .toLowerCase()
-                .normalize("NFD")
-                .replace(/[\u0300-\u036f]/g, "")
-                .trim()
-            );
-
-        const idxNome = cabecalho.findIndex(h => h.includes("nome"));
-        const idxQtd = cabecalho.findIndex(h => h.includes("qtd"));
-        const idxMidia = cabecalho.findIndex(h => h.includes("midia"));
-        const idxPadrao = cabecalho.findIndex(h => h.includes("padrao"));
-
-        estoque = {};
-
-        dadosCompletos.forEach(col => {
-            const nome = col[idxNome];
-            if (!nome) return;
-
-            estoque[nome] = {
-                qtd: parseInt(col[idxQtd]) || 0,
-                midia: (col[idxMidia] || "").toString(),
-                filtros: {}
-            };
-
-            colunasDeFiltro.forEach(f => {
-                const i = cabecalho.findIndex(h => h.includes(f));
-                estoque[nome].filtros[f] = i !== -1 ? (col[i] || "") : "";
-            });
-        });
-
-        gerarInterfaceFiltros();
-        montarCatalogo();
-
-    } catch (e) {
-        console.error(e);
-        grid.innerHTML = "Erro ao carregar dados.";
-    }
+// SLUG SEGURO
+function slug(nome){
+  return nome.toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]/g, "-");
 }
 
-// ===================== MONTAR CATÁLOGO =====================
-function montarCatalogo() {
-    grid.innerHTML = "";
-    let count = 0;
+// ================= CARREGAR =================
+async function carregarEstoque(){
+  try{
+    const resp = await fetch(urlPlanilha);
+    const text = await resp.text();
 
-    Object.keys(estoque).sort().forEach(nome => {
-        const d = estoque[nome];
+    const dados = parseCSV(text);
+    const cab = dados.shift().map(h =>
+      h.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim()
+    );
 
-        if (apenasDisponiveis && d.qtd === 0) return;
+    const idx = {
+      nome: cab.findIndex(h=>h.includes("nome")),
+      qtd: cab.findIndex(h=>h.includes("qtd")),
+      midia: cab.findIndex(h=>h.includes("midia"))
+    };
 
-        const nomeNormalizado = nome.toLowerCase()
-            .normalize("NFD")
-            .replace(/[\u0300-\u036f]/g, "");
+    estoque = {};
 
-        const filtroNorm = filtroTexto.toLowerCase();
+    dados.forEach(l=>{
+      const nome = l[idx.nome];
+      if(!nome) return;
 
-        if (filtroTexto && !nomeNormalizado.includes(filtroNorm)) return;
+      estoque[nome] = {
+        qtd: parseInt(l[idx.qtd]) || 0,
+        midia: (l[idx.midia] || "").toString(),
+        filtros:{}
+      };
 
-        let passa = true;
-
-        for (let f in filtrosAtivos) {
-            if (filtrosAtivos[f] && filtrosAtivos[f] !== "Todas") {
-                if (!String(d.filtros[f]).includes(filtrosAtivos[f])) {
-                    passa = false;
-                    break;
-                }
-            }
-        }
-
-        if (!passa) return;
-
-        count++;
-
-        // 🔥 CORREÇÃO PRINCIPAL (NUNCA QUEBRA)
-        const idMidia = (d.midia || "").toString().trim();
-
-        let src = "";
-
-        if (idMidia) {
-            src = idMidia.startsWith("http")
-                ? idMidia
-                : `https://drive.google.com/uc?export=view&id=${idMidia}`;
-        } else {
-            src = `imagens/${nome.toLowerCase().replace(/ /g, "-")}.jpg`;
-        }
-
-        const card = document.createElement("div");
-        card.className = "item" + (selecionados.has(nome) ? " selecionado" : "");
-
-        card.innerHTML = `
-            <img src="${src}" onerror="this.src='imagens/sem-foto.jpg'">
-            <p>${nome}</p>
-            <div class="estoque-status ${d.qtd > 0 ? 'disponivel' : 'encomenda'}">
-                ${d.qtd > 0 ? 'Disponível' : 'Por Encomenda'}
-            </div>
-        `;
-
-        card.onclick = () => {
-            selecionados.has(nome)
-                ? selecionados.delete(nome)
-                : selecionados.add(nome);
-
-            card.classList.toggle('selecionado');
-            atualizarPainelAcoes();
-        };
-
-        grid.appendChild(card);
+      colunasDeFiltro.forEach(f=>{
+        const i = cab.findIndex(h=>h.includes(f));
+        estoque[nome].filtros[f] = i !== -1 ? (l[i]||"") : "";
+      });
     });
 
-    if (count === 0) grid.innerHTML = "Nenhuma ID encontrada.";
-}
-
-// ===================== RESTO DO SEU CÓDIGO (INALTERADO) =====================
-
-function gerarInterfaceFiltros() {
-    drawer.innerHTML = `<button class="fechar-drawer" onclick="toggleDrawer()">✕</button>
-        <div class="wrapper-switch">
-        <label>
-        <input type="checkbox"
-        onchange="apenasDisponiveis=this.checked; atualizarTagsFiltros(); montarCatalogo()">
-        ID's Pronta Entrega
-        </label>
-        </div>`;
-
-    colunasDeFiltro.forEach(col => {
-        const vals = new Set();
-
-        Object.values(estoque).forEach(i =>
-            (i.filtros[col] || "").split(/[|/]/).forEach(v => {
-                if (v.trim()) vals.add(v.trim());
-            })
-        );
-
-        if (vals.size > 0) {
-            let html = `<div class="grupo-filtro">
-                <div class="titulo-filtro">${col}</div>
-                <div class="opcoes-filtro">
-                <div class="pill active" onclick="definirFiltro('${col}','Todas',this)">Todas</div>`;
-
-            Array.from(vals).sort().forEach(v => {
-                html += `<div class="pill" onclick="definirFiltro('${col}','${v}',this)">${v}</div>`;
-            });
-
-            drawer.innerHTML += html + `</div></div>`;
-        }
-    });
-}
-
-function definirFiltro(col, val, el) {
-    filtrosAtivos[col] = val;
-    el.parentElement.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
-    el.classList.add('active');
-    atualizarTagsFiltros();
+    gerarInterfaceFiltros();
     montarCatalogo();
+
+  }catch(e){
+    console.error(e);
+    grid.innerHTML="Erro ao carregar dados.";
+  }
 }
 
-function atualizarTagsFiltros() {
-    listaFiltrosAtivos.innerHTML = "";
+// ================= CATÁLOGO =================
+function montarCatalogo(){
+  grid.innerHTML="";
+  let count=0;
 
-    if (apenasDisponiveis) {
-        listaFiltrosAtivos.innerHTML += `<div class="tag-filtro-ativa">PRONTA ENTREGA</div>`;
-    }
+  Object.keys(estoque).sort().forEach(nome=>{
+    const d = estoque[nome];
 
-    for (let f in filtrosAtivos) {
-        if (filtrosAtivos[f] !== "Todas") {
-            listaFiltrosAtivos.innerHTML += `<div class="tag-filtro-ativa">${filtrosAtivos[f]}</div>`;
+    if(apenasDisponiveis && d.qtd===0) return;
+
+    const nomeNorm = nome.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
+    if(filtroTexto && !nomeNorm.includes(filtroTexto.toLowerCase())) return;
+
+    let passa=true;
+    for(let f in filtrosAtivos){
+      if(filtrosAtivos[f] !== "Todas"){
+        if(!String(d.filtros[f]).toLowerCase().includes(filtrosAtivos[f].toLowerCase())){
+          passa=false; break;
         }
+      }
     }
-}
+    if(!passa) return;
 
-function atualizarPainelAcoes() {
-    const area = document.getElementById("areaSelecao");
-    const cont = document.getElementById("containerTags");
-    const btn = document.getElementById("btnEnviar");
+    count++;
 
-    cont.innerHTML = "";
+    let src="imagens/sem-foto.jpg";
 
-    if (selecionados.size > 0) {
-        area.style.display = "block";
+    const idMidia = d.midia.trim();
 
-        selecionados.forEach(n =>
-            cont.innerHTML += `<div class="tag-item">${n}
-            <button onclick="removerItem('${n}')">×</button></div>`
-        );
-
-        btn.classList.remove("oculto");
-        btn.innerText = `Solicitar ${selecionados.size} selecionadas`;
+    if(idMidia && idMidia.length>10){
+      src = idMidia.startsWith("http")
+        ? idMidia
+        : `https://drive.google.com/uc?export=view&id=${idMidia}`;
     } else {
-        area.style.display = "none";
-        btn.classList.add("oculto");
+      src = `imagens/${slug(nome)}.jpg`;
     }
+
+    const card = document.createElement("div");
+    card.className="item"+(selecionados.has(nome)?" selecionado":"");
+
+    card.innerHTML=`
+      <img src="${src}" onerror="this.src='imagens/sem-foto.jpg'">
+      <p>${nome}</p>
+      <div class="estoque-status ${d.qtd>0?'disponivel':'encomenda'}">
+        ${d.qtd>0?'Disponível':'Por Encomenda'}
+      </div>
+    `;
+
+    card.onclick=()=>{
+      selecionados.has(nome)?selecionados.delete(nome):selecionados.add(nome);
+      card.classList.toggle('selecionado');
+      atualizarPainelAcoes();
+    };
+
+    grid.appendChild(card);
+  });
+
+  if(count===0) grid.innerHTML="Nenhuma ID encontrada.";
 }
 
-function removerItem(n) {
-    selecionados.delete(n);
-    atualizarPainelAcoes();
-    montarCatalogo();
-}
-
-function toggleDrawer() {
-    drawer.classList.toggle('active');
-    document.getElementById('overlay').style.display =
-        drawer.classList.contains('active') ? 'block' : 'none';
-}
-
-function enviarPedido() {
-    const msg = `Olá! Tenho interesse nas IDs: ${Array.from(selecionados).join(", ")}`;
-    window.open("https://wa.me/5581992665421?text=" + encodeURIComponent(msg));
-}
-
-function acessarAdmin() {
-    if (btoa(prompt("Senha:")) === "MTIzNDU2")
-        window.location.href = "admin.html";
-}
-
-inputPesquisa.addEventListener("input", (e) => {
-    filtroTexto = e.target.value;
-    montarCatalogo();
-});
-
-carregarEstoque();
 </script>
     
 </body>
