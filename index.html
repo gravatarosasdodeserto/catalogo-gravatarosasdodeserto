@@ -242,18 +242,20 @@ function getMidiaHTML(m) {
   
   const id = m.trim();
   const thumbUrl = `https://drive.google.com/thumbnail?sz=w600&id=${id}`;
-  const videoUrl = `https://drive.google.com/uc?export=download&id=${id}`;
+  
+  // Link de visualização direta que o Drive aceita melhor para streaming
+  const videoUrl = `https://drive.google.com/file/d/${id}/preview`;
 
-  // Criamos um container que carrega a imagem e só coloca o vídeo se detectarmos que é necessário
-  // Por padrão, mostramos a imagem. Se houver erro no vídeo, ele nem aparece.
   return `
     <div style="position:relative; width:100%; aspect-ratio:1/1; overflow:hidden; border-radius:14px; background:#f0f0f0;">
       <img src="${thumbUrl}" style="width:100%; height:100%; object-fit:cover; display:block;" onerror="this.src='imagens/sem-foto.jpg'">
-      <video src="${videoUrl}" autoplay loop muted playsinline 
-        style="position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; background:white;" 
-        onloadeddata="this.style.opacity=1" oncontextmenu="return false;"
-        onerror="this.remove()" style="opacity:0; transition: opacity 0.3s;">
-      </video>
+      
+      <iframe src="${videoUrl}" 
+        style="position:absolute; top:0; left:0; width:100%; height:100%; border:none; pointer-events:none;" 
+        allow="autoplay">
+      </iframe>
+      
+      <div style="position:absolute; inset:0; z-index:10;"></div>
     </div>`;
 }
 
