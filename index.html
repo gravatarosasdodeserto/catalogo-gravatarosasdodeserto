@@ -362,6 +362,12 @@ function montarCatalogo(){
   if(count===0) grid.innerHTML="Nenhuma ID encontrada.";
 }
 
+function acessarAdmin() {
+  if (prompt("Senha:") === "123456") {
+    window.location.href = "admin.html";
+  }
+}
+    
 </script>
     
 </body>
