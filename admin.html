@@ -212,51 +212,76 @@ async function carregar(){
 }
 
 // ===== CREATE =====
-async function criar(){
-  try{
-    const file = document.getElementById("n_imagem").files[0];
-    let base64="", mime="", name="";
 
-    if(file){
-      base64 = await new Promise(res=>{
-        const r=new FileReader();
-        r.onload=()=>res(r.result.split(",")[1]);
-        r.readAsDataURL(file);
-      });
-      mime=file.type;
-      name=file.name;
+async function criar() {
+  try {
+    // 1. Captura os elementos do DOM (Document Object Model)
+    const inputNome = document.getElementById("n_nome");
+    const inputQtd = document.getElementById("n_qtd");
+    const inputCamadas = document.getElementById("n_camadas");
+    const inputCores = document.getElementById("n_cores");
+    const inputPadrao = document.getElementById("n_padrao");
+    const inputFile = document.getElementById("n_imagem");
+
+    // 2. Validação simples: não deixa enviar sem nome
+    if (!inputNome.value) {
+      toast("O nome da ID é obrigatório!");
+      return;
     }
 
-    const res = await fetch(URL,{
-      method:"POST",
-      body:new URLSearchParams({
-        action:"create",
-        nome:n_nome.value,
-        qtd:n_qtd.value,
-        camadas:n_camadas.value,
-        cores:n_cores.value,
-        padrao:n_padrao.value,
-        imageBase64:base64,
-        mimeType:mime,
-        fileName:name
+    let base64 = "", mime = "", name = "";
+
+    // 3. Processamento da Imagem (se houver uma selecionada)
+    if (inputFile.files[0]) {
+      const file = inputFile.files[0];
+      base64 = await new Promise(res => {
+        const reader = new FileReader();
+        reader.onload = () => res(reader.result.split(",")[1]);
+        reader.readAsDataURL(file);
+      });
+      mime = file.type;
+      name = file.name;
+    }
+
+    // 4. Bloco de envio para o Google Apps Script
+    // Usamos URLSearchParams para formatar os dados como um formulário POST
+    const res = await fetch(URL, {
+      method: "POST",
+      body: new URLSearchParams({
+        action: "create",
+        nome: inputNome.value,
+        qtd: inputQtd.value,
+        camadas: inputCamadas.value,
+        cores: inputCores.value,
+        padrao: inputPadrao.value,
+        imageBase64: base64,
+        mimeType: mime,
+        fileName: name
       })
     });
 
     const txt = await res.text();
 
-    if(txt.includes("OK")){
-      toast("Criado!");
+    // 5. Feedback para o usuário
+    if (txt.includes("OK")) {
+      toast("ID Criada com Sucesso!");
       fecharModal();
-      carregar();
-    }else{
-      toast("Erro: "+txt);
+      carregar(); // Recarrega a lista para mostrar a nova ID
+      
+      // Limpa os campos para a próxima criação
+      inputNome.value = "";
+      inputQtd.value = "";
+      inputFile.value = "";
+    } else {
+      toast("Erro no servidor: " + txt);
     }
 
-  }catch(e){
-    toast("Erro!");
+  } catch (e) {
+    console.error(e);
+    toast("Erro ao conectar com o servidor.");
   }
-}
-
+ }
+      
 // ===== UPDATE =====
 async function salvar(nome){
   const id=nome.replace(/\W/g,"_");
