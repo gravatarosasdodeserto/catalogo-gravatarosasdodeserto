@@ -227,149 +227,160 @@ let apenasDisponiveis = false;
 let filtrosAtivos = {};
 let colunasDeFiltro = ["camadas", "cores", "padrao"];
 
-const urlPlanilha =
-  'https://docs.google.com/spreadsheets/d/e/2PACX-1vSochNnj1ihxWjFv_87wiDS9-ZakV1LrmdQWfZMAZMGRHf9pqCBXKQpkfQ6BDMlxwYE8E2JkWUVRYOG/pub?gid=1893895788&single=true&output=csv&t=' + Date.now();
+const urlPlanilha = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSochNnj1ihxWjFv_87wiDS9-ZakV1LrmdQWfZMAZMGRHf9pqCBXKQpkfQ6BDMlxwYE8E2JkWUVRYOG/pub?gid=1893895788&single=true&output=csv&t=' + Date.now();
 
 const grid = document.getElementById("gridCatalogo");
 const drawer = document.getElementById("drawer");
 const inputPesquisa = document.getElementById("inputPesquisa");
-const listaFiltrosAtivos = document.getElementById("listaFiltrosAtivos");
 
-// CSV ROBUSTO
+// --- FUNÇÕES DE APOIO ---
 function parseCSV(text) {
   const lines = text.split(/\r?\n/).filter(l => l.trim() !== "");
   return lines.map(line => {
     const cells = line.match(/(".*?"|[^",\r\n]+)(?=\s*,|\s*$)/g) || [];
-    return cells.map(c => c.trim().replace(/^"|"$/g, ''));
+    return cells.map(c => c.replace(/^"|"$/g, '').trim());
   });
 }
 
-// SLUG SEGURO
-function slug(nome){
-  return nome.toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/[^a-z0-9]/g, "-");
+function slug(nome) {
+  return nome.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]/g, "-");
 }
 
-// ================= CARREGAR =================
-async function carregarEstoque(){
-   
-    try{
+function toggleDrawer() {
+  document.getElementById("drawer").classList.toggle("active");
+  document.getElementById("overlay").style.display = 
+    document.getElementById("drawer").classList.contains("active") ? "block" : "none";
+}
+
+// --- CARREGAR DADOS ---
+async function carregarEstoque() {
+  try {
     const resp = await fetch(urlPlanilha);
     const text = await resp.text();
-
     const dados = parseCSV(text);
-    const cab = dados.shift().map(h =>
-  h.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim()
-);
-
-const idx = {
-  nome: cab.findIndex(h => h.includes("nome")),
-  qtd: cab.findIndex(h => h.includes("qtd")),
-  midia: cab.findIndex(h => h.includes("midia"))
-};
-
-   if (idx.nome === -1) {
-  grid.innerHTML = "Erro: coluna 'nome' não encontrada.";
-  return;
-}
+    const cabecalho = dados.shift(); 
 
     estoque = {};
-
-    dados.forEach(l=>{
-      const nome = l[idx.nome];
-      if(!nome) return;
-
+    dados.forEach(l => {
+      const nome = l[0];
+      if (!nome) return;
       estoque[nome] = {
-        qtd: parseInt(l[idx.qtd]) || 0,
-        midia: (l[idx.midia] || "").toString(),
-        filtros:{}
+        camadas: l[1] || "",
+        cores: l[2] || "",
+        padrao: l[3] || "",
+        qtd: parseInt(l[5]) || 0,
+        midia: l[6] || "",
+        filtros: {
+          camadas: l[1] || "Não inf.",
+          cores: l[2] || "Não inf.",
+          padrao: l[3] || "Não inf."
+        }
       };
-
-      colunasDeFiltro.forEach(f=>{
-        const i = cab.findIndex(h=>h.includes(f));
-        estoque[nome].filtros[f] = i !== -1 ? (l[i]||"") : "";
-      });
     });
 
-    gerarInterfaceFiltros();
+    gerarInterfaceFiltros(); // Agora ela existe abaixo!
     montarCatalogo();
-
-  }catch(e){
+  } catch (e) {
     console.error(e);
-    grid.innerHTML="Erro ao carregar dados.";
+    grid.innerHTML = "Erro ao carregar ID's.";
   }
 }
 
-// ================= CATÁLOGO =================
-function montarCatalogo(){
-  grid.innerHTML="";
-  let count=0;
+// --- FUNÇÃO QUE ESTAVA FALTANDO ---
+function gerarInterfaceFiltros() {
+  drawer.innerHTML = '<button class="fechar-drawer" onclick="toggleDrawer()">&times;</button><h3>Filtros</h3>';
+  
+  colunasDeFiltro.forEach(col => {
+    const valoresUnicos = new Set();
+    Object.values(estoque).forEach(item => {
+      if (item.filtros[col]) valoresUnicos.add(item.filtros[col]);
+    });
 
-  Object.keys(estoque).sort().forEach(nome=>{
+    let html = `<div class="grupo-filtro"><p class="titulo-filtro">${col}</p><div class="opcoes-filtro">`;
+    html += `<div class="pill ${!filtrosAtivos[col] ? 'active' : ''}" onclick="aplicarFiltro('${col}', '')">Todas</div>`;
+    
+    Array.from(valoresUnicos).sort().forEach(val => {
+      html += `<div class="pill ${filtrosAtivos[col] === val ? 'active' : ''}" onclick="aplicarFiltro('${col}', '${val}')">${val}</div>`;
+    });
+    
+    html += `</div></div>`;
+    drawer.innerHTML += html;
+  });
+}
+
+function aplicarFiltro(coluna, valor) {
+  if (valor === "") delete filtrosAtivos[coluna];
+  else filtrosAtivos[coluna] = valor;
+  gerarInterfaceFiltros();
+  montarCatalogo();
+}
+
+// --- MONTAR O GRID ---
+function montarCatalogo() {
+  grid.innerHTML = "";
+  Object.keys(estoque).sort().forEach(nome => {
     const d = estoque[nome];
+    
+    // Filtro de Texto
+    if (filtroTexto && !nome.toLowerCase().includes(filtroTexto.toLowerCase())) return;
 
-    if(apenasDisponiveis && d.qtd===0) return;
-
-    const nomeNorm = nome.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
-    if(filtroTexto && !nomeNorm.includes(filtroTexto.toLowerCase())) return;
-
-    let passa=true;
-    for(let f in filtrosAtivos){
-      if(filtrosAtivos[f] !== "Todas"){
-        if(!String(d.filtros[f]).toLowerCase().includes(filtrosAtivos[f].toLowerCase())){
-          passa=false; break;
-        }
-      }
+    // Filtros de Categoria
+    let passa = true;
+    for (let f in filtrosAtivos) {
+      if (d.filtros[f] !== filtrosAtivos[f]) passa = false;
     }
-    if(!passa) return;
+    if (!passa) return;
 
-    count++;
-
-    let src="imagens/sem-foto.jpg";
-
-    const idMidia = d.midia.trim();
-
-    if(idMidia && idMidia.length>10){
-      src = idMidia.startsWith("http")
-        ? idMidia
-        : `https://drive.google.com/uc?export=view&id=${idMidia}`;
-    } else {
-      src = `imagens/${slug(nome)}.jpg`;
-    }
+    let src = d.midia ? (d.midia.startsWith("http") ? d.midia : `https://drive.google.com/uc?export=view&id=${d.midia}`) : "imagens/sem-foto.jpg";
 
     const card = document.createElement("div");
-    card.className="item"+(selecionados.has(nome)?" selecionado":"");
-
-    card.innerHTML=`
+    card.className = "item" + (selecionados.has(nome) ? " selecionado" : "");
+    card.innerHTML = `
       <img src="${src}" onerror="this.src='imagens/sem-foto.jpg'">
       <p>${nome}</p>
-      <div class="estoque-status ${d.qtd>0?'disponivel':'encomenda'}">
-        ${d.qtd>0?'Disponível':'Por Encomenda'}
+      <div class="estoque-status ${d.qtd > 0 ? 'disponivel' : 'encomenda'}">
+        ${d.qtd > 0 ? 'Disponível' : 'Por Encomenda'}
       </div>
     `;
-
-    card.onclick=()=>{
-      selecionados.has(nome)?selecionados.delete(nome):selecionados.add(nome);
-      card.classList.toggle('selecionado');
+    card.onclick = () => {
+      if (selecionados.has(nome)) selecionados.delete(nome);
+      else selecionados.add(nome);
+      card.classList.toggle("selecionado");
       atualizarPainelAcoes();
     };
-
     grid.appendChild(card);
   });
-
-  if(count===0) grid.innerHTML="Nenhuma ID encontrada.";
 }
 
-function acessarAdmin() {
-  if (prompt("Senha:") === "123456") {
-    window.location.href = "admin.html";
+function atualizarPainelAcoes() {
+  const btn = document.getElementById("btnEnviar");
+  const area = document.getElementById("areaSelecao");
+  if (selecionados.size > 0) {
+    btn.classList.remove("oculto");
+    area.style.display = "block";
+    btn.innerText = `Solicitar ${selecionados.size} ID's via WhatsApp`;
+  } else {
+    btn.classList.add("oculto");
+    area.style.display = "none";
   }
 }
-// Inicializar o carregamento
+
+function enviarPedido() {
+  const texto = "Olá! Tenho interesse nas seguintes IDs:\n\n- " + Array.from(selecionados).join("\n- ");
+  window.open(`https://wa.me/5581900000000?text=${encodeURIComponent(texto)}`, '_blank');
+}
+
+// Evento de busca
+inputPesquisa.oninput = (e) => {
+  filtroTexto = e.target.value;
+  montarCatalogo();
+};
+
+function acessarAdmin() {
+  if (prompt("Senha:") === "123456") window.location.href = "admin.html";
+}
+
 carregarEstoque();
-    
 </script>
     
 </body>
