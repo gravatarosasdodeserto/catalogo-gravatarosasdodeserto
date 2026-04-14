@@ -364,7 +364,6 @@ async function criar(){
   let name = "";
 
   if(file){
-
     base64 = await new Promise(resolve => {
       const r = new FileReader();
       r.onload = () => resolve(r.result.split(",")[1]);
@@ -375,24 +374,32 @@ async function criar(){
     name = file.name;
   }
 
-  await fetch(URL,{
-    method:"POST",
-    body:new URLSearchParams({
-      action:"create",
-      nome:n_nome.value,
-      qtd:n_qtd.value,
-      camadas:n_camadas.value,
-      cores:n_cores.value,
-      padrao:n_padrao.value,
-      imageBase64:base64,
-      mimeType:mime,
-      fileName:name
-    })
+  const form = new URLSearchParams({
+    action: "create",
+    nome: document.getElementById("n_nome").value,
+    qtd: document.getElementById("n_qtd").value,
+    camadas: document.getElementById("n_camadas").value,
+    cores: document.getElementById("n_cores").value,
+    padrao: document.getElementById("n_padrao").value,
+    imageBase64: base64,
+    mimeType: mime,
+    fileName: name
   });
 
-  fecharModal();
-  toast("Criado!");
-  carregar();
+  try {
+    await fetch(URL, {
+      method: "POST",
+      body: form
+    });
+
+    fecharModal();
+    toast("Criado!");
+    carregar();
+
+  } catch (e) {
+    console.error(e);
+    toast("Erro ao criar!");
+  }
 }
 
 function previewUpload(event){
