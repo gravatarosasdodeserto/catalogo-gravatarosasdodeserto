@@ -27,7 +27,7 @@ body{
   overflow-x:hidden;
 }
 
-/* ================= HEADER IGUAL INDEX ================= */
+/* ===== HEADER IGUAL INDEX ===== */
 .topbar{
   position:sticky;
   top:0;
@@ -35,7 +35,6 @@ body{
   overflow:hidden;
 }
 
-/* imagem de fundo */
 .topbar::before{
   content:"";
   position:absolute;
@@ -46,35 +45,33 @@ body{
   z-index:0;
 }
 
-/* faixa branca do logo */
+/* logo */
 .logo-bar{
   position:relative;
   display:flex;
   justify-content:center;
   align-items:center;
-  padding:35px 0;
+  padding:18px 0;
   background:rgba(252,250,247,0.75);
   z-index:2;
 }
 
 .logo img{
-  width:150px;
-  filter:drop-shadow(0 4px 15px rgba(0,0,0,.4));
+  width:140px;
 }
 
-/* barra inferior branca (tipo index filtros) */
+/* barra inferior */
 .bottom-bar{
   position:relative;
   z-index:2;
   background:#fff;
-  height:52px;
+  height:48px;
   display:flex;
   align-items:center;
   padding:0 12px;
-  border-top:1px solid rgba(0,0,0,.08);
+  border-top:1px solid rgba(0,0,0,0.08);
 }
 
-/* botão voltar dentro da barra */
 .voltar{
   background:#fff;
   border:1px solid #3a3618;
@@ -84,20 +81,19 @@ body{
   cursor:pointer;
 }
 
-/* ================= CONTAINER ================= */
+/* ===== CONTAINER ===== */
 .container{
-  padding:15px;
+  padding:12px;
   max-width:1000px;
   margin:auto;
 }
 
-/* BUSCA */
 .busca{
   width:100%;
   padding:12px;
   border-radius:50px;
   border:1px solid #ccc;
-  margin:12px 0;
+  margin:10px 0;
   text-align:center;
 }
 
@@ -110,7 +106,7 @@ body{
   box-shadow:0 4px 10px rgba(0,0,0,.08);
 }
 
-/* imagem maior e central */
+/* imagem grande */
 .img{
   width:160px;
   height:160px;
@@ -120,7 +116,7 @@ body{
   margin:0 auto 10px;
 }
 
-/* labels */
+/* inputs */
 label{
   font-size:11px;
   opacity:.7;
@@ -128,7 +124,6 @@ label{
   margin-top:6px;
 }
 
-/* inputs sempre controlados */
 input{
   width:100%;
   padding:10px;
@@ -137,14 +132,16 @@ input{
   font-size:13px;
 }
 
-/* evita overflow em linha */
+/* evitar overflow mobile */
 .row{
   display:flex;
   gap:10px;
+  flex-wrap:wrap;
 }
-.col{flex:1}
 
-/* botões */
+.col{flex:1; min-width:120px}
+
+/* buttons */
 .actions{
   display:flex;
   gap:10px;
@@ -162,23 +159,29 @@ button{
 .save{background:var(--ok);color:#fff;flex:1}
 .del{background:var(--danger);color:#fff;flex:1}
 
-/* modal */
-.modal{
-  display:none;
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.5);
-  align-items:center;
-  justify-content:center;
-  z-index:2000;
+.new{
+  width:100%;
+  background:#3a3618;
+  color:#fff;
+  margin:10px 0;
 }
 
-.modal-content{
-  background:#fff;
-  padding:15px;
-  border-radius:15px;
-  width:90%;
-  max-width:400px;
+/* upload */
+.upload-box{
+  border:1px dashed #aaa;
+  padding:10px;
+  border-radius:12px;
+  margin-top:8px;
+  text-align:center;
+}
+
+.upload-box img{
+  width:100%;
+  max-height:180px;
+  object-fit:cover;
+  margin-top:10px;
+  border-radius:10px;
+  display:none;
 }
 
 /* toast */
@@ -192,7 +195,7 @@ button{
   padding:10px 15px;
   border-radius:20px;
   display:none;
-  z-index:3000;
+  z-index:9999;
 }
 </style>
 </head>
@@ -201,7 +204,6 @@ button{
 
 <!-- HEADER -->
 <div class="topbar">
-
   <div class="logo-bar">
     <div class="logo">
       <img src="logo.png">
@@ -211,13 +213,11 @@ button{
   <div class="bottom-bar">
     <button class="voltar" onclick="location.href='index.html'">← Catálogo</button>
   </div>
-
 </div>
 
-<!-- CONTEÚDO -->
 <div class="container">
 
-<button class="save" style="width:100%;margin-bottom:10px;background:#3a3618" onclick="abrirModal()">+ Nova ID</button>
+<button class="new" onclick="abrirModal()">+ Nova ID</button>
 
 <input class="busca" placeholder="Buscar ID..." oninput="filtrar(this.value)">
 
@@ -226,8 +226,8 @@ button{
 </div>
 
 <!-- MODAL -->
-<div class="modal" id="modal">
-  <div class="modal-content">
+<div class="modal" id="modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);align-items:center;justify-content:center;z-index:2000;">
+  <div style="background:#fff;padding:15px;border-radius:15px;width:90%;max-width:400px;">
 
     <h4>Nova ID</h4>
 
@@ -245,10 +245,16 @@ button{
     <label>Padrão</label>
     <input id="n_padrao">
 
-    <label>Link da imagem</label>
-    <input id="n_midia">
+    <label>Imagem</label>
+    <input id="n_midia" placeholder="link opcional">
 
-    <br><br>
+    <!-- UPLOAD -->
+    <div class="upload-box">
+      <input type="file" accept="image/*" onchange="previewUpload(event)">
+      <img id="previewImg">
+    </div>
+
+    <br>
 
     <button class="save" onclick="criar()">Criar</button>
     <button class="del" onclick="fecharModal()">Fechar</button>
@@ -265,6 +271,7 @@ const CSV="https://docs.google.com/spreadsheets/d/e/2PACX-1vSochNnj1ihxWjFv_87wi
 
 let dados=[];
 let filtro="";
+let uploadBase64="";
 
 function parseCSV(t){
   return t.split("\n").map(r=>r.split(","));
@@ -305,7 +312,7 @@ function render(){
     el.innerHTML+=`
     <div class="card">
 
-      <img src="${img}" class="img" onerror="this.src='imagens/sem-foto.jpg'">
+      <img src="${img}" class="img">
 
       <label>Nome</label>
       <input id="nome_${id}" value="${d.nome}">
@@ -313,7 +320,7 @@ function render(){
       <label>Qtd</label>
       <input id="qtd_${id}" value="${d.qtd}">
 
-      <label>Link da imagem</label>
+      <label>Imagem</label>
       <input id="midia_${id}" value="${d.midia}">
 
       <label>Camadas</label>
@@ -339,10 +346,48 @@ function filtrar(v){
   render();
 }
 
-async function salvar(nome){
+/* UPLOAD */
+function previewUpload(e){
+  const file=e.target.files[0];
+  if(!file)return;
+
+  const reader=new FileReader();
+  reader.onload=function(ev){
+    uploadBase64=ev.target.result;
+    const img=document.getElementById("previewImg");
+    img.src=uploadBase64;
+    img.style.display="block";
+    document.getElementById("n_midia").value=uploadBase64;
+  }
+  reader.readAsDataURL(file);
+}
+
+async function criar(){
+  await fetch(URL,{
+    method:"POST",
+    body:new URLSearchParams({
+      action:"create",
+      nome:n_nome.value,
+      qtd:n_qtd.value,
+      camadas:n_camadas.value,
+      cores:n_cores.value,
+      padrao:n_padrao.value,
+      midia:n_midia.value || uploadBase64
+    })
+  });
+
+  fecharModal();
+  toast("Criado!");
+  carregar();
+}
+
+function abrirModal(){modal.style.display="flex"}
+function fecharModal(){modal.style.display="none"}
+
+function salvar(nome){
   const id=nome.replace(/\W/g,"_");
 
-  await fetch(URL,{
+  fetch(URL,{
     method:"POST",
     body:new URLSearchParams({
       action:"update",
@@ -359,10 +404,10 @@ async function salvar(nome){
   carregar();
 }
 
-async function excluir(nome){
-  if(!confirm("Excluir?")) return;
+function excluir(nome){
+  if(!confirm("Excluir?"))return;
 
-  await fetch(URL,{
+  fetch(URL,{
     method:"POST",
     body:new URLSearchParams({action:"delete",nome})
   });
@@ -370,28 +415,6 @@ async function excluir(nome){
   toast("Excluído!");
   carregar();
 }
-
-async function criar(){
-  await fetch(URL,{
-    method:"POST",
-    body:new URLSearchParams({
-      action:"create",
-      nome:n_nome.value,
-      qtd:n_qtd.value,
-      camadas:n_camadas.value,
-      cores:n_cores.value,
-      padrao:n_padrao.value,
-      midia:n_midia.value
-    })
-  });
-
-  fecharModal();
-  toast("Criado!");
-  carregar();
-}
-
-function abrirModal(){modal.style.display="flex"}
-function fecharModal(){modal.style.display="none"}
 
 function toast(t){
   const x=document.getElementById("toast");
