@@ -4,185 +4,129 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Catálogo | Gravatá Rosas do Deserto</title>
-    <link rel="icon" type="image/png" href="favicon.png">
-    <link rel="apple-touch-icon" href="favicon.png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
-<style>
-:root {
-  --header-bg: #fcfaf7;
-  --body-bg: #e5e0d8;
-  --card-white: #ffffff;
-  --card-selected: #cbc4b7;
-  --text-main: #3a3618;
-}
+    <style>
+        :root {
+            --header-bg: #fcfaf7;
+            --body-bg: #e5e0d8;
+            --card-white: #ffffff;
+            --card-selected: #cbc4b7;
+            --text-main: #3a3618;
+        }
 
-* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
-body {
-  font-family: 'Poppins', sans-serif;
-  background-color: var(--body-bg);
-  color: var(--text-main);
-  margin: 0;
-  padding-bottom: 230px;
-}
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--body-bg);
+            color: var(--text-main);
+            margin: 0;
+            padding-bottom: 230px;
+        }
 
-/* ===== CABEÇALHO ===== */
-.topbar {
-  padding: 50px 0;
-  position: sticky;
-  top: 0;
-  z-index: 900;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.18);
-  overflow: hidden;
-  background-color: var(--header-bg);
-  border-bottom: 2px solid #ffffff;
-}
+        /* ===== CABEÇALHO ===== */
+        .topbar {
+            padding: 50px 0;
+            position: sticky;
+            top: 0;
+            z-index: 900;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.18);
+            overflow: hidden;
+            background-color: var(--header-bg);
+            border-bottom: 2px solid #ffffff;
+        }
 
-.topbar::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background-image: url('imagens/gravata-cabecalho.jpg');
-  background-size: cover;
-  background-position: top center;
-  z-index: 1;
-}
+        .topbar::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-image: url('imagens/gravata-cabecalho.jpg');
+            background-size: cover;
+            background-position: top center;
+            z-index: 1;
+        }
 
-.white-frame {
-  position: absolute;
-  width: 100%;
-  height: auto;
-  z-index: 2;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+        .logo { position: relative; z-index: 3; }
+        .logo img { width: 150px; height: auto; filter: drop-shadow(0 4px 15px rgba(0,0,0,0.4)); }
 
-.white-frame::before {
-  content: "";
-  position: absolute;
-  width: 100%;
-  height: 100px;
-  background-color: rgba(255, 255, 255, 0.7);
-}
+        /* ===== FILTROS ===== */
+        .secao-filtros {
+            position: sticky;
+            top: 152px;
+            z-index: 950;
+            padding: 6px 15px;
+            background: #ffffff;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            border-bottom: 1px solid rgba(0,0,0,0.06);
+        }
 
-.line-top,.line-bottom {
-  position: absolute;
-  width: 100%;
-  height: 1px;
-  background-color: #ffffff;
-  z-index: 2;
-}
+        .filtros-topo-wrapper { display: flex; justify-content: space-between; align-items: center; }
+        .resumo-filtros { display: flex; flex-wrap: wrap; gap: 4px; max-width: 75%; }
+        .tag-filtro-ativa { font-size: 9px; background: rgba(58, 54, 24, 0.08); color: var(--text-main); padding: 2px 8px; border-radius: 4px; font-weight: 700; text-transform: uppercase; }
 
-.line-top { top: 0; transform: translateY(-50px); }
-.line-bottom { bottom: 0; transform: translateY(50px); }
+        .btn-abrir-filtros { background: var(--text-main); color: white; display: flex; align-items: center; gap: 5px; padding: 4px 12px; border-radius: 50px; border: none; font-weight: 600; font-size: 11px; cursor: pointer; height: 24px; }
+        .btn-abrir-filtros svg { width: 12px; height: 12px; }
 
-.logo { position: relative; z-index: 3; }
-.logo img { width: 150px; height: auto; filter: drop-shadow(0 4px 15px rgba(0,0,0,0.4)); }
+        /* ===== INSTRUÇÕES (CORRIGIDO) ===== */
+        .instrucao-texto {
+            width: calc(100% - 40px);
+            margin: 25px auto 10px;
+            padding: 14px 18px;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.55);
+            border-radius: 18px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.6);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+        }
+        .instrucao-texto p { margin: 0; font-size: 13px; font-weight: 500; }
+        .instrucao-texto span { display: block; margin-top: 5px; font-size: 11px; color: rgba(58, 54, 24, 0.65); }
 
-.btn-admin-setup {
-  position: absolute;
-  top: 15px;      /* Desci um pouco mais */
-  right: 15px;
-  z-index: 1100;  /* Aumentei o z-index para garantir que fique por cima de tudo */
-  cursor: pointer;
-  opacity: 1;     /* Totalmente visível agora */
-  background: rgba(255, 255, 255, 0.8); /* Fundo branco semi-transparente para dar contraste */
-  border: 1px solid var(--text-main);
-  border-radius: 50%;
-  width: 35px;
-  height: 35px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: transform 0.2s;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-}
+        /* ===== GRID (CORRIGIDO TAMANHO NO CELULAR) ===== */
+        .catalogo {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 15px;
+            width: 100%;
+            padding: 0 20px;
+        }
 
-.btn-admin-setup:hover {
-  transform: scale(1.1);
-  background: #ffffff;
-}
+        .item { background: var(--card-white); padding: 10px; border-radius: 20px; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.05); transition: all 0.2s; }
+        .item.selecionado { background: var(--card-selected)!important; transform: scale(0.96); }
+        .item img { width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 14px; display: block; }
+        .item p { text-align: center; font-size: 13px; font-weight: 600; margin: 10px 0 2px 0; }
+        .estoque-status { text-align: center; font-size: 10px; font-weight: 700; text-transform: uppercase; }
+        .disponivel { color: #2d5a27; }
+        .encomenda { color: #8a8471; opacity: 0.7; }
 
-.btn-admin-setup svg {
-  fill: var(--text-main);
-  width: 22px;
-  height: 22px;
-}
+        /* ===== RODAPÉ ===== */
+        .rodape-acoes { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(229, 224, 216, 0.98); backdrop-filter: blur(12px); padding: 10px 20px 25px; z-index: 1000; border-top: 2px solid #ffffff; }
+        .container-rodape { max-width: 500px; margin: 0 auto; display: flex; flex-direction: column; gap: 8px; }
+        .caixa-selecao { display: none; background: #ffffff; padding: 6px 10px; border-radius: 15px; max-height: 70px; overflow-y: auto; border: 1px solid rgba(0,0,0,0.05); }
+        .tag-item { font-size: 10px; background: #f0f0eb; padding: 4px 10px; border-radius: 8px; display: inline-flex; align-items: center; gap: 6px; margin: 0 4px 4px 0; }
+        .tag-item button { border: none; background: none; color: #8b2d2d; cursor: pointer; font-weight: bold; }
+        .campo-busca { width: 100%; padding: 12px 20px; border-radius: 50px; border: 1.5px solid rgba(0,0,0,0.1); outline: none; text-align: center; }
+        .btn-whatsapp { width: 100%; padding: 15px; background: var(--text-main); color: white; border: none; border-radius: 50px; font-weight: 600; cursor: pointer; }
+        .oculto { display: none!important; }
 
-/* ===== BARRA DE FILTROS ===== */
-.secao-filtros {
-  position: sticky;
-  top: 152px;
-  z-index: 950;
-  padding: 6px 15px;
-  background: #ffffff;
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  border-bottom: 1px solid rgba(0,0,0,0.06);
-}
-.filtros-topo-wrapper { display: flex; justify-content: space-between; align-items: center; width: 100%; min-height: 28px; }
-.resumo-filtros { display: flex; flex-wrap: wrap; gap: 4px; max-width: 75%; }
-.tag-filtro-ativa { font-size: 9px; background: rgba(58, 54, 24, 0.08); color: var(--text-main); padding: 2px 8px; border-radius: 4px; font-weight: 700; text-transform: uppercase; }
-
-.btn-abrir-filtros { background: var(--text-main); color: white; display: flex; align-items: center; gap: 5px; padding: 4px 12px; border-radius: 50px; border: none; font-weight: 600; font-size: 11px; cursor: pointer; height: 24px; }
-.btn-abrir-filtros svg { width: 12px; height: 12px; }
-
-.instrucao-texto { width: calc(100% - 40px); margin: 25px auto 10px; padding: 14px 18px; text-align: center; background: rgba(255, 255, 255, 0.55); border-radius: 18px; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.6); box-shadow: 0 6px 20px rgba(0,0,0,0.06); }
-.instrucao-texto p { margin: 0; font-size: 13px; font-weight: 500; }
-.instrucao-texto span { display: block; margin-top: 5px; font-size: 11px; color: rgba(58, 54, 24, 0.65); }
-
-.oculto { display: none!important; }
-
-/* ===== DRAWER ===== */
-.overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 2000; display: none; backdrop-filter: blur(3px); }
-.drawer-filtros { position: fixed; right: -300px; top: 0; width: 300px; height: 100%; background: var(--body-bg); z-index: 2001; transition: 0.3s; padding: 30px 20px; box-shadow: -5px 0 25px rgba(0,0,0,0.2); overflow-y: auto; }
-.drawer-filtros.active { right: 0; }
-.fechar-drawer { background: none; border: none; font-size: 24px; cursor: pointer; text-align: right; width: 100%; color: var(--text-main); }
-.grupo-filtro { margin-bottom: 25px; }
-.titulo-filtro { font-size: 11px; text-transform: uppercase; font-weight: 700; margin-bottom: 12px; opacity: 0.6; }
-.opcoes-filtro { display: flex; flex-wrap: wrap; gap: 8px; }
-.pill { padding: 6px 14px; background: #ffffff; border: 1px solid rgba(0,0,0,0.05); border-radius: 50px; font-size: 12px; cursor: pointer; }
-.pill.active { background: var(--text-main); color: white; }
-
-/* ===== GRID ===== */
-.catalogo { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 15px; width: 100%; padding: 0 20px; }
-.item { background: var(--card-white); padding: 10px; border-radius: 20px; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.05); transition: all 0.2s; }
-.item.selecionado { background: var(--card-selected)!important; transform: scale(0.96); }
-.item img { width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 14px; }
-.item p { text-align: center; font-size: 13px; font-weight: 600; margin: 10px 0 2px 0; }
-.estoque-status { text-align: center; font-size: 10px; font-weight: 700; text-transform: uppercase; }
-.disponivel { color: #2d5a27; }
-.encomenda { color: #8a8471; opacity: 0.7; }
-
-/* ===== RODAPÉ ===== */
-.rodape-acoes { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(229, 224, 216, 0.98); backdrop-filter: blur(12px); padding: 10px 20px 25px; z-index: 1000; border-top: 2px solid #ffffff; }
-.container-rodape { max-width: 500px; margin: 0 auto; display: flex; flex-direction: column; gap: 8px; }
-.caixa-selecao { display: none; background: #ffffff; padding: 6px 10px; border-radius: 15px; max-height: 70px; overflow-y: auto; border: 1px solid rgba(0,0,0,0.05); }
-.tag-item { font-size: 10px; background: #f0f0eb; padding: 4px 10px; border-radius: 8px; display: inline-flex; align-items: center; gap: 6px; margin: 0 4px 4px 0; }
-.tag-item button { border: none; background: none; color: #8b2d2d; cursor: pointer; font-weight: bold; }
-.campo-busca { width: 100%; padding: 12px 20px; border-radius: 50px; border: 1.5px solid rgba(0,0,0,0.1); outline: none; text-align: center; }
-.btn-whatsapp { width: 100%; padding: 15px; background: var(--text-main); color: white; border: none; border-radius: 50px; font-weight: 600; cursor: pointer; }
-</style>
+        /* ===== DRAWER ===== */
+        .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 2000; display: none; backdrop-filter: blur(3px); }
+        .drawer-filtros { position: fixed; right: -300px; top: 0; width: 300px; height: 100%; background: var(--body-bg); z-index: 2001; transition: 0.3s; padding: 30px 20px; overflow-y: auto; }
+        .drawer-filtros.active { right: 0; }
+        .fechar-drawer { background: none; border: none; font-size: 24px; cursor: pointer; text-align: right; width: 100%; color: var(--text-main); }
+        .pill { padding: 6px 14px; background: #ffffff; border: 1px solid rgba(0,0,0,0.05); border-radius: 50px; font-size: 12px; cursor: pointer; margin: 4px; display: inline-block; }
+        .pill.active { background: var(--text-main); color: white; }
+    </style>
 </head>
 <body>
 
-<button class="btn-admin-setup" onclick="acessarAdmin()" title="Acesso Restrito">
-    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.74,8.87 C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.81,11.68,4.81,12c0,0.33,0.02,0.65,0.07,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.47-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"/>
-    </svg>
-</button>
-
 <div class="topbar">
   <div class="logo"><img src="logo.png"></div>
-  <div class="white-frame">
-    <div class="line-top"></div>
-    <div class="line-bottom"></div>
-  </div>
 </div>
 
 <div class="secao-filtros">
@@ -201,6 +145,10 @@ body {
 <div class="drawer-filtros" id="drawer"></div>
 
 <div class="instrucao-texto">
+    <p>Selecione as ID's desejadas para solicitar informações sobre os enxertos.</p>
+    <span>Variedades sem pronta entrega podem ser encomendadas sem custo.</span>
+</div>
+
 <div class="catalogo" id="gridCatalogo">
   <p style="text-align:center; grid-column: 1/-1; padding: 50px;">Carregando ID's...</p>
 </div>
@@ -230,43 +178,15 @@ const inputPesquisa = document.getElementById("inputPesquisa");
 const containerTags = document.getElementById("containerTags");
 const areaSelecao = document.getElementById("areaSelecao");
 
-// FUNÇÃO DE MÍDIA LIMPA (Sem setas ou quadrados pretos)
 function getMidiaHTML(m) {
   if (!m || m.trim() === "" || m === "Não inf.") {
-    return `<img src="imagens/sem-foto.jpg" style="width:100%; aspect-ratio:1/1; object-fit:cover; border-radius:14px;">`;
+    return `<img src="imagens/sem-foto.jpg">`;
   }
-  
   const id = m.trim();
-  const thumbUrl = `https://drive.google.com/thumbnail?sz=w600&id=${id}`;
-  const videoUrl = `https://drive.google.com/uc?export=download&id=${id}`;
-
-  // Criamos o vídeo com um "ID" temporário baseado no ID do Drive para o vigia achá-lo
-  return `
-    <div class="media-box" style="position:relative; width:100%; aspect-ratio:1/1; overflow:hidden; border-radius:14px; background:#f0f0f0;">
-      <img src="${thumbUrl}" style="width:100%; height:100%; object-fit:cover; display:block;" onerror="this.src='imagens/sem-foto.jpg'">
-      
-      <video 
-        class="video-rosa"
-        src="${videoUrl}" 
-        loop muted playsinline preload="auto"
-        style="position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; opacity:0; transition: opacity 0.8s;" 
-        onplaying="this.style.opacity=1"
-        onerror="this.remove()">
-      </video>
-    </div>`;
+  const imgUrl = `https://drive.google.com/thumbnail?sz=w600&id=${id}`;
+  return `<img src="${imgUrl}" onerror="this.src='imagens/sem-foto.jpg'">`;
 }
 
-// ESTE É O "VIGIA": Ele força o play em todos os vídeos a cada 1 segundo
-setInterval(() => {
-  const videos = document.querySelectorAll('.video-rosa');
-  videos.forEach(v => {
-    if (v.paused) {
-      v.play().catch(() => { 
-        // Se der erro (bloqueio do browser), ele tenta na próxima volta
-      });
-    }
-  });
-}, 1000);
 function parseCSV(text) {
   const lines = text.split(/\r?\n/).filter(l => l.trim() !== "");
   return lines.map(line => {
@@ -309,194 +229,12 @@ function gerarInterfaceFiltros() {
   colunasDeFiltro.forEach(col => {
     const valoresUnicos = new Set();
     Object.values(estoque).forEach(item => { if (item[col]) valoresUnicos.add(item[col]); });
-    let html = `<div class="grupo-filtro"><p class="titulo-filtro">${col.toUpperCase()}</p><div class="opcoes-filtro">`;
+    let html = `<div><p style="font-size:11px; font-weight:700; margin-bottom:10px;">${col.toUpperCase()}</p>`;
     html += `<div class="pill ${!filtrosAtivos[col] ? 'active' : ''}" onclick="aplicarFiltro('${col}', '')">Todas</div>`;
     Array.from(valoresUnicos).sort().forEach(val => {
       html += `<div class="pill ${filtrosAtivos[col] === val ? 'active' : ''}" onclick="aplicarFiltro('${col}', '${val}')">${val}</div>`;
     });
-    html += `</div></div>`;
-    drawer.innerHTML += html;
-  });
-}
-
-function aplicarFiltro(coluna, valor) {
-  if (valor === "") delete filtrosAtivos[coluna];
-  else filtrosAtivos[coluna] = valor;
-  gerarInterfaceFiltros();
-  montarCatalogo();
-}
-
-// MONTAGEM DO CATÁLOGO OTIMIZADA (Não apaga tudo ao selecionar)
-function montarCatalogo() {
-  grid.innerHTML = "";
-  Object.keys(estoque).sort().forEach(nome => {
-    const d = estoque[nome];
-    if (filtroTexto && !nome.toLowerCase().includes(filtroTexto.toLowerCase())) return;
-    let passa = true;
-    for (let f in filtrosAtivos) { if (d[f] !== filtrosAtivos[f]) passa = false; }
-    if (!passa) return;
-
-    const card = document.createElement("div");
-    card.className = "item" + (selecionados.has(nome) ? " selecionado" : "");
-    card.id = "card_" + nome.replace(/\W/g, "_"); // ID único para cada card
-    card.innerHTML = `
-      ${getMidiaHTML(d.midia)}
-      <p>${nome}</p>
-      <div class="estoque-status ${d.qtd > 0 ? 'disponivel' : 'encomenda'}">
-        ${d.qtd > 0 ? 'Disponível' : 'Por Encomenda'}
-      </div>`;
-    
-    card.onclick = () => {
-      if (selecionados.has(nome)) {
-        selecionados.delete(nome);
-        card.classList.remove("selecionado");
-      } else {
-        selecionados.add(nome);
-        card.classList.add("selecionado");
-      }
-      atualizarPainelAcoes();
-    };
-    grid.appendChild(card);
-  });
-}
-
-function atualizarPainelAcoes() {
-  const btn = document.getElementById("btnEnviar");
-  if (selecionados.size > 0) {
-    btn.classList.remove("oculto");
-    areaSelecao.style.display = "block";
-    
-    // Texto do botão exatamente como você gostava
-    if (selecionados.size === 1) {
-      btn.innerText = "Solicitar informação sobre a ID selecionada";
-    } else {
-      btn.innerText = `Solicitar informações sobre as ${selecionados.size} IDs selecionadas`;
-    }
-    
-    atualizarTags();
-  } else {
-    btn.classList.add("oculto");
-    areaSelecao.style.display = "none";
-  }
-}
-function atualizarTags() {
-  containerTags.innerHTML = "";
-  selecionados.forEach(nome => {
-    const tag = document.createElement("div");
-    tag.className = "tag-item";
-    tag.innerHTML = `${nome} <button onclick="removerSelecao('${nome}')">&times;</button>`;
-    containerTags.appendChild(tag);
-  });
-}
-
-function removerSelecao(nome) {
-  selecionados.delete(nome);
-  const card = document.getElementById("card_" + nome.replace(/\W/g, "_"));
-  if (card) card.classList.remove("selecionado");
-  atualizarPainelAcoes();
-}
-
-function enviarPedido() {
-  const ids = Array.from(selecionados);
-  let mensagem = "";
-  
-  // Lógica de texto e telefone do seu código antigo
-  if (ids.length === 1) {
-    mensagem = `Olá! Tenho interesse no enxerto da ID ${ids[0]} e queria saber mais informações e o valor.`;
-  } else {
-    mensagem = `Olá! Tenho interesse nos enxertos das IDs ${ids.join(", ")} e queria saber mais informações e valores.`;
-  }
-  
-  // Telefone atualizado para o final 5421
-  window.open("https://wa.me/5581992665421?text=" + encodeURIComponent(mensagem), "_blank");
-}
-
-inputPesquisa.oninput = (e) => { filtroTexto = e.target.value; montarCatalogo(); };
-function acessarAdmin() { if (prompt("Senha:") === "123456") window.location.href = "admin.html"; }
-
-carregarEstoque();
-</script><script>
-let estoque = {};
-let selecionados = new Set();
-let filtroTexto = "";
-let filtrosAtivos = {};
-let colunasDeFiltro = ["camadas", "cores", "padrao"];
-
-// URL da Planilha com Cache-Buster para sempre pegar dados novos
-const urlPlanilha = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSochNnj1ihxWjFv_87wiDS9-ZakV1LrmdQWfZMAZMGRHf9pqCBXKQpkfQ6BDMlxwYE8E2JkWUVRYOG/pub?gid=1893895788&single=true&output=csv&t=" + Date.now();
-
-const grid = document.getElementById("gridCatalogo");
-const drawer = document.getElementById("drawer");
-const inputPesquisa = document.getElementById("inputPesquisa");
-const containerTags = document.getElementById("containerTags");
-const areaSelecao = document.getElementById("areaSelecao");
-
-// FUNÇÃO DE MÍDIA SIMPLIFICADA (JPG, PNG e GIF)
-function getMidiaHTML(m) {
-  if (!m || m.trim() === "" || m === "Não inf.") {
-    return `<img src="imagens/sem-foto.jpg" style="width:100%; aspect-ratio:1/1; object-fit:cover; border-radius:14px;">`;
-  }
-  
-  const id = m.trim();
-  // O link de thumbnail do Drive suporta GIFs animados perfeitamente
-  const imgUrl = `https://drive.google.com/thumbnail?sz=w600&id=${id}`;
-
-  return `
-    <div class="media-box" style="width:100%; aspect-ratio:1/1; overflow:hidden; border-radius:14px; background:#f0f0f0;">
-      <img src="${imgUrl}" 
-        style="width:100%; height:100%; object-fit:cover; display:block;" 
-        onerror="this.src='imagens/sem-foto.jpg'">
-    </div>`;
-}
-
-function parseCSV(text) {
-  const lines = text.split(/\r?\n/).filter(l => l.trim() !== "");
-  return lines.map(line => {
-    const cells = line.match(/(".*?"|[^",\r\n]+)(?=\s*,|\s*$)/g) || [];
-    return cells.map(c => c.replace(/^"|"$/g, '').trim());
-  });
-}
-
-function toggleDrawer() {
-  document.getElementById("drawer").classList.toggle("active");
-  document.getElementById("overlay").style.display = 
-    document.getElementById("drawer").classList.contains("active") ? "block" : "none";
-}
-
-async function carregarEstoque() {
-  try {
-    const resp = await fetch(urlPlanilha);
-    const text = await resp.text();
-    const dados = parseCSV(text);
-    dados.shift(); 
-    estoque = {};
-    dados.forEach(l => {
-      const nome = l[0];
-      if (!nome) return;
-      estoque[nome] = {
-        camadas: l[1] || "Não inf.",
-        cores: l[2] || "Não inf.",
-        padrao: l[3] || "Não inf.",
-        qtd: parseInt(l[5]) || 0,
-        midia: l[6] || ""
-      };
-    });
-    gerarInterfaceFiltros();
-    montarCatalogo();
-  } catch (e) { grid.innerHTML = "<p>Erro ao carregar dados.</p>"; }
-}
-
-function gerarInterfaceFiltros() {
-  drawer.innerHTML = '<button class="fechar-drawer" onclick="toggleDrawer()">&times;</button><h3>Filtros</h3>';
-  colunasDeFiltro.forEach(col => {
-    const valoresUnicos = new Set();
-    Object.values(estoque).forEach(item => { if (item[col]) valoresUnicos.add(item[col]); });
-    let html = `<div class="grupo-filtro"><p class="titulo-filtro">${col.toUpperCase()}</p><div class="opcoes-filtro">`;
-    html += `<div class="pill ${!filtrosAtivos[col] ? 'active' : ''}" onclick="aplicarFiltro('${col}', '')">Todas</div>`;
-    Array.from(valoresUnicos).sort().forEach(val => {
-      html += `<div class="pill ${filtrosAtivos[col] === val ? 'active' : ''}" onclick="aplicarFiltro('${col}', '${val}')">${val}</div>`;
-    });
-    html += `</div></div>`;
+    html += `</div><br>`;
     drawer.innerHTML += html;
   });
 }
@@ -527,9 +265,20 @@ function montarCatalogo() {
         ${d.qtd > 0 ? 'Disponível' : 'Por Encomenda'}
       </div>`;
     
-    card.onclick
-        selecionados.add(nome);
-        card.classList.add("selecionado");
+    card.onclick = () => {
+      if (inputPesquisa.value !== "") {
+        inputPesquisa.value = "";
+        filtroTexto = "";
+        if (selecionados.has(nome)) selecionados.delete(nome); else selecionados.add(nome);
+        montarCatalogo(); 
+      } else {
+        if (selecionados.has(nome)) {
+          selecionados.delete(nome);
+          card.classList.remove("selecionado");
+        } else {
+          selecionados.add(nome);
+          card.classList.add("selecionado");
+        }
       }
       atualizarPainelAcoes();
     };
@@ -542,7 +291,12 @@ function atualizarPainelAcoes() {
   if (selecionados.size > 0) {
     btn.classList.remove("oculto");
     areaSelecao.style.display = "block";
-    btn.innerText = `Solicitar ${selecionados.size} ID's via WhatsApp`;
+    
+    if (selecionados.size === 1) {
+      btn.innerText = "Solicitar informação sobre a ID selecionada";
+    } else {
+      btn.innerText = `Solicitar informações sobre as ${selecionados.size} IDs selecionadas`;
+    }
     atualizarTags();
   } else {
     btn.classList.add("oculto");
@@ -562,21 +316,23 @@ function atualizarTags() {
 
 function removerSelecao(nome) {
   selecionados.delete(nome);
-  const card = document.getElementById("card_" + nome.replace(/\W/g, "_"));
-  if (card) card.classList.remove("selecionado");
+  montarCatalogo();
   atualizarPainelAcoes();
 }
 
 function enviarPedido() {
-  const texto = "Olá! Tenho interesse nas seguintes IDs:\n\n- " + Array.from(selecionados).join("\n- ");
-  window.open(`https://wa.me/5581985926880?text=${encodeURIComponent(texto)}`, '_blank');
+  const ids = Array.from(selecionados);
+  let mensagem = "";
+  if (ids.length === 1) {
+    mensagem = `Olá! Tenho interesse no enxerto da ID ${ids[0]} e queria saber mais informações e o valor.`;
+  } else {
+    mensagem = `Olá! Tenho interesse nos enxertos das IDs ${ids.join(", ")} e queria saber mais informações e valores.`;
+  }
+  window.open("https://wa.me/5581992665421?text=" + encodeURIComponent(mensagem), "_blank");
 }
 
 inputPesquisa.oninput = (e) => { filtroTexto = e.target.value; montarCatalogo(); };
-function acessarAdmin() { if (prompt("Senha:") === "123456") window.location.href = "admin.html"; }
-
 carregarEstoque();
 </script>
-    
 </body>
 </html>
