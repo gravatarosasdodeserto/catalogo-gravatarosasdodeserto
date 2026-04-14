@@ -184,65 +184,31 @@ function parseCSV(text){
 }
 
 // ===== LOAD =====
-async function carregar(){
-
-const r = await fetch(CSV + "&t=" + Date.now());
-const t = await r.text();
-
-console.log("CSV BRUTO ↓↓↓");
-console.log(t);
   
-  const r=await fetch(CSV+"?t="+Date.now());
-  const t=await r.text();
-  const linhas=parseCSV(t);
+async function carregar(){
+  try {
+    const resposta = await fetch(CSV + "&t=" + Date.now());
+    const texto = await resposta.text();
+    
+    console.log("CSV carregado com sucesso");
+    
+    const linhas = parseCSV(texto);
+    linhas.shift(); // Remove o cabeçalho
 
-  linhas.shift();
+    dados = linhas.map(l => ({
+      nome: l[0] || "",
+      camadas: l[1] || "",
+      cores: l[2] || "",
+      padrao: l[3] || "",
+      qtd: l[5] || "0",
+      midia: l[6] || ""
+    }));
 
-  dados = linhas.map(l=>({
-    nome:l[0],
-    camadas:l[1],
-    cores:l[2],
-    padrao:l[3],
-    qtd:l[5],
-    midia:l[6]
-  }));
-
-  render();
-}
-
-// ===== RENDER =====
-function getImg(m){
-  if(!m) return "imagens/sem-foto.jpg";
-  if(m.startsWith("http")) return m;
-  return `https://drive.google.com/uc?export=view&id=${m}`;
-}
-
-function render(){
-  const el=document.getElementById("lista");
-  el.innerHTML="";
-
-  dados
-  .filter(d=>d.nome.toLowerCase().includes(filtro.toLowerCase()))
-  .forEach(d=>{
-    const id=d.nome.replace(/\W/g,"_");
-
-    el.innerHTML+=`
-    <div class="card">
-      <img src="${getImg(d.midia)}" class="img">
-
-      <input id="nome_${id}" value="${d.nome}">
-      <input id="qtd_${id}" value="${d.qtd}">
-      <input id="midia_${id}" value="${d.midia}">
-      <input id="cam_${id}" value="${d.camadas}">
-      <input id="cor_${id}" value="${d.cores}">
-      <input id="pad_${id}" value="${d.padrao}">
-
-      <div class="actions">
-        <button class="save" onclick="salvar('${d.nome}')">Salvar</button>
-        <button class="del" onclick="excluir('${d.nome}')">Excluir</button>
-      </div>
-    </div>`;
-  });
+    render();
+  } catch (erro) {
+    console.error("Erro ao carregar CSV:", erro);
+    toast("Erro ao carregar dados.");
+  }
 }
 
 // ===== CREATE =====
