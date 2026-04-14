@@ -242,19 +242,22 @@ function getMidiaHTML(m) {
   
   const id = m.trim();
   const thumbUrl = `https://drive.google.com/thumbnail?sz=w600&id=${id}`;
-  // Link de stream direto (mais leve que iframe)
   const videoUrl = `https://drive.google.com/uc?export=download&id=${id}`;
 
   return `
     <div class="media-box" style="position:relative; width:100%; aspect-ratio:1/1; overflow:hidden; border-radius:14px; background:#f0f0f0;">
       <img src="${thumbUrl}" style="width:100%; height:100%; object-fit:cover; display:block;" onerror="this.src='imagens/sem-foto.jpg'">
-      <video src="${videoUrl}" autoplay loop muted playsinline 
+      
+      <video 
+        src="${videoUrl}" 
+        loop muted playsinline preload="auto"
         style="position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; opacity:0; transition: opacity 0.5s;" 
-        oncanplay="this.style.opacity=1" onerror="this.remove()">
+        oncanplay="this.play(); this.style.opacity=1" 
+        onloadedmetadata="this.play()"
+        onerror="this.remove()">
       </video>
     </div>`;
 }
-
 function parseCSV(text) {
   const lines = text.split(/\r?\n/).filter(l => l.trim() !== "");
   return lines.map(line => {
