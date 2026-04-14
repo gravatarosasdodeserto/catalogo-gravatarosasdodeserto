@@ -527,11 +527,7 @@ function montarCatalogo() {
         ${d.qtd > 0 ? 'Disponível' : 'Por Encomenda'}
       </div>`;
     
-    card.onclick = () => {
-      if (selecionados.has(nome)) {
-        selecionados.delete(nome);
-        card.classList.remove("selecionado");
-      } else {
+    card.onclick
         selecionados.add(nome);
         card.classList.add("selecionado");
       }
