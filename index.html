@@ -223,17 +223,18 @@ body {
 let estoque = {};
 let selecionados = new Set();
 let filtroTexto = "";
-let apenasDisponiveis = false;
 let filtrosAtivos = {};
 let colunasDeFiltro = ["camadas", "cores", "padrao"];
 
+// Link CSV com o seu novo ID e cache-buster
 const urlPlanilha = 'https://docs.google.com/spreadsheets/d/1thZhA6KxzB9HP4mbCgD6W8Qfex_TRmU8pg2oo0ANer0/pub?gid=1893895788&single=true&output=csv&t=' + Date.now();
 
 const grid = document.getElementById("gridCatalogo");
 const drawer = document.getElementById("drawer");
 const inputPesquisa = document.getElementById("inputPesquisa");
+const containerTags = document.getElementById("containerTags");
+const areaSelecao = document.getElementById("areaSelecao");
 
-// --- FUNÇÕES DE APOIO ---
 function parseCSV(text) {
   const lines = text.split(/\r?\n/).filter(l => l.trim() !== "");
   return lines.map(line => {
@@ -242,67 +243,53 @@ function parseCSV(text) {
   });
 }
 
-function slug(nome) {
-  return nome.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]/g, "-");
-}
-
 function toggleDrawer() {
   document.getElementById("drawer").classList.toggle("active");
   document.getElementById("overlay").style.display = 
     document.getElementById("drawer").classList.contains("active") ? "block" : "none";
 }
 
-// --- CARREGAR DADOS ---
 async function carregarEstoque() {
   try {
     const resp = await fetch(urlPlanilha);
     const text = await resp.text();
     const dados = parseCSV(text);
-    const cabecalho = dados.shift(); 
+    dados.shift(); // Remove cabeçalho
 
     estoque = {};
     dados.forEach(l => {
       const nome = l[0];
       if (!nome) return;
       estoque[nome] = {
-        camadas: l[1] || "",
-        cores: l[2] || "",
-        padrao: l[3] || "",
+        camadas: l[1] || "Não inf.",
+        cores: l[2] || "Não inf.",
+        padrao: l[3] || "Não inf.",
         qtd: parseInt(l[5]) || 0,
-        midia: l[6] || "",
-        filtros: {
-          camadas: l[1] || "Não inf.",
-          cores: l[2] || "Não inf.",
-          padrao: l[3] || "Não inf."
-        }
+        midia: l[6] || ""
       };
     });
 
-    gerarInterfaceFiltros(); // Agora ela existe abaixo!
+    gerarInterfaceFiltros();
     montarCatalogo();
   } catch (e) {
     console.error(e);
-    grid.innerHTML = "Erro ao carregar ID's.";
+    grid.innerHTML = "<p style='padding:20px;'>Erro ao carregar ID's. Verifique a conexão.</p>";
   }
 }
 
-// --- FUNÇÃO QUE ESTAVA FALTANDO ---
 function gerarInterfaceFiltros() {
-  drawer.innerHTML = '<button class="fechar-drawer" onclick="toggleDrawer()">&times;</button><h3>Filtros</h3>';
-  
+  drawer.innerHTML = '<button class="fechar-drawer" onclick="toggleDrawer()">&times;</button><h3 style="margin-top:0">Filtros</h3>';
   colunasDeFiltro.forEach(col => {
     const valoresUnicos = new Set();
     Object.values(estoque).forEach(item => {
-      if (item.filtros[col]) valoresUnicos.add(item.filtros[col]);
+      if (item[col]) valoresUnicos.add(item[col]);
     });
 
-    let html = `<div class="grupo-filtro"><p class="titulo-filtro">${col}</p><div class="opcoes-filtro">`;
+    let html = `<div class="grupo-filtro"><p class="titulo-filtro">${col.toUpperCase()}</p><div class="opcoes-filtro">`;
     html += `<div class="pill ${!filtrosAtivos[col] ? 'active' : ''}" onclick="aplicarFiltro('${col}', '')">Todas</div>`;
-    
     Array.from(valoresUnicos).sort().forEach(val => {
       html += `<div class="pill ${filtrosAtivos[col] === val ? 'active' : ''}" onclick="aplicarFiltro('${col}', '${val}')">${val}</div>`;
     });
-    
     html += `</div></div>`;
     drawer.innerHTML += html;
   });
@@ -315,23 +302,23 @@ function aplicarFiltro(coluna, valor) {
   montarCatalogo();
 }
 
-// --- MONTAR O GRID ---
 function montarCatalogo() {
   grid.innerHTML = "";
-  Object.keys(estoque).sort().forEach(nome => {
+  const nomes = Object.keys(estoque).sort();
+  let algumItem = false;
+  
+  nomes.forEach(nome => {
     const d = estoque[nome];
-    
-    // Filtro de Texto
     if (filtroTexto && !nome.toLowerCase().includes(filtroTexto.toLowerCase())) return;
-
-    // Filtros de Categoria
+    
     let passa = true;
     for (let f in filtrosAtivos) {
-      if (d.filtros[f] !== filtrosAtivos[f]) passa = false;
+      if (estoque[nome][f] !== filtrosAtivos[f]) passa = false;
     }
     if (!passa) return;
 
-    let src = d.midia ? (d.midia.startsWith("http") ? d.midia : `https://drive.google.com/uc?export=view&id=${d.midia}`) : "imagens/sem-foto.jpg";
+    algumItem = true;
+    let src = d.midia ? (d.midia.length > 25 ? d.midia : `https://drive.google.com/uc?export=view&id=${d.midia}`) : "imagens/sem-foto.jpg";
 
     const card = document.createElement("div");
     card.className = "item" + (selecionados.has(nome) ? " selecionado" : "");
@@ -342,42 +329,56 @@ function montarCatalogo() {
         ${d.qtd > 0 ? 'Disponível' : 'Por Encomenda'}
       </div>
     `;
-    card.onclick = () => {
-      if (selecionados.has(nome)) selecionados.delete(nome);
-      else selecionados.add(nome);
-      card.classList.toggle("selecionado");
-      atualizarPainelAcoes();
-    };
+    card.onclick = () => toggleSelecao(nome);
     grid.appendChild(card);
   });
+
+  if(!algumItem) grid.innerHTML = "<p style='grid-column:1/-1; text-align:center; padding:50px;'>Nenhuma planta com esses filtros.</p>";
+}
+
+function toggleSelecao(nome) {
+  if (selecionados.has(nome)) selecionados.delete(nome);
+  else selecionados.add(nome);
+  montarCatalogo();
+  atualizarPainelAcoes();
 }
 
 function atualizarPainelAcoes() {
   const btn = document.getElementById("btnEnviar");
-  const area = document.getElementById("areaSelecao");
   if (selecionados.size > 0) {
     btn.classList.remove("oculto");
-    area.style.display = "block";
+    areaSelecao.style.display = "block";
     btn.innerText = `Solicitar ${selecionados.size} ID's via WhatsApp`;
+    atualizarTags();
   } else {
     btn.classList.add("oculto");
-    area.style.display = "none";
+    areaSelecao.style.display = "none";
   }
 }
 
-function enviarPedido() {
-  const texto = "Olá! Tenho interesse nas seguintes IDs:\n\n- " + Array.from(selecionados).join("\n- ");
-  window.open(`https://wa.me/5581900000000?text=${encodeURIComponent(texto)}`, '_blank');
+function atualizarTags() {
+  containerTags.innerHTML = "";
+  selecionados.forEach(nome => {
+    const tag = document.createElement("div");
+    tag.className = "tag-item";
+    tag.innerHTML = `${nome} <button onclick="event.stopPropagation(); toggleSelecao('${nome}')">&times;</button>`;
+    containerTags.appendChild(tag);
+  });
 }
 
-// Evento de busca
+function enviarPedido() {
+  const numeroWhats = "5581900000000"; // COLOQUE SEU NUMERO AQUI
+  const texto = "Olá! Tenho interesse nas seguintes IDs:\n\n- " + Array.from(selecionados).join("\n- ");
+  window.open(`https://wa.me/${numeroWhats}?text=${encodeURIComponent(texto)}`, '_blank');
+}
+
 inputPesquisa.oninput = (e) => {
   filtroTexto = e.target.value;
   montarCatalogo();
 };
 
 function acessarAdmin() {
-  if (prompt("Senha:") === "123456") window.location.href = "admin.html";
+  if (prompt("Senha de acesso:") === "123456") window.location.href = "admin.html";
 }
 
 carregarEstoque();
