@@ -386,11 +386,27 @@ async function criar(){
     fileName: name
   });
 
-  try {
-    await fetch(URL, {
-      method: "POST",
-      body: form
-    });
+ try {
+  const res = await fetch(URL, {
+    method: "POST",
+    body: form
+  });
+
+  const txt = await res.text();
+
+  if(txt.includes("OK")){
+    fecharModal();
+    toast("Criado!");
+    carregar();
+  } else {
+    console.error(txt);
+    toast("Erro: " + txt);
+  }
+
+} catch (e) {
+  console.error(e);
+  toast("Erro de conexão!");
+}
 
     fecharModal();
     toast("Criado!");
