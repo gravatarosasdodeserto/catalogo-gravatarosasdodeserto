@@ -403,6 +403,171 @@ inputPesquisa.oninput = (e) => { filtroTexto = e.target.value; montarCatalogo();
 function acessarAdmin() { if (prompt("Senha:") === "123456") window.location.href = "admin.html"; }
 
 carregarEstoque();
+</script><script>
+let estoque = {};
+let selecionados = new Set();
+let filtroTexto = "";
+let filtrosAtivos = {};
+let colunasDeFiltro = ["camadas", "cores", "padrao"];
+
+// URL da Planilha com Cache-Buster para sempre pegar dados novos
+const urlPlanilha = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSochNnj1ihxWjFv_87wiDS9-ZakV1LrmdQWfZMAZMGRHf9pqCBXKQpkfQ6BDMlxwYE8E2JkWUVRYOG/pub?gid=1893895788&single=true&output=csv&t=" + Date.now();
+
+const grid = document.getElementById("gridCatalogo");
+const drawer = document.getElementById("drawer");
+const inputPesquisa = document.getElementById("inputPesquisa");
+const containerTags = document.getElementById("containerTags");
+const areaSelecao = document.getElementById("areaSelecao");
+
+// FUNÇÃO DE MÍDIA SIMPLIFICADA (JPG, PNG e GIF)
+function getMidiaHTML(m) {
+  if (!m || m.trim() === "" || m === "Não inf.") {
+    return `<img src="imagens/sem-foto.jpg" style="width:100%; aspect-ratio:1/1; object-fit:cover; border-radius:14px;">`;
+  }
+  
+  const id = m.trim();
+  // O link de thumbnail do Drive suporta GIFs animados perfeitamente
+  const imgUrl = `https://drive.google.com/thumbnail?sz=w600&id=${id}`;
+
+  return `
+    <div class="media-box" style="width:100%; aspect-ratio:1/1; overflow:hidden; border-radius:14px; background:#f0f0f0;">
+      <img src="${imgUrl}" 
+        style="width:100%; height:100%; object-fit:cover; display:block;" 
+        onerror="this.src='imagens/sem-foto.jpg'">
+    </div>`;
+}
+
+function parseCSV(text) {
+  const lines = text.split(/\r?\n/).filter(l => l.trim() !== "");
+  return lines.map(line => {
+    const cells = line.match(/(".*?"|[^",\r\n]+)(?=\s*,|\s*$)/g) || [];
+    return cells.map(c => c.replace(/^"|"$/g, '').trim());
+  });
+}
+
+function toggleDrawer() {
+  document.getElementById("drawer").classList.toggle("active");
+  document.getElementById("overlay").style.display = 
+    document.getElementById("drawer").classList.contains("active") ? "block" : "none";
+}
+
+async function carregarEstoque() {
+  try {
+    const resp = await fetch(urlPlanilha);
+    const text = await resp.text();
+    const dados = parseCSV(text);
+    dados.shift(); 
+    estoque = {};
+    dados.forEach(l => {
+      const nome = l[0];
+      if (!nome) return;
+      estoque[nome] = {
+        camadas: l[1] || "Não inf.",
+        cores: l[2] || "Não inf.",
+        padrao: l[3] || "Não inf.",
+        qtd: parseInt(l[5]) || 0,
+        midia: l[6] || ""
+      };
+    });
+    gerarInterfaceFiltros();
+    montarCatalogo();
+  } catch (e) { grid.innerHTML = "<p>Erro ao carregar dados.</p>"; }
+}
+
+function gerarInterfaceFiltros() {
+  drawer.innerHTML = '<button class="fechar-drawer" onclick="toggleDrawer()">&times;</button><h3>Filtros</h3>';
+  colunasDeFiltro.forEach(col => {
+    const valoresUnicos = new Set();
+    Object.values(estoque).forEach(item => { if (item[col]) valoresUnicos.add(item[col]); });
+    let html = `<div class="grupo-filtro"><p class="titulo-filtro">${col.toUpperCase()}</p><div class="opcoes-filtro">`;
+    html += `<div class="pill ${!filtrosAtivos[col] ? 'active' : ''}" onclick="aplicarFiltro('${col}', '')">Todas</div>`;
+    Array.from(valoresUnicos).sort().forEach(val => {
+      html += `<div class="pill ${filtrosAtivos[col] === val ? 'active' : ''}" onclick="aplicarFiltro('${col}', '${val}')">${val}</div>`;
+    });
+    html += `</div></div>`;
+    drawer.innerHTML += html;
+  });
+}
+
+function aplicarFiltro(coluna, valor) {
+  if (valor === "") delete filtrosAtivos[coluna];
+  else filtrosAtivos[coluna] = valor;
+  gerarInterfaceFiltros();
+  montarCatalogo();
+}
+
+function montarCatalogo() {
+  grid.innerHTML = "";
+  Object.keys(estoque).sort().forEach(nome => {
+    const d = estoque[nome];
+    if (filtroTexto && !nome.toLowerCase().includes(filtroTexto.toLowerCase())) return;
+    let passa = true;
+    for (let f in filtrosAtivos) { if (d[f] !== filtrosAtivos[f]) passa = false; }
+    if (!passa) return;
+
+    const card = document.createElement("div");
+    card.className = "item" + (selecionados.has(nome) ? " selecionado" : "");
+    card.id = "card_" + nome.replace(/\W/g, "_");
+    card.innerHTML = `
+      ${getMidiaHTML(d.midia)}
+      <p>${nome}</p>
+      <div class="estoque-status ${d.qtd > 0 ? 'disponivel' : 'encomenda'}">
+        ${d.qtd > 0 ? 'Disponível' : 'Por Encomenda'}
+      </div>`;
+    
+    card.onclick = () => {
+      if (selecionados.has(nome)) {
+        selecionados.delete(nome);
+        card.classList.remove("selecionado");
+      } else {
+        selecionados.add(nome);
+        card.classList.add("selecionado");
+      }
+      atualizarPainelAcoes();
+    };
+    grid.appendChild(card);
+  });
+}
+
+function atualizarPainelAcoes() {
+  const btn = document.getElementById("btnEnviar");
+  if (selecionados.size > 0) {
+    btn.classList.remove("oculto");
+    areaSelecao.style.display = "block";
+    btn.innerText = `Solicitar ${selecionados.size} ID's via WhatsApp`;
+    atualizarTags();
+  } else {
+    btn.classList.add("oculto");
+    areaSelecao.style.display = "none";
+  }
+}
+
+function atualizarTags() {
+  containerTags.innerHTML = "";
+  selecionados.forEach(nome => {
+    const tag = document.createElement("div");
+    tag.className = "tag-item";
+    tag.innerHTML = `${nome} <button onclick="removerSelecao('${nome}')">&times;</button>`;
+    containerTags.appendChild(tag);
+  });
+}
+
+function removerSelecao(nome) {
+  selecionados.delete(nome);
+  const card = document.getElementById("card_" + nome.replace(/\W/g, "_"));
+  if (card) card.classList.remove("selecionado");
+  atualizarPainelAcoes();
+}
+
+function enviarPedido() {
+  const texto = "Olá! Tenho interesse nas seguintes IDs:\n\n- " + Array.from(selecionados).join("\n- ");
+  window.open(`https://wa.me/5581985926880?text=${encodeURIComponent(texto)}`, '_blank');
+}
+
+inputPesquisa.oninput = (e) => { filtroTexto = e.target.value; montarCatalogo(); };
+function acessarAdmin() { if (prompt("Senha:") === "123456") window.location.href = "admin.html"; }
+
+carregarEstoque();
 </script>
     
 </body>
