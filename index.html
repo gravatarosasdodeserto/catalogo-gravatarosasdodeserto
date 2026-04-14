@@ -254,7 +254,10 @@ function slug(nome){
 
 // ================= CARREGAR =================
 async function carregarEstoque(){
-  try{
+  
+console.log(text);
+    
+    try{
     const resp = await fetch(urlPlanilha);
     const text = await resp.text();
 
