@@ -226,7 +226,6 @@ let filtroTexto = "";
 let filtrosAtivos = {};
 let colunasDeFiltro = ["camadas", "cores", "padrao"];
 
-// Link CSV Publicado (Leitura)
 const urlPlanilha = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSochNnj1ihxWjFv_87wiDS9-ZakV1LrmdQWfZMAZMGRHf9pqCBXKQpkfQ6BDMlxwYE8E2JkWUVRYOG/pub?gid=1893895788&single=true&output=csv&t=" + Date.now();
 
 const grid = document.getElementById("gridCatalogo");
@@ -234,6 +233,14 @@ const drawer = document.getElementById("drawer");
 const inputPesquisa = document.getElementById("inputPesquisa");
 const containerTags = document.getElementById("containerTags");
 const areaSelecao = document.getElementById("areaSelecao");
+
+// Função para tratar a imagem do Drive
+function getImg(m) {
+  if (!m || m.trim() === "" || m === "Não inf.") return "imagens/sem-foto.jpg";
+  if (m.startsWith("http")) return m;
+  const idLimpo = m.trim();
+  return `https://drive.google.com/thumbnail?sz=w600&id=${idLimpo}`;
+}
 
 function parseCSV(text) {
   const lines = text.split(/\r?\n/).filter(l => l.trim() !== "");
@@ -271,9 +278,7 @@ async function carregarEstoque() {
 
     gerarInterfaceFiltros();
     montarCatalogo();
-  } catch (e) {
-    grid.innerHTML = "<p>Erro ao carregar ID's.</p>";
-  }
+  } catch (e) { grid.innerHTML = "<p>Erro ao carregar ID's.</p>"; }
 }
 
 function gerarInterfaceFiltros() {
@@ -308,12 +313,10 @@ function montarCatalogo() {
     for (let f in filtrosAtivos) { if (d[f] !== filtrosAtivos[f]) passa = false; }
     if (!passa) return;
 
-    let src = d.midia ? (d.midia.length > 25 ? d.midia : `https://drive.google.com/uc?export=view&id=${d.midia}`) : "imagens/sem-foto.jpg";
-
     const card = document.createElement("div");
     card.className = "item" + (selecionados.has(nome) ? " selecionado" : "");
     card.innerHTML = `
-      <img src="${src}" onerror="this.src='imagens/sem-foto.jpg'">
+      <img src="${getImg(d.midia)}" onerror="this.src='imagens/sem-foto.jpg'">
       <p>${nome}</p>
       <div class="estoque-status ${d.qtd > 0 ? 'disponivel' : 'encomenda'}">
         ${d.qtd > 0 ? 'Disponível' : 'Por Encomenda'}
