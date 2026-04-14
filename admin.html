@@ -269,8 +269,12 @@ const CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSochNnj1ihxWjFv_87
 let dados = [];
 let filtro = "";
 
-function parseCSV(t){
-  return t.split("\n").map(r => r.split(","));
+function parseCSV(text) {
+  const lines = text.split(/\r?\n/).filter(l => l.trim() !== "");
+  return lines.map(line => {
+    const cells = line.match(/(".*?"|[^",\r\n]+)(?=\s*,|\s*$)/g) || [];
+    return cells.map(c => c.trim().replace(/^"|"$/g, ''));
+  });
 }
 
 // ================= CARREGAR =================
