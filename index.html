@@ -50,12 +50,12 @@
         }
 
         .logo { position: relative; z-index: 3; }
-       .logo img { 
-    width: 150px; 
-    height: auto; 
-    filter: drop-shadow(0 4px 15px rgba(0,0,0,0.4)); 
-    cursor: pointer; /* Adicione isso aqui */
-}
+        .logo img { 
+            width: 150px; 
+            height: auto; 
+            filter: drop-shadow(0 4px 15px rgba(0,0,0,0.4)); 
+            cursor: pointer; 
+        }
 
         /* ===== SEÇÃO DE FILTROS (BARRA DE TAGS) ===== */
         .secao-filtros {
@@ -76,20 +76,30 @@
         .resumo-filtros { 
             display: flex; 
             flex-wrap: wrap; 
-            gap: 4px; 
+            gap: 6px; 
             max-width: 75%; 
         }
 
-        /* TAGS ATIVAS DO SITE ANTIGO */
+        /* TAGS ATIVAS COM "X" */
         .tag-filtro-ativa { 
-            font-size: 9px; 
-            background: rgba(58, 54, 24, 0.08); 
-            color: var(--text-main); 
-            padding: 4px 8px; 
-            border-radius: 4px; 
-            font-weight: 700; 
+            font-size: 10px; 
+            background: var(--text-main); 
+            color: white; 
+            padding: 6px 12px; 
+            border-radius: 50px; 
+            font-weight: 600; 
             text-transform: uppercase;
-            white-space: nowrap;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .tag-filtro-ativa span {
+            font-size: 14px;
+            font-weight: 300;
+            opacity: 0.8;
         }
 
         .btn-abrir-filtros { 
@@ -285,21 +295,28 @@ function aplicarFiltro(coluna, valor) {
   else filtrosAtivos[coluna] = valor;
   
   gerarInterfaceFiltros();
-  atualizarTagsFiltros(); // ATUALIZA A BARRA DE CIMA
+  atualizarTagsFiltros();
   montarCatalogo();
 }
 
-// FUNÇÃO PARA MOSTRAR OS FILTROS IGUAL AO SITE ANTIGO
 function atualizarTagsFiltros() {
     listaFiltrosAtivos.innerHTML = "";
     for (let col in filtrosAtivos) {
         if (filtrosAtivos[col]) {
             const tag = document.createElement("div");
             tag.className = "tag-filtro-ativa";
-            tag.innerText = filtrosAtivos[col].toUpperCase();
+            tag.innerHTML = `${filtrosAtivos[col].toUpperCase()} <span>&times;</span>`;
+            tag.onclick = function() { removerUmFiltro(col); };
             listaFiltrosAtivos.appendChild(tag);
         }
     }
+}
+
+function removerUmFiltro(coluna) {
+    delete filtrosAtivos[coluna];
+    gerarInterfaceFiltros();
+    atualizarTagsFiltros();
+    montarCatalogo();
 }
 
 function montarCatalogo() {
@@ -387,19 +404,17 @@ function enviarPedido() {
   window.open("https://wa.me/5581992665421?text=" + encodeURIComponent(mensagem), "_blank");
 }
 
-inputPesquisa.oninput = (e) => { filtroTexto = e.target.value; montarCatalogo(); };
-carregarEstoque();
-
 function acessarAdmin() {
-  // Pede a senha para evitar que curiosos entrem
   const senha = prompt("Acesso Restrito. Digite a senha:");
-  if (senha === "123456") { // Você pode mudar a senha aqui
+  if (senha === "123456") {
     window.location.href = "admin.html";
   } else if (senha !== null) {
     alert("Senha incorreta!");
   }
 }
 
+inputPesquisa.oninput = (e) => { filtroTexto = e.target.value; montarCatalogo(); };
+carregarEstoque();
 </script>
 </body>
 </html>
