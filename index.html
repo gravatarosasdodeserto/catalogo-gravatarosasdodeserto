@@ -50,7 +50,12 @@
         }
 
         .logo { position: relative; z-index: 3; }
-        .logo img { width: 150px; height: auto; filter: drop-shadow(0 4px 15px rgba(0,0,0,0.4)); }
+       .logo img { 
+    width: 150px; 
+    height: auto; 
+    filter: drop-shadow(0 4px 15px rgba(0,0,0,0.4)); 
+    cursor: pointer; /* Adicione isso aqui */
+}
 
         /* ===== SEÇÃO DE FILTROS (BARRA DE TAGS) ===== */
         .secao-filtros {
@@ -382,6 +387,17 @@ function enviarPedido() {
 
 inputPesquisa.oninput = (e) => { filtroTexto = e.target.value; montarCatalogo(); };
 carregarEstoque();
+
+function acessarAdmin() {
+  // Pede a senha para evitar que curiosos entrem
+  const senha = prompt("Acesso Restrito. Digite a senha:");
+  if (senha === "123456") { // Você pode mudar a senha aqui
+    window.location.href = "admin.html";
+  } else if (senha !== null) {
+    alert("Senha incorreta!");
+  }
+}
+
 </script>
 </body>
 </html>
