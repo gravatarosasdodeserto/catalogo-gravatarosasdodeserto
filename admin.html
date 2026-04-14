@@ -9,7 +9,7 @@
 
 <style>
 :root{
-  --header-bg:#fcfaf7;
+  --header-bg: rgba(252, 250, 247, 0.75);
   --body-bg:#e5e0d8;
   --text:#3a3618;
   --card:#fff;
@@ -24,7 +24,7 @@ body{
   color:var(--text);
 }
 
-/* CABEÇALHO PADRONIZADO */
+/* CABEÇALHO PADRONIZADO COM TRANSPARÊNCIA */
 .topbar {
     position: sticky;
     top: 0;
@@ -35,8 +35,10 @@ body{
     position: relative;
     display: flex;
     justify-content: center;
-    padding: 30px 0; /* Ajustado para não ficar tão alto no admin */
-    background-color: var(--header-bg);
+    padding: 30px 0;
+    background-color: var(--header-bg); /* Cor semitransparente */
+    backdrop-filter: blur(10px); /* Efeito de desfoque */
+    -webkit-backdrop-filter: blur(10px);
     overflow: hidden;
     border-bottom: 2px solid #ffffff;
 }
@@ -46,13 +48,13 @@ body{
     position: absolute;
     inset: 0;
     background: url('imagens/gravata-cabecalho.jpg') center/cover;
-    z-index: 1;
+    z-index: -1; /* Fica atrás da cor transparente */
 }
 
 .logo { position: relative; z-index: 3; }
 .logo img { width: 130px; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.3)); }
 
-/* BARRA BRANCA IGUAL AO INDEX */
+/* BARRA BRANCA ABAIXO DO LOGO */
 .bottom-bar {
     background: #ffffff;
     height: 50px;
@@ -63,7 +65,6 @@ body{
     box-shadow: 0 2px 5px rgba(0,0,0,0.05);
 }
 
-/* BOTÃO VOLTAR ESTILO "FILTRAR" */
 .btn-voltar-admin { 
     background: var(--text); 
     color: white; 
@@ -147,40 +148,33 @@ button{
     </div>
   </div>
 
- <div class="bottom-bar">
-  <a href="index.html" class="btn-voltar-admin">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="width:14px; height:14px;">
-      <line x1="19" y1="12" x2="5" y2="12"></line>
-      <polyline points="12 19 5 12 12 5"></polyline>
-    </svg>
-    Sair do Painel
-  </a>
-</div>
+  <div class="bottom-bar">
+    <a href="index.html" class="btn-voltar-admin">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="width:14px; height:14px;">
+        <line x1="19" y1="12" x2="5" y2="12"></line>
+        <polyline points="12 19 5 12 12 5"></polyline>
+      </svg>
+      Sair do Painel
+    </a>
+  </div>
 </div>
 
 <div class="container">
-
-<button class="new" onclick="abrirModal()">+ Adicionar Nova ID</button>
-
-<input class="busca" placeholder="Filtrar por nome da rosa..." oninput="filtrar(this.value)">
-
-<div id="lista"></div>
-
+  <button class="new" onclick="abrirModal()">+ Adicionar Nova ID</button>
+  <input class="busca" placeholder="Filtrar por nome da rosa..." oninput="filtrar(this.value)">
+  <div id="lista"></div>
 </div>
 
 <div id="modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);align-items:center;justify-content:center;z-index:2000;">
   <div style="background:#fff;padding:20px;border-radius:15px;width:90%;max-width:400px;">
     <h4 style="margin-top:0">Nova ID</h4>
-
     <input id="n_nome" placeholder="Nome da ID">
     <input id="n_qtd" type="number" placeholder="Quantidade em Estoque">
     <input id="n_camadas" placeholder="Camadas (ex: Tripla)">
     <input id="n_cores" placeholder="Cores">
     <input id="n_padrao" placeholder="Padrão">
     <input id="n_midia" placeholder="ID da Imagem (Google Drive)">
-
     <br><br>
-
     <div style="display:flex; gap:10px;">
         <button class="save" onclick="criar()">Criar ID</button>
         <button class="del" onclick="fecharModal()">Cancelar</button>
