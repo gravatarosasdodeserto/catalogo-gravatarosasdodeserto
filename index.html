@@ -226,8 +226,8 @@ let filtroTexto = "";
 let filtrosAtivos = {};
 let colunasDeFiltro = ["camadas", "cores", "padrao"];
 
-// Link CSV com o seu novo ID e cache-buster
-const urlPlanilha = 'https://docs.google.com/spreadsheets/d/1thZhA6KxzB9HP4mbCgD6W8Qfex_TRmU8pg2oo0ANer0/pub?gid=1893895788&single=true&output=csv&t=' + Date.now();
+// Link CSV Publicado (Leitura)
+const urlPlanilha = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSochNnj1ihxWjFv_87wiDS9-ZakV1LrmdQWfZMAZMGRHf9pqCBXKQpkfQ6BDMlxwYE8E2JkWUVRYOG/pub?gid=1893895788&single=true&output=csv&t=" + Date.now();
 
 const grid = document.getElementById("gridCatalogo");
 const drawer = document.getElementById("drawer");
@@ -254,7 +254,7 @@ async function carregarEstoque() {
     const resp = await fetch(urlPlanilha);
     const text = await resp.text();
     const dados = parseCSV(text);
-    dados.shift(); // Remove cabeçalho
+    dados.shift(); 
 
     estoque = {};
     dados.forEach(l => {
@@ -272,18 +272,15 @@ async function carregarEstoque() {
     gerarInterfaceFiltros();
     montarCatalogo();
   } catch (e) {
-    console.error(e);
-    grid.innerHTML = "<p style='padding:20px;'>Erro ao carregar ID's. Verifique a conexão.</p>";
+    grid.innerHTML = "<p>Erro ao carregar ID's.</p>";
   }
 }
 
 function gerarInterfaceFiltros() {
-  drawer.innerHTML = '<button class="fechar-drawer" onclick="toggleDrawer()">&times;</button><h3 style="margin-top:0">Filtros</h3>';
+  drawer.innerHTML = '<button class="fechar-drawer" onclick="toggleDrawer()">&times;</button><h3>Filtros</h3>';
   colunasDeFiltro.forEach(col => {
     const valoresUnicos = new Set();
-    Object.values(estoque).forEach(item => {
-      if (item[col]) valoresUnicos.add(item[col]);
-    });
+    Object.values(estoque).forEach(item => { if (item[col]) valoresUnicos.add(item[col]); });
 
     let html = `<div class="grupo-filtro"><p class="titulo-filtro">${col.toUpperCase()}</p><div class="opcoes-filtro">`;
     html += `<div class="pill ${!filtrosAtivos[col] ? 'active' : ''}" onclick="aplicarFiltro('${col}', '')">Todas</div>`;
@@ -304,20 +301,13 @@ function aplicarFiltro(coluna, valor) {
 
 function montarCatalogo() {
   grid.innerHTML = "";
-  const nomes = Object.keys(estoque).sort();
-  let algumItem = false;
-  
-  nomes.forEach(nome => {
+  Object.keys(estoque).sort().forEach(nome => {
     const d = estoque[nome];
     if (filtroTexto && !nome.toLowerCase().includes(filtroTexto.toLowerCase())) return;
-    
     let passa = true;
-    for (let f in filtrosAtivos) {
-      if (estoque[nome][f] !== filtrosAtivos[f]) passa = false;
-    }
+    for (let f in filtrosAtivos) { if (d[f] !== filtrosAtivos[f]) passa = false; }
     if (!passa) return;
 
-    algumItem = true;
     let src = d.midia ? (d.midia.length > 25 ? d.midia : `https://drive.google.com/uc?export=view&id=${d.midia}`) : "imagens/sem-foto.jpg";
 
     const card = document.createElement("div");
@@ -327,20 +317,15 @@ function montarCatalogo() {
       <p>${nome}</p>
       <div class="estoque-status ${d.qtd > 0 ? 'disponivel' : 'encomenda'}">
         ${d.qtd > 0 ? 'Disponível' : 'Por Encomenda'}
-      </div>
-    `;
-    card.onclick = () => toggleSelecao(nome);
+      </div>`;
+    card.onclick = () => {
+      if (selecionados.has(nome)) selecionados.delete(nome);
+      else selecionados.add(nome);
+      montarCatalogo();
+      atualizarPainelAcoes();
+    };
     grid.appendChild(card);
   });
-
-  if(!algumItem) grid.innerHTML = "<p style='grid-column:1/-1; text-align:center; padding:50px;'>Nenhuma planta com esses filtros.</p>";
-}
-
-function toggleSelecao(nome) {
-  if (selecionados.has(nome)) selecionados.delete(nome);
-  else selecionados.add(nome);
-  montarCatalogo();
-  atualizarPainelAcoes();
 }
 
 function atualizarPainelAcoes() {
@@ -361,25 +346,18 @@ function atualizarTags() {
   selecionados.forEach(nome => {
     const tag = document.createElement("div");
     tag.className = "tag-item";
-    tag.innerHTML = `${nome} <button onclick="event.stopPropagation(); toggleSelecao('${nome}')">&times;</button>`;
+    tag.innerHTML = `${nome} <button onclick="event.stopPropagation(); selecionados.delete('${nome}'); montarCatalogo(); atualizarPainelAcoes();">&times;</button>`;
     containerTags.appendChild(tag);
   });
 }
 
 function enviarPedido() {
-  const numeroWhats = "5581900000000"; // COLOQUE SEU NUMERO AQUI
   const texto = "Olá! Tenho interesse nas seguintes IDs:\n\n- " + Array.from(selecionados).join("\n- ");
-  window.open(`https://wa.me/${numeroWhats}?text=${encodeURIComponent(texto)}`, '_blank');
+  window.open(`https://wa.me/5581985926880?text=${encodeURIComponent(texto)}`, '_blank');
 }
 
-inputPesquisa.oninput = (e) => {
-  filtroTexto = e.target.value;
-  montarCatalogo();
-};
-
-function acessarAdmin() {
-  if (prompt("Senha de acesso:") === "123456") window.location.href = "admin.html";
-}
+inputPesquisa.oninput = (e) => { filtroTexto = e.target.value; montarCatalogo(); };
+function acessarAdmin() { if (prompt("Senha:") === "123456") window.location.href = "admin.html"; }
 
 carregarEstoque();
 </script>
