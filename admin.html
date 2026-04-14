@@ -357,64 +357,56 @@ function filtrar(v){
 // ================= UPLOAD CREATE =================
 async function criar(){
 
-  const file = document.getElementById("n_imagem").files[0];
+  try {
 
-  let base64 = "";
-  let mime = "";
-  let name = "";
+    const file = document.getElementById("n_imagem").files[0];
 
-  if(file){
-    base64 = await new Promise(resolve => {
-      const r = new FileReader();
-      r.onload = () => resolve(r.result.split(",")[1]);
-      r.readAsDataURL(file);
+    let base64 = "";
+    let mime = "";
+    let name = "";
+
+    if(file){
+      base64 = await new Promise(resolve => {
+        const r = new FileReader();
+        r.onload = () => resolve(r.result.split(",")[1]);
+        r.readAsDataURL(file);
+      });
+
+      mime = file.type;
+      name = file.name;
+    }
+
+    const form = new URLSearchParams({
+      action: "create",
+      nome: document.getElementById("n_nome").value,
+      qtd: document.getElementById("n_qtd").value,
+      camadas: document.getElementById("n_camadas").value,
+      cores: document.getElementById("n_cores").value,
+      padrao: document.getElementById("n_padrao").value,
+      imageBase64: base64,
+      mimeType: mime,
+      fileName: name
     });
 
-    mime = file.type;
-    name = file.name;
-  }
+    const res = await fetch(URL, {
+      method: "POST",
+      body: form
+    });
 
-  const form = new URLSearchParams({
-    action: "create",
-    nome: document.getElementById("n_nome").value,
-    qtd: document.getElementById("n_qtd").value,
-    camadas: document.getElementById("n_camadas").value,
-    cores: document.getElementById("n_cores").value,
-    padrao: document.getElementById("n_padrao").value,
-    imageBase64: base64,
-    mimeType: mime,
-    fileName: name
-  });
+    const txt = await res.text();
 
- try {
-  const res = await fetch(URL, {
-    method: "POST",
-    body: form
-  });
-
-  const txt = await res.text();
-
-  if(txt.includes("OK")){
-    fecharModal();
-    toast("Criado!");
-    carregar();
-  } else {
-    console.error(txt);
-    toast("Erro: " + txt);
-  }
-
-} catch (e) {
-  console.error(e);
-  toast("Erro de conexão!");
-}
-
-    fecharModal();
-    toast("Criado!");
-    carregar();
+    if(txt.includes("OK")){
+      fecharModal();
+      toast("Criado!");
+      carregar();
+    } else {
+      console.error(txt);
+      toast("Erro: " + txt);
+    }
 
   } catch (e) {
     console.error(e);
-    toast("Erro ao criar!");
+    toast("Erro de conexão!");
   }
 }
 
