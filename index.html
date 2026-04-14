@@ -399,11 +399,21 @@ function enviarPedido() {
 }
 
 function acessarAdmin() {
-  const senha = prompt("Acesso Restrito. Digite a senha:");
-  if (senha === "123456") window.location.href = "admin.html";
-  else if (senha !== null) alert("Senha incorreta!");
-}
+  const entrada = prompt("Acesso Restrito. Digite a senha:");
+  if (!entrada) return;
 
+  // Vamos transformar o que você digitou em um código "embaralhado" (btoa)
+  // btoa("suasenha") gera um texto que não dá pra ler de cara
+  const senhaCriptografada = btoa(entrada);
+
+  // O código abaixo equivale à senha "gravata2026" (exemplo)
+  // Se quiser trocar a senha, me peça para gerar o código para você!
+  if (senhaCriptografada === "Z3JhdmF0YTIwMjY=") { 
+    window.location.href = "admin.html";
+  } else {
+    alert("Senha incorreta!");
+  }
+}
 inputPesquisa.oninput = (e) => { filtroTexto = e.target.value; montarCatalogo(); };
 carregarEstoque();
 </script>
