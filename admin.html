@@ -16,175 +16,77 @@
   --danger:#8b2d2d;
   --ok:#2d5a27;
 }
-
 *{box-sizing:border-box}
-
 body{
   margin:0;
   font-family:Poppins;
   background:var(--body-bg);
   color:var(--text);
-  overflow-x:hidden;
 }
-
-/* ===== HEADER IGUAL INDEX ===== */
-.topbar{
-  position:sticky;
-  top:0;
-  z-index:1000;
-  overflow:hidden;
-}
-
+.topbar{position:sticky;top:0;z-index:1000;overflow:hidden;}
 .topbar::before{
   content:"";
   position:absolute;
   inset:0;
-  background-image:url('imagens/gravata-cabecalho.jpg');
-  background-size:cover;
-  background-position:center;
-  z-index:0;
+  background:url('imagens/gravata-cabecalho.jpg') center/cover;
 }
-
-/* logo */
 .logo-bar{
   position:relative;
   display:flex;
   justify-content:center;
-  align-items:center;
   padding:18px 0;
-  background:rgba(252,250,247,0.75);
-  z-index:2;
+  background:rgba(252,250,247,.75);
 }
-
-.logo img{
-  width:140px;
-}
-
-/* barra inferior */
+.logo img{width:140px;}
 .bottom-bar{
-  position:relative;
-  z-index:2;
   background:#fff;
   height:48px;
   display:flex;
   align-items:center;
   padding:0 12px;
-  border-top:1px solid rgba(0,0,0,0.08);
 }
-
 .voltar{
-  background:#fff;
   border:1px solid #3a3618;
   border-radius:20px;
   padding:6px 12px;
-  font-size:12px;
   cursor:pointer;
 }
-
-/* ===== CONTAINER ===== */
-.container{
-  padding:12px;
-  max-width:1000px;
-  margin:auto;
-}
-
+.container{padding:12px;max-width:1000px;margin:auto;}
 .busca{
   width:100%;
   padding:12px;
   border-radius:50px;
   border:1px solid #ccc;
   margin:10px 0;
-  text-align:center;
 }
-
-/* CARD */
 .card{
-  background:var(--card);
+  background:#fff;
   border-radius:15px;
   padding:12px;
   margin-bottom:15px;
-  box-shadow:0 4px 10px rgba(0,0,0,.08);
 }
-
-/* imagem grande */
 .img{
-  width:160px;
-  height:160px;
-  object-fit:cover;
-  border-radius:12px;
-  display:block;
-  margin:0 auto 10px;
+  width:160px;height:160px;object-fit:cover;border-radius:12px;
+  display:block;margin:0 auto 10px;
 }
-
-/* inputs */
-label{
-  font-size:11px;
-  opacity:.7;
-  display:block;
-  margin-top:6px;
-}
-
 input{
   width:100%;
   padding:10px;
   border-radius:10px;
   border:1px solid #ddd;
-  font-size:13px;
+  margin-top:5px;
 }
-
-/* evitar overflow mobile */
-.row{
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-}
-
-.col{flex:1; min-width:120px}
-
-/* buttons */
-.actions{
-  display:flex;
-  gap:10px;
-  margin-top:10px;
-}
-
+.actions{display:flex;gap:10px;margin-top:10px;}
 button{
-  border:none;
   padding:10px;
+  border:none;
   border-radius:12px;
   cursor:pointer;
   font-weight:600;
 }
-
 .save{background:var(--ok);color:#fff;flex:1}
 .del{background:var(--danger);color:#fff;flex:1}
-
-.new{
-  width:100%;
-  background:#3a3618;
-  color:#fff;
-  margin:10px 0;
-}
-
-/* upload */
-.upload-box{
-  border:1px dashed #aaa;
-  padding:10px;
-  border-radius:12px;
-  margin-top:8px;
-  text-align:center;
-}
-
-.upload-box img{
-  width:100%;
-  max-height:180px;
-  object-fit:cover;
-  margin-top:10px;
-  border-radius:10px;
-  display:none;
-}
-
-/* toast */
+.new{width:100%;background:#3a3618;color:#fff;margin:10px 0;}
 .toast{
   position:fixed;
   bottom:20px;
@@ -195,14 +97,12 @@ button{
   padding:10px 15px;
   border-radius:20px;
   display:none;
-  z-index:9999;
 }
 </style>
 </head>
 
 <body>
 
-<!-- HEADER -->
 <div class="topbar">
   <div class="logo-bar">
     <div class="logo">
@@ -226,36 +126,22 @@ button{
 </div>
 
 <!-- MODAL -->
-<div class="modal" id="modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);align-items:center;justify-content:center;z-index:2000;">
+<div id="modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);align-items:center;justify-content:center;">
   <div style="background:#fff;padding:15px;border-radius:15px;width:90%;max-width:400px;">
-
     <h4>Nova ID</h4>
 
     <input id="n_nome" placeholder="Nome">
+    <input id="n_qtd" type="number" placeholder="Quantidade">
+    <input id="n_camadas" placeholder="Camadas">
+    <input id="n_cores" placeholder="Cores">
+    <input id="n_padrao" placeholder="Padrão">
 
-    <label>Qtd</label>
-    <input id="n_qtd" type="number">
-
-    <label>Camadas</label>
-    <input id="n_camadas">
-
-    <label>Cores</label>
-    <input id="n_cores">
-
-    <label>Padrão</label>
-    <input id="n_padrao">
-
-    <!-- ✔️ ÚNICO UPLOAD -->
-    <label>Imagem</label>
-    <input type="file" id="n_imagem" accept="image/*" onchange="previewUpload(event)">
-
-    <img id="previewImg" style="width:100%;max-height:180px;object-fit:cover;margin-top:10px;border-radius:10px;display:none;">
+    <input type="file" id="n_imagem">
 
     <br><br>
 
     <button class="save" onclick="criar()">Criar</button>
     <button class="del" onclick="fecharModal()">Fechar</button>
-
   </div>
 </div>
 
@@ -265,9 +151,30 @@ button{
 const URL = "https://script.google.com/macros/s/AKfycbxs8MmNSgkb43F1vZDCtFE6AiRvWtjlTp67QxpLMcfA9mnWInHQOBm8iZuEqpF6Ctg0hA/exec";
 const CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSochNnj1ihxWjFv_87wiDS9-ZakV1LrmdQWfZMAZMGRHf9pqCBXKQpkfQ6BDMlxwYE8E2JkWUVRYOG/pub?gid=1893895788&single=true&output=csv";
 
-let dados=[]; let filtro="";
+let dados=[]; 
+let filtro="";
 
-// CSV ROBUSTO
+// ===== UTILS =====
+function toast(msg){
+  const t=document.getElementById("toast");
+  t.innerText=msg;
+  t.style.display="block";
+  setTimeout(()=>t.style.display="none",2000);
+}
+
+function abrirModal(){
+  document.getElementById("modal").style.display="flex";
+}
+function fecharModal(){
+  document.getElementById("modal").style.display="none";
+}
+
+function filtrar(v){
+  filtro=v;
+  render();
+}
+
+// ===== CSV =====
 function parseCSV(text){
   const lines = text.split(/\r?\n/).filter(l=>l.trim());
   return lines.map(line=>{
@@ -276,8 +183,9 @@ function parseCSV(text){
   });
 }
 
+// ===== LOAD =====
 async function carregar(){
-  const r=await fetch(CSV);
+  const r=await fetch(CSV+"?t="+Date.now());
   const t=await r.text();
   const linhas=parseCSV(t);
 
@@ -295,6 +203,7 @@ async function carregar(){
   render();
 }
 
+// ===== RENDER =====
 function getImg(m){
   if(!m) return "imagens/sem-foto.jpg";
   if(m.startsWith("http")) return m;
@@ -312,7 +221,7 @@ function render(){
 
     el.innerHTML+=`
     <div class="card">
-      <img src="${getImg(d.midia)}" class="img" onerror="this.src='imagens/sem-foto.jpg'">
+      <img src="${getImg(d.midia)}" class="img">
 
       <input id="nome_${id}" value="${d.nome}">
       <input id="qtd_${id}" value="${d.qtd}">
@@ -329,11 +238,10 @@ function render(){
   });
 }
 
-// CREATE CORRIGIDO
+// ===== CREATE =====
 async function criar(){
   try{
     const file = document.getElementById("n_imagem").files[0];
-
     let base64="", mime="", name="";
 
     if(file){
@@ -364,18 +272,57 @@ async function criar(){
     const txt = await res.text();
 
     if(txt.includes("OK")){
-      fecharModal();
       toast("Criado!");
+      fecharModal();
       carregar();
     }else{
       toast("Erro: "+txt);
     }
 
   }catch(e){
-    console.error(e);
     toast("Erro!");
   }
 }
+
+// ===== UPDATE =====
+async function salvar(nome){
+  const id=nome.replace(/\W/g,"_");
+
+  const res = await fetch(URL,{
+    method:"POST",
+    body:new URLSearchParams({
+      action:"update",
+      nome:nome,
+      qtd:document.getElementById("qtd_"+id).value,
+      camadas:document.getElementById("cam_"+id).value,
+      cores:document.getElementById("cor_"+id).value,
+      padrao:document.getElementById("pad_"+id).value,
+      midia:document.getElementById("midia_"+id).value
+    })
+  });
+
+  const txt=await res.text();
+  txt.includes("OK")?toast("Salvo!"):toast("Erro!");
+}
+
+// ===== DELETE =====
+async function excluir(nome){
+  if(!confirm("Excluir?")) return;
+
+  const res = await fetch(URL,{
+    method:"POST",
+    body:new URLSearchParams({
+      action:"delete",
+      nome:nome
+    })
+  });
+
+  const txt=await res.text();
+  txt.includes("OK")?(toast("Excluído"),carregar()):toast("Erro!");
+}
+
+// INIT
+carregar();
 </script>
 
 </body>
