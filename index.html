@@ -399,20 +399,60 @@ function enviarPedido() {
 }
 
 function acessarAdmin() {
-  const entrada = prompt("Acesso Restrito. Digite a senha:");
-  if (!entrada) return;
+  const modalSenha = document.createElement('div');
+  modalSenha.setAttribute('style', 'position:fixed; inset:0; background:rgba(0,0,0,0.8); z-index:9999; display:flex; align-items:center; justify-content:center; padding:20px;');
+  
+  modalSenha.innerHTML = `
+    <div style="background:#fff; padding:20px; border-radius:15px; width:100%; max-width:300px; text-align:center; position:relative;">
+      <p style="margin-top:0; font-weight:600; color:#3a3618;">Acesso Restrito</p>
+      
+      <div style="position:relative; display:flex; align-items:center;">
+        <input type="password" id="inputSenhaAdmin" placeholder="Digite a senha" 
+               style="width:100%; padding:12px; padding-right:40px; border-radius:10px; border:1px solid #ddd; text-align:center; font-size:18px;">
+        
+        <div id="toggleSenha" style="position:absolute; right:10px; cursor:pointer; display:flex; align-items:center; opacity:0.5;">
+          <svg id="olhoAberto" style="width:20px; height:20px;" viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="2">
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+            <circle cx="12" cy="12" r="3"></circle>
+          </svg>
+        </div>
+      </div>
 
-  // Vamos transformar o que você digitou em um código "embaralhado" (btoa)
-  // btoa("suasenha") gera um texto que não dá pra ler de cara
-  const senhaCriptografada = btoa(entrada);
+      <div style="display:flex; gap:10px; margin-top:15px;">
+        <button id="btnConfirmarSenha" style="flex:1; padding:10px; background:#3a3618; color:#fff; border:none; border-radius:10px; font-weight:600; cursor:pointer;">Entrar</button>
+        <button id="btnCancelarSenha" style="flex:1; padding:10px; background:#eee; color:#333; border:none; border-radius:10px; font-weight:600; cursor:pointer;">Sair</button>
+      </div>
+    </div>
+  `;
 
-  // O código abaixo equivale à senha "gravata2026" (exemplo)
-  // Se quiser trocar a senha, me peça para gerar o código para você!
-  if (senhaCriptografada === "Z3JhdmF0YTIwMjY=") { 
-    window.location.href = "admin.html";
-  } else {
-    alert("Senha incorreta!");
-  }
+  document.body.appendChild(modalSenha);
+  const input = document.getElementById('inputSenhaAdmin');
+  const toggleBtn = document.getElementById('toggleSenha');
+  input.focus();
+
+  // Função para mostrar/esconder senha
+  toggleBtn.onclick = () => {
+    if (input.type === 'password') {
+      input.type = 'text';
+      toggleBtn.style.opacity = "1";
+    } else {
+      input.type = 'password';
+      toggleBtn.style.opacity = "0.5";
+    }
+  };
+
+  const validar = () => {
+    if (btoa(input.value) === "MTQwNTA4bGU=") {
+      window.location.href = "admin.html";
+    } else {
+      alert("Senha incorreta!");
+      input.value = "";
+    }
+  };
+
+  document.getElementById('btnConfirmarSenha').onclick = validar;
+  document.getElementById('btnCancelarSenha').onclick = () => document.body.removeChild(modalSenha);
+  input.onkeypress = (e) => { if(e.key === 'Enter') validar(); };
 }
 inputPesquisa.oninput = (e) => { filtroTexto = e.target.value; montarCatalogo(); };
 carregarEstoque();
