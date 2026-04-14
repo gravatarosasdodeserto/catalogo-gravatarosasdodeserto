@@ -23,47 +23,80 @@ body{
   background:var(--body-bg);
   color:var(--text);
 }
-.topbar{position:sticky;top:0;z-index:1000;overflow:hidden;}
-.topbar::before{
-  content:"";
-  position:absolute;
-  inset:0;
-  background:url('imagens/gravata-cabecalho.jpg') center/cover;
+
+/* CABEÇALHO PADRONIZADO */
+.topbar {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
 }
-.logo-bar{
-  position:relative;
-  display:flex;
-  justify-content:center;
-  padding:18px 0;
-  background:rgba(252,250,247,.75);
+
+.logo-bar {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    padding: 30px 0; /* Ajustado para não ficar tão alto no admin */
+    background-color: var(--header-bg);
+    overflow: hidden;
+    border-bottom: 2px solid #ffffff;
 }
-.logo img{width:140px;}
-.bottom-bar{
-  background:#fff;
-  height:48px;
-  display:flex;
-  align-items:center;
-  padding:0 12px;
+
+.logo-bar::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: url('imagens/gravata-cabecalho.jpg') center/cover;
+    z-index: 1;
 }
-.voltar{
-  border:1px solid #3a3618;
-  border-radius:20px;
-  padding:6px 12px;
-  cursor:pointer;
+
+.logo { position: relative; z-index: 3; }
+.logo img { width: 130px; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.3)); }
+
+/* BARRA BRANCA IGUAL AO INDEX */
+.bottom-bar {
+    background: #ffffff;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    padding: 0 15px;
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
 }
+
+/* BOTÃO VOLTAR ESTILO "FILTRAR" */
+.btn-voltar-admin { 
+    background: var(--text); 
+    color: white; 
+    display: flex; 
+    align-items: center; 
+    gap: 8px; 
+    padding: 0 15px; 
+    border-radius: 50px; 
+    border: none;
+    font-weight: 600; 
+    font-size: 11px; 
+    cursor: pointer; 
+    height: 30px;
+    text-transform: uppercase;
+    text-decoration: none;
+}
+
 .container{padding:12px;max-width:1000px;margin:auto;}
 .busca{
   width:100%;
   padding:12px;
   border-radius:50px;
-  border:1px solid #ccc;
+  border:1.5px solid rgba(0,0,0,0.1);
   margin:10px 0;
+  outline: none;
+  text-align: center;
 }
 .card{
   background:#fff;
   border-radius:15px;
   padding:12px;
   margin-bottom:15px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
 }
 .img{
   width:160px;height:160px;object-fit:cover;border-radius:12px;
@@ -76,6 +109,8 @@ input{
   border:1px solid #ddd;
   margin-top:5px;
 }
+label { font-size: 11px; font-weight: 600; color: #888; margin-top: 8px; display: block; }
+
 .actions{display:flex;gap:10px;margin-top:10px;}
 button{
   padding:10px;
@@ -86,7 +121,8 @@ button{
 }
 .save{background:var(--ok);color:#fff;flex:1}
 .del{background:var(--danger);color:#fff;flex:1}
-.new{width:100%;background:#3a3618;color:#fff;margin:10px 0;}
+.new{width:100%;background:#3a3618;color:#fff;margin:10px 0; border-radius: 50px; height: 45px;}
+
 .toast{
   position:fixed;
   bottom:20px;
@@ -97,45 +133,13 @@ button{
   padding:10px 15px;
   border-radius:20px;
   display:none;
-}
-  .btn-voltar {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 10px 20px;
-    background-color: #3a3618; /* Cor padrão que estamos usando */
-    color: white;
-    text-decoration: none;
-    border-radius: 50px;
-    font-size: 14px;
-    font-weight: 600;
-    margin-bottom: 20px;
-    transition: transform 0.2s;
-}
-
-.btn-voltar:hover {
-    transform: scale(1.05);
-    background-color: #5a5425;
-}
-
-.btn-voltar svg {
-    width: 16px;
-    height: 16px;
+  z-index: 2000;
 }
 </style>
 </head>
 
 <body>
 
-  <a href="index.html" class="btn-voltar">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <line x1="19" y1="12" x2="5" y2="12"></line>
-        <polyline points="12 19 5 12 12 5"></polyline>
-    </svg>
-    Voltar para o Catálogo
-
-</a>
-  
 <div class="topbar">
   <div class="logo-bar">
     <div class="logo">
@@ -144,37 +148,44 @@ button{
   </div>
 
   <div class="bottom-bar">
-    <button class="voltar" onclick="location.href='index.html'">← Catálogo</button>
+    <a href="index.html" class="btn-voltar-admin">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="width:14px; height:14px;">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+        </svg>
+        Sair do Painel
+    </a>
+    <span style="font-size: 12px; font-weight: 600; margin-left: 15px; opacity: 0.6;">ADMINISTRAÇÃO</span>
   </div>
 </div>
 
 <div class="container">
 
-<button class="new" onclick="abrirModal()">+ Nova ID</button>
+<button class="new" onclick="abrirModal()">+ Adicionar Nova ID</button>
 
-<input class="busca" placeholder="Buscar ID..." oninput="filtrar(this.value)">
+<input class="busca" placeholder="Filtrar por nome da rosa..." oninput="filtrar(this.value)">
 
 <div id="lista"></div>
 
 </div>
 
-<!-- MODAL -->
-<div id="modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);align-items:center;justify-content:center;">
-  <div style="background:#fff;padding:15px;border-radius:15px;width:90%;max-width:400px;">
-    <h4>Nova ID</h4>
+<div id="modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);align-items:center;justify-content:center;z-index:2000;">
+  <div style="background:#fff;padding:20px;border-radius:15px;width:90%;max-width:400px;">
+    <h4 style="margin-top:0">Nova ID</h4>
 
-    <input id="n_nome" placeholder="Nome">
-    <input id="n_qtd" type="number" placeholder="Quantidade">
-    <input id="n_camadas" placeholder="Camadas">
+    <input id="n_nome" placeholder="Nome da ID">
+    <input id="n_qtd" type="number" placeholder="Quantidade em Estoque">
+    <input id="n_camadas" placeholder="Camadas (ex: Tripla)">
     <input id="n_cores" placeholder="Cores">
     <input id="n_padrao" placeholder="Padrão">
-
-    <input type="file" id="n_imagem">
+    <input id="n_midia" placeholder="ID da Imagem (Google Drive)">
 
     <br><br>
 
-    <button class="save" onclick="criar()">Criar</button>
-    <button class="del" onclick="fecharModal()">Fechar</button>
+    <div style="display:flex; gap:10px;">
+        <button class="save" onclick="criar()">Criar ID</button>
+        <button class="del" onclick="fecharModal()">Cancelar</button>
+    </div>
   </div>
 </div>
 
@@ -191,8 +202,7 @@ function getMidiaHTML(m) {
   if (!m || m.trim() === "" || m === "Não inf.") return `<img src="imagens/sem-foto.jpg" class="img">`;
   const id = m.trim();
   const imgUrl = `https://drive.google.com/thumbnail?sz=w600&id=${id}`;
-  
-  return `<img src="${imgUrl}" class="img" style="width:160px; height:160px; object-fit:cover; border-radius:12px; margin-bottom:10px;" onerror="this.src='imagens/sem-foto.jpg'">`;
+  return `<img src="${imgUrl}" class="img" onerror="this.src='imagens/sem-foto.jpg'">`;
 }
 
 function toast(msg) {
@@ -225,7 +235,7 @@ function render() {
     <div class="card">
       ${getMidiaHTML(d.midia)}
       <label>Nome:</label>
-      <input id="nome_${idSeguro}" value="${d.nome}" readonly style="background:#f0f0f0">
+      <input id="nome_${idSeguro}" value="${d.nome}" readonly style="background:#f9f9f9">
       <label>Qtd:</label>
       <input id="qtd_${idSeguro}" value="${d.qtd}" type="number">
       <label>ID da Mídia (Google Drive):</label>
@@ -237,7 +247,7 @@ function render() {
       <label>Padrão:</label>
       <input id="pad_${idSeguro}" value="${d.padrao}">
       <div class="actions">
-        <button class="save" onclick="salvar('${d.nome}')">Salvar</button>
+        <button class="save" onclick="salvar('${d.nome}')">Salvar Alterações</button>
         <button class="del" onclick="excluir('${d.nome}')">Excluir</button>
       </div>
     </div>`;
@@ -279,12 +289,12 @@ async function salvar(nomeOriginal) {
       })
     });
     const txt = await res.text();
-    txt.includes("OK") ? toast("Salvo!") : toast("Erro ao salvar");
+    txt.includes("OK") ? toast("Salvo com sucesso!") : toast("Erro ao salvar");
   } catch (e) { toast("Erro de conexão"); }
 }
 
 async function excluir(nome) {
-  if (!confirm("Excluir " + nome + "?")) return;
+  if (!confirm("Tem certeza que deseja excluir " + nome + "?")) return;
   try {
     const res = await fetch(URL, {
       method: "POST",
@@ -293,6 +303,32 @@ async function excluir(nome) {
     const txt = await res.text();
     if (txt.includes("OK")) { toast("Excluído!"); carregar(); }
   } catch (e) { toast("Erro ao excluir"); }
+}
+
+async function criar() {
+    const nome = document.getElementById("n_nome").value;
+    if(!nome) return alert("Digite o nome da ID");
+    
+    try {
+        const res = await fetch(URL, {
+            method: "POST",
+            body: new URLSearchParams({
+                action: "create",
+                nome: nome,
+                qtd: document.getElementById("n_qtd").value,
+                camadas: document.getElementById("n_camadas").value,
+                cores: document.getElementById("n_cores").value,
+                padrao: document.getElementById("n_padrao").value,
+                midia: document.getElementById("n_midia").value
+            })
+        });
+        const txt = await res.text();
+        if(txt.includes("OK")) {
+            toast("ID criada!");
+            fecharModal();
+            carregar();
+        }
+    } catch(e) { toast("Erro ao criar ID"); }
 }
 
 carregar();
