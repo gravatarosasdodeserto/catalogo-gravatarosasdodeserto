@@ -401,8 +401,18 @@ function removerSelecao(nome) {
 }
 
 function enviarPedido() {
-  const texto = "Olá! Tenho interesse nas seguintes IDs:\n\n- " + Array.from(selecionados).join("\n- ");
-  window.open(`https://wa.me/5581985926880?text=${encodeURIComponent(texto)}`, '_blank');
+  const ids = Array.from(selecionados);
+  let mensagem = "";
+  
+  // Lógica de texto e telefone do seu código antigo
+  if (ids.length === 1) {
+    mensagem = `Olá! Tenho interesse no enxerto da ID ${ids[0]} e queria saber mais informações e o valor.`;
+  } else {
+    mensagem = `Olá! Tenho interesse nos enxertos das IDs ${ids.join(", ")} e queria saber mais informações e valores.`;
+  }
+  
+  // Telefone atualizado para o final 5421
+  window.open("https://wa.me/5581992665421?text=" + encodeURIComponent(mensagem), "_blank");
 }
 
 inputPesquisa.oninput = (e) => { filtroTexto = e.target.value; montarCatalogo(); };
