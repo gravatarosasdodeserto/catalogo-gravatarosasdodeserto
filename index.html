@@ -369,14 +369,20 @@ function atualizarPainelAcoes() {
   if (selecionados.size > 0) {
     btn.classList.remove("oculto");
     areaSelecao.style.display = "block";
-    btn.innerText = `Solicitar ${selecionados.size} ID's via WhatsApp`;
+    
+    // Texto do botão exatamente como você gostava
+    if (selecionados.size === 1) {
+      btn.innerText = "Solicitar informação sobre a ID selecionada";
+    } else {
+      btn.innerText = `Solicitar informações sobre as ${selecionados.size} IDs selecionadas`;
+    }
+    
     atualizarTags();
   } else {
     btn.classList.add("oculto");
     areaSelecao.style.display = "none";
   }
 }
-
 function atualizarTags() {
   containerTags.innerHTML = "";
   selecionados.forEach(nome => {
