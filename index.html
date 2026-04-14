@@ -264,11 +264,10 @@ async function carregarEstoque(){
       h.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim()
     );
 
-    const idx = {
-      nome: cab.findIndex(h=>h.includes("nome")),
-      qtd: cab.findIndex(h=>h.includes("qtd")),
-      midia: cab.findIndex(h=>h.includes("midia"))
-    };
+   if (idx.nome === -1) {
+  grid.innerHTML = "Erro: coluna 'nome' não encontrada.";
+  return;
+}
 
     estoque = {};
 
