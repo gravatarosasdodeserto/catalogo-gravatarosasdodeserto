@@ -52,27 +52,59 @@
         .logo { position: relative; z-index: 3; }
         .logo img { width: 150px; height: auto; filter: drop-shadow(0 4px 15px rgba(0,0,0,0.4)); }
 
-        /* ===== FILTROS ===== */
+        /* ===== SEÇÃO DE FILTROS (BARRA DE TAGS) ===== */
         .secao-filtros {
             position: sticky;
             top: 152px;
             z-index: 950;
-            padding: 6px 15px;
+            padding: 8px 15px;
             background: #ffffff;
             display: flex;
             flex-direction: column;
             gap: 5px;
             border-bottom: 1px solid rgba(0,0,0,0.06);
+            min-height: 45px;
         }
 
-        .filtros-topo-wrapper { display: flex; justify-content: space-between; align-items: center; }
-        .resumo-filtros { display: flex; flex-wrap: wrap; gap: 4px; max-width: 75%; }
-        .tag-filtro-ativa { font-size: 9px; background: rgba(58, 54, 24, 0.08); color: var(--text-main); padding: 2px 8px; border-radius: 4px; font-weight: 700; text-transform: uppercase; }
+        .filtros-topo-wrapper { display: flex; justify-content: space-between; align-items: center; width: 100%; }
+        
+        .resumo-filtros { 
+            display: flex; 
+            flex-wrap: wrap; 
+            gap: 4px; 
+            max-width: 75%; 
+        }
 
-        .btn-abrir-filtros { background: var(--text-main); color: white; display: flex; align-items: center; gap: 5px; padding: 4px 12px; border-radius: 50px; border: none; font-weight: 600; font-size: 11px; cursor: pointer; height: 24px; }
+        /* TAGS ATIVAS DO SITE ANTIGO */
+        .tag-filtro-ativa { 
+            font-size: 9px; 
+            background: rgba(58, 54, 24, 0.08); 
+            color: var(--text-main); 
+            padding: 4px 8px; 
+            border-radius: 4px; 
+            font-weight: 700; 
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        .btn-abrir-filtros { 
+            background: var(--text-main); 
+            color: white; 
+            display: flex; 
+            align-items: center; 
+            gap: 5px; 
+            padding: 4px 12px; 
+            border-radius: 50px; 
+            border: none; 
+            font-weight: 600; 
+            font-size: 11px; 
+            cursor: pointer; 
+            height: 28px;
+            flex-shrink: 0;
+        }
         .btn-abrir-filtros svg { width: 12px; height: 12px; }
 
-        /* ===== INSTRUÇÕES (CORRIGIDO) ===== */
+        /* ===== INSTRUÇÕES ===== */
         .instrucao-texto {
             width: calc(100% - 40px);
             margin: 25px auto 10px;
@@ -87,7 +119,7 @@
         .instrucao-texto p { margin: 0; font-size: 13px; font-weight: 500; }
         .instrucao-texto span { display: block; margin-top: 5px; font-size: 11px; color: rgba(58, 54, 24, 0.65); }
 
-        /* ===== GRID (CORRIGIDO TAMANHO NO CELULAR) ===== */
+        /* ===== GRID ===== */
         .catalogo {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
@@ -100,6 +132,7 @@
         .item.selecionado { background: var(--card-selected)!important; transform: scale(0.96); }
         .item img { width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 14px; display: block; }
         .item p { text-align: center; font-size: 13px; font-weight: 600; margin: 10px 0 2px 0; }
+        
         .estoque-status { text-align: center; font-size: 10px; font-weight: 700; text-transform: uppercase; }
         .disponivel { color: #2d5a27; }
         .encomenda { color: #8a8471; opacity: 0.7; }
@@ -118,7 +151,7 @@
         .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 2000; display: none; backdrop-filter: blur(3px); }
         .drawer-filtros { position: fixed; right: -300px; top: 0; width: 300px; height: 100%; background: var(--body-bg); z-index: 2001; transition: 0.3s; padding: 30px 20px; overflow-y: auto; }
         .drawer-filtros.active { right: 0; }
-        .fechar-drawer { background: none; border: none; font-size: 24px; cursor: pointer; text-align: right; width: 100%; color: var(--text-main); }
+        .fechar-drawer { background: none; border: none; font-size: 24px; cursor: pointer; text-align: right; width: 100%; color: var(--text-main); margin-bottom: 10px; }
         .pill { padding: 6px 14px; background: #ffffff; border: 1px solid rgba(0,0,0,0.05); border-radius: 50px; font-size: 12px; cursor: pointer; margin: 4px; display: inline-block; }
         .pill.active { background: var(--text-main); color: white; }
     </style>
@@ -177,6 +210,7 @@ const drawer = document.getElementById("drawer");
 const inputPesquisa = document.getElementById("inputPesquisa");
 const containerTags = document.getElementById("containerTags");
 const areaSelecao = document.getElementById("areaSelecao");
+const listaFiltrosAtivos = document.getElementById("listaFiltrosAtivos");
 
 function getMidiaHTML(m) {
   if (!m || m.trim() === "" || m === "Não inf.") {
@@ -225,7 +259,7 @@ async function carregarEstoque() {
 }
 
 function gerarInterfaceFiltros() {
-  drawer.innerHTML = '<button class="fechar-drawer" onclick="toggleDrawer()">&times;</button><h3>Filtros</h3>';
+  drawer.innerHTML = '<button class="fechar-drawer" onclick="toggleDrawer()">&times;</button><h3 style="margin-top:0">Filtros</h3>';
   colunasDeFiltro.forEach(col => {
     const valoresUnicos = new Set();
     Object.values(estoque).forEach(item => { if (item[col]) valoresUnicos.add(item[col]); });
@@ -240,10 +274,25 @@ function gerarInterfaceFiltros() {
 }
 
 function aplicarFiltro(coluna, valor) {
-  if (valor === "") delete filtrosAtivos[coluna];
+  if (valor === "" || valor === "Todas") delete filtrosAtivos[coluna];
   else filtrosAtivos[coluna] = valor;
+  
   gerarInterfaceFiltros();
+  atualizarTagsFiltros(); // ATUALIZA A BARRA DE CIMA
   montarCatalogo();
+}
+
+// FUNÇÃO PARA MOSTRAR OS FILTROS IGUAL AO SITE ANTIGO
+function atualizarTagsFiltros() {
+    listaFiltrosAtivos.innerHTML = "";
+    for (let col in filtrosAtivos) {
+        if (filtrosAtivos[col]) {
+            const tag = document.createElement("div");
+            tag.className = "tag-filtro-ativa";
+            tag.innerText = filtrosAtivos[col].toUpperCase();
+            listaFiltrosAtivos.appendChild(tag);
+        }
+    }
 }
 
 function montarCatalogo() {
