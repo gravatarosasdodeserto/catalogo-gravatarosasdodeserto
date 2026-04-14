@@ -154,12 +154,15 @@ const CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSochNnj1ihxWjFv_87
 let dados = []; 
 let filtro = "";
 
-// Função para tratar a imagem do Drive
-function getImg(m) {
-  if (!m || m.trim() === "" || m === "Não inf.") return "imagens/sem-foto.jpg";
-  if (m.startsWith("http")) return m;
-  const idLimpo = m.trim();
-  return `https://drive.google.com/thumbnail?sz=w600&id=${idLimpo}`;
+// Mesma função de mídia para o Admin visualizar
+function getMidiaHTML(m) {
+  if (!m || m.trim() === "" || m === "Não inf.") return `<img src="imagens/sem-foto.jpg" class="img">`;
+  const id = m.trim();
+  return `
+    <div style="width:160px; height:160px; margin:0 auto 10px; position:relative;">
+      <video src="https://drive.google.com/uc?export=download&id=${id}" autoplay loop muted playsinline class="img" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; border-radius:12px;"></video>
+      <img src="https://drive.google.com/thumbnail?sz=w600&id=${id}" class="img" style="width:100%; height:100%; object-fit:cover; border-radius:12px;" onerror="this.src='imagens/sem-foto.jpg'">
+    </div>`;
 }
 
 function toast(msg) {
@@ -190,7 +193,7 @@ function render() {
     const idSeguro = d.nome.replace(/\W/g, "_");
     el.innerHTML += `
     <div class="card">
-      <img src="${getImg(d.midia)}" class="img" onerror="this.src='imagens/sem-foto.jpg'">
+      ${getMidiaHTML(d.midia)}
       <label>Nome:</label>
       <input id="nome_${idSeguro}" value="${d.nome}" readonly style="background:#f0f0f0">
       <label>Qtd:</label>
