@@ -185,6 +185,13 @@ function parseCSV(text){
 
 // ===== LOAD =====
 async function carregar(){
+
+const r = await fetch(CSV + "&t=" + Date.now());
+const t = await r.text();
+
+console.log("CSV BRUTO ↓↓↓");
+console.log(t);
+  
   const r=await fetch(CSV+"?t="+Date.now());
   const t=await r.text();
   const linhas=parseCSV(t);
