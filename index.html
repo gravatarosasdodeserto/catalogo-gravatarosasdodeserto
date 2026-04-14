@@ -50,56 +50,61 @@
         }
 
         .logo { position: relative; z-index: 3; }
-        .logo img { 
-            width: 150px; 
-            height: auto; 
-            filter: drop-shadow(0 4px 15px rgba(0,0,0,0.4)); 
-            cursor: pointer; 
-        }
+        .logo img { width: 150px; height: auto; filter: drop-shadow(0 4px 15px rgba(0,0,0,0.4)); cursor: pointer; }
 
-        /* ===== SEÇÃO DE FILTROS (BARRA DE TAGS) ===== */
+        /* ===== SEÇÃO DE FILTROS (AJUSTADA) ===== */
         .secao-filtros {
             position: sticky;
             top: 152px;
             z-index: 950;
-            padding: 8px 15px;
+            padding: 6px 15px;
             background: #ffffff;
             display: flex;
-            flex-direction: column;
-            gap: 5px;
+            align-items: center;
             border-bottom: 1px solid rgba(0,0,0,0.06);
-            min-height: 45px;
+            min-height: 48px;
         }
 
-        .filtros-topo-wrapper { display: flex; justify-content: space-between; align-items: center; width: 100%; }
+        .filtros-topo-wrapper { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            width: 100%; 
+            gap: 10px;
+        }
         
+        /* Permite que as tags rolem pro lado se forem muitas */
         .resumo-filtros { 
             display: flex; 
-            flex-wrap: wrap; 
+            flex-wrap: nowrap; 
+            overflow-x: auto;
             gap: 6px; 
-            max-width: 75%; 
+            flex-grow: 1;
+            padding-right: 10px;
+            scrollbar-width: none; /* Esconde scroll no Firefox */
         }
+        .resumo-filtros::-webkit-scrollbar { display: none; } /* Esconde scroll no Chrome/Safari */
 
-        /* TAGS ATIVAS COM "X" */
+        /* TAGS ATIVAS MINIATURIZADAS */
         .tag-filtro-ativa { 
-            font-size: 10px; 
+            font-size: 9px; 
             background: var(--text-main); 
             color: white; 
-            padding: 6px 12px; 
-            border-radius: 50px; 
-            font-weight: 600; 
+            padding: 3px 8px; 
+            border-radius: 4px; 
+            font-weight: 700; 
             text-transform: uppercase;
             display: inline-flex;
             align-items: center;
-            gap: 8px;
+            gap: 5px;
             cursor: pointer;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            white-space: nowrap;
         }
 
         .tag-filtro-ativa span {
-            font-size: 14px;
+            font-size: 12px;
             font-weight: 300;
-            opacity: 0.8;
+            line-height: 1;
         }
 
         .btn-abrir-filtros { 
@@ -108,16 +113,17 @@
             display: flex; 
             align-items: center; 
             gap: 5px; 
-            padding: 4px 12px; 
+            padding: 0 12px; 
             border-radius: 50px; 
             border: none; 
             font-weight: 600; 
-            font-size: 11px; 
+            font-size: 10px; 
             cursor: pointer; 
-            height: 28px;
+            height: 26px;
             flex-shrink: 0;
+            text-transform: uppercase;
         }
-        .btn-abrir-filtros svg { width: 12px; height: 12px; }
+        .btn-abrir-filtros svg { width: 10px; height: 10px; }
 
         /* ===== INSTRUÇÕES ===== */
         .instrucao-texto {
@@ -147,7 +153,6 @@
         .item.selecionado { background: var(--card-selected)!important; transform: scale(0.96); }
         .item img { width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 14px; display: block; }
         .item p { text-align: center; font-size: 13px; font-weight: 600; margin: 10px 0 2px 0; }
-        
         .estoque-status { text-align: center; font-size: 10px; font-weight: 700; text-transform: uppercase; }
         .disponivel { color: #2d5a27; }
         .encomenda { color: #8a8471; opacity: 0.7; }
@@ -293,7 +298,6 @@ function gerarInterfaceFiltros() {
 function aplicarFiltro(coluna, valor) {
   if (valor === "" || valor === "Todas") delete filtrosAtivos[coluna];
   else filtrosAtivos[coluna] = valor;
-  
   gerarInterfaceFiltros();
   atualizarTagsFiltros();
   montarCatalogo();
@@ -364,12 +368,7 @@ function atualizarPainelAcoes() {
   if (selecionados.size > 0) {
     btn.classList.remove("oculto");
     areaSelecao.style.display = "block";
-    
-    if (selecionados.size === 1) {
-      btn.innerText = "Solicitar informação sobre a ID selecionada";
-    } else {
-      btn.innerText = `Solicitar informações sobre as ${selecionados.size} IDs selecionadas`;
-    }
+    btn.innerText = selecionados.size === 1 ? "Solicitar informação sobre a ID selecionada" : `Solicitar informações sobre as ${selecionados.size} IDs selecionadas`;
     atualizarTags();
   } else {
     btn.classList.add("oculto");
@@ -395,22 +394,14 @@ function removerSelecao(nome) {
 
 function enviarPedido() {
   const ids = Array.from(selecionados);
-  let mensagem = "";
-  if (ids.length === 1) {
-    mensagem = `Olá! Tenho interesse no enxerto da ID ${ids[0]} e queria saber mais informações e o valor.`;
-  } else {
-    mensagem = `Olá! Tenho interesse nos enxertos das IDs ${ids.join(", ")} e queria saber mais informações e valores.`;
-  }
+  let mensagem = ids.length === 1 ? `Olá! Tenho interesse no enxerto da ID ${ids[0]} e queria saber mais informações e o valor.` : `Olá! Tenho interesse nos enxertos das IDs ${ids.join(", ")} e queria saber mais informações e valores.`;
   window.open("https://wa.me/5581992665421?text=" + encodeURIComponent(mensagem), "_blank");
 }
 
 function acessarAdmin() {
   const senha = prompt("Acesso Restrito. Digite a senha:");
-  if (senha === "123456") {
-    window.location.href = "admin.html";
-  } else if (senha !== null) {
-    alert("Senha incorreta!");
-  }
+  if (senha === "123456") window.location.href = "admin.html";
+  else if (senha !== null) alert("Senha incorreta!");
 }
 
 inputPesquisa.oninput = (e) => { filtroTexto = e.target.value; montarCatalogo(); };
