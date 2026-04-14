@@ -245,19 +245,13 @@ button{
     <label>Padrão</label>
     <input id="n_padrao">
 
+    <!-- ✔️ ÚNICO UPLOAD -->
     <label>Imagem</label>
-<input type="file" id="n_imagem" accept="image/*">
+    <input type="file" id="n_imagem" accept="image/*" onchange="previewUpload(event)">
 
-    <label>Imagem</label>
-    <input id="n_midia" placeholder="link opcional">
+    <img id="previewImg" style="width:100%;max-height:180px;object-fit:cover;margin-top:10px;border-radius:10px;display:none;">
 
-    <!-- UPLOAD -->
-    <div class="upload-box">
-      <input type="file" accept="image/*" onchange="previewUpload(event)">
-      <img id="previewImg">
-    </div>
-
-    <br>
+    <br><br>
 
     <button class="save" onclick="criar()">Criar</button>
     <button class="del" onclick="fecharModal()">Fechar</button>
