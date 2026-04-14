@@ -467,7 +467,7 @@ function enviarPedido() {
 }
 
 function acessarAdmin() {
-    if (prompt("Senha:") === "123456")
+    if (btoa(prompt("Senha:")) === "MTIzNDU2")
         window.location.href = "admin.html";
 }
 
