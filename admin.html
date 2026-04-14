@@ -148,178 +148,203 @@ button{
 <div class="toast" id="toast"></div>
 
 <script>
-const URL = "https://script.google.com/macros/s/AKfycbxs8MmNSgkb43F1vZDCtFE6AiRvWtjlTp67QxpLMcfA9mnWInHQOBm8iZuEqpF6Ctg0hA/exec";
+const URL = "COLE_AQUI_O_SEU_LINK_DO_DEPLOY_GERADO_PELO_GOOGLE";
 const CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSochNnj1ihxWjFv_87wiDS9-ZakV1LrmdQWfZMAZMGRHf9pqCBXKQpkfQ6BDMlxwYE8E2JkWUVRYOG/pub?gid=1893895788&single=true&output=csv";
 
-let dados=[]; 
-let filtro="";
+let dados = []; 
+let filtro = "";
 
-// ===== UTILS =====
-function toast(msg){
-  const t=document.getElementById("toast");
-  t.innerText=msg;
-  t.style.display="block";
-  setTimeout(()=>t.style.display="none",2000);
+// ===== 1. FUNÇÕES DE UTILIDADE E INTERFACE =====
+function toast(msg) {
+  const t = document.getElementById("toast");
+  t.innerText = msg;
+  t.style.display = "block";
+  setTimeout(() => t.style.display = "none", 2000);
 }
 
-function abrirModal(){
-  document.getElementById("modal").style.display="flex";
-}
-function fecharModal(){
-  document.getElementById("modal").style.display="none";
+function abrirModal() {
+  document.getElementById("modal").style.display = "flex";
 }
 
-function filtrar(v){
-  filtro=v;
+function fecharModal() {
+  document.getElementById("modal").style.display = "none";
+}
+
+function filtrar(v) {
+  filtro = v;
   render();
 }
 
-// ===== CSV =====
-function parseCSV(text){
-  const lines = text.split(/\r?\n/).filter(l=>l.trim());
-  return lines.map(line=>{
-    const cells=line.match(/(".*?"|[^",\r\n]+)(?=\s*,|\s*$)/g)||[];
-    return cells.map(c=>c.replace(/^"|"$/g,'').trim());
+function getImg(m) {
+  if (!m) return "imagens/sem-foto.jpg";
+  if (m.startsWith("http")) return m;
+  return `https://drive.google.com/uc?export=view&id=${m}`;
+}
+
+// ===== 2. PROCESSAMENTO DE DADOS (CSV) =====
+function parseCSV(text) {
+  const lines = text.split(/\r?\n/).filter(l => l.trim());
+  return lines.map(line => {
+    const cells = line.match(/(".*?"|[^",\r\n]+)(?=\s*,|\s*$)/g) || [];
+    return cells.map(c => c.replace(/^"|"$/g, '').trim());
   });
 }
 
-// ===== LOAD =====
-  
-async function carregar(){
+// ===== 3. FUNÇÃO DE RENDERIZAÇÃO (Onde estava o erro) =====
+function render() {
+  const el = document.getElementById("lista");
+  el.innerHTML = "";
+
+  const itensFiltrados = dados.filter(d => 
+    d.nome.toLowerCase().includes(filtro.toLowerCase())
+  );
+
+  itensFiltrados.forEach(d => {
+    // Cria um ID seguro para os campos baseado no nome (remove espaços e acentos)
+    const idSeguro = d.nome.replace(/\W/g, "_");
+
+    el.innerHTML += `
+    <div class="card">
+      <img src="${getImg(d.midia)}" class="img" onerror="this.src='imagens/sem-foto.jpg'">
+
+      <label>Nome:</label>
+      <input id="nome_${idSeguro}" value="${d.nome}" readonly style="background:#f0f0f0">
+      
+      <label>Qtd:</label>
+      <input id="qtd_${idSeguro}" value="${d.qtd}" type="number">
+      
+      <label>ID da Mídia (Drive):</label>
+      <input id="midia_${idSeguro}" value="${d.midia}">
+      
+      <label>Camadas:</label>
+      <input id="cam_${idSeguro}" value="${d.camadas}">
+      
+      <label>Cores:</label>
+      <input id="cor_${idSeguro}" value="${d.cores}">
+      
+      <label>Padrão:</label>
+      <input id="pad_${idSeguro}" value="${d.padrao}">
+
+      <div class="actions">
+        <button class="save" onclick="salvar('${d.nome}')">Salvar Alterações</button>
+        <button class="del" onclick="excluir('${d.nome}')">Excluir</button>
+      </div>
+    </div>`;
+  });
+}
+
+// ===== 4. CARREGAMENTO INICIAL =====
+async function carregar() {
   try {
-    const resposta = await fetch(CSV + "&t=" + Date.now());
-    const texto = await resposta.text();
-    
-    console.log("CSV carregado com sucesso");
-    
-    const linhas = parseCSV(texto);
-    linhas.shift(); // Remove o cabeçalho
+    const r = await fetch(CSV + "&t=" + Date.now());
+    const t = await r.text();
+    const linhas = parseCSV(t);
 
-    dados = linhas.map(l => ({
-      nome: l[0] || "",
-      camadas: l[1] || "",
-      cores: l[2] || "",
-      padrao: l[3] || "",
-      qtd: l[5] || "0",
-      midia: l[6] || ""
-    }));
-
-    render();
-  } catch (erro) {
-    console.error("Erro ao carregar CSV:", erro);
-    toast("Erro ao carregar dados.");
+    if (linhas.length > 0) {
+      linhas.shift(); // Remove cabeçalho
+      dados = linhas.map(l => ({
+        nome: l[0] || "",
+        camadas: l[1] || "",
+        cores: l[2] || "",
+        padrao: l[3] || "",
+        qtd: l[5] || "0",
+        midia: l[6] || ""
+      }));
+      render();
+    }
+  } catch (e) {
+    console.error("Erro ao carregar CSV:", e);
+    toast("Erro ao carregar dados da planilha.");
   }
 }
 
-// ===== CREATE =====
-
+// ===== 5. AÇÕES (COMUNICAÇÃO COM GOOGLE SCRIPT) =====
 async function criar() {
   try {
-    // 1. Captura os elementos do DOM (Document Object Model)
-    const inputNome = document.getElementById("n_nome");
-    const inputQtd = document.getElementById("n_qtd");
-    const inputCamadas = document.getElementById("n_camadas");
-    const inputCores = document.getElementById("n_cores");
-    const inputPadrao = document.getElementById("n_padrao");
-    const inputFile = document.getElementById("n_imagem");
+    const nome = document.getElementById("n_nome").value;
+    if (!nome) return toast("Nome obrigatório!");
 
-    // 2. Validação simples: não deixa enviar sem nome
-    if (!inputNome.value) {
-      toast("O nome da ID é obrigatório!");
-      return;
-    }
+    const file = document.getElementById("n_imagem").files[0];
+    let base64 = "", mime = "", fileName = "";
 
-    let base64 = "", mime = "", name = "";
-
-    // 3. Processamento da Imagem (se houver uma selecionada)
-    if (inputFile.files[0]) {
-      const file = inputFile.files[0];
+    if (file) {
       base64 = await new Promise(res => {
-        const reader = new FileReader();
-        reader.onload = () => res(reader.result.split(",")[1]);
-        reader.readAsDataURL(file);
+        const r = new FileReader();
+        r.onload = () => res(r.result.split(",")[1]);
+        r.readAsDataURL(file);
       });
       mime = file.type;
-      name = file.name;
+      fileName = file.name;
     }
 
-    // 4. Bloco de envio para o Google Apps Script
-    // Usamos URLSearchParams para formatar os dados como um formulário POST
     const res = await fetch(URL, {
       method: "POST",
       body: new URLSearchParams({
         action: "create",
-        nome: inputNome.value,
-        qtd: inputQtd.value,
-        camadas: inputCamadas.value,
-        cores: inputCores.value,
-        padrao: inputPadrao.value,
+        nome: nome,
+        qtd: document.getElementById("n_qtd").value,
+        camadas: document.getElementById("n_camadas").value,
+        cores: document.getElementById("n_cores").value,
+        padrao: document.getElementById("n_padrao").value,
         imageBase64: base64,
         mimeType: mime,
-        fileName: name
+        fileName: fileName
       })
     });
 
     const txt = await res.text();
-
-    // 5. Feedback para o usuário
     if (txt.includes("OK")) {
-      toast("ID Criada com Sucesso!");
+      toast("Criado!");
       fecharModal();
-      carregar(); // Recarrega a lista para mostrar a nova ID
-      
-      // Limpa os campos para a próxima criação
-      inputNome.value = "";
-      inputQtd.value = "";
-      inputFile.value = "";
+      carregar();
     } else {
-      toast("Erro no servidor: " + txt);
+      toast("Erro: " + txt);
     }
-
   } catch (e) {
-    console.error(e);
-    toast("Erro ao conectar com o servidor.");
+    toast("Erro na conexão!");
   }
- }
-      
-// ===== UPDATE =====
-async function salvar(nome){
-  const id=nome.replace(/\W/g,"_");
-
-  const res = await fetch(URL,{
-    method:"POST",
-    body:new URLSearchParams({
-      action:"update",
-      nome:nome,
-      qtd:document.getElementById("qtd_"+id).value,
-      camadas:document.getElementById("cam_"+id).value,
-      cores:document.getElementById("cor_"+id).value,
-      padrao:document.getElementById("pad_"+id).value,
-      midia:document.getElementById("midia_"+id).value
-    })
-  });
-
-  const txt=await res.text();
-  txt.includes("OK")?toast("Salvo!"):toast("Erro!");
 }
 
-// ===== DELETE =====
-async function excluir(nome){
-  if(!confirm("Excluir?")) return;
-
-  const res = await fetch(URL,{
-    method:"POST",
-    body:new URLSearchParams({
-      action:"delete",
-      nome:nome
-    })
-  });
-
-  const txt=await res.text();
-  txt.includes("OK")?(toast("Excluído"),carregar()):toast("Erro!");
+async function salvar(nomeOriginal) {
+  try {
+    const id = nomeOriginal.replace(/\W/g, "_");
+    const res = await fetch(URL, {
+      method: "POST",
+      body: new URLSearchParams({
+        action: "update",
+        nome: nomeOriginal,
+        qtd: document.getElementById("qtd_" + id).value,
+        camadas: document.getElementById("cam_" + id).value,
+        cores: document.getElementById("cor_" + id).value,
+        padrao: document.getElementById("pad_" + id).value,
+        midia: document.getElementById("midia_" + id).value
+      })
+    });
+    const txt = await res.text();
+    txt.includes("OK") ? toast("Salvo!") : toast("Erro ao salvar");
+  } catch (e) {
+    toast("Erro de conexão");
+  }
 }
 
-// INIT
+async function excluir(nome) {
+  if (!confirm("Tem certeza que deseja excluir " + nome + "?")) return;
+  try {
+    const res = await fetch(URL, {
+      method: "POST",
+      body: new URLSearchParams({ action: "delete", nome: nome })
+    });
+    const txt = await res.text();
+    if (txt.includes("OK")) {
+      toast("Excluído!");
+      carregar();
+    }
+  } catch (e) {
+    toast("Erro ao excluir");
+  }
+}
+
+// INICIALIZAÇÃO
 carregar();
 </script>
 
