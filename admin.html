@@ -762,11 +762,12 @@ function gerarCheckboxesEspeciais(selecionadas = [], prefixo = 'n') {
   todasEspeciais.forEach(tag => {
     const checked = selecionadas.includes(tag)? 'checked' : '';
     const idSeguro = prefixo === 'n'? 'nova' : prefixo;
-    container.innerHTML += `
-      <label style="display:flex; align-items:center; gap:6px; font-size:13px; font-weight:500; cursor:pointer; background:white; padding:6px 12px; border-radius:20px; border:1.5px solid #e5e0d8;">
-        <input type="checkbox" value="${tag}" ${checked} onchange="atualizarEspeciais('${prefixo}')" style="width:16px; height:16px; accent-color:var(--accent); cursor:pointer;">
-        ${tag}
-      </label>`;
+    container.className = 'especiais-wrap';
+container.innerHTML += `
+  <label>
+    <input type="checkbox" value="${tag}" ${checked} onchange="atualizarEspeciais('${prefixo}')">
+    ${tag}
+  </label>`;
   });
 }
 
