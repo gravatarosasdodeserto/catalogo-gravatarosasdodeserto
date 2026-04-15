@@ -24,8 +24,9 @@
             padding-bottom: 230px;
         }
 
+/* ===== CABEÇALHO FIXO COM FAIXA BRANCA ===== */
 .topbar {
-    padding: 30px 0;
+    padding: 15px 0; /* Padding menor para economizar espaço */
     position: sticky;
     top: 0;
     z-index: 1100;
@@ -33,12 +34,12 @@
     justify-content: center;
     align-items: center;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    background: transparent; /* Fundo principal transparente para mostrar a foto */
+    background: transparent;
     border-bottom: 2px solid #ffffff;
-    overflow: hidden; /* Garante que a faixa não escape das bordas */
+    overflow: hidden;
+    min-height: 80px; /* Garante uma altura mínima razoável */
 }
 
-/* A FOTO DO CABEÇALHO */
 .topbar::before {
     content: "";
     position: absolute;
@@ -46,29 +47,41 @@
     background-image: url('imagens/gravata-cabecalho.jpg');
     background-size: cover;
     background-position: top center;
-    z-index: -2; /* Fica no fundo de tudo */
+    z-index: -2;
 }
 
-/* A FAIXA BRANCA TRANSPARENTE (NOVA) */
+/* A FAIXA BRANCA - Ajustada para ser proporcional */
 .topbar::after {
     content: "";
     position: absolute;
     left: 0;
     width: 100%;
-    height: 180px;
-    background: rgba(255, 255, 255, 0.6); /* Branco com 60% de opacidade */
-    backdrop-filter: blur(5px); /* Efeito de vidro opcional */
+    height: 70%; /* Em vez de PX, usamos % para ela nunca tapar a foto toda */
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(5px);
     -webkit-backdrop-filter: blur(5px);
-    z-index: -1; /* Fica na frente da foto, mas atrás do logo */
+    z-index: -1;
+}
+    .logo { position: relative; z-index: 3; }
+
+    .logo img { 
+    width: 100px; /* Logo menor por padrão */
+    height: auto; 
+    filter: drop-shadow(0 4px 15px rgba(0,0,0,0.4)); 
+    cursor: pointer; 
 }
 
-        .logo { position: relative; z-index: 3; }
-        .logo img { width: 150px; height: auto; filter: drop-shadow(0 4px 15px rgba(0,0,0,0.4)); cursor: pointer; }
+/* AJUSTES PARA TELAS GRANDES (PC) */
+@media (min-width: 768px) {
+    .topbar { padding: 30px 0; }
+    .logo img { width: 150px; }
+    .topbar::after { height: 130px; } /* No PC ela pode ser maior */
+}
 
-        /* ===== SEÇÃO DE FILTROS (AJUSTADA) ===== */
-        .secao-filtros {
+/* ===== SEÇÃO DE FILTROS ===== */
+.secao-filtros {
     position: sticky;
-    top: 112px; /* ESTE VALOR É A CHAVE: Deve ser a altura exata da sua topbar */
+    top: 80px; /* Valor inicial para evitar pulos, o JS corrigirá o resto */
     z-index: 1000;
     padding: 6px 15px;
     background: #ffffff;
