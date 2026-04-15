@@ -556,7 +556,8 @@
 
 let dados = [];
 let filtro = "";
-let temAlteracoesNaoSalvas = false; // Flag global
+let temAlteracoesNaoSalvas = false;
+let idParaExcluir = "";
 const URL = "https://script.google.com/macros/s/AKfycbxs8MmNSgkb43F1vZDCtFE6AiRvWtjlTp67QxpLMcfA9mnWInHQOBm8iZuEqpF6Ctg0hA/exec";
 const CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSochNnj1ihxWjFv_87wiDS9-ZakV1LrmdQWfZMAZMGRHf9pqCBXKQpkfQ6BDMlxwYE8E2JkWUVRYOG/pub?gid=1893895788&single=true&output=csv";
 
@@ -617,6 +618,12 @@ function abrirModal() {
 }
 
 function fecharModal() { document.getElementById("modal").style.display = "none"; }
+
+function fecharModalExcluir() {
+  document.getElementById("modalExcluir").style.display = "none";
+  idParaExcluir = "";
+}
+
 function filtrar(v) { filtro = v; render(); }
 
 function parseCSV(text) {
@@ -798,7 +805,7 @@ async function carregar() {
         midia: l[6] || ""
       }));
       render();
-      temAlteracoesNaoSalvas = false; // Reseta ao carregar
+      temAlteracoesNaoSalvas = false;
     }
   } catch (e) { toast("Erro ao carregar dados."); }
 }
@@ -828,7 +835,6 @@ async function salvar(nomeOriginal) {
     btn.style.display = "none";
     btn.innerText = "Salvar";
 
-    // Verifica se ainda tem algum botão Salvar visível
     if (!document.querySelector('.save[style*="display: block"]')) {
       temAlteracoesNaoSalvas = false;
     }
@@ -840,16 +846,25 @@ async function salvar(nomeOriginal) {
   btn.disabled = false;
 }
 
-async function excluir(nome) {
-  if (!confirm("Excluir " + nome + "?")) return;
+function excluir(nome) {
+  idParaExcluir = nome;
+  document.getElementById("textoExcluir").innerHTML = `Tem certeza que quer excluir <strong>${nome}</strong>?`;
+  document.getElementById("modalExcluir").style.display = "flex";
+}
+
+async function confirmarExclusao() {
+  if (!idParaExcluir) return;
   try {
     await fetch(URL, {
       method: "POST",
-      body: new URLSearchParams({ action: "delete", nome })
+      body: new URLSearchParams({ action: "delete", nome: idParaExcluir })
     });
     toast("Excluído!");
+    fecharModalExcluir();
     carregar();
-  } catch (e) { toast("Erro ao excluir"); }
+  } catch (e) {
+    toast("Erro ao excluir");
+  }
 }
 
 async function criar() {
