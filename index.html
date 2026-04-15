@@ -647,7 +647,7 @@ let filtroTexto = "";
 let filtrosAtivos = {};
 let colunasDeFiltro = ["camadas", "cores", "padrao", "especiais"];
 
-const urlPlanilha = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSochNnj1ihxWjFv_87wiDS9-ZakV1LrmdQWfZMAZMGRHf9pqCBXKQpkfQ6BDMlxwYE8E2JkWUVRYOG/pub?gid=1893895788&single=true&output=csv&t=" + Date.now();
+const urlPlanilha = "https://script.google.com/macros/s/AKfycbxs8MmNSgkb43F1vZDCtFE6AiRvWtjlTp67QxpLMcfA9mnWInHQOBm8iZuEqpF6Ctg0hA/exec";
 
 const grid = document.getElementById("gridCatalogo");
 const drawer = document.getElementById("drawer");
@@ -681,23 +681,10 @@ function toggleDrawer() {
 
 async function carregarEstoque() {
   try {
-    const resp = await fetch(urlPlanilha);
-    const text = await resp.text();
-    const dados = parseCSV(text);
-    dados.shift();
-    estoque = {};
-    dados.forEach(l => {
-      const nome = l[0];
-      if (!nome) return;
-      estoque[nome] = {
-  camadas: l[1] || "Não inf.", // B
-  cores: l[2] || "Não inf.", // C
-  padrao: l[3] || "Não inf.", // D
-  especiais: l[4] || "Não inf.", // E
-  qtd: parseInt(l[5]) || 0, // F
-  midia: l[6] || "" // G
-};
-    });
+    const resp = await fetch(urlPlanilha + "?action=get&t=" + Date.now());
+    estoque = await resp.json();
+    if (estoque.error) throw new Error(estoque.error);
+
     gerarInterfaceFiltros();
     montarCatalogo();
 
