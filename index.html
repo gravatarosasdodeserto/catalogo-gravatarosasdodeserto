@@ -672,7 +672,8 @@
       </div>
     <div id="containerTags"></div>
 </div>
-    <input type="text" id="inputPesquisa" class="campo-busca" placeholder="Buscar ID pelo nome...">
+    <input type="text" id="inputPesquisa" class="campo-busca" placeholder="Buscar ID pelo nome..." oninput="filtrar(this.value)">
+
     <button id="btnEnviar" class="btn-whatsapp oculto" onclick="enviarPedido()"></button>
   </div>
 </div>
@@ -715,6 +716,7 @@ async function carregarEstoque() {
     montarCatalogo();
   } catch (e) {
     console.error("Erro ao carregar estoque:", e);
+    document.getElementById("gridCatalogo").innerHTML = "<p style='text-align:center; grid-column: 1/-1; padding: 50px; color: rgba(58,54,24,0.5);'>Erro ao carregar catálogo</p>";
   }
 }
 
@@ -731,7 +733,7 @@ function getOpcoesUnicas(campo) {
 }
 
 function gerarInterfaceFiltros() {
-  const drawer = document.getElementById("drawerFiltros");
+  const drawer = document.getElementById("drawer");
   if (!drawer) return;
 
   drawer.innerHTML = '<h3 style="margin:0 0 16px 0;">Filtros</h3>';
@@ -809,13 +811,13 @@ function filtrar(v) {
 }
 
 function montarCatalogo() {
-  const lista = document.getElementById("lista");
+  const lista = document.getElementById("gridCatalogo");
   if (!lista) return;
 
   lista.innerHTML = "";
 
   const itensFiltrados = Object.entries(estoque)
- .filter(([nome, d]) => {
+.filter(([nome, d]) => {
       const matchBusca = nome.toLowerCase().includes(filtro.toLowerCase());
 
       const matchFiltros = colunasDeFiltro.every(c => {
@@ -829,7 +831,7 @@ function montarCatalogo() {
 
       return matchBusca && matchFiltros && d.qtd > 0;
     })
- .sort((a, b) => a[0].localeCompare(b[0], 'pt-BR', { sensitivity: 'base' }));
+.sort((a, b) => a[0].localeCompare(b[0], 'pt-BR', { sensitivity: 'base' }));
 
   if (itensFiltrados.length === 0) {
     lista.innerHTML = "<p style='text-align:center; grid-column: 1/-1; padding: 60px; color: rgba(58,54,24,0.4);'>Nenhuma ID encontrada</p>";
@@ -840,7 +842,7 @@ function montarCatalogo() {
     const imgUrl = (!d.midia || d.midia === "")? "imagens/sem-foto.jpg" : `https://drive.google.com/thumbnail?sz=w600&id=${d.midia}`;
 
     const especiaisHTML = d.especiais.length > 0
-    ? `<div style="display:flex; flex-wrap:wrap; gap:4px; margin-top:6px; justify-content:center;">
+   ? `<div style="display:flex; flex-wrap:wrap; gap:4px; margin-top:6px; justify-content:center;">
           ${d.especiais.map(tag => `<span style="font-size:8px; background:var(--accent); color:white; padding:2px 6px; border-radius:8px; font-weight:600; text-transform:uppercase;">${tag}</span>`).join('')}
          </div>`
       : '';
