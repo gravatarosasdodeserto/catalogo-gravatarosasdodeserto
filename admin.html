@@ -56,8 +56,7 @@
         50% { transform: scale(1.05); }
     }
 
-    /* ===== CABEÇALHO PREMIUM ===== */
-   .topbar {
+  .topbar {
         padding: 35px 0;
         position: sticky;
         top: 0;
@@ -73,7 +72,7 @@
         margin-bottom: 0;
     }
 
-   .topbar::before {
+  .topbar::before {
         content: "";
         position: absolute;
         inset: 0;
@@ -90,7 +89,7 @@
         to { transform: scale(1.1); }
     }
 
-   .topbar::after {
+  .topbar::after {
         content: "";
         position: absolute;
         left: 0;
@@ -105,7 +104,7 @@
         box-shadow: inset 0 1px 0 rgba(255,255,255,0.5);
     }
 
-   .logo {
+  .logo {
         position: relative;
         z-index: 3;
         display: flex;
@@ -113,7 +112,7 @@
         animation: slideUp 0.8s ease-out 0.2s both;
     }
 
-   .logo img {
+  .logo img {
         width: 155px;
         height: auto;
         filter: drop-shadow(0 6px 20px rgba(0,0,0,0.35));
@@ -121,12 +120,11 @@
         transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-   .logo img:hover {
+  .logo img:hover {
         transform: scale(1.05) rotate(-1deg);
     }
 
-    /* BARRA BRANCA - BOTÃO SAIR */
-   .bottom-bar {
+  .bottom-bar {
         position: sticky;
         top: 160px;
         z-index: 1050;
@@ -145,7 +143,7 @@
         margin-top: -1px;
     }
 
-   .btn-voltar-admin {
+  .btn-voltar-admin {
         background: linear-gradient(135deg, var(--text-main), var(--accent-dark));
         color: white;
         display: flex;
@@ -165,24 +163,23 @@
         letter-spacing: 0.5px;
     }
 
-   .btn-voltar-admin:hover {
+  .btn-voltar-admin:hover {
         transform: translateY(-2px);
         box-shadow: 0 6px 20px rgba(58, 54, 24, 0.35);
     }
 
-   .btn-voltar-admin:active {
+  .btn-voltar-admin:active {
         transform: translateY(0);
     }
 
-    /* CONTEÚDO PRINCIPAL */
-   .container {
+  .container {
         padding: 20px;
         max-width: 1400px;
         margin: auto;
         animation: slideUp 0.6s ease-out 0.4s both;
     }
 
-   .busca {
+  .busca {
         width: 100%;
         padding: 14px 24px;
         border-radius: 50px;
@@ -198,21 +195,20 @@
         box-shadow: var(--shadow-sm);
     }
 
-   .busca:focus {
+  .busca:focus {
         border-color: var(--accent);
         box-shadow: 0 0 0 4px rgba(160, 140, 107, 0.1), var(--shadow-md);
         transform: scale(1.01);
         background: white;
     }
 
-    /* GRID E CARDS */
     #lista {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
         gap: 22px;
     }
 
-   .card {
+  .card {
         background: rgba(255, 255, 255, 0.95);
         backdrop-filter: blur(12px);
         border-radius: 24px;
@@ -226,12 +222,12 @@
         animation: slideUp 0.5s ease-out both;
     }
 
-   .card:hover {
+  .card:hover {
         transform: translateY(-6px);
         box-shadow: var(--shadow-lg);
     }
 
-   .img-container {
+  .img-container {
         position: relative;
         width: 100%;
         aspect-ratio: 1/1;
@@ -240,7 +236,7 @@
         overflow: hidden;
     }
 
-   .img {
+  .img {
         width: 100%;
         height: 100%;
         object-fit: cover;
@@ -249,11 +245,11 @@
         transition: transform 0.4s ease;
     }
 
-   .card:hover .img {
+  .card:hover.img {
         transform: scale(1.05);
     }
 
-   .edit-badge {
+  .edit-badge {
         position: absolute;
         bottom: 10px;
         right: 10px;
@@ -271,12 +267,12 @@
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-   .edit-badge:hover {
+  .edit-badge:hover {
         transform: scale(1.15) rotate(15deg);
         box-shadow: 0 6px 18px rgba(0,0,0,0.35);
     }
 
-   .file-input { display: none; }
+  .file-input { display: none; }
 
     h4 {
         margin: 6px 0 18px;
@@ -315,13 +311,13 @@
         box-shadow: 0 0 0 3px rgba(160, 140, 107, 0.1);
     }
 
-   .row {
+  .row {
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 12px;
     }
 
-   .actions {
+  .actions {
         display: flex;
         gap: 10px;
         margin-top: 20px;
@@ -340,31 +336,31 @@
         letter-spacing: 0.5px;
     }
 
-   .save {
+  .save {
         background: linear-gradient(135deg, var(--ok), #3d7a37);
         color: #fff;
         flex: 2;
         box-shadow: 0 4px 14px rgba(45, 90, 39, 0.3);
     }
 
-   .save:hover {
+  .save:hover {
         transform: translateY(-2px);
         box-shadow: 0 6px 20px rgba(45, 90, 39, 0.4);
     }
 
-   .del {
+  .del {
         background: rgba(245, 243, 240, 0.8);
         color: var(--danger);
         flex: 1;
         border: 1.5px solid rgba(139, 45, 45, 0.2);
     }
 
-   .del:hover {
+  .del:hover {
         background: rgba(139, 45, 45, 0.1);
         transform: translateY(-2px);
     }
 
-   .new {
+  .new {
         width: 100%;
         background: linear-gradient(135deg, var(--text-main), var(--accent-dark));
         color: #fff;
@@ -375,12 +371,12 @@
         box-shadow: 0 6px 20px rgba(58, 54, 24, 0.3);
     }
 
-   .new:hover {
+  .new:hover {
         transform: translateY(-3px);
         box-shadow: 0 10px 28px rgba(58, 54, 24, 0.4);
     }
 
-   .toast {
+  .toast {
         position: fixed;
         bottom: 25px;
         left: 50%;
@@ -397,7 +393,7 @@
         animation: slideUp 0.3s ease;
     }
 
-    #modal {
+    #modal, #modalExcluir {
         display: none;
         position: fixed;
         inset: 0;
@@ -409,7 +405,7 @@
         animation: fadeIn 0.3s ease;
     }
 
-   .modal-content {
+  .modal-content {
         background: rgba(255, 255, 255, 0.98);
         backdrop-filter: blur(16px);
         padding: 32px;
@@ -421,33 +417,31 @@
         animation: slideUp 0.4s ease;
     }
 
-       .modal-content h4 {
+      .modal-content h4 {
             margin-top: 0;
             font-size: 24px;
             margin-bottom: 24px;
         }
 
-        /* SKELETON */
         @keyframes shimmer {
             0% { background-position: -1000px 0; }
             100% { background-position: 1000px 0; }
         }
 
-       .skeleton {
+      .skeleton {
             background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
             background-size: 1000px 100%;
             animation: shimmer 2s infinite;
         }
 
-        /* AJUSTE PC */
        @media (min-width: 768px) {
-   .topbar { min-height: 230px; padding: 50px 0; }
-   .logo img { width: 260px; }
-   .topbar::after { height: 175px; }
-   .bottom-bar { top: 230px; margin-top: -1px; }
+  .topbar { min-height: 230px; padding: 50px 0; }
+  .logo img { width: 260px; }
+  .topbar::after { height: 175px; }
+  .bottom-bar { top: 230px; margin-top: -1px; }
     #lista { grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); }
 }
-    
+
 .upload-progress {
     position: absolute;
     bottom: 0;
@@ -483,7 +477,7 @@
     text-transform: uppercase;
     letter-spacing: 1px;
 }
-    
+
     </style>
 </head>
 <body>
@@ -517,18 +511,29 @@
     <input id="n_nome" placeholder="Ex: TS-152">
     <div class="row">
         <div><label>Quantidade</label><input id="n_qtd" type="number" value="0"></div>
-        <div><label>Camadas</label><input id="n_camadas" placeholder="Ex: Tripla"></div>
+        <div><label>Camadas</label><div id="n_camadas_container"></div></div>
     </div>
     <label>Cores</label>
-    <input id="n_cores" placeholder="Ex: Vermelho e Preto">
+    <div id="n_cores_container"></div>
     <label>Padrão</label>
-    <input id="n_padrao" placeholder="Ex: Matizada">
+    <div id="n_padrao_container"></div>
     <label>ID da Imagem (Drive)</label>
     <input id="n_midia" placeholder="Código da foto">
     <br>
     <div class="actions">
         <button class="save" onclick="criar()">Criar ID</button>
         <button class="del" style="color:#666" onclick="fecharModal()">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<div id="modalExcluir" onclick="if(event.target == this) fecharModalExcluir()">
+  <div class="modal-content" style="text-align:center;">
+    <h4 style="margin-top:0;font-size:20px;margin-bottom:16px;">Excluir ID</h4>
+    <p id="textoExcluir" style="font-size:14px;color:rgba(58,54,24,0.8);margin-bottom:24px;"></p>
+    <div class="actions">
+        <button class="del" onclick="confirmarExclusao()" style="flex:1;">Confirmar</button>
+        <button class="save" onclick="fecharModalExcluir()" style="flex:1;background:linear-gradient(135deg,#666,#444);">Cancelar</button>
     </div>
   </div>
 </div>
@@ -561,7 +566,6 @@ let idParaExcluir = "";
 const URL = "https://script.google.com/macros/s/AKfycbxs8MmNSgkb43F1vZDCtFE6AiRvWtjlTp67QxpLMcfA9mnWInHQOBm8iZuEqpF6Ctg0hA/exec";
 const CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSochNnj1ihxWjFv_87wiDS9-ZakV1LrmdQWfZMAZMGRHf9pqCBXKQpkfQ6BDMlxwYE8E2JkWUVRYOG/pub?gid=1893895788&single=true&output=csv";
 
-// Alerta ao tentar fechar/sair da página
 window.addEventListener('beforeunload', (e) => {
     if (temAlteracoesNaoSalvas) {
         e.preventDefault();
@@ -570,7 +574,6 @@ window.addEventListener('beforeunload', (e) => {
     }
 });
 
-// Intercepta clique no "Sair do Painel"
 document.addEventListener('DOMContentLoaded', () => {
     document.querySelector('.btn-voltar-admin').addEventListener('click', (e) => {
         if (temAlteracoesNaoSalvas) {
@@ -611,9 +614,9 @@ function criarSelect(id, valorAtual, opcoes) {
 }
 
 function abrirModal() {
-  document.getElementById("n_camadas").outerHTML = criarSelect('n_camadas', '', getOpcoesUnicas('camadas'));
-  document.getElementById("n_cores").outerHTML = criarSelect('n_cores', '', getOpcoesUnicas('cores'));
-  document.getElementById("n_padrao").outerHTML = criarSelect('n_padrao', '', getOpcoesUnicas('padrao'));
+  document.getElementById("n_camadas_container").innerHTML = criarSelect('n_camadas', '', getOpcoesUnicas('camadas'));
+  document.getElementById("n_cores_container").innerHTML = criarSelect('n_cores', '', getOpcoesUnicas('cores'));
+  document.getElementById("n_padrao_container").innerHTML = criarSelect('n_padrao', '', getOpcoesUnicas('padrao'));
   document.getElementById("modal").style.display = "flex";
 }
 
@@ -868,7 +871,6 @@ async function confirmarExclusao() {
 }
 
 async function criar() {
-    const nome = document.getElementById("n_nome").value;
     const btn = document.querySelector("#modal.save");
     if(!nome) return alert("Digite o nome");
 
