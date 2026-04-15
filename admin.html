@@ -735,7 +735,11 @@ function parseCSV(text) {
 function render() {
   const el = document.getElementById("lista");
   el.innerHTML = "";
-  const itensFiltrados = dados.filter(d => d.nome.toLowerCase().includes(filtro.toLowerCase()));
+
+  // Filtra e mantém ordenação alfabética
+  const itensFiltrados = dados
+   .filter(d => d.nome.toLowerCase().includes(filtro.toLowerCase()))
+   .sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR', { sensitivity: 'base' }));
 
   if (itensFiltrados.length === 0) {
     el.innerHTML = "<p style='text-align:center; grid-column: 1/-1; padding: 60px; color: rgba(58,54,24,0.4);'>Nenhuma ID encontrada</p>";
@@ -758,7 +762,7 @@ function render() {
     <div class="upload-progress-bar" id="progressBar_${idSeguro}"></div>
   </div>
   <label class="edit-badge" for="file_${idSeguro}">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="19" height="19"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="19" height="19"><path d="M17 3a2.828 2.828 0 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
   </label>
   <input type="file" id="file_${idSeguro}" class="file-input" accept="image/*" onchange="uploadFoto(this, '${idSeguro}')">
 </div>
@@ -800,7 +804,6 @@ function render() {
     el.appendChild(card);
   });
 }
-
 async function uploadFotoNova(input) {
   if (!input.files ||!input.files[0]) return;
   const file = input.files[0];
@@ -960,12 +963,16 @@ async function carregar() {
         qtd: l[5] || "0",
         midia: l[6] || ""
       }));
+
+      // Ordena alfabeticamente ignorando maiúscula/minúscula e acentos
+      dados.sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR', { sensitivity: 'base' }));
+
       render();
       temAlteracoesNaoSalvas = false;
     }
   } catch (e) { toast("Erro ao carregar dados."); }
 }
-
+    
 async function salvar(nomeOriginal) {
   const id = nomeOriginal.replace(/\W/g, "_");
   const card = document.getElementById("qtd_" + id).closest('.card');
