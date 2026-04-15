@@ -557,44 +557,46 @@ function render() {
     card.className = 'card';
     card.style.animationDelay = `${index * 0.05}s`;
     card.innerHTML = `
+  <div>
+    <div class="img-container">
+      <img src="${imgUrl}" class="img" id="img_${idSeguro}" onerror="this.src='imagens/sem-foto.jpg'">
+      <label class="edit-badge" for="file_${idSeguro}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="19" height="19"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
+      </label>
+      <input type="file" id="file_${idSeguro}" class="file-input" accept="image/*" onchange="uploadFoto(this, '${idSeguro}')">
+    </div>
+    
+    <input id="midia_${idSeguro}" value="${d.midia}" type="hidden">
+    <div style="font-size:9px; color:rgba(58,54,24,0.4); text-align:center; margin:-6px 0 10px; font-weight:500; word-break:break-all; opacity:0.7;">
+      ${d.midia && d.midia !== "Não inf." ? `${d.midia}` : 'sem foto'}
+    </div>
+
+    <h4>${d.nome}</h4>
+    <input id="nome_${idSeguro}" value="${d.nome}" type="hidden">
+    
+    <label>Quantidade em Estoque</label>
+    <input id="qtd_${idSeguro}" value="${d.qtd}" type="number">
+
+    <div class="row">
       <div>
-        <div class="img-container">
-          <img src="${imgUrl}" class="img" id="img_${idSeguro}" onerror="this.src='imagens/sem-foto.jpg'">
-          <label class="edit-badge" for="file_${idSeguro}">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="19" height="19"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
-          </label>
-          <input type="file" id="file_${idSeguro}" class="file-input" accept="image/*" onchange="uploadFoto(this, '${idSeguro}')">
-        </div>
-
-        <h4>${d.nome}</h4>
-        <input id="nome_${idSeguro}" value="${d.nome}" type="hidden">
-        <label>Quantidade em Estoque</label>
-        <input id="qtd_${idSeguro}" value="${d.qtd}" type="number">
-        <input id="midia_${idSeguro}" value="${d.midia}" type="hidden">
-<div style="font-size:9px; color:rgba(58,54,24,0.4); text-align:center; margin:8px 0 4px; font-weight:500; word-break:break-all;">
-  ${d.midia && d.midia !== "Não inf." ? `ID: ${d.midia}` : 'Sem foto'}
-</div>
-
-        <div class="row">
-          <div>
-            <label>Camadas</label>
-            <input id="cam_${idSeguro}" value="${d.camadas}">
-          </div>
-          <div>
-             <label>Cores</label>
-             <input id="cor_${idSeguro}" value="${d.cores}">
-          </div>
-        </div>
-
-        <label>Padrão</label>
-        <input id="pad_${idSeguro}" value="${d.padrao}">
+        <label>Camadas</label>
+        <input id="cam_${idSeguro}" value="${d.camadas}">
       </div>
-
-      <div class="actions">
-        <button class="save" onclick="salvar('${d.nome}')">Salvar</button>
-        <button class="del" onclick="excluir('${d.nome}')">Excluir</button>
+      <div>
+         <label>Cores</label>
+         <input id="cor_${idSeguro}" value="${d.cores}">
       </div>
-    `;
+    </div>
+
+    <label>Padrão</label>
+    <input id="pad_${idSeguro}" value="${d.padrao}">
+  </div>
+
+  <div class="actions">
+    <button class="save" onclick="salvar('${d.nome}')">Salvar</button>
+    <button class="del" onclick="excluir('${d.nome}')">Excluir</button>
+  </div>
+`;
     el.appendChild(card);
   });
 }
