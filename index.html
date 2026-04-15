@@ -24,51 +24,46 @@
             padding-bottom: 230px;
         }
 
-              /* ===== CABEÇALHO ===== */
-        .topbar {
-            padding: 20px 0;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            
-            /* Barra branca com transparência */
-            background-color: rgba(255, 255, 255, 0.9); 
-            
-            /* Efeito de vidro embaçado */
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            
-            /* Sombra suave para separar do conteúdo */
-            border-bottom: 1px solid rgba(0,0,0,0.08);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-        }
+       /* ===== CABEÇALHO ===== */
+.topbar {
+    padding: 50px 0;
+    position: sticky;
+    top: 0;
+    z-index: 1000; /* Aumentado para garantir que fique sobre tudo */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.18);
+    overflow: hidden;
+    /* A cor branca da barra fica aqui */
+    background-color: rgba(255, 255, 255, 0.85); 
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 2px solid #ffffff;
+}
 
-        /* Se você não quiser a imagem de fundo atrás da logo, 
-           apague ou deixe esse bloco vazio */
+.topbar::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url('imagens/gravata-cabecalho.jpg');
+    background-size: cover;
+    background-position: top center;
+    z-index: -1; /* A foto vai para trás, permitindo que o branco apareça */
+}
+
         .topbar::before {
             content: "";
             position: absolute;
             inset: 0;
-            z-index: -1;
+            background-image: url('imagens/gravata-cabecalho.jpg');
+            background-size: cover;
+            background-position: top center;
+            z-index: 1;
         }
 
-        .logo { 
-            position: relative; 
-            z-index: 3; 
-            display: flex;
-            justify-content: center;
-        }
-
-        .logo img { 
-            width: 140px; 
-            height: auto; 
-            filter: drop-shadow(0 2px 5px rgba(0,0,0,0.1)); 
-            cursor: pointer; 
-        }
-
+        .logo { position: relative; z-index: 3; }
+        .logo img { width: 150px; height: auto; filter: drop-shadow(0 4px 15px rgba(0,0,0,0.4)); cursor: pointer; }
 
         /* ===== SEÇÃO DE FILTROS (AJUSTADA) ===== */
         .secao-filtros {
