@@ -55,7 +55,7 @@
         50% { transform: scale(1.05); }
     }
 
- .topbar {
+.topbar {
         padding: 35px 0;
         position: sticky;
         top: 0;
@@ -71,7 +71,7 @@
         margin-bottom: 0;
     }
 
- .topbar::before {
+.topbar::before {
         content: "";
         position: absolute;
         inset: 0;
@@ -88,7 +88,7 @@
         to { transform: scale(1.1); }
     }
 
- .topbar::after {
+.topbar::after {
         content: "";
         position: absolute;
         left: 0;
@@ -103,7 +103,7 @@
         box-shadow: inset 0 1px 0 rgba(255,255,255,0.5);
     }
 
- .logo {
+.logo {
         position: relative;
         z-index: 3;
         display: flex;
@@ -111,7 +111,7 @@
         animation: slideUp 0.8s ease-out 0.2s both;
     }
 
- .logo img {
+.logo img {
         width: 155px;
         height: auto;
         filter: drop-shadow(0 6px 20px rgba(0,0,0,0.35));
@@ -119,11 +119,11 @@
         transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
- .logo img:hover {
+.logo img:hover {
         transform: scale(1.05) rotate(-1deg);
     }
 
- .admin-access {
+.admin-access {
         position: absolute;
         right: 20px;
         top: 50%;
@@ -145,19 +145,19 @@
         box-shadow: var(--shadow-sm);
     }
 
- .admin-access:hover {
+.admin-access:hover {
         background: rgba(255, 255, 255, 0.95);
         transform: translateY(-50%) rotate(90deg) scale(1.1);
         box-shadow: var(--shadow-md);
     }
 
- .admin-access svg {
+.admin-access svg {
         width: 18px;
         height: 18px;
         opacity: 0.8;
     }
 
- .secao-filtros {
+.secao-filtros {
         position: sticky;
         top: 160px;
         z-index: 1000;
@@ -175,7 +175,7 @@
         margin-top: -1px;
     }
 
- .filtros-topo-wrapper {
+.filtros-topo-wrapper {
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -183,7 +183,7 @@
         gap: 12px;
     }
 
- .resumo-filtros {
+.resumo-filtros {
         display: flex;
         flex-wrap: nowrap;
         overflow-x: auto;
@@ -192,9 +192,9 @@
         padding-right: 10px;
         scrollbar-width: none;
     }
- .resumo-filtros::-webkit-scrollbar { display: none; }
+.resumo-filtros::-webkit-scrollbar { display: none; }
 
- .tag-filtro-ativa {
+.tag-filtro-ativa {
         font-size: 9px;
         background: linear-gradient(135deg, var(--text-main), var(--accent-dark));
         color: white;
@@ -212,18 +212,18 @@
         animation: slideUp 0.3s ease-out;
     }
 
- .tag-filtro-ativa:hover {
+.tag-filtro-ativa:hover {
         transform: translateY(-2px);
         box-shadow: 0 4px 12px rgba(58, 54, 24, 0.3);
     }
 
- .tag-filtro-ativa span {
+.tag-filtro-ativa span {
         font-size: 13px;
         font-weight: 300;
         line-height: 1;
     }
 
- .btn-abrir-filtros {
+.btn-abrir-filtros {
         background: linear-gradient(135deg, var(--text-main), var(--accent-dark));
         color: white;
         display: flex;
@@ -242,18 +242,18 @@
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
- .btn-abrir-filtros:hover {
+.btn-abrir-filtros:hover {
         transform: translateY(-2px);
         box-shadow: 0 5px 16px rgba(58, 54, 24, 0.35);
     }
 
- .btn-abrir-filtros:active {
+.btn-abrir-filtros:active {
         transform: translateY(0);
     }
 
- .btn-abrir-filtros svg { width: 11px; height: 11px; }
+.btn-abrir-filtros svg { width: 11px; height: 11px; }
 
- .instrucao-texto {
+.instrucao-texto {
         width: calc(100% - 40px);
         margin: 30px auto 15px;
         padding: 18px 22px;
@@ -266,12 +266,12 @@
         box-shadow: var(--shadow-md);
         animation: slideUp 0.6s ease-out 0.4s both;
     }
- .instrucao-texto p {
+.instrucao-texto p {
         margin: 0;
         font-size: 14px;
         font-weight: 500;
     }
- .instrucao-texto span {
+.instrucao-texto span {
         display: block;
         margin-top: 6px;
         font-size: 11px;
@@ -279,7 +279,7 @@
         font-weight: 400;
     }
 
- .catalogo {
+.catalogo {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
         gap: 18px;
@@ -288,7 +288,7 @@
         animation: slideUp 0.6s ease-out 0.5s both;
     }
 
- .item {
+.item {
         background: var(--card-white);
         padding: 12px;
         border-radius: 24px;
@@ -299,7 +299,7 @@
         overflow: hidden;
     }
 
- .item::before {
+.item::before {
         content: '';
         position: absolute;
         top: 0;
@@ -311,22 +311,22 @@
         transition: opacity 0.4s ease;
     }
 
- .item:hover {
+.item:hover {
         transform: translateY(-8px) scale(1.02);
         box-shadow: var(--shadow-lg);
     }
 
- .item:hover::before {
+.item:hover::before {
         opacity: 1;
     }
 
- .item.selecionado {
+.item.selecionado {
         background: var(--card-selected)!important;
         transform: scale(0.96);
         box-shadow: 0 0 0 3px var(--accent), var(--shadow-md);
     }
 
- .item.selecionado::after {
+.item.selecionado::after {
         content: '✓';
         position: absolute;
         top: 8px;
@@ -344,7 +344,7 @@
         animation: pulse 0.4s ease;
     }
 
- .item img {
+.item img {
         width: 100%;
         aspect-ratio: 1/1;
         object-fit: cover;
@@ -353,18 +353,18 @@
         transition: transform 0.4s ease;
     }
 
- .item:hover img {
+.item:hover img {
         transform: scale(1.05);
     }
 
- .item p {
+.item p {
         text-align: center;
         font-size: 13px;
         font-weight: 600;
         margin: 12px 0 4px 0;
     }
 
- .estoque-status {
+.estoque-status {
         text-align: center;
         font-size: 10px;
         font-weight: 700;
@@ -372,17 +372,17 @@
         letter-spacing: 0.5px;
     }
 
- .disponivel {
+.disponivel {
         color: #2d5a27;
     }
 
- .produzimos {
+.produzimos {
         color: var(--accent-dark);
         opacity: 0.95;
         font-weight: 600;
     }
 
- .rodape-acoes {
+.rodape-acoes {
         position: fixed;
         bottom: 0;
         left: 0;
@@ -396,7 +396,7 @@
         box-shadow: 0 -8px 32px rgba(0,0,0,0.08);
     }
 
- .container-rodape {
+.container-rodape {
         max-width: 500px;
         margin: 0 auto;
         display: flex;
@@ -404,7 +404,7 @@
         gap: 10px;
     }
 
- .caixa-selecao {
+.caixa-selecao {
         display: none;
         background: #ffffff;
         padding: 8px 12px;
@@ -448,8 +448,8 @@
     background: rgba(139, 45, 0.1);
     transform: scale(1.05);
 }
- 
- .tag-item {
+
+.tag-item {
         font-size: 10px;
         background: linear-gradient(135deg, #f5f3f0, #ebe7e1);
         padding: 5px 11px;
@@ -462,7 +462,7 @@
         animation: slideUp 0.2s ease;
     }
 
- .tag-item button {
+.tag-item button {
         border: none;
         background: none;
         color: var(--danger);
@@ -471,11 +471,11 @@
         transition: transform 0.2s;
     }
 
- .tag-item button:hover {
+.tag-item button:hover {
         transform: scale(1.2);
     }
 
- .campo-busca {
+.campo-busca {
         width: 100%;
         padding: 14px 22px;
         border-radius: 50px;
@@ -488,13 +488,13 @@
         transition: all 0.3s ease;
     }
 
- .campo-busca:focus {
+.campo-busca:focus {
         border-color: var(--accent);
         box-shadow: 0 0 0 4px rgba(160, 140, 107, 0.1);
         transform: scale(1.01);
     }
 
- .btn-whatsapp {
+.btn-whatsapp {
         width: 100%;
         padding: 16px;
         background: linear-gradient(135deg, var(--text-main), var(--accent-dark));
@@ -509,18 +509,18 @@
         animation: slideUp 0.4s ease;
     }
 
- .btn-whatsapp:hover {
+.btn-whatsapp:hover {
         transform: translateY(-3px);
         box-shadow: 0 10px 28px rgba(58, 54, 24, 0.4);
     }
 
- .btn-whatsapp:active {
+.btn-whatsapp:active {
         transform: translateY(-1px);
     }
 
- .oculto { display: none!important; }
+.oculto { display: none!important; }
 
- .overlay {
+.overlay {
         position: fixed;
         inset: 0;
         background: rgba(0,0,0,0.6);
@@ -530,7 +530,7 @@
         animation: fadeIn 0.3s ease;
     }
 
- .drawer-filtros {
+.drawer-filtros {
         position: fixed;
         right: -320px;
         top: 0;
@@ -546,9 +546,9 @@
         box-shadow: -12px 0 40px rgba(0,0,0,0.15);
     }
 
- .drawer-filtros.active { right: 0; }
+.drawer-filtros.active { right: 0; }
 
- .fechar-drawer {
+.fechar-drawer {
         background: rgba(255,255,255,0.6);
         border: none;
         font-size: 26px;
@@ -563,64 +563,27 @@
         backdrop-filter: blur(8px);
     }
 
- .fechar-drawer:hover {
+.fechar-drawer:hover {
         background: rgba(255,255,255,0.9);
         transform: rotate(90deg);
     }
 
- .pill {
-        padding: 7px 16px;
-        background: rgba(255, 255, 255, 0.8);
-        backdrop-filter: blur(8px);
-        border: 1.5px solid rgba(0,0,0,0.06);
-        border-radius: 50px;
-        font-size: 12px;
-        cursor: pointer;
-        margin: 5px;
-        display: inline-block;
-        font-weight: 500;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
- .pill:hover {
-        transform: translateY(-2px);
-        box-shadow: var(--shadow-sm);
-    }
-
- .pill.active {
-        background: linear-gradient(135deg, var(--text-main), var(--accent-dark));
-        color: white;
-        border-color: transparent;
-        box-shadow: 0 4px 12px rgba(58, 54, 24, 0.3);
-    }
-
-    @keyframes shimmer {
-        0% { background-position: -1000px 0; }
-        100% { background-position: 1000px 0; }
-    }
-
- .skeleton {
-        background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0 75%);
-        background-size: 1000px 100%;
-        animation: shimmer 2s infinite;
-    }
-
     @media (min-width: 768px) {
-     .topbar {
+    .topbar {
             padding: 50px 0;
             min-height: 230px;
         }
-     .logo img {
+    .logo img {
             width: 260px;
         }
-     .topbar::after {
+    .topbar::after {
             height: 175px;
         }
-     .secao-filtros {
+    .secao-filtros {
             top: 230px;
             margin-top: -1px;
         }
-     .catalogo { grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); }
+    .catalogo { grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); }
     }
 </style>
 </head>
@@ -746,33 +709,63 @@ async function carregarEstoque() {
   }
 }
 
+function getOpcoesUnicas(campo) {
+  const valores = new Set();
+  Object.values(estoque).forEach(item => {
+    if (item[campo] && item[campo]!== "Não inf." && item[campo].trim()) {
+      if (campo === 'especiais') {
+        item[campo].split(',').map(v => v.trim()).filter(v => v).forEach(v => valores.add(v));
+      } else {
+        valores.add(item[campo]);
+      }
+    }
+  });
+  return [...valores].sort();
+}
+
 function gerarInterfaceFiltros() {
   drawer.innerHTML = '<button class="fechar-drawer" onclick="toggleDrawer()">&times;</button><h3 style="margin-top:0; font-size: 22px;">Filtros</h3>';
 
   // Filtro de Disponibilidade
   let htmlDisponivel = `<div style="margin-bottom: 20px;"><p style="font-size:11px; font-weight:700; margin-bottom:12px; text-transform: uppercase; letter-spacing: 1px; opacity: 0.6;">DISPONIBILIDADE</p>`;
-  htmlDisponivel += `<div class="pill ${!filtrosAtivos['disponivel']? 'active' : ''}" onclick="aplicarFiltro('disponivel', '')">Todas</div>`;
-  htmlDisponivel += `<div class="pill ${filtrosAtivos['disponivel'] === 'sim'? 'active' : ''}" onclick="aplicarFiltro('disponivel', 'sim')">Somente disponíveis</div>`;
+  const dispAtivo = filtrosAtivos['disponivel'] && filtrosAtivos['disponivel'].includes('sim');
+  htmlDisponivel += `<label style="display:flex; align-items:center; gap:10px; font-size:13px; font-weight:500; cursor:pointer; background:rgba(255,255,255,0.7); padding:8px 12px; border-radius:12px; border:1.5px solid ${dispAtivo? 'var(--accent)' : '#e5e0d8'};">
+    <input type="checkbox" ${dispAtivo? 'checked' : ''} onchange="aplicarFiltroCheckbox('disponivel', 'sim', this.checked)" style="width:18px; height:18px; accent-color:var(--accent); cursor:pointer;">
+    Somente disponíveis
+  </label>`;
   htmlDisponivel += `</div>`;
   drawer.innerHTML += htmlDisponivel;
 
   // Filtros normais
   colunasDeFiltro.forEach(col => {
-    const valoresUnicos = new Set();
-    Object.values(estoque).forEach(item => { if (item[col]) valoresUnicos.add(item[col]); });
+    const valoresUnicos = getOpcoesUnicas(col);
+    if (valoresUnicos.length === 0) return;
+
     let html = `<div style="margin-bottom: 20px;"><p style="font-size:11px; font-weight:700; margin-bottom:12px; text-transform: uppercase; letter-spacing: 1px; opacity: 0.6;">${col}</p>`;
-    html += `<div class="pill ${!filtrosAtivos[col]? 'active' : ''}" onclick="aplicarFiltro('${col}', '')">Todas</div>`;
-    Array.from(valoresUnicos).sort().forEach(val => {
-      html += `<div class="pill ${filtrosAtivos[col] === val? 'active' : ''}" onclick="aplicarFiltro('${col}', '${val}')">${val}</div>`;
+    html += `<div style="display:flex; flex-direction:column; gap:8px;">`;
+
+    valoresUnicos.forEach(val => {
+      const selecionado = filtrosAtivos[col] && filtrosAtivos[col].includes(val);
+      html += `<label style="display:flex; align-items:center; gap:10px; font-size:13px; font-weight:500; cursor:pointer; background:rgba(255,255,255,0.7); padding:8px 12px; border-radius:12px; border:1.5px solid ${selecionado? 'var(--accent)' : '#e5e0d8'};">
+        <input type="checkbox" value="${val}" ${selecionado? 'checked' : ''} onchange="aplicarFiltroCheckbox('${col}', '${val}', this.checked)" style="width:18px; height:18px; accent-color:var(--accent); cursor:pointer;">
+        ${val}
+      </label>`;
     });
-    html += `</div>`;
+    html += `</div></div>`;
     drawer.innerHTML += html;
   });
 }
 
-function aplicarFiltro(coluna, valor) {
-  if (valor === "" || valor === "Todas") delete filtrosAtivos[coluna];
-  else filtrosAtivos[coluna] = valor;
+function aplicarFiltroCheckbox(coluna, valor, checked) {
+  if (!filtrosAtivos[coluna]) filtrosAtivos[coluna] = [];
+
+  if (checked) {
+    if (!filtrosAtivos[coluna].includes(valor)) filtrosAtivos[coluna].push(valor);
+  } else {
+    filtrosAtivos[coluna] = filtrosAtivos[coluna].filter(v => v!== valor);
+    if (filtrosAtivos[coluna].length === 0) delete filtrosAtivos[coluna];
+  }
+
   gerarInterfaceFiltros();
   atualizarTagsFiltros();
   montarCatalogo();
@@ -781,22 +774,18 @@ function aplicarFiltro(coluna, valor) {
 function atualizarTagsFiltros() {
     listaFiltrosAtivos.innerHTML = "";
     for (let col in filtrosAtivos) {
-        if (filtrosAtivos[col]) {
-            const tag = document.createElement("div");
-            tag.className = "tag-filtro-ativa";
-            const texto = col === 'disponivel'? 'DISPONÍVEIS' : filtrosAtivos[col].toUpperCase();
-            tag.innerHTML = `${texto} <span>&times;</span>`;
-            tag.onclick = function() { removerUmFiltro(col); };
-            listaFiltrosAtivos.appendChild(tag);
+        const valores = filtrosAtivos[col];
+        if (valores && valores.length > 0) {
+            valores.forEach(val => {
+                const tag = document.createElement("div");
+                tag.className = "tag-filtro-ativa";
+                const texto = col === 'disponivel' && val === 'sim'? 'DISPONÍVEIS' : val.toUpperCase();
+                tag.innerHTML = `${texto} <span>&times;</span>`;
+                tag.onclick = function() { aplicarFiltroCheckbox(col, val, false); };
+                listaFiltrosAtivos.appendChild(tag);
+            });
         }
     }
-}
-
-function removerUmFiltro(coluna) {
-    delete filtrosAtivos[coluna];
-    gerarInterfaceFiltros();
-    atualizarTagsFiltros();
-    montarCatalogo();
 }
 
 function montarCatalogo() {
@@ -808,11 +797,26 @@ function montarCatalogo() {
     let passa = true;
 
     // Filtro de disponibilidade
-    if (filtrosAtivos['disponivel'] === 'sim' && d.qtd <= 0) passa = false;
+    if (filtrosAtivos['disponivel'] && filtrosAtivos['disponivel'].includes('sim') && d.qtd <= 0) passa = false;
 
     // Filtros normais
     for (let f in filtrosAtivos) {
-      if (f!== 'disponivel' && d[f]!== filtrosAtivos[f]) passa = false;
+      if (f === 'disponivel') continue;
+      const valoresSelecionados = filtrosAtivos[f];
+      if (!valoresSelecionados || valoresSelecionados.length === 0) continue;
+
+      if (f === 'especiais') {
+        const especiaisArray = d.especiais.split(',').map(s => s.trim()).filter(s => s);
+        if (!valoresSelecionados.some(v => especiaisArray.includes(v))) {
+          passa = false;
+          break;
+        }
+      } else {
+        if (!valoresSelecionados.includes(d[f])) {
+          passa = false;
+          break;
+        }
+      }
     }
     if (!passa) return;
 
@@ -846,7 +850,7 @@ function montarCatalogo() {
     grid.appendChild(card);
   });
 }
-    
+
 function atualizarPainelAcoes() {
   const btn = document.getElementById("btnEnviar");
   if (selecionados.size > 0) {
@@ -862,8 +866,8 @@ function atualizarPainelAcoes() {
 
 function atualizarTags() {
   containerTags.innerHTML = "";
-  document.getElementById('contadorSelecao').innerText = `${selecionados.size} ${selecionados.size === 1 ? 'selecionada' : 'selecionadas'}`;
-  
+  document.getElementById('contadorSelecao').innerText = `${selecionados.size} ${selecionados.size === 1? 'selecionada' : 'selecionadas'}`;
+
   selecionados.forEach(nome => {
     const tag = document.createElement("div");
     tag.className = "tag-item";
