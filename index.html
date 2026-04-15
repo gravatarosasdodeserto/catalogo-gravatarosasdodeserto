@@ -24,20 +24,34 @@
             padding-bottom: 230px;
         }
 
-        /* ===== CABEÇALHO ===== */
-        .topbar {
-            padding: 50px 0;
-            position: sticky;
-            top: 0;
-            z-index: 900;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.18);
-            overflow: hidden;
-            background-color: var(--header-bg);
-            border-bottom: 2px solid #ffffff;
-        }
+       /* ===== CABEÇALHO ===== */
+.topbar {
+    padding: 50px 0;
+    position: sticky;
+    top: 0;
+    z-index: 900;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.18);
+    overflow: hidden;
+    /* Alterado para branco transparente com efeito de desfoque */
+    background-color: rgba(252, 250, 247, 0.75); 
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 2px solid #ffffff;
+}
+
+.topbar::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url('imagens/gravata-cabecalho.jpg');
+    background-size: cover;
+    background-position: top center;
+    /* Alterado para -1 para a foto ficar atrás da cor branca */
+    z-index: -1; 
+}
 
         .topbar::before {
             content: "";
