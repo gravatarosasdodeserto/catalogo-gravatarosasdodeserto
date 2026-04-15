@@ -800,6 +800,7 @@ function montarCatalogo() {
     if (filtrosAtivos['disponivel'] && filtrosAtivos['disponivel'].includes('sim') && d.qtd <= 0) passa = false;
 
     // Filtros normais
+    // Filtros normais
     for (let f in filtrosAtivos) {
       if (f === 'disponivel') continue;
       const valoresSelecionados = filtrosAtivos[f];
@@ -807,11 +808,13 @@ function montarCatalogo() {
 
       if (f === 'especiais') {
         const especiaisArray = d.especiais.split(',').map(s => s.trim()).filter(s => s);
-        if (!valoresSelecionados.some(v => especiaisArray.includes(v))) {
+        // AND: a ID precisa ter TODAS as tags selecionadas
+        if (!valoresSelecionados.every(v => especiaisArray.includes(v))) {
           passa = false;
           break;
         }
       } else {
+        // OR: pra campos únicos como camadas/cores/padrao, mostra se bate com QUALQUER uma marcada
         if (!valoresSelecionados.includes(d[f])) {
           passa = false;
           break;
