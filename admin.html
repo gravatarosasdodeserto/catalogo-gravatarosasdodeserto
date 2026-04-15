@@ -497,8 +497,13 @@
 <div class="toast" id="toast"></div>
 
 <script>
+<script>
 // BLOQUEIO DE ACESSO
 (function() {
+    if (sessionStorage.getItem("adminLogado") === "true") {
+        return; // já logou pelo index
+    }
+    
     const senhaCorreta = "MTQwNTA4bGU=";
     const tentativa = prompt("Área restrita. Digite a senha:");
     
@@ -507,9 +512,10 @@
         window.location.href = "index.html";
         return;
     }
+    
+    sessionStorage.setItem("adminLogado", "true");
 })();
 
-// resto do código continua aqui...
 let dados = [];
 let filtro = "";
 const URL = "https://script.google.com/macros/s/AKfycbxs8MmNSgkb43F1vZDCtFE6AiRvWtjlTp67QxpLMcfA9mnWInHQOBm8iZuEqpF6Ctg0hA/exec";
