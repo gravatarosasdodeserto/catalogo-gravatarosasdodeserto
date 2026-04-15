@@ -687,7 +687,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
-    
+
 function toast(msg) {
   const t = document.getElementById("toast");
   t.innerText = msg;
@@ -707,7 +707,7 @@ function mostrarBotaoSalvar(idSeguro) {
 }
 
 function criarSelect(id, valorAtual, opcoes) {
-  const idSeguro = id.replace(/^(cam_|cor_|pad_|esp_)/, ''); // ADICIONEI esp_ AQUI
+  const idSeguro = id.replace(/^(cam_|cor_|pad_|esp_)/, '');
   let html = `<select id="${id}" onchange="mostrarBotaoSalvar('${idSeguro}')">`;
   html += `<option value="">Selecione...</option>`;
   opcoes.forEach(op => {
@@ -721,7 +721,6 @@ function abrirModal() {
   document.getElementById("n_camadas_container").innerHTML = criarSelect('n_camadas', '', getOpcoesUnicas('camadas'));
   document.getElementById("n_cores_container").innerHTML = criarSelect('n_cores', '', getOpcoesUnicas('cores'));
   document.getElementById("n_padrao_container").innerHTML = criarSelect('n_padrao', '', getOpcoesUnicas('padrao'));
-    document.getElementById("n_especiais_container").innerHTML = criarSelect('n_especiais', '', getOpcoesUnicas('especiais'));
   document.getElementById("modal").style.display = "flex";
 }
 
@@ -730,6 +729,7 @@ function fecharModal() {
   document.getElementById("n_nome").value = "";
   document.getElementById("n_qtd").value = "0";
   document.getElementById("n_midia").value = "";
+  document.getElementById("n_especiais").value = "";
   document.getElementById("img_nova").style.display = "none";
   document.getElementById("placeholder_nova").style.display = "flex";
 }
@@ -747,7 +747,7 @@ function confirmarSair() {
   temAlteracoesNaoSalvas = false;
   window.location.href = "index.html";
 }
-    
+
 function filtrar(v) { filtro = v; render(); }
 
 function parseCSV(text) {
@@ -762,10 +762,9 @@ function render() {
   const el = document.getElementById("lista");
   el.innerHTML = "";
 
-  // Filtra e mantém ordenação alfabética
   const itensFiltrados = dados
-   .filter(d => d.nome.toLowerCase().includes(filtro.toLowerCase()))
-   .sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR', { sensitivity: 'base' }));
+  .filter(d => d.nome.toLowerCase().includes(filtro.toLowerCase()))
+  .sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR', { sensitivity: 'base' }));
 
   if (itensFiltrados.length === 0) {
     el.innerHTML = "<p style='text-align:center; grid-column: 1/-1; padding: 60px; color: rgba(58,54,24,0.4);'>Nenhuma ID encontrada</p>";
@@ -782,18 +781,16 @@ function render() {
     card.innerHTML = `
   <div>
     <div class="img-container">
-  <img src="${imgUrl}" class="img" id="img_${idSeguro}" onerror="this.src='imagens/sem-foto.jpg'">
-  <div class="upload-overlay" id="overlay_${idSeguro}">Enviando...</div>
-  <div class="upload-progress" id="progress_${idSeguro}">
-    <div class="upload-progress-bar" id="progressBar_${idSeguro}"></div>
-  </div>
-  <label class="edit-badge" for="file_${idSeguro}">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="19" height="19"><path d="M17 3 a 2.828 2.828 0 1 1 4 4 L7.5 20.5 2 22 l1.5 -5.5 L17 3z"></path>
-
-</svg>
-  </label>
-  <input type="file" id="file_${idSeguro}" class="file-input" accept="image/*" onchange="uploadFoto(this, '${idSeguro}')">
-</div>
+      <img src="${imgUrl}" class="img" id="img_${idSeguro}" onerror="this.src='imagens/sem-foto.jpg'">
+      <div class="upload-overlay" id="overlay_${idSeguro}">Enviando...</div>
+      <div class="upload-progress" id="progress_${idSeguro}">
+        <div class="upload-progress-bar" id="progressBar_${idSeguro}"></div>
+      </div>
+      <label class="edit-badge" for="file_${idSeguro}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="19" height="19"><path d="M17 3 a 2.828 0 1 1 4 4 L7.5 20.5 2 22 l1.5 -5.5 L17 3z"></path></svg>
+      </label>
+      <input type="file" id="file_${idSeguro}" class="file-input" accept="image/*" onchange="uploadFoto(this, '${idSeguro}')">
+    </div>
 
     <input id="midia_${idSeguro}" value="${d.midia}" type="hidden">
     <div style="font-size:8px; color:rgba(58,54,24,0.6); text-align:center; margin:-6px 0 10px; font-weight:500; word-break:break-all; opacity:0.9;">
@@ -821,20 +818,22 @@ function render() {
     </div>
 
     <label>Padrão</label>
-${criarSelect(`pad_${idSeguro}`, d.padrao, getOpcoesUnicas('padrao'))}
+    ${criarSelect(`pad_${idSeguro}`, d.padrao, getOpcoesUnicas('padrao'))}
 
-<label>Especiais</label>
-${criarSelect(`esp_${idSeguro}`, d.especiais, getOpcoesUnicas('especiais'))}
-</div>
+    <label>Especiais</label>
+    <input id="esp_${idSeguro}" value="${d.especiais}" placeholder="Ex: Perfumada, Variegata" oninput="mostrarBotaoSalvar('${idSeguro}')">
+    <small style="font-size:9px; opacity:0.6;">Separe por vírgula</small>
+  </div>
 
-<div class="actions">
-  <button class="save" onclick="salvar('${d.nome}')" style="display:none;">Salvar</button>
-  <button class="del" onclick="excluir('${d.nome}')">Excluir</button>
-</div>
+  <div class="actions">
+    <button class="save" onclick="salvar('${d.nome}')" style="display:none;">Salvar</button>
+    <button class="del" onclick="excluir('${d.nome}')">Excluir</button>
+  </div>
 `;
     el.appendChild(card);
   });
 }
+
 async function uploadFotoNova(input) {
   if (!input.files ||!input.files[0]) return;
   const file = input.files[0];
@@ -924,50 +923,48 @@ async function uploadFoto(input, idSeguro) {
       const res = await fetch(URL, { method: "POST", body: params });
       const json = await res.json();
 
-if (json && json.id) {
-  progressBar.style.width = "100%";
-  document.getElementById("midia_" + idSeguro).value = json.id;
-  toast("Foto enviada! Aguardando Drive processar...");
+      if (json && json.id) {
+        progressBar.style.width = "100%";
+        document.getElementById("midia_" + idSeguro).value = json.id;
+        toast("Foto enviada! Aguardando Drive processar...");
 
-  const img = document.getElementById("img_" + idSeguro);
-  const novaUrl = `https://drive.google.com/thumbnail?sz=w600&id=${json.id}&t=${Date.now()}`;
+        const img = document.getElementById("img_" + idSeguro);
+        const novaUrl = `https://drive.google.com/thumbnail?sz=w600&id=${json.id}&t=${Date.now()}`;
 
-  img.onload = function() {
-    img.dataset.tentativas = 0;
+        img.onload = function() {
+          img.dataset.tentativas = 0;
+          textDiv.innerHTML = `https://drive.google.com/thumbnail?sz=w600&id=${json.id}`;
+          mostrarBotaoSalvar(idSeguro);
+          toast("Pronto! Clique em Salvar.");
+          setTimeout(() => {
+            overlay.style.display = "none";
+            progress.style.display = "none";
+            progressBar.style.width = "0%";
+          }, 800);
+        };
 
-    textDiv.innerHTML = `https://drive.google.com/thumbnail?sz=w600&id=${json.id}`;
-    mostrarBotaoSalvar(idSeguro);
+        img.onerror = function() {
+          if (!img.dataset.tentativas) img.dataset.tentativas = 0;
+          img.dataset.tentativas++;
 
-    toast("Pronto! Clique em Salvar.");
-    setTimeout(() => {
-      overlay.style.display = "none";
-      progress.style.display = "none";
-      progressBar.style.width = "0%";
-    }, 800);
-  };
+          if (img.dataset.tentativas < 4) {
+            setTimeout(() => {
+              img.src = `https://drive.google.com/thumbnail?sz=w600&id=${json.id}&t=${Date.now()}`;
+            }, 2000);
+          } else {
+            textDiv.innerHTML = `https://drive.google.com/thumbnail?sz=w600&id=${json.id}`;
+            mostrarBotaoSalvar(idSeguro);
+            toast("Imagem demorou pra processar. Salve mesmo assim.");
+            overlay.style.display = "none";
+            progress.style.display = "none";
+            progressBar.style.width = "0%";
+          }
+        };
 
-  img.onerror = function() {
-    if (!img.dataset.tentativas) img.dataset.tentativas = 0;
-    img.dataset.tentativas++;
-
-    if (img.dataset.tentativas < 4) {
-      setTimeout(() => {
-        img.src = `https://drive.google.com/thumbnail?sz=w600&id=${json.id}&t=${Date.now()}`;
-      }, 2000);
-    } else {
-      textDiv.innerHTML = `https://drive.google.com/thumbnail?sz=w600&id=${json.id}`;
-      mostrarBotaoSalvar(idSeguro);
-      toast("Imagem demorou pra processar. Salve mesmo assim.");
-      overlay.style.display = "none";
-      progress.style.display = "none";
-      progressBar.style.width = "0%";
-    }
-  };
-
-  img.src = novaUrl;
-} else {
-  throw new Error("ID não retornado");
-}
+        img.src = novaUrl;
+      } else {
+        throw new Error("ID não retornado");
+      }
     } catch (err) {
       toast("Erro no upload.");
       textDiv.innerHTML = `<span style="color:var(--accent);font-size:9px;">📷 Aguardando foto</span>`;
@@ -991,9 +988,9 @@ async function carregar() {
         camadas: l[1] || "",
         cores: l[2] || "",
         padrao: l[3] || "",
-        especiais: l[4] || "", // E
-        qtd: l[5] || "0", // F
-        midia: l[6] || "" // G
+        especiais: l[4] || "",
+        qtd: l[5] || "0",
+        midia: l[6] || ""
       }));
 
       dados.sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR', { sensitivity: 'base' }));
@@ -1003,7 +1000,7 @@ async function carregar() {
     }
   } catch (e) { toast("Erro ao carregar dados."); }
 }
-    
+
 async function salvar(nomeOriginal) {
   const id = nomeOriginal.replace(/\W/g, "_");
   const card = document.getElementById("qtd_" + id).closest('.card');
@@ -1063,7 +1060,7 @@ async function confirmarExclusao() {
 }
 
 async function criar() {
-  const btn = document.querySelector("#modal .save");
+  const btn = document.querySelector("#modal.save");
   const nome = document.getElementById("n_nome").value.trim();
 
   if (!nome) {
@@ -1085,9 +1082,9 @@ async function criar() {
         camadas: document.getElementById("n_camadas").value,
         cores: document.getElementById("n_cores").value,
         padrao: document.getElementById("n_padrao").value,
-        especiais: document.getElementById("n_especiais").value, // ADICIONA
+        especiais: document.getElementById("n_especiais").value,
         midia: midia
-})
+      })
     });
     toast("Criado com sucesso!");
     fecharModal();
