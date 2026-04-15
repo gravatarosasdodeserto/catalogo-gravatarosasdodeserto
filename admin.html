@@ -9,7 +9,7 @@
 
 <style>
 :root{
-  --header-bg: rgba(252, 250, 247, 0.75);
+  --header-bg: rgba(252, 250, 247, 0.75); /* Branco transparente */
   --body-bg:#e5e0d8;
   --text:#3a3618;
   --card:#fff;
@@ -24,7 +24,7 @@ body{
   color:var(--text);
 }
 
-/* CABEÇALHO PADRONIZADO COM TRANSPARÊNCIA */
+/* CABEÇALHO PADRONIZADO */
 .topbar {
     position: sticky;
     top: 0;
@@ -36,8 +36,8 @@ body{
     display: flex;
     justify-content: center;
     padding: 30px 0;
-    background-color: var(--header-bg); /* Cor semitransparente */
-    backdrop-filter: blur(10px); /* Efeito de desfoque */
+    background-color: var(--header-bg); /* Barra branca transparente */
+    backdrop-filter: blur(10px); /* Efeito de desfoque no fundo */
     -webkit-backdrop-filter: blur(10px);
     overflow: hidden;
     border-bottom: 2px solid #ffffff;
@@ -48,13 +48,13 @@ body{
     position: absolute;
     inset: 0;
     background: url('imagens/gravata-cabecalho.jpg') center/cover;
-    z-index: -1; /* Fica atrás da cor transparente */
+    z-index: -1; /* Joga a imagem para trás da barra branca */
 }
 
 .logo { position: relative; z-index: 3; }
 .logo img { width: 130px; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.3)); }
 
-/* BARRA BRANCA ABAIXO DO LOGO */
+/* BARRA BRANCA IGUAL AO INDEX */
 .bottom-bar {
     background: #ffffff;
     height: 50px;
@@ -65,6 +65,7 @@ body{
     box-shadow: 0 2px 5px rgba(0,0,0,0.05);
 }
 
+/* BOTÃO VOLTAR ESTILO "FILTRAR" */
 .btn-voltar-admin { 
     background: var(--text); 
     color: white; 
