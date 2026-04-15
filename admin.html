@@ -541,16 +541,16 @@
     if (sessionStorage.getItem("adminLogado") === "true") {
         return; // já logou pelo index
     }
-    
+
     const senhaCorreta = "MTQwNTA4bGU=";
     const tentativa = prompt("Área restrita. Digite a senha:");
-    
-    if (tentativa === null || btoa(tentativa) !== senhaCorreta) {
+
+    if (tentativa === null || btoa(tentativa)!== senhaCorreta) {
         alert("Acesso negado!");
         window.location.href = "index.html";
         return;
     }
-    
+
     sessionStorage.setItem("adminLogado", "true");
 })();
 
@@ -566,7 +566,29 @@ function toast(msg) {
   setTimeout(() => t.style.display = "none", 3000);
 }
 
-function abrirModal() { document.getElementById("modal").style.display = "flex"; }
+function getOpcoesUnicas(campo) {
+  const valores = dados.map(d => d[campo]).filter(v => v && v!== "Não inf." && v.trim());
+  return [...new Set(valores)].sort();
+}
+
+function criarSelect(id, valorAtual, opcoes) {
+  let html = `<select id="${id}" style="width:100%;padding:10px 14px;border-radius:10px;border:1.5px solid #e5e0d8;margin-top:4px;font-family:inherit;font-size:13px;background:rgba(250,250,250,0.6);transition:all 0.3s ease;cursor:pointer;">`;
+  html += `<option value="">Selecione...</option>`;
+  opcoes.forEach(op => {
+    html += `<option value="${op}" ${valorAtual === op? 'selected' : ''}>${op}</option>`;
+  });
+  html += `</select>`;
+  return html;
+}
+
+function abrirModal() {
+  // Atualiza os selects do modal com as opções da planilha
+  document.getElementById("n_camadas").outerHTML = criarSelect('n_camadas', '', getOpcoesUnicas('camadas'));
+  document.getElementById("n_cores").outerHTML = criarSelect('n_cores', '', getOpcoesUnicas('cores'));
+  document.getElementById("n_padrao").outerHTML = criarSelect('n_padrao', '', getOpcoesUnicas('padrao'));
+  document.getElementById("modal").style.display = "flex";
+}
+
 function fecharModal() { document.getElementById("modal").style.display = "none"; }
 function filtrar(v) { filtro = v; render(); }
 
@@ -608,34 +630,34 @@ function render() {
   </label>
   <input type="file" id="file_${idSeguro}" class="file-input" accept="image/*" onchange="uploadFoto(this, '${idSeguro}')">
 </div>
-    
+
     <input id="midia_${idSeguro}" value="${d.midia}" type="hidden">
-    <div style="font-size:9px; color:rgba(58,54,24,0.4); text-align:center; margin:-6px 0 10px; font-weight:500; word-break:break-all; opacity:0.7;">
-      ${d.midia && d.midia !== "Não inf." ? 
-  `<span style="color:var(--ok);font-weight:600;">✓ Foto carregada</span>` 
-  : '<span style="color:var(--accent);">📷 Aguardando foto</span>'
-}
+    <div style="font-size:9px; color:rgba(58,54,24,0.5); text-align:center; margin:-6px 0 10px; font-weight:600; word-break:break-all; opacity:0.8;">
+      ${d.midia && d.midia!== "Não inf."?
+        `<span style="color:var(--ok);font-weight:600;">✓ Foto carregada</span>`
+        : '<span style="color:var(--accent);">📷 Aguardando foto</span>'
+      }
     </div>
 
     <h4>${d.nome}</h4>
     <input id="nome_${idSeguro}" value="${d.nome}" type="hidden">
-    
+
     <label>Quantidade em Estoque</label>
     <input id="qtd_${idSeguro}" value="${d.qtd}" type="number">
 
     <div class="row">
       <div>
         <label>Camadas</label>
-        <input id="cam_${idSeguro}" value="${d.camadas}">
+        ${criarSelect(`cam_${idSeguro}`, d.camadas, getOpcoesUnicas('camadas'))}
       </div>
       <div>
          <label>Cores</label>
-         <input id="cor_${idSeguro}" value="${d.cores}">
+         ${criarSelect(`cor_${idSeguro}`, d.cores, getOpcoesUnicas('cores'))}
       </div>
     </div>
 
     <label>Padrão</label>
-    <input id="pad_${idSeguro}" value="${d.padrao}">
+    ${criarSelect(`pad_${idSeguro}`, d.padrao, getOpcoesUnicas('padrao'))}
   </div>
 
   <div class="actions">
@@ -655,10 +677,12 @@ async function uploadFoto(input, idSeguro) {
   const overlay = document.getElementById("overlay_" + idSeguro);
   const progress = document.getElementById("progress_" + idSeguro);
   const progressBar = document.getElementById("progressBar_" + idSeguro);
+  const textDiv = input.closest('.card').querySelector('[style*="font-size:9px"]');
 
   overlay.style.display = "flex";
   progress.style.display = "block";
   progressBar.style.width = "20%";
+  textDiv.innerHTML = `<span style="color:var(--accent);">⏳ Processando...</span>`;
   toast("Iniciando upload...");
 
   reader.onload = async function(e) {
@@ -680,49 +704,47 @@ if (json && json.id) {
   progressBar.style.width = "100%";
   document.getElementById("midia_" + idSeguro).value = json.id;
   toast("Foto enviada! Aguardando Drive processar...");
-  
-  // Tenta carregar a imagem e só some o overlay quando carregar
+
   const img = document.getElementById("img_" + idSeguro);
   const novaUrl = `https://drive.google.com/thumbnail?sz=w600&id=${json.id}&t=${Date.now()}`;
-  
+
   img.onload = function() {
-  img.dataset.tentativas = 0;
-  
-  // Atualiza o texto embaixo pra confirmar que deu certo
-  const textDiv = img.closest('.card').querySelector('[style*="font-size:9px"]');
-  textDiv.innerHTML = `<span style="color:var(--ok);font-weight:600;">✓ Foto carregada</span>`;
-  
-  toast("Pronto! Clique em Salvar.");
-  setTimeout(() => {
-    overlay.style.display = "none";
-    progress.style.display = "none";
-    progressBar.style.width = "0%";
-  }, 800);
-};
-  
-  img.onerror = function() {
-  // Limita a 3 tentativas pra não travar
-  if (!img.dataset.tentativas) img.dataset.tentativas = 0;
-  img.dataset.tentativas++;
-  
-  if (img.dataset.tentativas < 4) {
+    img.dataset.tentativas = 0;
+
+    textDiv.innerHTML = `<span style="color:var(--ok);font-weight:600;">✓ Foto carregada</span>`;
+
+    toast("Pronto! Clique em Salvar.");
     setTimeout(() => {
-      img.src = `https://drive.google.com/thumbnail?sz=w600&id=${json.id}&t=${Date.now()}`;
-    }, 2000);
-  } else {
-    toast("Imagem demorou pra processar. Salve mesmo assim.");
-    overlay.style.display = "none";
-    progress.style.display = "none";
-    progressBar.style.width = "0%";
-  }
-};
-  
+      overlay.style.display = "none";
+      progress.style.display = "none";
+      progressBar.style.width = "0%";
+    }, 800);
+  };
+
+  img.onerror = function() {
+    if (!img.dataset.tentativas) img.dataset.tentativas = 0;
+    img.dataset.tentativas++;
+
+    if (img.dataset.tentativas < 4) {
+      setTimeout(() => {
+        img.src = `https://drive.google.com/thumbnail?sz=w600&id=${json.id}&t=${Date.now()}`;
+      }, 2000);
+    } else {
+      textDiv.innerHTML = `<span style="color:var(--ok);font-weight:600;">✓ Foto carregada</span>`;
+      toast("Imagem demorou pra processar. Salve mesmo assim.");
+      overlay.style.display = "none";
+      progress.style.display = "none";
+      progressBar.style.width = "0%";
+    }
+  };
+
   img.src = novaUrl;
 } else {
   throw new Error("ID não retornado");
 }
     } catch (err) {
       toast("Erro no upload.");
+      textDiv.innerHTML = `<span style="color:var(--accent);">📷 Aguardando foto</span>`;
       overlay.style.display = "none";
       progress.style.display = "none";
       progressBar.style.width = "0%";
@@ -730,7 +752,7 @@ if (json && json.id) {
   };
   reader.readAsDataURL(file);
 }
-    
+
 async function carregar() {
   try {
     const r = await fetch(CSV + "&t=" + Date.now());
