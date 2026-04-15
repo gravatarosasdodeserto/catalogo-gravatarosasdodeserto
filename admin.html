@@ -570,8 +570,10 @@ function render() {
         <input id="nome_${idSeguro}" value="${d.nome}" type="hidden">
         <label>Quantidade em Estoque</label>
         <input id="qtd_${idSeguro}" value="${d.qtd}" type="number">
-        <label>ID da Imagem (Drive)</label>
-        <input id="midia_${idSeguro}" value="${d.midia}">
+        <input id="midia_${idSeguro}" value="${d.midia}" type="hidden">
+<div style="font-size:9px; color:rgba(58,54,24,0.4); text-align:center; margin:8px 0 4px; font-weight:500; word-break:break-all;">
+  ${d.midia && d.midia !== "Não inf." ? `ID: ${d.midia}` : 'Sem foto'}
+</div>
 
         <div class="row">
           <div>
