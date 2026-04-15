@@ -24,22 +24,20 @@
             padding-bottom: 230px;
         }
 
-       /* ===== CABEÇALHO ===== */
+/* ===== CABEÇALHO ===== */
 .topbar {
-    padding: 50px 0;
+    padding: 30px 0; /* Diminuí um pouco para não ocupar a tela toda no celular */
     position: sticky;
     top: 0;
-    z-index: 1000;
+    z-index: 1100; /* Z-index maior que a barra de filtros */
     display: flex;
     justify-content: center;
     align-items: center;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.18);
-    overflow: hidden;
-    background-color: rgba(255, 255, 255, 0.85); 
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    background-color: rgba(255, 255, 255, 0.9); 
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     border-bottom: 2px solid #ffffff;
-    position: relative; 
 }
 
 .topbar::before {
@@ -57,16 +55,17 @@
 
         /* ===== SEÇÃO DE FILTROS (AJUSTADA) ===== */
         .secao-filtros {
-            position: sticky;
-            top: 152px;
-            z-index: 950;
-            padding: 6px 15px;
-            background: #ffffff;
-            display: flex;
-            align-items: center;
-            border-bottom: 1px solid rgba(0,0,0,0.06);
-            min-height: 48px;
-        }
+    position: sticky;
+    top: 112px; /* ESTE VALOR É A CHAVE: Deve ser a altura exata da sua topbar */
+    z-index: 1000;
+    padding: 6px 15px;
+    background: #ffffff;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+    min-height: 48px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+}
 
         .filtros-topo-wrapper { 
             display: flex; 
@@ -317,7 +316,14 @@ async function carregarEstoque() {
     });
     gerarInterfaceFiltros();
     montarCatalogo();
-  } catch (e) { grid.innerHTML = "<p>Erro ao carregar ID's.</p>"; }
+
+    // O ajuste deve ficar aqui dentro:
+    const alturaTopbar = document.querySelector('.topbar').offsetHeight;
+    document.querySelector('.secao-filtros').style.top = alturaTopbar + 'px';
+
+  } catch (e) { 
+    grid.innerHTML = "<p>Erro ao carregar ID's.</p>"; 
+  }
 }
 
 function gerarInterfaceFiltros() {
