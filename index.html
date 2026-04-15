@@ -868,6 +868,7 @@ function acessarAdmin() {
 
   const validar = () => {
     if (btoa(input.value) === "MTQwNTA4bGU=") {
+      sessionStorage.setItem("adminLogado", "true");
       window.location.href = "admin.html";
     } else {
       alert("Senha incorreta!");
@@ -876,7 +877,7 @@ function acessarAdmin() {
       setTimeout(() => input.style.borderColor = '#e5e0d8', 1500);
     }
   };
-
+    
   document.getElementById('btnConfirmarSenha').onclick = validar;
   document.getElementById('btnCancelarSenha').onclick = () => document.body.removeChild(modalSenha);
   input.onkeypress = (e) => { if(e.key === 'Enter') validar(); };
