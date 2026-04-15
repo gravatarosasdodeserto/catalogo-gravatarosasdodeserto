@@ -18,23 +18,23 @@
 *{box-sizing:border-box}
 body{
   margin:0;
-  font-family:Poppins;
+  font-family: 'Poppins', sans-serif;
   background:var(--body-bg);
   color:var(--text);
+  padding-bottom: 50px;
 }
 
+/* CABEÇALHO */
 .topbar { position: sticky; top: 0; z-index: 1000; }
 .logo-bar {
     position: relative;
     display: flex;
     justify-content: center;
-    padding: 30px 0;
+    padding: 25px 0;
     background-color: rgba(255, 255, 255, 0.85); 
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
-    overflow: hidden;
     border-bottom: 2px solid #ffffff;
-    z-index: 1;
 }
 .logo-bar::before {
     content: "";
@@ -43,7 +43,7 @@ body{
     background: url('imagens/gravata-cabecalho.jpg') center/cover;
     z-index: -1;
 }
-.logo img { width: 130px; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.3)); }
+.logo img { width: 110px; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.3)); }
 
 .bottom-bar {
     background: #ffffff;
@@ -71,115 +71,83 @@ body{
     text-decoration: none;
 }
 
-.container{padding:12px;max-width:1000px;margin:auto;}
-.busca{
-  width:100%; padding:12px; border-radius:50px;
-  border:1.5px solid rgba(0,0,0,0.1); margin:10px 0;
-  outline: none; text-align: center;
-}
-.card{
-  background:#fff; border-radius:15px; padding:15px;
-  margin-bottom:15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+/* CONTEÚDO PRINCIPAL */
+.container { padding: 15px; max-width: 1400px; margin: auto; }
+
+.busca {
+  width: 100%; padding: 12px 20px; border-radius: 50px;
+  border: 1.5px solid rgba(0,0,0,0.1); margin: 15px 0;
+  outline: none; text-align: center; font-family: inherit;
 }
 
-/* ESTILO DA FOTO COM LÁPIS */
+/* GRID DE CARDS */
+#lista {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.card {
+  background: #fff; border-radius: 20px; padding: 15px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  display: flex; flex-direction: column;
+  justify-content: space-between;
+}
+
+/* IMAGEM E EDIÇÃO */
 .img-container {
   position: relative;
-  width: 160px;
-  height: 160px;
-  margin: 0 auto 15px;
+  width: 100%;
+  aspect-ratio: 1/1;
+  margin-bottom: 12px;
 }
 .img {
-  width: 100%; height: 100%; object-fit: cover; border-radius: 12px;
-  display: block; border: 2px solid #eee;
+  width: 100%; height: 100%; object-fit: cover; border-radius: 15px;
+  display: block; border: 1px solid #eee;
 }
 .edit-badge {
-  position: absolute; bottom: 5px; right: 5px;
+  position: absolute; bottom: 8px; right: 8px;
   background: var(--text); color: white;
-  width: 36px; height: 36px; border-radius: 50%;
+  width: 38px; height: 38px; border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
-  cursor: pointer; border: 3px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  cursor: pointer; border: 3px solid white; box-shadow: 0 2px 8px rgba(0,0,0,0.2);
 }
 .file-input { display: none; }
 
-input{ width:100%; padding:10px; border-radius:10px; border:1px solid #ddd; margin-top:5px; }
-label { font-size: 11px; font-weight: 600; color: #888; margin-top: 8px; display: block; }
+/* FORMULÁRIO INTERNO */
+h4 { margin: 5px 0 15px; text-align: center; font-size: 16px; color: var(--text); }
+label { font-size: 10px; font-weight: 700; color: #aaa; text-transform: uppercase; margin-top: 10px; display: block; }
+input { 
+  width: 100%; padding: 8px 12px; border-radius: 8px; 
+  border: 1px solid #eee; margin-top: 3px; font-family: inherit; font-size: 13px;
+  background: #fafafa;
+}
+input:focus { border-color: var(--text); outline: none; background: #fff; }
 
-.actions{display:flex;gap:10px;margin-top:15px;}
-button{ padding:10px; border:none; border-radius:12px; cursor:pointer; font-weight:600; }
-.save{background:var(--ok);color:#fff;flex:1}
-.del{background:var(--danger);color:#fff;flex:1}
-.new{width:100%;background:#3a3618;color:#fff;margin:10px 0; border-radius: 50px; height: 45px;}
+.row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 
-.toast{
-  position:fixed; bottom:20px; left:50%; transform:translateX(-50%);
-  background:#000; color:#fff; padding:10px 20px; border-radius:50px;
-  display:none; z-index: 3000; font-size: 13px;
+/* BOTÕES */
+.actions { display: flex; gap: 8px; margin-top: 18px; }
+button { padding: 12px; border: none; border-radius: 12px; cursor: pointer; font-weight: 600; font-family: inherit; font-size: 12px; transition: 0.2s; }
+.save { background: var(--ok); color: #fff; flex: 2; }
+.del { background: #f0f0f0; color: var(--danger); flex: 1; }
+.save:hover { filter: brightness(1.1); }
+.new { width: 100%; background: var(--text); color: #fff; margin-bottom: 10px; border-radius: 50px; height: 48px; font-size: 14px; }
+
+.toast {
+  position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+  background: #333; color: #fff; padding: 12px 25px; border-radius: 50px;
+  display: none; z-index: 3000; font-size: 13px; box-shadow: 0 5px 15px rgba(0,0,0,0.3);
 }
 
-/* Estilo para o botão quando estiver processando */
-button:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
+button:disabled { opacity: 0.5; cursor: not-allowed; }
 
-/* Container principal para as IDs no Admin */
-#listaAdmin {
-    display: grid;
-    /* No PC: 4 colunas. No Tablet: 3. No Celular: 2. */
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 20px;
-    padding: 20px;
+/* MODAL */
+#modal { 
+    display:none; position:fixed; inset:0; background:rgba(0,0,0,.6); 
+    align-items:center; justify-content:center; z-index:2000; backdrop-filter: blur(4px);
 }
-
-/* Estilo de cada "Card" de edição */
-.item-admin {
-    background: #fff;
-    border-radius: 15px;
-    padding: 15px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    border: 1px solid #eee;
-}
-
-/* Miniatura da imagem para conferência rápida */
-.item-admin img {
-    width: 100%;
-    height: 120px;
-    object-fit: cover;
-    border-radius: 10px;
-    margin-bottom: 5px;
-}
-
-/* Título da ID no Card */
-.item-admin h4 {
-    margin: 0;
-    font-size: 16px;
-    color: var(--text-main);
-}
-
-/* Estilização dos inputs dentro do card */
-.item-admin input, .item-admin select {
-    width: 100%;
-    padding: 8px;
-    border-radius: 8px;
-    border: 1px solid #ddd;
-    font-family: 'Poppins', sans-serif;
-    font-size: 13px;
-}
-
-/* Botão de salvar individual (opcional) ou destaque de status */
-.status-badge {
-    font-size: 11px;
-    font-weight: bold;
-    text-transform: uppercase;
-    padding: 4px 8px;
-    border-radius: 5px;
-    text-align: center;
-}
-  
+.modal-content { background:#fff; padding:25px; border-radius:20px; width:90%; max-width:400px; }
 </style>
 </head>
 
@@ -201,19 +169,25 @@ button:disabled {
   <div id="lista"></div>
 </div>
 
-<div id="modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);align-items:center;justify-content:center;z-index:2000;">
-  <div style="background:#fff;padding:20px;border-radius:15px;width:90%;max-width:400px;">
-    <h4 style="margin-top:0">Nova ID</h4>
-    <input id="n_nome" placeholder="Nome da ID">
-    <input id="n_qtd" type="number" placeholder="Quantidade em Estoque">
-    <input id="n_camadas" placeholder="Camadas (ex: Tripla)">
-    <input id="n_cores" placeholder="Cores">
-    <input id="n_padrao" placeholder="Padrão">
-    <input id="n_midia" placeholder="ID da Imagem (Google Drive)">
-    <br><br>
-    <div style="display:flex; gap:10px;">
+<div id="modal" onclick="if(event.target == this) fecharModal()">
+  <div class="modal-content">
+    <h4 style="margin-top:0">Nova Rosa do Deserto</h4>
+    <label>Nome da ID</label>
+    <input id="n_nome" placeholder="Ex: TS-152">
+    <div class="row">
+        <div><label>Quantidade</label><input id="n_qtd" type="number" value="0"></div>
+        <div><label>Camadas</label><input id="n_camadas" placeholder="Ex: Tripla"></div>
+    </div>
+    <label>Cores</label>
+    <input id="n_cores" placeholder="Ex: Vermelho e Preto">
+    <label>Padrão</label>
+    <input id="n_padrao" placeholder="Ex: Matizada">
+    <label>ID da Imagem (Drive)</label>
+    <input id="n_midia" placeholder="Código da foto">
+    <br>
+    <div class="actions">
         <button class="save" onclick="criar()">Criar ID</button>
-        <button class="del" onclick="fecharModal()">Cancelar</button>
+        <button class="del" style="color:#666" onclick="fecharModal()">Cancelar</button>
     </div>
   </div>
 </div>
@@ -257,29 +231,42 @@ function render() {
 
     el.innerHTML += `
     <div class="card">
-      <div class="img-container">
-        <img src="${imgUrl}" class="img" id="img_${idSeguro}" onerror="this.src='imagens/sem-foto.jpg'">
-        <label class="edit-badge" for="file_${idSeguro}">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="18" height="18"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
-        </label>
-        <input type="file" id="file_${idSeguro}" class="file-input" accept="image/*" onchange="uploadFoto(this, '${idSeguro}')">
+      <div>
+        <div class="img-container">
+          <img src="${imgUrl}" class="img" id="img_${idSeguro}" onerror="this.src='imagens/sem-foto.jpg'">
+          <label class="edit-badge" for="file_${idSeguro}">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="18" height="18"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
+          </label>
+          <input type="file" id="file_${idSeguro}" class="file-input" accept="image/*" onchange="uploadFoto(this, '${idSeguro}')">
+        </div>
+
+        <h4>${d.nome}</h4>
+        
+        <input id="nome_${idSeguro}" value="${d.nome}" type="hidden">
+        
+        <label>Quantidade em Estoque</label>
+        <input id="qtd_${idSeguro}" value="${d.qtd}" type="number">
+        
+        <label>ID da Imagem (Drive)</label>
+        <input id="midia_${idSeguro}" value="${d.midia}">
+
+        <div class="row">
+          <div>
+            <label>Camadas</label>
+            <input id="cam_${idSeguro}" value="${d.camadas}">
+          </div>
+          <div>
+             <label>Cores</label>
+             <input id="cor_${idSeguro}" value="${d.cores}">
+          </div>
+        </div>
+        
+        <label>Padrão</label>
+        <input id="pad_${idSeguro}" value="${d.padrao}">
       </div>
 
-      <label>Nome:</label>
-      <input id="nome_${idSeguro}" value="${d.nome}" readonly style="background:#f4f4f4">
-      <label>Qtd em Estoque:</label>
-      <input id="qtd_${idSeguro}" value="${d.qtd}" type="number">
-      <label>ID da Foto (Google Drive):</label>
-      <input id="midia_${idSeguro}" value="${d.midia}">
-      <label>Camadas:</label>
-      <input id="cam_${idSeguro}" value="${d.camadas}">
-      <label>Cores:</label>
-      <input id="cor_${idSeguro}" value="${d.cores}">
-      <label>Padrão:</label>
-      <input id="pad_${idSeguro}" value="${d.padrao}">
-
       <div class="actions">
-        <button class="save" onclick="salvar('${d.nome}')">Salvar Alterações</button>
+        <button class="save" onclick="salvar('${d.nome}')">Salvar</button>
         <button class="del" onclick="excluir('${d.nome}')">Excluir</button>
       </div>
     </div>`;
@@ -290,39 +277,26 @@ async function uploadFoto(input, idSeguro) {
   if (!input.files || !input.files[0]) return;
   const file = input.files[0];
   const reader = new FileReader();
-  
-  toast("Fazendo upload da foto...");
+  toast("Fazendo upload...");
   
   reader.onload = async function(e) {
     const base64Data = e.target.result.split(",")[1];
     try {
-      // Usamos URLSearchParams para enviar como formulário, que o Apps Script aceita melhor
       const params = new URLSearchParams();
       params.append("action", "upload");
       params.append("nome", file.name);
       params.append("mimeType", file.type);
       params.append("data", base64Data);
 
-      const res = await fetch(URL, {
-        method: "POST",
-        body: params
-      });
-
-      const json = await res.json(); // O script retorna um JSON com o ID
+      const res = await fetch(URL, { method: "POST", body: params });
+      const json = await res.json();
 
       if (json && json.id) {
-        // Atualiza o campo de texto invisível com o novo ID
         document.getElementById("midia_" + idSeguro).value = json.id;
-        // Atualiza a visualização da imagem na hora
         document.getElementById("img_" + idSeguro).src = `https://drive.google.com/thumbnail?sz=w600&id=${json.id}`;
-        toast("Foto carregada! Clique em 'Salvar Alterações'.");
-      } else {
-        toast("Erro ao processar imagem no servidor.");
+        toast("Foto carregada! Clique em Salvar.");
       }
-    } catch (err) { 
-      console.error(err);
-      toast("Erro de conexão no upload."); 
-    }
+    } catch (err) { toast("Erro no upload."); }
   };
   reader.readAsDataURL(file);
 }
@@ -349,15 +323,13 @@ async function carregar() {
 
 async function salvar(nomeOriginal) {
   const id = nomeOriginal.replace(/\W/g, "_");
-  const btn = document.querySelector(`.card:has(#nome_${id}) .save`); // Localiza o botão dentro do card certo
+  const btn = document.querySelector(`.card:has(#nome_${id}) .save`);
   
-  // 1. Indicador Visual: Muda o botão antes de começar o fetch
-  const textoOriginal = btn.innerText;
   btn.innerText = "Salvando...";
   btn.disabled = true;
 
   try {
-    const res = await fetch(URL, {
+    await fetch(URL, {
       method: "POST",
       body: new URLSearchParams({
         action: "update", 
@@ -369,21 +341,10 @@ async function salvar(nomeOriginal) {
         midia: document.getElementById("midia_" + id).value
       })
     });
-    
-    const txt = await res.text();
-    
-    if (txt.includes("OK")) {
-      toast("Salvo com sucesso!");
-    } else {
-      toast("Erro ao salvar");
-    }
-  } catch (e) {
-    toast("Erro de conexão");
-  } finally {
-    // 2. Volta o botão ao estado original, independente de ter dado erro ou sucesso
-    btn.innerText = textoOriginal;
-    btn.disabled = false;
-  }
+    toast("Salvo com sucesso!");
+  } catch (e) { toast("Erro ao salvar"); }
+  btn.innerText = "Salvar";
+  btn.disabled = false;
 }
 
 async function excluir(nome) {
@@ -393,22 +354,21 @@ async function excluir(nome) {
       method: "POST",
       body: new URLSearchParams({ action: "delete", nome })
     });
-    const txt = await res.text();
-    if (txt.includes("OK")) { toast("Excluído!"); carregar(); }
+    toast("Excluído!"); 
+    carregar();
   } catch (e) { toast("Erro ao excluir"); }
 }
 
 async function criar() {
     const nome = document.getElementById("n_nome").value;
-    const btn = document.querySelector("#modal .save"); // Pega o botão do modal
+    const btn = document.querySelector("#modal .save");
     if(!nome) return alert("Digite o nome");
 
-    const textoOriginal = btn.innerText;
     btn.innerText = "Criando...";
     btn.disabled = true;
 
     try {
-        const res = await fetch(URL, {
+        await fetch(URL, {
             method: "POST",
             body: new URLSearchParams({
                 action: "create", nome: nome,
@@ -419,19 +379,14 @@ async function criar() {
                 midia: document.getElementById("n_midia").value
             })
         });
-        const txt = await res.text();
-        if(txt.includes("OK")) { 
-          toast("Criado com sucesso!"); 
-          fecharModal(); 
-          carregar(); 
-        }
-    } catch(e) { 
-        toast("Erro ao criar"); 
-    } finally {
-        btn.innerText = textoOriginal;
-        btn.disabled = false;
-    }
+        toast("Criado com sucesso!"); 
+        fecharModal(); 
+        carregar(); 
+    } catch(e) { toast("Erro ao criar"); }
+    btn.innerText = "Criar ID";
+    btn.disabled = false;
 }
+
 carregar();
 </script>
 </body>
