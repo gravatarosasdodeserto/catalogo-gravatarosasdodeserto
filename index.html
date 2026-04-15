@@ -766,7 +766,7 @@ function montarCatalogo() {
   ${getMidiaHTML(d.midia)}
   <p>${nome}</p>
   <div class="estoque-status ${d.qtd > 0? 'disponivel' : 'produzimos'}">
-  ${d.qtd > 0? `${d.qtd} ${d.qtd === 1 ? 'enxerto' : 'enxertos'}` : 'Produzimos pra você'}
+  ${d.qtd > 0? `${d.qtd} ${d.qtd === 1 ? 'enxerto disponível' : 'enxertos disponíveis'}` : 'Produzimos pra você'}
 </div>`;
 
     card.onclick = () => {
