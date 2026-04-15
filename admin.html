@@ -499,12 +499,13 @@
 <script>
 // BLOQUEIO DE ACESSO
 (function() {
-    const senha = "140508le"; // mesma senha que você usa
+    const senhaCorreta = "MTQwNTA4bGU=";
     const tentativa = prompt("Área restrita. Digite a senha:");
     
-    if (btoa(tentativa) !== "MTQwNTA4bGU=") {
+    if (tentativa === null || btoa(tentativa) !== senhaCorreta) {
         alert("Acesso negado!");
-        window.location.href = "index.html"; // redireciona pro catálogo
+        window.location.href = "index.html";
+        return;
     }
 })();
 
