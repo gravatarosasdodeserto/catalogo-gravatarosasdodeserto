@@ -752,7 +752,7 @@ function removerUmFiltro(coluna) {
 
 function montarCatalogo() {
   grid.innerHTML = "";
-  Object.keys(estoque).sort().forEach(nome => {
+  Object.keys(estoque).sort((a, b) => a.localeCompare(b, 'pt-BR', { sensitivity: 'base' })).forEach(nome => {
     const d = estoque[nome];
     if (filtroTexto &&!nome.toLowerCase().includes(filtroTexto.toLowerCase())) return;
     let passa = true;
@@ -789,7 +789,7 @@ function montarCatalogo() {
     grid.appendChild(card);
   });
 }
-
+    
 function atualizarPainelAcoes() {
   const btn = document.getElementById("btnEnviar");
   if (selecionados.size > 0) {
