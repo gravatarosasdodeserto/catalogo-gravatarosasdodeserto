@@ -539,7 +539,7 @@
 // BLOQUEIO DE ACESSO
 (function() {
     if (sessionStorage.getItem("adminLogado") === "true") {
-        return; // já logou pelo index
+        return;
     }
 
     const senhaCorreta = "MTQwNTA4bGU=";
@@ -571,8 +571,14 @@ function getOpcoesUnicas(campo) {
   return [...new Set(valores)].sort();
 }
 
+function mostrarBotaoSalvar(idSeguro) {
+  const btn = document.getElementById("qtd_" + idSeguro).closest('.card').querySelector('.save');
+  btn.style.display = "block";
+}
+
 function criarSelect(id, valorAtual, opcoes) {
-  let html = `<select id="${id}" style="width:100%;padding:10px 14px;border-radius:10px;border:1.5px solid #e5e0d8;margin-top:4px;font-family:inherit;font-size:13px;background:rgba(250,250,250,0.6);transition:all 0.3s ease;cursor:pointer;">`;
+  const idSeguro = id.replace(/^(cam_|cor_|pad_)/, '');
+  let html = `<select id="${id}" onchange="mostrarBotaoSalvar('${idSeguro}')" style="width:100%;padding:10px 14px;border-radius:10px;border:1.5px solid #e5e0d8;margin-top:4px;font-family:inherit;font-size:13px;background:rgba(250,250,250,0.6);transition:all 0.3s ease;cursor:pointer;">`;
   html += `<option value="">Selecione...</option>`;
   opcoes.forEach(op => {
     html += `<option value="${op}" ${valorAtual === op? 'selected' : ''}>${op}</option>`;
@@ -642,7 +648,7 @@ function render() {
     <input id="nome_${idSeguro}" value="${d.nome}" type="hidden">
 
     <label>Quantidade em Estoque</label>
-    <input id="qtd_${idSeguro}" value="${d.qtd}" type="number">
+    <input id="qtd_${idSeguro}" value="${d.qtd}" type="number" oninput="mostrarBotaoSalvar('${idSeguro}')">
 
     <div class="row">
       <div>
@@ -660,7 +666,7 @@ function render() {
   </div>
 
   <div class="actions">
-    <button class="save" onclick="salvar('${d.nome}')">Salvar</button>
+    <button class="save" onclick="salvar('${d.nome}')" style="display:none;">Salvar</button>
     <button class="del" onclick="excluir('${d.nome}')">Excluir</button>
   </div>
 `;
@@ -711,6 +717,7 @@ if (json && json.id) {
     img.dataset.tentativas = 0;
 
     textDiv.innerHTML = `https://drive.google.com/thumbnail?sz=w600&id=${json.id}`;
+    mostrarBotaoSalvar(idSeguro);
 
     toast("Pronto! Clique em Salvar.");
     setTimeout(() => {
@@ -730,6 +737,7 @@ if (json && json.id) {
       }, 2000);
     } else {
       textDiv.innerHTML = `https://drive.google.com/thumbnail?sz=w600&id=${json.id}`;
+      mostrarBotaoSalvar(idSeguro);
       toast("Imagem demorou pra processar. Salve mesmo assim.");
       overlay.style.display = "none";
       progress.style.display = "none";
@@ -794,10 +802,13 @@ async function salvar(nomeOriginal) {
       })
     });
     toast("Salvo com sucesso!");
+    btn.style.display = "none";
+    btn.innerText = "Salvar";
+
   } catch (e) {
     toast("Erro ao salvar");
+    btn.innerText = "Salvar";
   }
-  btn.innerText = "Salvar";
   btn.disabled = false;
 }
 
