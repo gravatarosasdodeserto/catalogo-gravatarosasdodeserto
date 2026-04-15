@@ -29,14 +29,14 @@
     padding: 50px 0;
     position: sticky;
     top: 0;
-    z-index: 900;
+    z-index: 1000; /* Aumentado para garantir que fique sobre tudo */
     display: flex;
     justify-content: center;
     align-items: center;
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.18);
     overflow: hidden;
-    /* Alterado para branco transparente com efeito de desfoque */
-    background-color: rgba(252, 250, 247, 0.75); 
+    /* A cor branca da barra fica aqui */
+    background-color: rgba(255, 255, 255, 0.85); 
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     border-bottom: 2px solid #ffffff;
@@ -49,8 +49,7 @@
     background-image: url('imagens/gravata-cabecalho.jpg');
     background-size: cover;
     background-position: top center;
-    /* Alterado para -1 para a foto ficar atrás da cor branca */
-    z-index: -1; 
+    z-index: -1; /* A foto vai para trás, permitindo que o branco apareça */
 }
 
         .topbar::before {
