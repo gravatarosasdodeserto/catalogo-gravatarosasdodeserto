@@ -63,23 +63,35 @@
             z-index: -1;
         }
 
-        .logo { position: relative; z-index: 3; }
-        .logo img { 
-            width: 100px; 
-            height: auto; 
-            filter: drop-shadow(0 4px 15px rgba(0,0,0,0.4)); 
-            cursor: pointer; 
-        }
+       /* ===== AJUSTE DE TAMANHO DO LOGO ===== */
+.logo { 
+    position: relative; 
+    z-index: 3; 
+    display: flex;
+    align-items: center;
+}
 
-        /* AJUSTES PARA TELAS GRANDES (PC) */
-        @media (min-width: 768px) {
-            .topbar { 
-                padding: 40px 0; 
-                min-height: 160px; 
-            }
-            .logo img { width: 150px; }
-            .topbar::after { height: 130px; } 
-        }
+.logo img { 
+    width: 130px; /* Aumentado de 100px para 130px no celular */
+    height: auto; 
+    filter: drop-shadow(0 4px 15px rgba(0,0,0,0.4)); 
+    cursor: pointer;
+    transition: width 0.3s ease; /* Transição suave ao mudar de tela */
+}
+
+/* AJUSTES PARA TELAS GRANDES (PC) */
+@media (min-width: 768px) {
+    .topbar { 
+        padding: 40px 0; 
+        min-height: 180px; /* Aumentei um pouco mais a altura no PC */
+    }
+    .logo img { 
+        width: 200px; /* Aumentado de 150px para 200px no PC */
+    }
+    .topbar::after { 
+        height: 150px; /* Faixa branca maior para acompanhar o logo no PC */
+    } 
+}
 
         /* ===== SEÇÃO DE FILTROS ===== */
         .secao-filtros {
@@ -207,31 +219,33 @@
 
         .admin-access {
     position: absolute;
-    right: 10px;      /* Distância da borda direita */
-    top: 10px;        /* Distância do topo */
+    right: 20px;       /* Distância da borda direita */
+    top: 50%;          /* Move para o meio da altura */
+    transform: translateY(-50%); /* Ajuste fino para centralizar o próprio ícone */
     color: var(--text-main);
     text-decoration: none;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 32px;      /* Era 38px, agora menor */
-    height: 32px;     /* Era 38px, agora menor */
+    width: 34px;
+    height: 34px;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.4); /* Levemente mais visível */
+    background: rgba(255, 255, 255, 0.4);
     backdrop-filter: blur(5px);
     -webkit-backdrop-filter: blur(5px);
     transition: all 0.3s ease;
-    z-index: 1200;    /* Um acima da topbar (que é 1100) */
+    z-index: 1200;
     border: 1px solid rgba(255, 255, 255, 0.5);
 }
 
 .admin-access:hover {
     background: rgba(255, 255, 255, 0.9);
-    transform: rotate(90deg); /* Removido o translateY para não bugar a posição fixa */
+    /* Mantemos o translateY(-50%) no hover para ele não "pular" de lugar ao girar */
+    transform: translateY(-50%) rotate(90deg);
 }
 
 .admin-access svg {
-    width: 18px;      /* Ícone menor para acompanhar o botão */
+    width: 18px;
     height: 18px;
     opacity: 0.7;
 }
