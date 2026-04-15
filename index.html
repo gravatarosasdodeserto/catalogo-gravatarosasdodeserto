@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin | Gravatá Rosas do Deserto</title>
+    <title>Catálogo | Gravatá Rosas do Deserto</title>
     <link rel="icon" type="image/png" href="favicon.png">
     <link rel="apple-touch-icon" href="favicon.png">
     <meta name="theme-color" content="#2e2a15">
@@ -12,10 +12,9 @@
     :root {
         --header-bg: #fcfaf7;
         --body-bg: #e9e4dd;
-        --text-main: #2e2a15;
         --card-white: #ffffff;
-        --danger: #8b2d2d;
-        --ok: #2d5a27;
+        --card-selected: #d4ccc0;
+        --text-main: #2e2a15;
         --accent: #a08c6b;
         --accent-dark: #7d6e53;
         --shadow-sm: 0 4px 12px rgba(58, 54, 24, 0.06);
@@ -37,7 +36,7 @@
             radial-gradient(at 80% 80%, rgba(255, 255, 255, 0.4) 0px, transparent 50%);
         color: var(--text-main);
         margin: 0;
-        padding-bottom: 50px;
+        padding-bottom: 240px;
         animation: fadeIn 0.6s ease-out;
     }
 
@@ -56,7 +55,8 @@
         50% { transform: scale(1.05); }
     }
 
-  .topbar {
+    /* ===== CABEÇALHO PREMIUM ===== */
+   .topbar {
         padding: 35px 0;
         position: sticky;
         top: 0;
@@ -72,7 +72,7 @@
         margin-bottom: 0;
     }
 
-  .topbar::before {
+   .topbar::before {
         content: "";
         position: absolute;
         inset: 0;
@@ -89,7 +89,7 @@
         to { transform: scale(1.1); }
     }
 
-  .topbar::after {
+   .topbar::after {
         content: "";
         position: absolute;
         left: 0;
@@ -104,7 +104,7 @@
         box-shadow: inset 0 1px 0 rgba(255,255,255,0.5);
     }
 
-  .logo {
+   .logo {
         position: relative;
         z-index: 3;
         display: flex;
@@ -112,7 +112,7 @@
         animation: slideUp 0.8s ease-out 0.2s both;
     }
 
-  .logo img {
+   .logo img {
         width: 155px;
         height: auto;
         filter: drop-shadow(0 6px 20px rgba(0,0,0,0.35));
@@ -120,998 +120,802 @@
         transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-  .logo img:hover {
+   .logo img:hover {
         transform: scale(1.05) rotate(-1deg);
     }
 
-  .bottom-bar {
-        position: sticky;
-        top: 160px;
-        z-index: 1050;
-        background: rgba(255, 255, 255, 0.9);
-        backdrop-filter: blur(12px) saturate(180%);
-        -webkit-backdrop-filter: blur(12px) saturate(180%);
-        height: 64px;
+   .admin-access {
+        position: absolute;
+        right: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--text-main);
+        text-decoration: none;
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 0 15px;
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.5);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        z-index: 1200;
+        border: 1.5px solid rgba(255, 255, 255, 0.6);
+        box-shadow: var(--shadow-sm);
+    }
+
+   .admin-access:hover {
+        background: rgba(255, 255, 255, 0.95);
+        transform: translateY(-50%) rotate(90deg) scale(1.1);
+        box-shadow: var(--shadow-md);
+    }
+
+   .admin-access svg {
+        width: 18px;
+        height: 18px;
+        opacity: 0.8;
+    }
+
+    /* ===== FILTROS COM GLASSMORPHISM ===== */
+   .secao-filtros {
+        position: sticky;
+        top: 160px;
+        z-index: 1000;
+        padding: 8px 15px;
+        background: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(12px) saturate(180%);
+        -webkit-backdrop-filter: blur(12px) saturate(180%);
+        display: flex;
+        align-items: center;
         border-top: 2px solid rgba(255, 255, 255, 0.8);
-        border-bottom: 1px solid rgba(0,0,0,0.06);
-        box-shadow: 0 4px 16px rgba(0,0,0,0.05);
+        border-bottom: 1px solid rgba(0,0,0,0.04);
+        min-height: 52px;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.04);
         animation: slideUp 0.6s ease-out 0.3s both;
         margin-top: -1px;
     }
 
-  .btn-voltar-admin {
+   .filtros-topo-wrapper {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        gap: 12px;
+    }
+
+   .resumo-filtros {
+        display: flex;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        gap: 8px;
+        flex-grow: 1;
+        padding-right: 10px;
+        scrollbar-width: none;
+    }
+   .resumo-filtros::-webkit-scrollbar { display: none; }
+
+   .tag-filtro-ativa {
+        font-size: 9px;
+        background: linear-gradient(135deg, var(--text-main), var(--accent-dark));
+        color: white;
+        padding: 4px 10px;
+        border-radius: 6px;
+        font-weight: 700;
+        text-transform: uppercase;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        cursor: pointer;
+        white-space: nowrap;
+        box-shadow: 0 2px 8px rgba(58, 54, 24, 0.2);
+        transition: all 0.2s ease;
+        animation: slideUp 0.3s ease-out;
+    }
+
+   .tag-filtro-ativa:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(58, 54, 24, 0.3);
+    }
+
+   .tag-filtro-ativa span {
+        font-size: 13px;
+        font-weight: 300;
+        line-height: 1;
+    }
+
+   .btn-abrir-filtros {
         background: linear-gradient(135deg, var(--text-main), var(--accent-dark));
         color: white;
         display: flex;
         align-items: center;
-        gap: 8px;
-        padding: 0 28px;
+        gap: 6px;
+        padding: 0 14px;
         border-radius: 50px;
         border: none;
         font-weight: 600;
-        font-size: 11px;
+        font-size: 10px;
         cursor: pointer;
-        height: 38px;
+        height: 28px;
+        flex-shrink: 0;
         text-transform: uppercase;
-        text-decoration: none;
+        box-shadow: 0 3px 12px rgba(58, 54, 24, 0.25);
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        box-shadow: 0 4px 14px rgba(58, 54, 24, 0.25);
-        letter-spacing: 0.5px;
     }
 
-  .btn-voltar-admin:hover {
+   .btn-abrir-filtros:hover {
         transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(58, 54, 24, 0.35);
+        box-shadow: 0 5px 16px rgba(58, 54, 24, 0.35);
     }
 
-  .btn-voltar-admin:active {
+   .btn-abrir-filtros:active {
         transform: translateY(0);
     }
 
-  .container {
-        padding: 20px;
-        max-width: 1400px;
-        margin: auto;
+   .btn-abrir-filtros svg { width: 11px; height: 11px; }
+
+    /* ===== INSTRUÇÕES PREMIUM ===== */
+   .instrucao-texto {
+        width: calc(100% - 40px);
+        margin: 30px auto 15px;
+        padding: 18px 22px;
+        text-align: center;
+        background: rgba(255, 255, 255, 0.65);
+        border-radius: 24px;
+        backdrop-filter: blur(16px) saturate(180%);
+        -webkit-backdrop-filter: blur(16px) saturate(180%);
+        border: 1.5px solid rgba(255,255,255,0.7);
+        box-shadow: var(--shadow-md);
         animation: slideUp 0.6s ease-out 0.4s both;
     }
-
-  .busca {
-        width: 100%;
-        padding: 14px 24px;
-        border-radius: 50px;
-        border: 2px solid rgba(0,0,0,0.08);
-        margin: 20px 0;
-        outline: none;
-        text-align: center;
-        font-family: inherit;
+   .instrucao-texto p {
+        margin: 0;
+        font-size: 14px;
         font-weight: 500;
-        background: rgba(255, 255, 255, 0.8);
-        backdrop-filter: blur(8px);
-        transition: all 0.3s ease;
-        box-shadow: var(--shadow-sm);
+    }
+   .instrucao-texto span {
+        display: block;
+        margin-top: 6px;
+        font-size: 11px;
+        color: rgba(58, 54, 24, 0.7);
+        font-weight: 400;
     }
 
-  .busca:focus {
-        border-color: var(--accent);
-        box-shadow: 0 0 0 4px rgba(160, 140, 107, 0.1), var(--shadow-md);
-        transform: scale(1.01);
-        background: white;
-    }
-
-    #lista {
+    /* ===== GRID PREMIUM ===== */
+   .catalogo {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
-        gap: 22px;
-    }
-
-  .card {
-        background: rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(12px);
-        border-radius: 24px;
-        padding: 18px;
-        box-shadow: var(--shadow-md);
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        border: 1.5px solid rgba(255, 255, 255, 0.6);
-        animation: slideUp 0.5s ease-out both;
-    }
-
-  .card:hover {
-        transform: translateY(-6px);
-        box-shadow: var(--shadow-lg);
-    }
-
-  .img-container {
-        position: relative;
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 18px;
         width: 100%;
-        aspect-ratio: 1/1;
-        margin-bottom: 14px;
-        border-radius: 18px;
+        padding: 0 20px;
+        animation: slideUp 0.6s ease-out 0.5s both;
+    }
+
+   .item {
+        background: var(--card-white);
+        padding: 12px;
+        border-radius: 24px;
+        cursor: pointer;
+        box-shadow: var(--shadow-sm);
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
         overflow: hidden;
     }
 
-  .img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        display: block;
-        border: 2px solid rgba(255,255,255,0.8);
-        transition: transform 0.4s ease;
-    }
-
-  .card:hover.img {
-        transform: scale(1.05);
-    }
-
-  .edit-badge {
+   .item::before {
+        content: '';
         position: absolute;
-        bottom: 10px;
-        right: 10px;
-        background: linear-gradient(135deg, var(--text-main), var(--accent-dark));
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 100%;
+        background: linear-gradient(135deg, rgba(160, 140, 107, 0.1), transparent);
+        opacity: 0;
+        transition: opacity 0.4s ease;
+    }
+
+   .item:hover {
+        transform: translateY(-8px) scale(1.02);
+        box-shadow: var(--shadow-lg);
+    }
+
+   .item:hover::before {
+        opacity: 1;
+    }
+
+   .item.selecionado {
+        background: var(--card-selected)!important;
+        transform: scale(0.96);
+        box-shadow: 0 0 0 3px var(--accent), var(--shadow-md);
+    }
+
+   .item.selecionado::after {
+        content: '✓';
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        width: 24px;
+        height: 24px;
+        background: var(--accent);
         color: white;
-        width: 42px;
-        height: 42px;
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
-        cursor: pointer;
-        border: 3px solid white;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.25);
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-  .edit-badge:hover {
-        transform: scale(1.15) rotate(15deg);
-        box-shadow: 0 6px 18px rgba(0,0,0,0.35);
-    }
-
-  .file-input { display: none; }
-
-    h4 {
-        margin: 6px 0 18px;
-        text-align: center;
-        font-size: 17px;
-        color: var(--text-main);
         font-weight: 700;
+        font-size: 14px;
+        animation: pulse 0.4s ease;
     }
 
-    label {
-        font-size: 10px;
-        font-weight: 700;
-        color: var(--accent);
-        text-transform: uppercase;
-        margin-top: 12px;
+   .item img {
+        width: 100%;
+        aspect-ratio: 1/1;
+        object-fit: cover;
+        border-radius: 16px;
         display: block;
-        letter-spacing: 0.8px;
+        transition: transform 0.4s ease;
     }
 
-    input, select {
-        width: 100%;
-        padding: 10px 14px;
-        border-radius: 10px;
-        border: 1.5px solid #e5e0d8;
-        margin-top: 4px;
-        font-family: inherit;
+   .item:hover img {
+        transform: scale(1.05);
+    }
+
+   .item p {
+        text-align: center;
         font-size: 13px;
-        background: rgba(250, 250, 250, 0.6);
-        transition: all 0.3s ease;
-        cursor: pointer;
-    }
-
-    input:focus, select:focus {
-        border-color: var(--accent);
-        outline: none;
-        background: #fff;
-        box-shadow: 0 0 0 3px rgba(160, 140, 107, 0.1);
-    }
-
-  .row {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 12px;
-    }
-
-  .actions {
-        display: flex;
-        gap: 10px;
-        margin-top: 20px;
-    }
-
-    button {
-        padding: 13px;
-        border: none;
-        border-radius: 14px;
-        cursor: pointer;
         font-weight: 600;
-        font-family: inherit;
-        font-size: 12px;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
+        margin: 12px 0 4px 0;
     }
 
-  .save {
-        background: linear-gradient(135deg, var(--ok), #3d7a37);
-        color: #fff;
-        flex: 2;
-        box-shadow: 0 4px 14px rgba(45, 90, 39, 0.3);
-    }
+.estoque-status {
+    text-align: center;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
 
-  .save:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(45, 90, 39, 0.4);
-    }
+.disponivel {
+    color: #2d5a27;
+}
 
-  .save:disabled {
-        opacity: 0.6;
-        cursor: not-allowed;
-        transform: none;
-    }
+.produzimos {
+    color: var(--accent-dark);
+    opacity: 0.95;
+    font-weight: 600;
+}
 
-  .del {
-        background: rgba(245, 243, 240, 0.8);
-        color: var(--danger);
-        flex: 1;
-        border: 1.5px solid rgba(139, 45, 45, 0.2);
-    }
-
-  .del:hover {
-        background: rgba(139, 45, 45, 0.1);
-        transform: translateY(-2px);
-    }
-
-  .new {
+    /* ===== RODAPÉ PREMIUM ===== */
+   .rodape-acoes {
+        position: fixed;
+        bottom: 0;
+        left: 0;
         width: 100%;
-        background: linear-gradient(135deg, var(--text-main), var(--accent-dark));
-        color: #fff;
-        margin-bottom: 15px;
+        background: rgba(233, 228, 221, 0.95);
+        backdrop-filter: blur(16px) saturate(180%);
+        -webkit-backdrop-filter: blur(16px) saturate(180%);
+        padding: 12px 20px 28px;
+        z-index: 1000;
+        border-top: 2px solid rgba(255, 255, 255, 0.9);
+        box-shadow: 0 -8px 32px rgba(0,0,0,0.08);
+    }
+
+   .container-rodape {
+        max-width: 500px;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+   .caixa-selecao {
+        display: none;
+        background: #ffffff;
+        padding: 8px 12px;
+        border-radius: 18px;
+        max-height: 75px;
+        overflow-y: auto;
+        border: 1.5px solid rgba(0,0,0,0.06);
+        box-shadow: inset 0 2px 8px rgba(0,0,0,0.03);
+    }
+
+   .tag-item {
+        font-size: 10px;
+        background: linear-gradient(135deg, #f5f3f0, #ebe7e1);
+        padding: 5px 11px;
+        border-radius: 10px;
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        margin: 0 5px 5px 0;
+        font-weight: 600;
+        animation: slideUp 0.2s ease;
+    }
+
+   .tag-item button {
+        border: none;
+        background: none;
+        color: var(--danger);
+        cursor: pointer;
+        font-weight: bold;
+        transition: transform 0.2s;
+    }
+
+   .tag-item button:hover {
+        transform: scale(1.2);
+    }
+
+   .campo-busca {
+        width: 100%;
+        padding: 14px 22px;
         border-radius: 50px;
-        height: 52px;
+        border: 2px solid rgba(0,0,0,0.08);
+        outline: none;
+        text-align: center;
+        font-family: inherit;
+        font-weight: 500;
+        background: white;
+        transition: all 0.3s ease;
+    }
+
+   .campo-busca:focus {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 4px rgba(160, 140, 107, 0.1);
+        transform: scale(1.01);
+    }
+
+   .btn-whatsapp {
+        width: 100%;
+        padding: 16px;
+        background: linear-gradient(135deg, var(--text-main), var(--accent-dark));
+        color: white;
+        border: none;
+        border-radius: 50px;
+        font-weight: 600;
+        cursor: pointer;
         font-size: 14px;
         box-shadow: 0 6px 20px rgba(58, 54, 24, 0.3);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        animation: slideUp 0.4s ease;
     }
 
-  .new:hover {
+   .btn-whatsapp:hover {
         transform: translateY(-3px);
         box-shadow: 0 10px 28px rgba(58, 54, 24, 0.4);
     }
 
-  .toast {
-        position: fixed;
-        bottom: 25px;
-        left: 50%;
-        transform: translateX(-50%);
-        background: linear-gradient(135deg, #2e2a15, #3a3618);
-        color: #fff;
-        padding: 14px 28px;
-        border-radius: 50px;
-        display: none;
-        z-index: 3000;
-        font-size: 13px;
-        font-weight: 500;
-        box-shadow: 0 8px 24px rgba(0,0,0,0.35);
-        animation: slideUp 0.3s ease;
+   .btn-whatsapp:active {
+        transform: translateY(-1px);
     }
 
-    #modal, #modalExcluir, #modalSair {
-        display: none;
+   .oculto { display: none!important; }
+
+    /* ===== DRAWER PREMIUM ===== */
+   .overlay {
         position: fixed;
         inset: 0;
-        background: rgba(0,0,0,0.7);
-        align-items: center;
-        justify-content: center;
+        background: rgba(0,0,0,0.6);
         z-index: 2000;
-        backdrop-filter: blur(8px);
+        display: none;
+        backdrop-filter: blur(6px);
         animation: fadeIn 0.3s ease;
     }
 
-  .modal-content {
-        background: transparent;
-        backdrop-filter: none;
-        padding: 0;
+   .drawer-filtros {
+        position: fixed;
+        right: -320px;
+        top: 0;
+        width: 320px;
+        height: 100%;
+        background: var(--body-bg);
+        background-image:
+            radial-gradient(at 80% 20%, rgba(160, 140, 107, 0.1) 0px, transparent 50%);
+        z-index: 2001;
+        transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        padding: 35px 25px;
+        overflow-y: auto;
+        box-shadow: -12px 0 40px rgba(0,0,0,0.15);
+    }
+
+   .drawer-filtros.active { right: 0; }
+
+   .fechar-drawer {
+        background: rgba(255,255,255,0.6);
         border: none;
-        box-shadow: none;
-        max-width: 340px;
-    }
-
-    #modal .card-modal {
-    background: rgba(255, 255, 255, 0.98);
-    backdrop-filter: blur(16px);
-    border-radius: 24px;
-    padding: 18px;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-    border: 2px solid rgba(255, 255, 255, 0.8);
-    animation: slideUp 0.4s ease;
-}
-
-    #modal .card-modal h4 {
-    margin: 6px 0 18px;
-    text-align: center;
-    font-size: 20px;
-    color: var(--text-main);
-    font-weight: 700;
-}
-
-    .img-placeholder {
-        width: 100%;
-        aspect-ratio: 1/1;
-        background: linear-gradient(135deg, #f5f3f0, #e9e4dd);
-        border: 2px dashed rgba(160, 140, 107, 0.4);
-        border-radius: 18px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        color: var(--accent);
-        font-size: 12px;
-        font-weight: 600;
-        gap: 8px;
+        font-size: 26px;
         cursor: pointer;
+        text-align: center;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        color: var(--text-main);
+        margin-bottom: 15px;
         transition: all 0.3s ease;
+        backdrop-filter: blur(8px);
     }
 
-    .img-placeholder:hover {
-        border-color: var(--accent);
-        background: linear-gradient(135deg, #fcfaf7, #f5f3f0);
+   .fechar-drawer:hover {
+        background: rgba(255,255,255,0.9);
+        transform: rotate(90deg);
     }
 
-    #modalExcluir .modal-content,
-    #modalSair .modal-content {
-        background: rgba(255, 255, 255, 0.98);
-        backdrop-filter: blur(16px);
-        padding: 32px;
-        border-radius: 28px;
-        width: 90%;
-        max-width: 420px;
-        box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-        border: 2px solid rgba(255, 255, 255, 0.8);
-        animation: slideUp 0.4s ease;
+   .pill {
+        padding: 7px 16px;
+        background: rgba(255, 255, 255, 0.8);
+        backdrop-filter: blur(8px);
+        border: 1.5px solid rgba(0,0,0,0.06);
+        border-radius: 50px;
+        font-size: 12px;
+        cursor: pointer;
+        margin: 5px;
+        display: inline-block;
+        font-weight: 500;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    #modalExcluir .modal-content h4,
-    #modalSair .modal-content h4 {
-        margin-top: 0;
-        font-size: 24px;
-        margin-bottom: 24px;
+   .pill:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-sm);
     }
 
+   .pill.active {
+        background: linear-gradient(135deg, var(--text-main), var(--accent-dark));
+        color: white;
+        border-color: transparent;
+        box-shadow: 0 4px 12px rgba(58, 54, 24, 0.3);
+    }
+
+    /* ===== SKELETON LOADING ===== */
     @keyframes shimmer {
         0% { background-position: -1000px 0; }
         100% { background-position: 1000px 0; }
     }
 
-  .skeleton {
+   .skeleton {
         background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
         background-size: 1000px 100%;
         animation: shimmer 2s infinite;
     }
 
-   @media (min-width: 768px) {
-  .topbar { min-height: 230px; padding: 50px 0; }
-  .logo img { width: 260px; }
-  .topbar::after { height: 175px; }
-  .bottom-bar { top: 230px; margin-top: -1px; }
-    #lista { grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); }
-}
-
-.upload-progress {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 4px;
-    background: rgba(255,255,255,0.3);
-    border-radius: 0 0 16px 16px;
-    overflow: hidden;
-    display: none;
-}
-
-.upload-progress-bar {
-    height: 100%;
-    width: 0%;
-    background: linear-gradient(90deg, var(--accent), var(--accent-dark));
-    transition: width 0.3s ease;
-    box-shadow: 0 0 10px rgba(160, 140, 107, 0.6);
-}
-
-.upload-overlay {
-    position: absolute;
-    inset: 0;
-    background: rgba(0,0,0,0.6);
-    backdrop-filter: blur(4px);
-    display: none;
-    align-items: center;
-    justify-content: center;
-    border-radius: 16px;
-    color: white;
-    font-size: 11px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
+    @media (min-width: 768px) {
+       .topbar {
+            padding: 50px 0;
+            min-height: 230px;
+        }
+       .logo img {
+            width: 260px;
+        }
+       .topbar::after {
+            height: 175px;
+        }
+       .secao-filtros { 
+            top: 230px; 
+            margin-top: -1px;
+        }
+       .catalogo { grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); }
+    }
 </style>
 </head>
 <body>
 
 <div class="topbar">
     <div class="logo">
-        <img src="logo.png" onclick="location.href='index.html'">
+        <img src="logo.png" onclick="location.reload()">
     </div>
-</div>
 
-<div class="bottom-bar">
-    <a href="index.html" class="btn-voltar-admin">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" width="15">
-            <line x1="19" y1="12" x2="5" y2="12"></line>
-            <polyline points="12 19 5 12 12 5"></polyline>
+    <a href="javascript:void(0)" onclick="acessarAdmin()" class="admin-access" title="Acesso Admin">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="22" height="22">
+    <circle cx="12" cy="12" r="3"></circle>
+    <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"></path>
         </svg>
-        Sair do Painel
     </a>
 </div>
 
-<div class="container">
-  <button class="new" onclick="abrirModal()">+ Adicionar Nova ID</button>
-  <input class="busca" placeholder="Buscar ID pelo nome..." oninput="filtrar(this.value)">
-  <div id="lista"></div>
-</div>
-    <div id="modal" onclick="if(event.target == this) fecharModal()">
-  <div class="modal-content">
-    <div class="card card-modal">
-      <h4>Nova Rosa do Deserto</h4>
-
-      <div class="img-container">
-        <img src="imagens/sem-foto.jpg" class="img" id="img_nova" style="display:none;">
-        <div class="img-placeholder" id="placeholder_nova" onclick="document.getElementById('file_nova').click()">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="32" height="32">
-            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-            <circle cx="8.5" cy="8.5" r="1.5"></circle>
-            <polyline points="21 15 16 10 5 21"></polyline>
-          </svg>
-          <span>Clique para adicionar foto</span>
-          <span style="font-size:10px;opacity:0.7;">Opcional</span>
-        </div>
-        <div class="upload-overlay" id="overlay_nova">Enviando...</div>
-        <div class="upload-progress" id="progress_nova">
-          <div class="upload-progress-bar" id="progressBar_nova"></div>
-        </div>
-        <label class="edit-badge" for="file_nova">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="19" height="19"><path d="M17 3 a 2.828 2.828 0 1 1 4 4 L7.5 20.5 2 22 l1.5 -5.5 L17 3z"></path></svg>
-        </label>
-        <input type="file" id="file_nova" class="file-input" accept="image/*" onchange="uploadFotoNova(this)">
-      </div>
-
-      <input id="n_midia" value="" type="hidden">
-
-      <label>Nome da ID</label>
-      <input id="n_nome" placeholder="Ex: TS-152">
-
-      <label>Quantidade em Estoque</label>
-      <input id="n_qtd" type="number" value="0">
-
-      <div class="row">
-        <div>
-          <label>Camadas</label>
-          <div id="n_camadas_container"></div>
-        </div>
-        <div>
-          <label>Cores</label>
-          <div id="n_cores_container"></div>
-        </div>
-      </div>
-
-      <label>Padrão</label>
-<div id="n_padrao_container"></div>
-
-<label>Especiais</label>
-<div id="n_especiais_container"></div>
-
-<div class="actions">
-  <button class="save" onclick="criar()">Criar ID</button>
-  <button class="del" style="color:#666" onclick="fecharModal()">Cancelar</button>
-</div>
-    </div>
+<div class="secao-filtros">
+  <div class="filtros-topo-wrapper">
+    <div class="resumo-filtros" id="listaFiltrosAtivos"></div>
+    <button class="btn-abrir-filtros" onclick="toggleDrawer()">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M3 4.5H21M7 12H17M10 19.5H14" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+      </svg>
+      <span>Filtrar</span>
+    </button>
   </div>
 </div>
 
-<div id="modalExcluir" onclick="if(event.target == this) fecharModalExcluir()">
-  <div class="modal-content" style="text-align:center;">
-    <h4 style="margin-top:0;font-size:20px;margin-bottom:16px;">Excluir ID</h4>
-    <p id="textoExcluir" style="font-size:14px;color:rgba(58,54,24,0.8);margin-bottom:24px;"></p>
-    <div class="actions">
-        <button class="del" onclick="confirmarExclusao()" style="flex:1;">Confirmar</button>
-        <button class="save" onclick="fecharModalExcluir()" style="flex:1;background:linear-gradient(135deg,#666,#444);">Cancelar</button>
-    </div>
-  </div>
+<div class="overlay" id="overlay" onclick="toggleDrawer()"></div>
+<div class="drawer-filtros" id="drawer"></div>
+
+<div class="instrucao-texto">
+    <p>Selecione as ID's desejadas para solicitar informações sobre os enxertos</p>
+    <span>Sua cor favorita acabou? Produzimos uma pra você sem custo adicional</span>
 </div>
 
-<div id="modalSair" onclick="if(event.target == this) fecharModalSair()">
-  <div class="modal-content" style="text-align:center;">
-    <h4 style="margin-top:0;font-size:20px;margin-bottom:16px;">Alterações não salvas</h4>
-    <p style="font-size:14px;color:rgba(58,54,24,0.8);margin-bottom:24px;">Você tem alterações que não foram salvas.<br>Tem certeza que deseja sair?</p>
-    <div class="actions">
-        <button class="del" onclick="confirmarSair()" style="flex:1;">Sair mesmo assim</button>
-        <button class="save" onclick="fecharModalSair()" style="flex:1;background:linear-gradient(135deg,#666,#444);">Continuar editando</button>
-    </div>
-  </div>
+<div class="catalogo" id="gridCatalogo">
+  <p style="text-align:center; grid-column: 1/-1; padding: 50px; color: rgba(58,54,24,0.5);">Carregando catálogo...</p>
 </div>
 
-<div class="toast" id="toast"></div>
+<div class="rodape-acoes">
+  <div class="container-rodape">
+    <div class="caixa-selecao" id="areaSelecao">
+      <div id="containerTags"></div>
+    </div>
+    <input type="text" id="inputPesquisa" class="campo-busca" placeholder="Buscar ID pelo nome...">
+    <button id="btnEnviar" class="btn-whatsapp oculto" onclick="enviarPedido()"></button>
+  </div>
+</div>
 
 <script>
-// BLOQUEIO DE ACESSO
-(function() {
-    if (sessionStorage.getItem("adminLogado") === "true") {
-        return;
-    }
+let estoque = {};
+let selecionados = new Set();
+let filtroTexto = "";
+let filtrosAtivos = {};
+let colunasDeFiltro = ["camadas", "cores", "padrao"];
 
-    const senhaCorreta = "MTQwNTA4bGU=";
-    const tentativa = prompt("Área restrita. Digite a senha:");
+const urlPlanilha = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSochNnj1ihxWjFv_87wiDS9-ZakV1LrmdQWfZMAZMGRHf9pqCBXKQpkfQ6BDMlxwYE8E2JkWUVRYOG/pub?gid=1893895788&single=true&output=csv&t=" + Date.now();
 
-    if (tentativa === null || btoa(tentativa)!== senhaCorreta) {
-        alert("Acesso negado!");
-        window.location.href = "index.html";
-        return;
-    }
+const grid = document.getElementById("gridCatalogo");
+const drawer = document.getElementById("drawer");
+const inputPesquisa = document.getElementById("inputPesquisa");
+const containerTags = document.getElementById("containerTags");
+const areaSelecao = document.getElementById("areaSelecao");
+const listaFiltrosAtivos = document.getElementById("listaFiltrosAtivos");
 
-    sessionStorage.setItem("adminLogado", "true");
-})();
-
-let dados = [];
-let filtro = "";
-let temAlteracoesNaoSalvas = false;
-let colunasDeFiltro = ["camadas", "cores", "padrao", "especiais"];
-let idParaExcluir = "";
-const URL = "https://script.google.com/macros/s/AKfycbxs8MmNSgkb43F1vZDCtFE6AiRvWtjlTp67QxpLMcfA9mnWInHQOBm8iZuEqpF6Ctg0hA/exec";
-const CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSochNnj1ihxWjFv_87wiDS9-ZakV1LrmdQWfZMAZMGRHf9pqCBXKQpkfQ6BDMlxwYE8E2JkWUVRYOG/pub?gid=1893895788&single=true&output=csv";
-
-window.addEventListener('beforeunload', (e) => {
-    if (temAlteracoesNaoSalvas) {
-        e.preventDefault();
-        e.returnValue = 'Você tem alterações não salvas. Deseja sair mesmo assim?';
-        return e.returnValue;
-    }
-});
-
-document.addEventListener('DOMContentLoaded', () => {
-    document.querySelector('.btn-voltar-admin').addEventListener('click', (e) => {
-        if (temAlteracoesNaoSalvas) {
-            e.preventDefault();
-            document.getElementById("modalSair").style.display = "flex";
-        }
-    });
-});
-    
-function toast(msg) {
-  const t = document.getElementById("toast");
-  t.innerText = msg;
-  t.style.display = "block";
-  setTimeout(() => t.style.display = "none", 3000);
+function getMidiaHTML(m) {
+  if (!m || m.trim() === "" || m === "Não inf.") {
+    return `<img src="imagens/sem-foto.jpg">`;
+  }
+  const id = m.trim();
+  const imgUrl = `https://drive.google.com/thumbnail?sz=w600&id=${id}`;
+  return `<img src="${imgUrl}" onerror="this.src='imagens/sem-foto.jpg'">`;
 }
-
-function getOpcoesUnicas(campo) {
-  const valores = dados.map(d => d[campo]).filter(v => v && v!== "Não inf." && v.trim());
-  return [...new Set(valores)].sort();
-}
-
-function mostrarBotaoSalvar(idSeguro) {
-  temAlteracoesNaoSalvas = true;
-  const btn = document.getElementById("qtd_" + idSeguro).closest('.card').querySelector('.save');
-  btn.style.display = "block";
-}
-
-function criarSelect(id, valorAtual, opcoes) {
-  const idSeguro = id.replace(/^(cam_|cor_|pad_|esp_)/, ''); // ADICIONEI esp_ AQUI
-  let html = `<select id="${id}" onchange="mostrarBotaoSalvar('${idSeguro}')">`;
-  html += `<option value="">Selecione...</option>`;
-  opcoes.forEach(op => {
-    html += `<option value="${op}" ${valorAtual === op? 'selected' : ''}>${op}</option>`;
-  });
-  html += `</select>`;
-  return html;
-}
-
-function abrirModal() {
-  document.getElementById("n_camadas_container").innerHTML = criarSelect('n_camadas', '', getOpcoesUnicas('camadas'));
-  document.getElementById("n_cores_container").innerHTML = criarSelect('n_cores', '', getOpcoesUnicas('cores'));
-  document.getElementById("n_padrao_container").innerHTML = criarSelect('n_padrao', '', getOpcoesUnicas('padrao'));
-    document.getElementById("n_especiais_container").innerHTML = criarSelect('n_especiais', '', getOpcoesUnicas('especiais'));
-  document.getElementById("modal").style.display = "flex";
-}
-
-function fecharModal() {
-  document.getElementById("modal").style.display = "none";
-  document.getElementById("n_nome").value = "";
-  document.getElementById("n_qtd").value = "0";
-  document.getElementById("n_midia").value = "";
-  document.getElementById("img_nova").style.display = "none";
-  document.getElementById("placeholder_nova").style.display = "flex";
-}
-
-function fecharModalExcluir() {
-  document.getElementById("modalExcluir").style.display = "none";
-  idParaExcluir = "";
-}
-
-function fecharModalSair() {
-  document.getElementById("modalSair").style.display = "none";
-}
-
-function confirmarSair() {
-  temAlteracoesNaoSalvas = false;
-  window.location.href = "index.html";
-}
-    
-function filtrar(v) { filtro = v; render(); }
 
 function parseCSV(text) {
-  const lines = text.split(/\r?\n/).filter(l => l.trim());
+  const lines = text.split(/\r?\n/).filter(l => l.trim()!== "");
   return lines.map(line => {
     const cells = line.match(/(".*?"|[^",\r\n]+)(?=\s*,|\s*$)/g) || [];
     return cells.map(c => c.replace(/^"|"$/g, '').trim());
   });
 }
 
-function render() {
-  const el = document.getElementById("lista");
-  el.innerHTML = "";
+function toggleDrawer() {
+  document.getElementById("drawer").classList.toggle("active");
+  document.getElementById("overlay").style.display =
+    document.getElementById("drawer").classList.contains("active")? "block" : "none";
+}
 
-  // Filtra e mantém ordenação alfabética
-  const itensFiltrados = dados
-   .filter(d => d.nome.toLowerCase().includes(filtro.toLowerCase()))
-   .sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR', { sensitivity: 'base' }));
+async function carregarEstoque() {
+  try {
+    const resp = await fetch(urlPlanilha);
+    const text = await resp.text();
+    const dados = parseCSV(text);
+    dados.shift();
+    estoque = {};
+    dados.forEach(l => {
+      const nome = l[0];
+      if (!nome) return;
+      estoque[nome] = {
+        camadas: l[1] || "Não inf.",
+        cores: l[2] || "Não inf.",
+        padrao: l[3] || "Não inf.",
+        qtd: parseInt(l[5]) || 0,
+        midia: l[6] || ""
+      };
+    });
+    gerarInterfaceFiltros();
+    montarCatalogo();
 
-  if (itensFiltrados.length === 0) {
-    el.innerHTML = "<p style='text-align:center; grid-column: 1/-1; padding: 60px; color: rgba(58,54,24,0.4);'>Nenhuma ID encontrada</p>";
-    return;
+    const alturaTopbar = document.querySelector('.topbar').offsetHeight;
+    document.querySelector('.secao-filtros').style.top = alturaTopbar + 'px';
+
+  } catch (e) {
+    grid.innerHTML = "<p style='text-align:center; grid-column: 1/-1; padding: 50px;'>Erro ao carregar catálogo</p>";
   }
+}
 
-  itensFiltrados.forEach((d, index) => {
-    const idSeguro = d.nome.replace(/\W/g, "_");
-    const imgUrl = (!d.midia || d.midia === "Não inf.")? "imagens/sem-foto.jpg" : `https://drive.google.com/thumbnail?sz=w600&id=${d.midia}`;
-
-    const card = document.createElement('div');
-    card.className = 'card';
-    card.style.animationDelay = `${index * 0.05}s`;
-    card.innerHTML = `
-  <div>
-    <div class="img-container">
-  <img src="${imgUrl}" class="img" id="img_${idSeguro}" onerror="this.src='imagens/sem-foto.jpg'">
-  <div class="upload-overlay" id="overlay_${idSeguro}">Enviando...</div>
-  <div class="upload-progress" id="progress_${idSeguro}">
-    <div class="upload-progress-bar" id="progressBar_${idSeguro}"></div>
-  </div>
-  <label class="edit-badge" for="file_${idSeguro}">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="19" height="19"><path d="M17 3 a 2.828 2.828 0 1 1 4 4 L7.5 20.5 2 22 l1.5 -5.5 L17 3z"></path>
-
-</svg>
-  </label>
-  <input type="file" id="file_${idSeguro}" class="file-input" accept="image/*" onchange="uploadFoto(this, '${idSeguro}')">
-</div>
-
-    <input id="midia_${idSeguro}" value="${d.midia}" type="hidden">
-    <div style="font-size:8px; color:rgba(58,54,24,0.6); text-align:center; margin:-6px 0 10px; font-weight:500; word-break:break-all; opacity:0.9;">
-      ${d.midia && d.midia!== "Não inf."?
-        `https://drive.google.com/thumbnail?sz=w600&id=${d.midia}`
-        : '<span style="color:var(--accent);font-size:9px;">📷 Aguardando foto</span>'
-      }
-    </div>
-
-    <h4>${d.nome}</h4>
-    <input id="nome_${idSeguro}" value="${d.nome}" type="hidden">
-
-    <label>Quantidade em Estoque</label>
-    <input id="qtd_${idSeguro}" value="${d.qtd}" type="number" oninput="mostrarBotaoSalvar('${idSeguro}')">
-
-    <div class="row">
-      <div>
-        <label>Camadas</label>
-        ${criarSelect(`cam_${idSeguro}`, d.camadas, getOpcoesUnicas('camadas'))}
-      </div>
-      <div>
-         <label>Cores</label>
-         ${criarSelect(`cor_${idSeguro}`, d.cores, getOpcoesUnicas('cores'))}
-      </div>
-    </div>
-
-    <label>Padrão</label>
-${criarSelect(`pad_${idSeguro}`, d.padrao, getOpcoesUnicas('padrao'))}
-
-<label>Especiais</label>
-${criarSelect(`esp_${idSeguro}`, d.especiais, getOpcoesUnicas('especiais'))}
-</div>
-
-<div class="actions">
-  <button class="save" onclick="salvar('${d.nome}')" style="display:none;">Salvar</button>
-  <button class="del" onclick="excluir('${d.nome}')">Excluir</button>
-</div>
-`;
-    el.appendChild(card);
+function gerarInterfaceFiltros() {
+  drawer.innerHTML = '<button class="fechar-drawer" onclick="toggleDrawer()">&times;</button><h3 style="margin-top:0; font-size: 22px;">Filtros</h3>';
+  colunasDeFiltro.forEach(col => {
+    const valoresUnicos = new Set();
+    Object.values(estoque).forEach(item => { if (item[col]) valoresUnicos.add(item[col]); });
+    let html = `<div style="margin-bottom: 20px;"><p style="font-size:11px; font-weight:700; margin-bottom:12px; text-transform: uppercase; letter-spacing: 1px; opacity: 0.6;">${col}</p>`;
+    html += `<div class="pill ${!filtrosAtivos[col]? 'active' : ''}" onclick="aplicarFiltro('${col}', '')">Todas</div>`;
+    Array.from(valoresUnicos).sort().forEach(val => {
+      html += `<div class="pill ${filtrosAtivos[col] === val? 'active' : ''}" onclick="aplicarFiltro('${col}', '${val}')">${val}</div>`;
+    });
+    html += `</div>`;
+    drawer.innerHTML += html;
   });
 }
-async function uploadFotoNova(input) {
-  if (!input.files ||!input.files[0]) return;
-  const file = input.files[0];
-  const reader = new FileReader();
 
-  const overlay = document.getElementById("overlay_nova");
-  const progress = document.getElementById("progress_nova");
-  const progressBar = document.getElementById("progressBar_nova");
-  const img = document.getElementById("img_nova");
-  const placeholder = document.getElementById("placeholder_nova");
+function aplicarFiltro(coluna, valor) {
+  if (valor === "" || valor === "Todas") delete filtrosAtivos[coluna];
+  else filtrosAtivos[coluna] = valor;
+  gerarInterfaceFiltros();
+  atualizarTagsFiltros();
+  montarCatalogo();
+}
 
-  overlay.style.display = "flex";
-  progress.style.display = "block";
-  progressBar.style.width = "20%";
-  toast("Iniciando upload...");
+function atualizarTagsFiltros() {
+    listaFiltrosAtivos.innerHTML = "";
+    for (let col in filtrosAtivos) {
+        if (filtrosAtivos[col]) {
+            const tag = document.createElement("div");
+            tag.className = "tag-filtro-ativa";
+            tag.innerHTML = `${filtrosAtivos[col].toUpperCase()} <span>&times;</span>`;
+            tag.onclick = function() { removerUmFiltro(col); };
+            listaFiltrosAtivos.appendChild(tag);
+        }
+    }
+}
 
-  reader.onload = async function(e) {
-    const base64Data = e.target.result.split(",")[1];
-    progressBar.style.width = "50%";
+function removerUmFiltro(coluna) {
+    delete filtrosAtivos[coluna];
+    gerarInterfaceFiltros();
+    atualizarTagsFiltros();
+    montarCatalogo();
+}
 
-    try {
-      const params = new URLSearchParams();
-      params.append("action", "upload");
-      params.append("nome", file.name);
-      params.append("mimeType", file.type);
-      params.append("data", base64Data);
+function montarCatalogo() {
+  grid.innerHTML = "";
+  Object.keys(estoque).sort().forEach(nome => {
+    const d = estoque[nome];
+    if (filtroTexto &&!nome.toLowerCase().includes(filtroTexto.toLowerCase())) return;
+    let passa = true;
+    for (let f in filtrosAtivos) { if (d[f]!== filtrosAtivos[f]) passa = false; }
+    if (!passa) return;
 
-      progressBar.style.width = "75%";
-      const res = await fetch(URL, { method: "POST", body: params });
-      const json = await res.json();
+    const card = document.createElement("div");
+    card.className = "item" + (selecionados.has(nome)? " selecionado" : "");
+    card.id = "card_" + nome.replace(/\W/g, "_");
+    card.innerHTML = `
+      ${getMidiaHTML(d.midia)}
+      <p>${nome}</p>
+      <div class="estoque-status ${d.qtd > 0? 'disponivel' : 'produzimos'}">
+      ${d.qtd > 0? 'Disponível' : 'Produzimos pra você'}
+      </div>`;
 
-      if (json && json.id) {
-        progressBar.style.width = "100%";
-        document.getElementById("n_midia").value = json.id;
-
-        img.src = `https://drive.google.com/thumbnail?sz=w600&id=${json.id}`;
-        img.style.display = "block";
-        placeholder.style.display = "none";
-
-        toast("Foto enviada! Pronta pra criar.");
-        setTimeout(() => {
-          overlay.style.display = "none";
-          progress.style.display = "none";
-          progressBar.style.width = "0%";
-        }, 800);
+    card.onclick = () => {
+      if (inputPesquisa.value!== "") {
+        inputPesquisa.value = "";
+        filtroTexto = "";
+        if (selecionados.has(nome)) selecionados.delete(nome); else selecionados.add(nome);
+        montarCatalogo();
       } else {
-        throw new Error("ID não retornado");
+        if (selecionados.has(nome)) {
+          selecionados.delete(nome);
+          card.classList.remove("selecionado");
+        } else {
+          selecionados.add(nome);
+          card.classList.add("selecionado");
+        }
       }
-    } catch (err) {
-      toast("Erro no upload.");
-      overlay.style.display = "none";
-      progress.style.display = "none";
-      progressBar.style.width = "0%";
-    }
-  };
-  reader.readAsDataURL(file);
+      atualizarPainelAcoes();
+    };
+    grid.appendChild(card);
+  });
 }
 
-async function uploadFoto(input, idSeguro) {
-  if (!input.files ||!input.files[0]) return;
-  const file = input.files[0];
-  const reader = new FileReader();
+function atualizarPainelAcoes() {
+  const btn = document.getElementById("btnEnviar");
+  if (selecionados.size > 0) {
+    btn.classList.remove("oculto");
+    areaSelecao.style.display = "block";
+    btn.innerText = selecionados.size === 1? "Solicitar informação sobre a ID selecionada" : `Solicitar informações sobre ${selecionados.size} IDs selecionadas`;
+    atualizarTags();
+  } else {
+    btn.classList.add("oculto");
+    areaSelecao.style.display = "none";
+  }
+}
 
-  const overlay = document.getElementById("overlay_" + idSeguro);
-  const progress = document.getElementById("progress_" + idSeguro);
-  const progressBar = document.getElementById("progressBar_" + idSeguro);
-  const textDiv = input.closest('.card').querySelector('[style*="font-size:8px"]');
+function atualizarTags() {
+  containerTags.innerHTML = "";
+  selecionados.forEach(nome => {
+    const tag = document.createElement("div");
+    tag.className = "tag-item";
+    tag.innerHTML = `${nome} <button onclick="removerSelecao('${nome}')">&times;</button>`;
+    containerTags.appendChild(tag);
+  });
+}
 
-  overlay.style.display = "flex";
-  progress.style.display = "block";
-  progressBar.style.width = "20%";
-  textDiv.innerHTML = `<span style="color:var(--accent);font-size:9px;">⏳ Processando...</span>`;
-  toast("Iniciando upload...");
+function removerSelecao(nome) {
+  selecionados.delete(nome);
+  montarCatalogo();
+  atualizarPainelAcoes();
+}
 
-  reader.onload = async function(e) {
-    const base64Data = e.target.result.split(",")[1];
-    progressBar.style.width = "50%";
+function enviarPedido() {
+  const ids = Array.from(selecionados);
+  let mensagem = ids.length === 1? `Olá! Tenho interesse no enxerto da ID ${ids[0]} e queria saber mais informações e o valor.` : `Olá! Tenho interesse nos enxertos das IDs ${ids.join(", ")} e queria saber mais informações e valores.`;
+  window.open("https://wa.me/5581992665421?text=" + encodeURIComponent(mensagem), "_blank");
+}
 
-    try {
-      const params = new URLSearchParams();
-      params.append("action", "upload");
-      params.append("nome", file.name);
-      params.append("mimeType", file.type);
-      params.append("data", base64Data);
+function acessarAdmin() {
+  const modalSenha = document.createElement('div');
+  modalSenha.setAttribute('style', 'position:fixed; inset:0; background:rgba(0,0,0,0.85); backdrop-filter:blur(8px); z-index:9999; display:flex; align-items:center; justify-content:center; padding:20px; animation: fadeIn 0.3s ease;');
 
-      progressBar.style.width = "75%";
-      const res = await fetch(URL, { method: "POST", body: params });
-      const json = await res.json();
+  modalSenha.innerHTML = `
+    <div style="background:#fff; padding:28px; border-radius:24px; width:100%; max-width:320px; text-align:center; position:relative; box-shadow: 0 20px 60px rgba(0,0,0,0.3); animation: slideUp 0.4s ease;">
+      <p style="margin-top:0; font-weight:700; color:#2e2a15; font-size: 20px;">Acesso Restrito</p>
 
-if (json && json.id) {
-  progressBar.style.width = "100%";
-  document.getElementById("midia_" + idSeguro).value = json.id;
-  toast("Foto enviada! Aguardando Drive processar...");
+      <div style="position:relative; display:flex; align-items:center; margin-top: 20px;">
+        <input type="password" id="inputSenhaAdmin" placeholder="Digite a senha"
+               style="width:100%; padding:14px; padding-right:45px; border-radius:14px; border:2px solid #e5e0d8; text-align:center; font-size:18px; font-family: Poppins; transition: all 0.3s ease;">
+        <div id="toggleSenha" style="position:absolute; right:12px; cursor:pointer; display:flex; align-items:center; opacity:0.5; transition: opacity 0.2s;">
+          <svg id="olhoAberto" style="width:22px; height:22px;" viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="2">
+            <path d="M1 12s4-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+            <circle cx="12" cy="12" r="3"></circle>
+          </svg>
+        </div>
+      </div>
 
-  const img = document.getElementById("img_" + idSeguro);
-  const novaUrl = `https://drive.google.com/thumbnail?sz=w600&id=${json.id}&t=${Date.now()}`;
+      <div style="display:flex; gap:12px; margin-top:20px;">
+        <button id="btnConfirmarSenha" style="flex:1; padding:12px; background:linear-gradient(135deg, #2e2a15, #7d6e53); color:#fff; border:none; border-radius:14px; font-weight:600; cursor:pointer; font-family: Poppins; transition: transform 0.2s;">Entrar</button>
+        <button id="btnCancelarSenha" style="flex:1; padding:12px; background:#f5f3f0; color:#333; border:none; border-radius:14px; font-weight:600; cursor:pointer; font-family: Poppins; transition: transform 0.2s;">Sair</button>
+      </div>
+    </div>
+  `;
 
-  img.onload = function() {
-    img.dataset.tentativas = 0;
+  document.body.appendChild(modalSenha);
+  const input = document.getElementById('inputSenhaAdmin');
+  const toggleBtn = document.getElementById('toggleSenha');
+  input.focus();
 
-    textDiv.innerHTML = `https://drive.google.com/thumbnail?sz=w600&id=${json.id}`;
-    mostrarBotaoSalvar(idSeguro);
+  input.onfocus = () => input.style.borderColor = '#a08c6b';
+  input.onblur = () => input.style.borderColor = '#e5e0d8';
 
-    toast("Pronto! Clique em Salvar.");
-    setTimeout(() => {
-      overlay.style.display = "none";
-      progress.style.display = "none";
-      progressBar.style.width = "0%";
-    }, 800);
-  };
-
-  img.onerror = function() {
-    if (!img.dataset.tentativas) img.dataset.tentativas = 0;
-    img.dataset.tentativas++;
-
-    if (img.dataset.tentativas < 4) {
-      setTimeout(() => {
-        img.src = `https://drive.google.com/thumbnail?sz=w600&id=${json.id}&t=${Date.now()}`;
-      }, 2000);
+  toggleBtn.onclick = () => {
+    if (input.type === 'password') {
+      input.type = 'text';
+      toggleBtn.style.opacity = "1";
     } else {
-      textDiv.innerHTML = `https://drive.google.com/thumbnail?sz=w600&id=${json.id}`;
-      mostrarBotaoSalvar(idSeguro);
-      toast("Imagem demorou pra processar. Salve mesmo assim.");
-      overlay.style.display = "none";
-      progress.style.display = "none";
-      progressBar.style.width = "0%";
+      input.type = 'password';
+      toggleBtn.style.opacity = "0.5";
     }
   };
 
-  img.src = novaUrl;
-} else {
-  throw new Error("ID não retornado");
-}
-    } catch (err) {
-      toast("Erro no upload.");
-      textDiv.innerHTML = `<span style="color:var(--accent);font-size:9px;">📷 Aguardando foto</span>`;
-      overlay.style.display = "none";
-      progress.style.display = "none";
-      progressBar.style.width = "0%";
+  const validar = () => {
+    if (btoa(input.value) === "MTQwNTA4bGU=") {
+      sessionStorage.setItem("adminLogado", "true");
+      window.location.href = "admin.html";
+    } else {
+      alert("Senha incorreta!");
+      input.value = "";
+      input.style.borderColor = '#8b2d2d';
+      setTimeout(() => input.style.borderColor = '#e5e0d8', 1500);
     }
   };
-  reader.readAsDataURL(file);
-}
-
-async function carregar() {
-  try {
-    const r = await fetch(CSV + "&t=" + Date.now());
-    const t = await r.text();
-    const linhas = parseCSV(t);
-    if (linhas.length > 1) {
-      linhas.shift();
-      dados = linhas.map(l => ({
-        nome: l[0] || "",
-        camadas: l[1] || "",
-        cores: l[2] || "",
-        padrao: l[3] || "",
-        especiais: l[4] || "", // E
-        qtd: l[5] || "0", // F
-        midia: l[6] || "" // G
-      }));
-
-      dados.sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR', { sensitivity: 'base' }));
-
-      render();
-      temAlteracoesNaoSalvas = false;
-    }
-  } catch (e) { toast("Erro ao carregar dados."); }
-}
     
-async function salvar(nomeOriginal) {
-  const id = nomeOriginal.replace(/\W/g, "_");
-  const card = document.getElementById("qtd_" + id).closest('.card');
-  const btn = card.querySelector('.save');
-
-  btn.innerText = "Salvando...";
-  btn.disabled = true;
-
-  try {
-    await fetch(URL, {
-      method: "POST",
-      body: new URLSearchParams({
-        action: "update",
-        nome: nomeOriginal,
-        qtd: document.getElementById("qtd_" + id).value,
-        camadas: document.getElementById("cam_" + id).value,
-        cores: document.getElementById("cor_" + id).value,
-        padrao: document.getElementById("pad_" + id).value,
-        especiais: document.getElementById("esp_" + id).value,
-        midia: document.getElementById("midia_" + id).value
-      })
-    });
-    toast("Salvo com sucesso!");
-    btn.style.display = "none";
-    btn.innerText = "Salvar";
-
-    if (!document.querySelector('.save[style*="display: block"]')) {
-      temAlteracoesNaoSalvas = false;
-    }
-
-  } catch (e) {
-    toast("Erro ao salvar");
-    btn.innerText = "Salvar";
-  }
-  btn.disabled = false;
+  document.getElementById('btnConfirmarSenha').onclick = validar;
+  document.getElementById('btnCancelarSenha').onclick = () => document.body.removeChild(modalSenha);
+  input.onkeypress = (e) => { if(e.key === 'Enter') validar(); };
 }
 
-function excluir(nome) {
-  idParaExcluir = nome;
-  document.getElementById("textoExcluir").innerHTML = `Tem certeza que quer excluir <strong>${nome}</strong>?`;
-  document.getElementById("modalExcluir").style.display = "flex";
-}
+inputPesquisa.oninput = (e) => { filtroTexto = e.target.value; montarCatalogo(); };
+carregarEstoque();
 
-async function confirmarExclusao() {
-  if (!idParaExcluir) return;
-  try {
-    await fetch(URL, {
-      method: "POST",
-      body: new URLSearchParams({ action: "delete", nome: idParaExcluir })
-    });
-    toast("Excluído!");
-    fecharModalExcluir();
-    carregar();
-  } catch (e) {
-    toast("Erro ao excluir");
-  }
-}
+// Recalcula posição da barra de filtros ao redimensionar
+window.onresize = () => {
+    const altura = document.querySelector('.topbar').offsetHeight;
+    document.querySelector('.secao-filtros').style.top = altura + 'px';
+};
 
-async function criar() {
-  const btn = document.querySelector("#modal .save");
-  const nome = document.getElementById("n_nome").value.trim();
-
-  if (!nome) {
-    toast("Digite o nome da ID");
-    return;
-  }
-
-  btn.innerText = "Criando...";
-  btn.disabled = true;
-
-  try {
-    const midia = document.getElementById("n_midia").value || "Não inf.";
-    await fetch(URL, {
-      method: "POST",
-      body: new URLSearchParams({
-        action: "create",
-        nome: nome,
-        qtd: document.getElementById("n_qtd").value,
-        camadas: document.getElementById("n_camadas").value,
-        cores: document.getElementById("n_cores").value,
-        padrao: document.getElementById("n_padrao").value,
-        especiais: document.getElementById("n_especiais").value, // ADICIONA
-        midia: midia
-})
-    });
-    toast("Criado com sucesso!");
-    fecharModal();
-    carregar();
-  } catch(e) {
-    toast("Erro ao criar");
-  }
-  btn.innerText = "Criar ID";
-  btn.disabled = false;
-}
-
-// Efeito parallax no scroll
+// Efeito parallax sutil no scroll
+let lastScroll = 0;
 window.addEventListener('scroll', () => {
     const topbar = document.querySelector('.topbar');
     const currentScroll = window.pageYOffset;
-
+    
     if (currentScroll > 50) {
         topbar.style.boxShadow = '0 12px 40px rgba(0, 0, 0, 0.18)';
     } else {
         topbar.style.boxShadow = '0 8px 32px rgba(0, 0, 0, 0.12)';
     }
+    
+    lastScroll = currentScroll;
 });
-
-carregar();
 </script>
 </body>
 </html>
