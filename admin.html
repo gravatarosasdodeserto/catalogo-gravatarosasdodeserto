@@ -122,6 +122,63 @@ button:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
+
+/* Container principal para as IDs no Admin */
+#listaAdmin {
+    display: grid;
+    /* No PC: 4 colunas. No Tablet: 3. No Celular: 2. */
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
+
+/* Estilo de cada "Card" de edição */
+.item-admin {
+    background: #fff;
+    border-radius: 15px;
+    padding: 15px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    border: 1px solid #eee;
+}
+
+/* Miniatura da imagem para conferência rápida */
+.item-admin img {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 5px;
+}
+
+/* Título da ID no Card */
+.item-admin h4 {
+    margin: 0;
+    font-size: 16px;
+    color: var(--text-main);
+}
+
+/* Estilização dos inputs dentro do card */
+.item-admin input, .item-admin select {
+    width: 100%;
+    padding: 8px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    font-family: 'Poppins', sans-serif;
+    font-size: 13px;
+}
+
+/* Botão de salvar individual (opcional) ou destaque de status */
+.status-badge {
+    font-size: 11px;
+    font-weight: bold;
+    text-transform: uppercase;
+    padding: 4px 8px;
+    border-radius: 5px;
+    text-align: center;
+}
   
 </style>
 </head>
