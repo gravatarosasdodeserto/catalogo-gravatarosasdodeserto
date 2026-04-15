@@ -25,20 +25,20 @@
         }
 
         /* ===== CABEÇALHO FIXO AJUSTADO ===== */
-        .topbar {
-            padding: 25px 0; 
-            position: sticky;
-            top: 0;
-            z-index: 1100;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            background: transparent;
-            border-bottom: 2px solid #ffffff;
-            overflow: hidden;
-            min-height: 120px; /* Altura garantida no celular */
-        }
+       .topbar {
+    padding: 35px 0;    /* Aumentado para dar mais respiro vertical */
+    position: sticky;
+    top: 0;
+    z-index: 1100;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    background: transparent;
+    border-bottom: 2px solid #ffffff;
+    overflow: hidden;
+    min-height: 150px;  /* Altura mínima aumentada para 150px no celular */
+}
 
         .topbar::before {
             content: "";
@@ -52,16 +52,16 @@
 
         /* A FAIXA BRANCA TRANSPARENTE */
         .topbar::after {
-            content: "";
-            position: absolute;
-            left: 0;
-            width: 100%;
-            height: 90px; /* Faixa presente e visível */
-            background: rgba(255, 255, 255, 0.6);
-            backdrop-filter: blur(5px);
-            -webkit-backdrop-filter: blur(5px);
-            z-index: -1;
-        }
+    content: "";
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 110px;      /* Faixa um pouco mais larga para o logo maior */
+    background: rgba(255, 255, 255, 0.65);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    z-index: -1;
+}
 
        /* ===== AJUSTE DE TAMANHO DO LOGO ===== */
 .logo { 
@@ -72,32 +72,31 @@
 }
 
 .logo img { 
-    width: 130px; /* Aumentado de 100px para 130px no celular */
+    width: 150px;       /* Logo agora com 150px fixos no celular */
     height: auto; 
     filter: drop-shadow(0 4px 15px rgba(0,0,0,0.4)); 
     cursor: pointer;
-    transition: width 0.3s ease; /* Transição suave ao mudar de tela */
 }
 
 /* AJUSTES PARA TELAS GRANDES (PC) */
 @media (min-width: 768px) {
     .topbar { 
-        padding: 40px 0; 
-        min-height: 180px; /* Aumentei um pouco mais a altura no PC */
+        padding: 50px 0; 
+        min-height: 220px; /* Bem alto no PC para um visual premium */
     }
     .logo img { 
-        width: 200px; /* Aumentado de 150px para 200px no PC */
+        width: 250px;      /* Logo grande no PC */
     }
     .topbar::after { 
-        height: 150px; /* Faixa branca maior para acompanhar o logo no PC */
+        height: 170px;     /* Faixa branca acompanha o tamanho no PC */
     } 
 }
 
-        /* ===== SEÇÃO DE FILTROS ===== */
-        .secao-filtros {
-            position: sticky;
-            top: 120px; /* Valor inicial que o JS vai ajustar */
-            z-index: 1000;
+        /* SEÇÃO DE FILTROS - Ajuste de segurança para não sobrepor */
+.secao-filtros {
+    position: sticky;
+    top: 150px; /* Alinhado com a nova altura do celular */
+    z-index: 1000;
             padding: 6px 15px;
             background: #ffffff;
             display: flex;
