@@ -582,7 +582,6 @@ function criarSelect(id, valorAtual, opcoes) {
 }
 
 function abrirModal() {
-  // Atualiza os selects do modal com as opções da planilha
   document.getElementById("n_camadas").outerHTML = criarSelect('n_camadas', '', getOpcoesUnicas('camadas'));
   document.getElementById("n_cores").outerHTML = criarSelect('n_cores', '', getOpcoesUnicas('cores'));
   document.getElementById("n_padrao").outerHTML = criarSelect('n_padrao', '', getOpcoesUnicas('padrao'));
@@ -632,10 +631,10 @@ function render() {
 </div>
 
     <input id="midia_${idSeguro}" value="${d.midia}" type="hidden">
-    <div style="font-size:9px; color:rgba(58,54,24,0.5); text-align:center; margin:-6px 0 10px; font-weight:600; word-break:break-all; opacity:0.8;">
+    <div style="font-size:8px; color:rgba(58,54,24,0.6); text-align:center; margin:-6px 0 10px; font-weight:500; word-break:break-all; opacity:0.9;">
       ${d.midia && d.midia!== "Não inf."?
-        `<span style="color:var(--ok);font-weight:600;">✓ Foto carregada</span>`
-        : '<span style="color:var(--accent);">📷 Aguardando foto</span>'
+        `https://drive.google.com/thumbnail?sz=w600&id=${d.midia}`
+        : '<span style="color:var(--accent);font-size:9px;">📷 Aguardando foto</span>'
       }
     </div>
 
@@ -677,12 +676,12 @@ async function uploadFoto(input, idSeguro) {
   const overlay = document.getElementById("overlay_" + idSeguro);
   const progress = document.getElementById("progress_" + idSeguro);
   const progressBar = document.getElementById("progressBar_" + idSeguro);
-  const textDiv = input.closest('.card').querySelector('[style*="font-size:9px"]');
+  const textDiv = input.closest('.card').querySelector('[style*="font-size:8px"]');
 
   overlay.style.display = "flex";
   progress.style.display = "block";
   progressBar.style.width = "20%";
-  textDiv.innerHTML = `<span style="color:var(--accent);">⏳ Processando...</span>`;
+  textDiv.innerHTML = `<span style="color:var(--accent);font-size:9px;">⏳ Processando...</span>`;
   toast("Iniciando upload...");
 
   reader.onload = async function(e) {
@@ -711,7 +710,7 @@ if (json && json.id) {
   img.onload = function() {
     img.dataset.tentativas = 0;
 
-    textDiv.innerHTML = `<span style="color:var(--ok);font-weight:600;">✓ Foto carregada</span>`;
+    textDiv.innerHTML = `https://drive.google.com/thumbnail?sz=w600&id=${json.id}`;
 
     toast("Pronto! Clique em Salvar.");
     setTimeout(() => {
@@ -730,7 +729,7 @@ if (json && json.id) {
         img.src = `https://drive.google.com/thumbnail?sz=w600&id=${json.id}&t=${Date.now()}`;
       }, 2000);
     } else {
-      textDiv.innerHTML = `<span style="color:var(--ok);font-weight:600;">✓ Foto carregada</span>`;
+      textDiv.innerHTML = `https://drive.google.com/thumbnail?sz=w600&id=${json.id}`;
       toast("Imagem demorou pra processar. Salve mesmo assim.");
       overlay.style.display = "none";
       progress.style.display = "none";
@@ -744,7 +743,7 @@ if (json && json.id) {
 }
     } catch (err) {
       toast("Erro no upload.");
-      textDiv.innerHTML = `<span style="color:var(--accent);">📷 Aguardando foto</span>`;
+      textDiv.innerHTML = `<span style="color:var(--accent);font-size:9px;">📷 Aguardando foto</span>`;
       overlay.style.display = "none";
       progress.style.display = "none";
       progressBar.style.width = "0%";
