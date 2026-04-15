@@ -502,6 +502,13 @@ function acessarAdmin() {
 }
 inputPesquisa.oninput = (e) => { filtroTexto = e.target.value; montarCatalogo(); };
 carregarEstoque();
+
+// Se o usuário girar o celular ou mudar o tamanho da tela, recalcula a posição
+window.onresize = () => {
+    const altura = document.querySelector('.topbar').offsetHeight;
+    document.querySelector('.secao-filtros').style.top = altura + 'px';
+};
+
 </script>
 </body>
 </html>
