@@ -24,48 +24,51 @@
             padding-bottom: 230px;
         }
 
-       /* ===== CABEÇALHO ===== */
-.topbar/* ===== CABEÇALHO CORRIGIDO ===== */
-.topbar {
-    padding: 30px 0; /* Diminuído um pouco para não ocupar tanto espaço vertical */
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    
-    /* A barra branca transparente */
-    background-color: rgba(255, 255, 255, 0.8); 
-    backdrop-filter: blur(10px); /* Efeito de vidro embaçado */
-    -webkit-backdrop-filter: blur(10px);
-}
+              /* ===== CABEÇALHO ===== */
+        .topbar {
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            
+            /* Barra branca com transparência */
+            background-color: rgba(255, 255, 255, 0.9); 
+            
+            /* Efeito de vidro embaçado */
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            
+            /* Sombra suave para separar do conteúdo */
+            border-bottom: 1px solid rgba(0,0,0,0.08);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
 
-/* O pseudo-elemento agora serve apenas para a imagem de fundo, se você quiser manter */
-/* Se quiser APENAS a barra branca, pode remover o trecho abaixo */
-.topbar::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background-image: url('imagens/gravata-cabecalho.jpg');
-    background-size: cover;
-    background-position: center;
-    z-index: -1; /* OBRIGATÓRIO ser negativo para a cor branca aparecer na frente da foto */
-    opacity: 0.3; /* Ajuste a opacidade da imagem de fundo aqui */
-}
+        /* Se você não quiser a imagem de fundo atrás da logo, 
+           apague ou deixe esse bloco vazio */
+        .topbar::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            z-index: -1;
+        }
 
-.logo {
-    position: relative;
-    z-index: 1001; /* Garante que a logo fique acima da barra */
-}
+        .logo { 
+            position: relative; 
+            z-index: 3; 
+            display: flex;
+            justify-content: center;
+        }
 
-.logo img {
-    width: 150px;
-    height: auto;
-    filter: drop-shadow(0 2px 8px rgba(0,0,0,0.2));
-    cursor: pointer;
-}
+        .logo img { 
+            width: 140px; 
+            height: auto; 
+            filter: drop-shadow(0 2px 5px rgba(0,0,0,0.1)); 
+            cursor: pointer; 
+        }
+
 
         /* ===== SEÇÃO DE FILTROS (AJUSTADA) ===== */
         .secao-filtros {
