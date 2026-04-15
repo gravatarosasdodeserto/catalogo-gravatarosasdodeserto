@@ -25,45 +25,47 @@
         }
 
        /* ===== CABEÇALHO ===== */
+.topbar/* ===== CABEÇALHO CORRIGIDO ===== */
 .topbar {
-    padding: 50px 0;
+    padding: 30px 0; /* Diminuído um pouco para não ocupar tanto espaço vertical */
     position: sticky;
     top: 0;
-    z-index: 1000; /* Aumentado para garantir que fique sobre tudo */
+    z-index: 1000;
     display: flex;
     justify-content: center;
     align-items: center;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.18);
-    overflow: hidden;
-    /* A cor branca da barra fica aqui */
-    background-color: rgba(255, 255, 255, 0.85); 
-    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    
+    /* A barra branca transparente */
+    background-color: rgba(255, 255, 255, 0.8); 
+    backdrop-filter: blur(10px); /* Efeito de vidro embaçado */
     -webkit-backdrop-filter: blur(10px);
-    border-bottom: 2px solid #ffffff;
 }
 
+/* O pseudo-elemento agora serve apenas para a imagem de fundo, se você quiser manter */
+/* Se quiser APENAS a barra branca, pode remover o trecho abaixo */
 .topbar::before {
     content: "";
     position: absolute;
     inset: 0;
     background-image: url('imagens/gravata-cabecalho.jpg');
     background-size: cover;
-    background-position: top center;
-    z-index: -1; /* A foto vai para trás, permitindo que o branco apareça */
+    background-position: center;
+    z-index: -1; /* OBRIGATÓRIO ser negativo para a cor branca aparecer na frente da foto */
+    opacity: 0.3; /* Ajuste a opacidade da imagem de fundo aqui */
 }
 
-        .topbar::before {
-            content: "";
-            position: absolute;
-            inset: 0;
-            background-image: url('imagens/gravata-cabecalho.jpg');
-            background-size: cover;
-            background-position: top center;
-            z-index: 1;
-        }
+.logo {
+    position: relative;
+    z-index: 1001; /* Garante que a logo fique acima da barra */
+}
 
-        .logo { position: relative; z-index: 3; }
-        .logo img { width: 150px; height: auto; filter: drop-shadow(0 4px 15px rgba(0,0,0,0.4)); cursor: pointer; }
+.logo img {
+    width: 150px;
+    height: auto;
+    filter: drop-shadow(0 2px 8px rgba(0,0,0,0.2));
+    cursor: pointer;
+}
 
         /* ===== SEÇÃO DE FILTROS (AJUSTADA) ===== */
         .secao-filtros {
