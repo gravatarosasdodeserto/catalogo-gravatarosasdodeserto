@@ -29,17 +29,17 @@
     padding: 50px 0;
     position: sticky;
     top: 0;
-    z-index: 1000; /* Aumentado para garantir que fique sobre tudo */
+    z-index: 1000;
     display: flex;
     justify-content: center;
     align-items: center;
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.18);
     overflow: hidden;
-    /* A cor branca da barra fica aqui */
     background-color: rgba(255, 255, 255, 0.85); 
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     border-bottom: 2px solid #ffffff;
+    position: relative; 
 }
 
 .topbar::before {
@@ -49,18 +49,8 @@
     background-image: url('imagens/gravata-cabecalho.jpg');
     background-size: cover;
     background-position: top center;
-    z-index: -1; /* A foto vai para trás, permitindo que o branco apareça */
+    z-index: -1; 
 }
-
-        .topbar::before {
-            content: "";
-            position: absolute;
-            inset: 0;
-            background-image: url('imagens/gravata-cabecalho.jpg');
-            background-size: cover;
-            background-position: top center;
-            z-index: 1;
-        }
 
         .logo { position: relative; z-index: 3; }
         .logo img { width: 150px; height: auto; filter: drop-shadow(0 4px 15px rgba(0,0,0,0.4)); cursor: pointer; }
@@ -187,16 +177,53 @@
         .fechar-drawer { background: none; border: none; font-size: 24px; cursor: pointer; text-align: right; width: 100%; color: var(--text-main); margin-bottom: 10px; }
         .pill { padding: 6px 14px; background: #ffffff; border: 1px solid rgba(0,0,0,0.05); border-radius: 50px; font-size: 12px; cursor: pointer; margin: 4px; display: inline-block; }
         .pill.active { background: var(--text-main); color: white; }
+
+        .admin-access {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-main);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    transition: all 0.3s ease;
+    z-index: 1001; /* Um acima da topbar */
+    border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.admin-access:hover {
+    background: rgba(255, 255, 255, 0.8);
+    transform: translateY(-50%) rotate(90deg);
+}
+
+.admin-access svg {
+    opacity: 0.6;
+}
+    
     </style>
 </head>
 <body>
 
 <div class="topbar">
-  <div class="logo">
-    <img src="logo.png" onclick="acessarAdmin()">
-  </div>
-</div>
+    <div class="logo">
+        <img src="logo.png" onclick="location.reload()"> </div>
 
+    <a href="javascript:void(0)" onclick="acessarAdmin()" class="admin-access" title="Acesso Admin">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="22" height="22">
+            <circle cx="12" cy="12" r="3"></circle>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+        </svg>
+    </a>
+</div>
+    
 <div class="secao-filtros">
   <div class="filtros-topo-wrapper">
     <div class="resumo-filtros" id="listaFiltrosAtivos"></div>
