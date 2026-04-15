@@ -415,6 +415,40 @@
         box-shadow: inset 0 2px 8px rgba(0,0,0,0.03);
     }
 
+.selecao-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+}
+
+.selecao-contador {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--accent-dark);
+    text-transform: uppercase;
+}
+
+.btn-limpar-tudo {
+    background: none;
+    border: none;
+    color: #8b2d2d;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+
+.btn-limpar-tudo:hover {
+    background: rgba(139, 45, 0.1);
+    transform: scale(1.05);
+}
+ 
  .tag-item {
         font-size: 10px;
         background: linear-gradient(135deg, #f5f3f0, #ebe7e1);
@@ -632,8 +666,12 @@
 <div class="rodape-acoes">
   <div class="container-rodape">
     <div class="caixa-selecao" id="areaSelecao">
-      <div id="containerTags"></div>
-    </div>
+      <div class="selecao-header">
+        <span class="selecao-contador" id="contadorSelecao"></span>
+        <button class="btn-limpar-tudo" onclick="limparSelecao()">Limpar tudo</button>
+      </div>
+    <div id="containerTags"></div>
+</div>
     <input type="text" id="inputPesquisa" class="campo-busca" placeholder="Buscar ID pelo nome...">
     <button id="btnEnviar" class="btn-whatsapp oculto" onclick="enviarPedido()"></button>
   </div>
@@ -805,12 +843,20 @@ function atualizarPainelAcoes() {
 
 function atualizarTags() {
   containerTags.innerHTML = "";
+  document.getElementById('contadorSelecao').innerText = `${selecionados.size} ${selecionados.size === 1 ? 'selecionada' : 'selecionadas'}`;
+  
   selecionados.forEach(nome => {
     const tag = document.createElement("div");
     tag.className = "tag-item";
     tag.innerHTML = `${nome} <button onclick="removerSelecao('${nome}')">&times;</button>`;
     containerTags.appendChild(tag);
   });
+}
+
+function limparSelecao() {
+  selecionados.clear();
+  montarCatalogo();
+  atualizarPainelAcoes();
 }
 
 function removerSelecao(nome) {
