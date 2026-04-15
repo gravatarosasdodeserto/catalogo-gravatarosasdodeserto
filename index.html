@@ -763,11 +763,11 @@ function montarCatalogo() {
     card.className = "item" + (selecionados.has(nome)? " selecionado" : "");
     card.id = "card_" + nome.replace(/\W/g, "_");
     card.innerHTML = `
-      ${getMidiaHTML(d.midia)}
-      <p>${nome}</p>
-      <div class="estoque-status ${d.qtd > 0? 'disponivel' : 'produzimos'}">
-      ${d.qtd > 0? 'Disponível' : 'Produzimos pra você'}
-      </div>`;
+  ${getMidiaHTML(d.midia)}
+  <p>${nome}</p>
+  <div class="estoque-status ${d.qtd > 0? 'disponivel' : 'produzimos'}">
+  ${d.qtd > 0? `${d.qtd} ${d.qtd === 1 ? 'enxerto' : 'enxertos'}` : 'Produzimos pra você'}
+</div>`;
 
     card.onclick = () => {
       if (inputPesquisa.value!== "") {
