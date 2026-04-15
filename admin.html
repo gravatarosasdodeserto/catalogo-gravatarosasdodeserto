@@ -400,7 +400,7 @@
         animation: slideUp 0.3s ease;
     }
 
-    #modal, #modalExcluir {
+    #modal, #modalExcluir, #modalSair {
         display: none;
         position: fixed;
         inset: 0;
@@ -462,7 +462,8 @@
         background: linear-gradient(135deg, #fcfaf7, #f5f3f0);
     }
 
-   #modalExcluir .modal-content {
+    #modalExcluir .modal-content,
+    #modalSair .modal-content {
         background: rgba(255, 255, 255, 0.98);
         backdrop-filter: blur(16px);
         padding: 32px;
@@ -474,7 +475,8 @@
         animation: slideUp 0.4s ease;
     }
 
-    #modalExcluir .modal-content h4 {
+    #modalExcluir .modal-content h4,
+    #modalSair .modal-content h4 {
         margin-top: 0;
         font-size: 24px;
         margin-bottom: 24px;
@@ -626,6 +628,17 @@
   </div>
 </div>
 
+<div id="modalSair" onclick="if(event.target == this) fecharModalSair()">
+  <div class="modal-content" style="text-align:center;">
+    <h4 style="margin-top:0;font-size:20px;margin-bottom:16px;">Alterações não salvas</h4>
+    <p style="font-size:14px;color:rgba(58,54,24,0.8);margin-bottom:24px;">Você tem alterações que não foram salvas.<br>Tem certeza que deseja sair?</p>
+    <div class="actions">
+        <button class="del" onclick="confirmarSair()" style="flex:1;">Sair mesmo assim</button>
+        <button class="save" onclick="fecharModalSair()" style="flex:1;background:linear-gradient(135deg,#666,#444);">Continuar editando</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
@@ -665,13 +678,12 @@ window.addEventListener('beforeunload', (e) => {
 document.addEventListener('DOMContentLoaded', () => {
     document.querySelector('.btn-voltar-admin').addEventListener('click', (e) => {
         if (temAlteracoesNaoSalvas) {
-            if (!confirm('Você tem alterações não salvas. Deseja sair mesmo assim?')) {
-                e.preventDefault();
-            }
+            e.preventDefault();
+            document.getElementById("modalSair").style.display = "flex";
         }
     });
 });
-
+    
 function toast(msg) {
   const t = document.getElementById("toast");
   t.innerText = msg;
@@ -722,6 +734,15 @@ function fecharModalExcluir() {
   idParaExcluir = "";
 }
 
+function fecharModalSair() {
+  document.getElementById("modalSair").style.display = "none";
+}
+
+function confirmarSair() {
+  temAlteracoesNaoSalvas = false;
+  window.location.href = "index.html";
+}
+    
 function filtrar(v) { filtro = v; render(); }
 
 function parseCSV(text) {
