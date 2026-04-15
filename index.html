@@ -8,7 +8,7 @@
 <link rel="icon" type="image/png" href="catalogo/favicon.png">
 <link rel="apple-touch-icon" href="catalogo/favicon.png">
 <meta name="theme-color" content="#2e2a15">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
    <style>
         :root {
             --header-bg: #fcfaf7;
@@ -706,7 +706,7 @@ async function carregarEstoque() {
 }
 
 function gerarInterfaceFiltros() {
-  drawer.innerHTML = '<button class="fechar-drawer" onclick="toggleDrawer()">&times;</button><h3 style="margin-top:0; font-family: Playfair Display, serif; font-size: 22px;">Filtros</h3>';
+  drawer.innerHTML = '<button class="fechar-drawer" onclick="toggleDrawer()">&times;</button><h3 style="margin-top:0; font-size: 22px;">Filtros</h3>';
   colunasDeFiltro.forEach(col => {
     const valoresUnicos = new Set();
     Object.values(estoque).forEach(item => { if (item[col]) valoresUnicos.add(item[col]); });
