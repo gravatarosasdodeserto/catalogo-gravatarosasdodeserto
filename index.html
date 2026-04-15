@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Catálogo | Gravatá Rosas do Deserto</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <style>
+   <style>
         :root {
             --header-bg: #fcfaf7;
             --body-bg: #e5e0d8;
@@ -24,76 +24,76 @@
             padding-bottom: 230px;
         }
 
-* ===== CABEÇALHO FIXO AJUSTADO ===== */
-.topbar {
-    padding: 25px 0; /* Aumentado de 15px para 25px para dar mais altura */
-    position: sticky;
-    top: 0;
-    z-index: 1100;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    background: transparent;
-    border-bottom: 2px solid #ffffff;
-    overflow: hidden;
-    min-height: 120px; /* Aumentamos a altura mínima de 80px para 120px */
-}
+        /* ===== CABEÇALHO FIXO AJUSTADO ===== */
+        .topbar {
+            padding: 25px 0; 
+            position: sticky;
+            top: 0;
+            z-index: 1100;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            background: transparent;
+            border-bottom: 2px solid #ffffff;
+            overflow: hidden;
+            min-height: 120px; /* Altura garantida no celular */
+        }
 
-.topbar::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background-image: url('imagens/gravata-cabecalho.jpg');
-    background-size: cover;
-    background-position: top center;
-    z-index: -2;
-}
+        .topbar::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-image: url('imagens/gravata-cabecalho.jpg');
+            background-size: cover;
+            background-position: top center;
+            z-index: -2;
+        }
 
-/* A FAIXA BRANCA - Agora com altura fixa para garantir o preenchimento */
-.topbar::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    width: 100%;
-    height: 90px; /* Definimos uma altura fixa para a faixa no celular */
-    background: rgba(255, 255, 255, 0.6);
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
-    z-index: -1;
-}
-    .logo { position: relative; z-index: 3; }
+        /* A FAIXA BRANCA TRANSPARENTE */
+        .topbar::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            width: 100%;
+            height: 90px; /* Faixa presente e visível */
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            z-index: -1;
+        }
 
-    .logo img { 
-    width: 100px; /* Logo menor por padrão */
-    height: auto; 
-    filter: drop-shadow(0 4px 15px rgba(0,0,0,0.4)); 
-    cursor: pointer; 
-}
+        .logo { position: relative; z-index: 3; }
+        .logo img { 
+            width: 100px; 
+            height: auto; 
+            filter: drop-shadow(0 4px 15px rgba(0,0,0,0.4)); 
+            cursor: pointer; 
+        }
 
-/* AJUSTES PARA TELAS GRANDES (PC) */
-@media (min-width: 768px) {
-    .topbar { 
-        padding: 40px 0; 
-        min-height: 160px; /* Mais alto no PC */
-    }
-    .logo img { width: 150px; }
-    .topbar::after { height: 130px; } 
-}
+        /* AJUSTES PARA TELAS GRANDES (PC) */
+        @media (min-width: 768px) {
+            .topbar { 
+                padding: 40px 0; 
+                min-height: 160px; 
+            }
+            .logo img { width: 150px; }
+            .topbar::after { height: 130px; } 
+        }
 
-/* ===== SEÇÃO DE FILTROS ===== */
-.secao-filtros {
-    position: sticky;
-    top: 80px; /* Valor inicial para evitar pulos, o JS corrigirá o resto */
-    z-index: 1000;
-    padding: 6px 15px;
-    background: #ffffff;
-    display: flex;
-    align-items: center;
-    border-bottom: 1px solid rgba(0,0,0,0.06);
-    min-height: 48px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.03);
-}
+        /* ===== SEÇÃO DE FILTROS ===== */
+        .secao-filtros {
+            position: sticky;
+            top: 120px; /* Valor inicial que o JS vai ajustar */
+            z-index: 1000;
+            padding: 6px 15px;
+            background: #ffffff;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid rgba(0,0,0,0.06);
+            min-height: 48px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+        }
 
         .filtros-topo-wrapper { 
             display: flex; 
