@@ -679,46 +679,22 @@
 
 <script>
 let estoque = {};
-let selecionados = new Set();
-let filtroTexto = "";
+let filtro = "";
 let filtrosAtivos = {};
 let colunasDeFiltro = ["camadas", "cores", "padrao", "especiais"];
-
-const urlPlanilha = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSochNnj1ihxWjFv_87wiDS9-ZakV1LrmdQWfZMAZMGRHf9pqCBXKQpkfQ6BDMlxwYE8E2JkWUVRYOG/pub?gid=1893895788&single=true&output=csv&t=" + Date.now();
-
-const grid = document.getElementById("gridCatalogo");
-const drawer = document.getElementById("drawer");
-const inputPesquisa = document.getElementById("inputPesquisa");
-const containerTags = document.getElementById("containerTags");
-const areaSelecao = document.getElementById("areaSelecao");
-const listaFiltrosAtivos = document.getElementById("listaFiltrosAtivos");
-
-function getMidiaHTML(m) {
-  if (!m || m.trim() === "" || m === "Não inf.") {
-    return `<img src="imagens/sem-foto.jpg">`;
-  }
-  const id = m.trim();
-  const imgUrl = `https://drive.google.com/thumbnail?sz=w600&id=${id}`;
-  return `<img src="${imgUrl}" onerror="this.src='imagens/sem-foto.jpg'">`;
-}
+const urlPlanilha = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSochNnj1ihxWjFv_87wiDS9-ZakV1LrmdQWfZMAZMGRHf9pqCBXKQpkfQ6BDMlxwYE8E2JkWUVRYOG/pub?gid=1893895788&single=true&output=csv";
 
 function parseCSV(text) {
-  const lines = text.split(/\r?\n/).filter(l => l.trim()!== "");
+  const lines = text.split(/\r?\n/).filter(l => l.trim());
   return lines.map(line => {
     const cells = line.match(/(".*?"|[^",\r\n]+)(?=\s*,|\s*$)/g) || [];
     return cells.map(c => c.replace(/^"|"$/g, '').trim());
   });
 }
 
-function toggleDrawer() {
-  document.getElementById("drawer").classList.toggle("active");
-  document.getElementById("overlay").style.display =
-    document.getElementById("drawer").classList.contains("active")? "block" : "none";
-}
-
 async function carregarEstoque() {
   try {
-    const resp = await fetch(urlPlanilha);
+    const resp = await fetch(urlPlanilha + "&t=" + Date.now());
     const text = await resp.text();
     const dados = parseCSV(text);
     dados.shift();
@@ -727,253 +703,173 @@ async function carregarEstoque() {
       const nome = l[0];
       if (!nome) return;
       estoque[nome] = {
-  camadas: l[1] || "Não inf.", // B
-  cores: l[2] || "Não inf.", // C
-  padrao: l[3] || "Não inf.", // D
-  especiais: l[4] || "Não inf.", // E
-  qtd: parseInt(l[5]) || 0, // F
-  midia: l[6] || "" // G
-};
+        camadas: l[1] || "Não inf.",
+        cores: l[2] || "Não inf.",
+        padrao: l[3] || "Não inf.",
+        especiais: (l[4] || "").split(', ').filter(t => t),
+        qtd: parseInt(l[5]) || 0,
+        midia: l[6] || ""
+      };
     });
     gerarInterfaceFiltros();
     montarCatalogo();
-
-    const alturaTopbar = document.querySelector('.topbar').offsetHeight;
-    document.querySelector('.secao-filtros').style.top = alturaTopbar + 'px';
-
   } catch (e) {
-    grid.innerHTML = "<p style='text-align:center; grid-column: 1/-1; padding: 50px;'>Erro ao carregar catálogo</p>";
+    console.error("Erro ao carregar estoque:", e);
   }
+}
+
+function getOpcoesUnicas(campo) {
+  let valores = [];
+  Object.values(estoque).forEach(d => {
+    if (campo === 'especiais' && Array.isArray(d[campo])) {
+      valores = valores.concat(d[campo]);
+    } else if (d[campo] && d[campo]!== "Não inf." && d[campo].trim()) {
+      valores.push(d[campo]);
+    }
+  });
+  return [...new Set(valores)].filter(v => v).sort();
 }
 
 function gerarInterfaceFiltros() {
-  drawer.innerHTML = '<button class="fechar-drawer" onclick="toggleDrawer()">&times;</button><h3 style="margin-top:0; font-size: 22px;">Filtros</h3>';
+  const drawer = document.getElementById("drawerFiltros");
+  if (!drawer) return;
 
-  // Filtro de Disponibilidade
-  let htmlDisponivel = `<div style="margin-bottom: 20px;"><p style="font-size:11px; font-weight:700; margin-bottom:12px; text-transform: uppercase; letter-spacing: 1px; opacity: 0.6;">DISPONIBILIDADE</p>`;
-  htmlDisponivel += `<div class="pill ${!filtrosAtivos['disponivel']? 'active' : ''}" onclick="aplicarFiltro('disponivel', '')">Todas</div>`;
-  htmlDisponivel += `<div class="pill ${filtrosAtivos['disponivel'] === 'sim'? 'active' : ''}" onclick="aplicarFiltro('disponivel', 'sim')">Somente disponíveis</div>`;
-  htmlDisponivel += `</div>`;
-  drawer.innerHTML += htmlDisponivel;
+  drawer.innerHTML = '<h3 style="margin:0 0 16px 0;">Filtros</h3>';
 
-  // Filtros normais
-  colunasDeFiltro.forEach(col => {
-    const valoresUnicos = new Set();
-    Object.values(estoque).forEach(item => { if (item[col]) valoresUnicos.add(item[col]); });
-    let html = `<div style="margin-bottom: 20px;"><p style="font-size:11px; font-weight:700; margin-bottom:12px; text-transform: uppercase; letter-spacing: 1px; opacity: 0.6;">${col}</p>`;
-    html += `<div class="pill ${!filtrosAtivos[col]? 'active' : ''}" onclick="aplicarFiltro('${col}', '')">Todas</div>`;
-    Array.from(valoresUnicos).sort().forEach(val => {
-      html += `<div class="pill ${filtrosAtivos[col] === val? 'active' : ''}" onclick="aplicarFiltro('${col}', '${val}')">${val}</div>`;
-    });
-    html += `</div>`;
-    drawer.innerHTML += html;
+  colunasDeFiltro.forEach(campo => {
+    const opcoes = getOpcoesUnicas(campo);
+    if (opcoes.length === 0) return;
+
+    const label = campo.charAt(0).toUpperCase() + campo.slice(1);
+    drawer.innerHTML += `<label style="font-size:11px; font-weight:700; color:var(--accent); text-transform:uppercase; margin-top:16px; display:block;">${label}</label>`;
+
+    if (campo === 'especiais') {
+      drawer.innerHTML += `<div id="filtro_${campo}" style="display:flex; flex-direction:column; gap:8px; margin-top:8px;">`;
+      opcoes.forEach(op => {
+        const checked = filtrosAtivos.especiais?.includes(op)? 'checked' : '';
+        drawer.innerHTML += `
+          <label style="display:flex; align-items:center; gap:8px; font-size:12px; font-weight:500; cursor:pointer; text-transform:none; margin:0;">
+            <input type="checkbox" value="${op}" ${checked} onchange="toggleFiltroEspecial('${op}')" style="width:16px; height:16px; accent-color:var(--accent); cursor:pointer;">
+            ${op}
+          </label>`;
+      });
+      drawer.innerHTML += `</div>`;
+    } else {
+      let html = `<select id="filtro_${campo}" onchange="aplicarFiltro('${campo}', this.value)" style="width:100%; padding:10px; border-radius:10px; border:1.5px solid #e5e0d8; margin-top:8px; font-family:inherit; font-size:13px;">
+        <option value="">Todos</option>`;
+      opcoes.forEach(op => {
+        const selected = filtrosAtivos[campo] === op? 'selected' : '';
+        html += `<option value="${op}" ${selected}>${op}</option>`;
+      });
+      html += `</select>`;
+      drawer.innerHTML += html;
+    }
   });
+
+  drawer.innerHTML += `<button onclick="limparFiltros()" style="width:100%; margin-top:20px; padding:12px; border-radius:50px; border:none; background:var(--accent); color:white; font-weight:600; font-size:12px; cursor:pointer; text-transform:uppercase;">Limpar Filtros</button>`;
 }
 
-function aplicarFiltro(coluna, valor) {
-  if (valor === "" || valor === "Todas") delete filtrosAtivos[coluna];
-  else filtrosAtivos[coluna] = valor;
-  gerarInterfaceFiltros();
-  atualizarTagsFiltros();
+function toggleFiltroEspecial(tag) {
+  if (!filtrosAtivos.especiais) filtrosAtivos.especiais = [];
+
+  const index = filtrosAtivos.especiais.indexOf(tag);
+  if (index > -1) {
+    filtrosAtivos.especiais.splice(index, 1);
+  } else {
+    filtrosAtivos.especiais.push(tag);
+  }
+
   montarCatalogo();
 }
 
-function atualizarTagsFiltros() {
-    listaFiltrosAtivos.innerHTML = "";
-    for (let col in filtrosAtivos) {
-        if (filtrosAtivos[col]) {
-            const tag = document.createElement("div");
-            tag.className = "tag-filtro-ativa";
-            const texto = col === 'disponivel'? 'DISPONÍVEIS' : filtrosAtivos[col].toUpperCase();
-            tag.innerHTML = `${texto} <span>&times;</span>`;
-            tag.onclick = function() { removerUmFiltro(col); };
-            listaFiltrosAtivos.appendChild(tag);
-        }
-    }
+function aplicarFiltro(campo, valor) {
+  if (valor) {
+    filtrosAtivos[campo] = valor;
+  } else {
+    delete filtrosAtivos[campo];
+  }
+  montarCatalogo();
 }
 
-function removerUmFiltro(coluna) {
-    delete filtrosAtivos[coluna];
-    gerarInterfaceFiltros();
-    atualizarTagsFiltros();
-    montarCatalogo();
+function limparFiltros() {
+  filtrosAtivos = {};
+  colunasDeFiltro.forEach(c => {
+    if (c!== 'especiais') {
+      const el = document.getElementById(`filtro_${c}`);
+      if (el) el.value = '';
+    }
+  });
+  document.querySelectorAll('#filtro_especiais input').forEach(cb => cb.checked = false);
+  montarCatalogo();
+}
+
+function filtrar(v) {
+  filtro = v;
+  montarCatalogo();
 }
 
 function montarCatalogo() {
-  grid.innerHTML = "";
-  Object.keys(estoque).sort((a, b) => a.localeCompare(b, 'pt-BR', { sensitivity: 'base' })).forEach(nome => {
-    const d = estoque[nome];
-    if (filtroTexto &&!nome.toLowerCase().includes(filtroTexto.toLowerCase())) return;
+  const lista = document.getElementById("lista");
+  if (!lista) return;
 
-    let passa = true;
+  lista.innerHTML = "";
 
-    // Filtro de disponibilidade
-    if (filtrosAtivos['disponivel'] === 'sim' && d.qtd <= 0) passa = false;
+  const itensFiltrados = Object.entries(estoque)
+ .filter(([nome, d]) => {
+      const matchBusca = nome.toLowerCase().includes(filtro.toLowerCase());
 
-    // Filtros normais
-    for (let f in filtrosAtivos) {
-      if (f!== 'disponivel' && d[f]!== filtrosAtivos[f]) passa = false;
-    }
-    if (!passa) return;
+      const matchFiltros = colunasDeFiltro.every(c => {
+        if (!filtrosAtivos[c] || filtrosAtivos[c].length === 0) return true;
 
-    const card = document.createElement("div");
-    card.className = "item" + (selecionados.has(nome)? " selecionado" : "");
-    card.id = "card_" + nome.replace(/\W/g, "_");
-    card.innerHTML = `
-      ${getMidiaHTML(d.midia)}
-      <p>${nome}</p>
-      <div class="estoque-status ${d.qtd > 0? 'disponivel' : 'produzimos'}">
-      ${d.qtd > 0? `${d.qtd} ${d.qtd === 1? 'enxerto disponível' : 'enxertos disponíveis'}` : 'Produzimos pra você'}
-    </div>`;
-
-    card.onclick = () => {
-      if (inputPesquisa.value!== "") {
-        inputPesquisa.value = "";
-        filtroTexto = "";
-        if (selecionados.has(nome)) selecionados.delete(nome); else selecionados.add(nome);
-        montarCatalogo();
-      } else {
-        if (selecionados.has(nome)) {
-          selecionados.delete(nome);
-          card.classList.remove("selecionado");
-        } else {
-          selecionados.add(nome);
-          card.classList.add("selecionado");
+        if (c === 'especiais') {
+          return filtrosAtivos[c].some(tag => d.especiais.includes(tag));
         }
-      }
-      atualizarPainelAcoes();
-    };
-    grid.appendChild(card);
-  });
-}
-    
-function atualizarPainelAcoes() {
-  const btn = document.getElementById("btnEnviar");
-  if (selecionados.size > 0) {
-    btn.classList.remove("oculto");
-    areaSelecao.style.display = "block";
-    btn.innerText = selecionados.size === 1? "Solicitar informação sobre a ID selecionada" : `Solicitar informações sobre ${selecionados.size} IDs selecionadas`;
-    atualizarTags();
-  } else {
-    btn.classList.add("oculto");
-    areaSelecao.style.display = "none";
+        return filtrosAtivos[c] === d[c];
+      });
+
+      return matchBusca && matchFiltros && d.qtd > 0;
+    })
+ .sort((a, b) => a[0].localeCompare(b[0], 'pt-BR', { sensitivity: 'base' }));
+
+  if (itensFiltrados.length === 0) {
+    lista.innerHTML = "<p style='text-align:center; grid-column: 1/-1; padding: 60px; color: rgba(58,54,24,0.4);'>Nenhuma ID encontrada</p>";
+    return;
   }
-}
 
-function atualizarTags() {
-  containerTags.innerHTML = "";
-  document.getElementById('contadorSelecao').innerText = `${selecionados.size} ${selecionados.size === 1 ? 'selecionada' : 'selecionadas'}`;
-  
-  selecionados.forEach(nome => {
-    const tag = document.createElement("div");
-    tag.className = "tag-item";
-    tag.innerHTML = `${nome} <button onclick="removerSelecao('${nome}')">&times;</button>`;
-    containerTags.appendChild(tag);
-  });
-}
+  itensFiltrados.forEach(([nome, d], index) => {
+    const imgUrl = (!d.midia || d.midia === "")? "imagens/sem-foto.jpg" : `https://drive.google.com/thumbnail?sz=w600&id=${d.midia}`;
 
-function limparSelecao() {
-  selecionados.clear();
-  montarCatalogo();
-  atualizarPainelAcoes();
-}
+    const especiaisHTML = d.especiais.length > 0
+    ? `<div style="display:flex; flex-wrap:wrap; gap:4px; margin-top:6px; justify-content:center;">
+          ${d.especiais.map(tag => `<span style="font-size:8px; background:var(--accent); color:white; padding:2px 6px; border-radius:8px; font-weight:600; text-transform:uppercase;">${tag}</span>`).join('')}
+         </div>`
+      : '';
 
-function removerSelecao(nome) {
-  selecionados.delete(nome);
-  montarCatalogo();
-  atualizarPainelAcoes();
-}
-
-function enviarPedido() {
-  const ids = Array.from(selecionados);
-  let mensagem = ids.length === 1? `Olá! Tenho interesse no enxerto da ID ${ids[0]} e queria saber mais informações e o valor.` : `Olá! Tenho interesse nos enxertos das IDs ${ids.join(", ")} e queria saber mais informações e valores.`;
-  window.open("https://wa.me/5581992665421?text=" + encodeURIComponent(mensagem), "_blank");
-}
-
-function acessarAdmin() {
-  const modalSenha = document.createElement('div');
-  modalSenha.setAttribute('style', 'position:fixed; inset:0; background:rgba(0,0,0,0.85); backdrop-filter:blur(8px); z-index:9999; display:flex; align-items:center; justify-content:center; padding:20px; animation: fadeIn 0.3s ease;');
-
-  modalSenha.innerHTML = `
-    <div style="background:#fff; padding:28px; border-radius:24px; width:100%; max-width:320px; text-align:center; position:relative; box-shadow: 0 20px 60px rgba(0,0,0,0.3); animation: slideUp 0.4s ease;">
-      <p style="margin-top:0; font-weight:700; color:#2e2a15; font-size: 20px;">Acesso Restrito</p>
-
-      <div style="position:relative; display:flex; align-items:center; margin-top: 20px;">
-        <input type="password" id="inputSenhaAdmin" placeholder="Digite a senha"
-               style="width:100%; padding:14px; padding-right:45px; border-radius:14px; border:2px solid #e5e0d8; text-align:center; font-size:18px; font-family: Poppins; transition: all 0.3s ease;">
-        <div id="toggleSenha" style="position:absolute; right:12px; cursor:pointer; display:flex; align-items:center; opacity:0.5; transition: opacity 0.2s;">
-          <svg id="olhoAberto" style="width:22px; height:22px;" viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="2">
-            <path d="M1 12s4-8 11 8 11 8-4 8-11-8-11-8z"></path>
-            <circle cx="12" cy="12" r="3"></circle>
-          </svg>
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.style.animationDelay = `${index * 0.03}s`;
+    card.innerHTML = `
+      <div>
+        <div class="img-container">
+          <img src="${imgUrl}" class="img" onerror="this.src='imagens/sem-foto.jpg'" alt="${nome}">
+        </div>
+        <h4>${nome}</h4>
+        <div style="font-size:11px; text-align:center; color:rgba(58,54,24,0.7); margin-top:8px;">
+          <div><strong>Camadas:</strong> ${d.camadas}</div>
+          <div><strong>Cores:</strong> ${d.cores}</div>
+          <div><strong>Padrão:</strong> ${d.padrao}</div>
+          ${especiaisHTML}
+        </div>
+        <div style="text-align:center; margin-top:12px; font-size:13px; font-weight:700; color:var(--ok);">
+          ${d.qtd} ${d.qtd === 1? 'unidade' : 'unidades'}
         </div>
       </div>
-
-      <div style="display:flex; gap:12px; margin-top:20px;">
-        <button id="btnConfirmarSenha" style="flex:1; padding:12px; background:linear-gradient(135deg, #2e2a15, #7d6e53); color:#fff; border:none; border-radius:14px; font-weight:600; cursor:pointer; font-family: Poppins; transition: transform 0.2s;">Entrar</button>
-        <button id="btnCancelarSenha" style="flex:1; padding:12px; background:#f5f3f0; color:#333; border:none; border-radius:14px; font-weight:600; cursor:pointer; font-family: Poppins; transition: transform 0.2s;">Sair</button>
-      </div>
-    </div>
-  `;
-
-  document.body.appendChild(modalSenha);
-  const input = document.getElementById('inputSenhaAdmin');
-  const toggleBtn = document.getElementById('toggleSenha');
-  input.focus();
-
-  input.onfocus = () => input.style.borderColor = '#a08c6b';
-  input.onblur = () => input.style.borderColor = '#e5e0d8';
-
-  toggleBtn.onclick = () => {
-    if (input.type === 'password') {
-      input.type = 'text';
-      toggleBtn.style.opacity = "1";
-    } else {
-      input.type = 'password';
-      toggleBtn.style.opacity = "0.5";
-    }
-  };
-
-  const validar = () => {
-    if (btoa(input.value) === "MTQwNTA4bGU=") {
-      sessionStorage.setItem("adminLogado", "true");
-      window.location.href = "admin.html";
-    } else {
-      alert("Senha incorreta!");
-      input.value = "";
-      input.style.borderColor = '#8b2d2d';
-      setTimeout(() => input.style.borderColor = '#e5e0d8', 1500);
-    }
-  };
-    
-  document.getElementById('btnConfirmarSenha').onclick = validar;
-  document.getElementById('btnCancelarSenha').onclick = () => document.body.removeChild(modalSenha);
-  input.onkeypress = (e) => { if(e.key === 'Enter') validar(); };
+    `;
+    lista.appendChild(card);
+  });
 }
 
-inputPesquisa.oninput = (e) => { filtroTexto = e.target.value; montarCatalogo(); };
 carregarEstoque();
-
-// Recalcula posição da barra de filtros ao redimensionar
-window.onresize = () => {
-    const altura = document.querySelector('.topbar').offsetHeight;
-    document.querySelector('.secao-filtros').style.top = altura + 'px';
-};
-
-// Efeito parallax sutil no scroll
-let lastScroll = 0;
-window.addEventListener('scroll', () => {
-    const topbar = document.querySelector('.topbar');
-    const currentScroll = window.pageYOffset;
-    
-    if (currentScroll > 50) {
-        topbar.style.boxShadow = '0 12px 40px rgba(0, 0, 0, 0.18)';
-    } else {
-        topbar.style.boxShadow = '0 8px 32px rgba(0, 0, 0, 0.12)';
-    }
-    
-    lastScroll = currentScroll;
-});
 </script>
 </body>
 </html>
