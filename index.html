@@ -727,12 +727,13 @@ async function carregarEstoque() {
       const nome = l[0];
       if (!nome) return;
       estoque[nome] = {
-        camadas: l[1] || "Não inf.",
-        cores: l[2] || "Não inf.",
-        padrao: l[3] || "Não inf.",
-        qtd: parseInt(l[5]) || 0,
-        midia: l[6] || ""
-      };
+  camadas: l[1] || "Não inf.", // B
+  cores: l[2] || "Não inf.", // C
+  padrao: l[3] || "Não inf.", // D
+  especiais: l[4] || "Não inf.", // E
+  qtd: parseInt(l[5]) || 0, // F
+  midia: l[6] || "" // G
+};
     });
     gerarInterfaceFiltros();
     montarCatalogo();
