@@ -36,11 +36,13 @@ body{
     display: flex;
     justify-content: center;
     padding: 30px 0;
-    background-color: var(--header-bg); /* Barra branca transparente */
-    backdrop-filter: blur(10px); /* Efeito de desfoque no fundo */
+    /* Usamos um branco com 85% de opacidade para a barra aparecer bem */
+    background-color: rgba(255, 255, 255, 0.85); 
+    backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     overflow: hidden;
     border-bottom: 2px solid #ffffff;
+    z-index: 1; /* Garante que a barra e a logo fiquem acima da foto */
 }
 
 .logo-bar::before {
@@ -48,7 +50,7 @@ body{
     position: absolute;
     inset: 0;
     background: url('imagens/gravata-cabecalho.jpg') center/cover;
-    z-index: -1; /* Joga a imagem para trás da barra branca */
+    z-index: -1; /* Joga a foto das rosas para trás da cor branca */
 }
 
 .logo { position: relative; z-index: 3; }
