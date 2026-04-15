@@ -611,7 +611,10 @@ function render() {
     
     <input id="midia_${idSeguro}" value="${d.midia}" type="hidden">
     <div style="font-size:9px; color:rgba(58,54,24,0.4); text-align:center; margin:-6px 0 10px; font-weight:500; word-break:break-all; opacity:0.7;">
-      ${d.midia && d.midia !== "Não inf." ? `${d.midia}` : 'sem foto'}
+      ${d.midia && d.midia !== "Não inf." ? 
+  `<span style="color:var(--ok);font-weight:600;">✓ Foto carregada</span>` 
+  : '<span style="color:var(--accent);">📷 Aguardando foto</span>'
+}
     </div>
 
     <h4>${d.nome}</h4>
@@ -683,7 +686,12 @@ if (json && json.id) {
   const novaUrl = `https://drive.google.com/thumbnail?sz=w600&id=${json.id}&t=${Date.now()}`;
   
   img.onload = function() {
-  img.dataset.tentativas = 0; // <-- adiciona essa linha
+  img.dataset.tentativas = 0;
+  
+  // Atualiza o texto embaixo pra confirmar que deu certo
+  const textDiv = img.closest('.card').querySelector('[style*="font-size:9px"]');
+  textDiv.innerHTML = `<span style="color:var(--ok);font-weight:600;">✓ Foto carregada</span>`;
+  
   toast("Pronto! Clique em Salvar.");
   setTimeout(() => {
     overlay.style.display = "none";
