@@ -747,6 +747,15 @@ async function carregarEstoque() {
 
 function gerarInterfaceFiltros() {
   drawer.innerHTML = '<button class="fechar-drawer" onclick="toggleDrawer()">&times;</button><h3 style="margin-top:0; font-size: 22px;">Filtros</h3>';
+
+  // Filtro de Disponibilidade
+  let htmlDisponivel = `<div style="margin-bottom: 20px;"><p style="font-size:11px; font-weight:700; margin-bottom:12px; text-transform: uppercase; letter-spacing: 1px; opacity: 0.6;">DISPONIBILIDADE</p>`;
+  htmlDisponivel += `<div class="pill ${!filtrosAtivos['disponivel']? 'active' : ''}" onclick="aplicarFiltro('disponivel', '')">Todas</div>`;
+  htmlDisponivel += `<div class="pill ${filtrosAtivos['disponivel'] === 'sim'? 'active' : ''}" onclick="aplicarFiltro('disponivel', 'sim')">Somente disponíveis</div>`;
+  htmlDisponivel += `</div>`;
+  drawer.innerHTML += htmlDisponivel;
+
+  // Filtros normais
   colunasDeFiltro.forEach(col => {
     const valoresUnicos = new Set();
     Object.values(estoque).forEach(item => { if (item[col]) valoresUnicos.add(item[col]); });
@@ -774,7 +783,8 @@ function atualizarTagsFiltros() {
         if (filtrosAtivos[col]) {
             const tag = document.createElement("div");
             tag.className = "tag-filtro-ativa";
-            tag.innerHTML = `${filtrosAtivos[col].toUpperCase()} <span>&times;</span>`;
+            const texto = col === 'disponivel'? 'DISPONÍVEIS' : filtrosAtivos[col].toUpperCase();
+            tag.innerHTML = `${texto} <span>&times;</span>`;
             tag.onclick = function() { removerUmFiltro(col); };
             listaFiltrosAtivos.appendChild(tag);
         }
@@ -793,19 +803,27 @@ function montarCatalogo() {
   Object.keys(estoque).sort((a, b) => a.localeCompare(b, 'pt-BR', { sensitivity: 'base' })).forEach(nome => {
     const d = estoque[nome];
     if (filtroTexto &&!nome.toLowerCase().includes(filtroTexto.toLowerCase())) return;
+
     let passa = true;
-    for (let f in filtrosAtivos) { if (d[f]!== filtrosAtivos[f]) passa = false; }
+
+    // Filtro de disponibilidade
+    if (filtrosAtivos['disponivel'] === 'sim' && d.qtd <= 0) passa = false;
+
+    // Filtros normais
+    for (let f in filtrosAtivos) {
+      if (f!== 'disponivel' && d[f]!== filtrosAtivos[f]) passa = false;
+    }
     if (!passa) return;
 
     const card = document.createElement("div");
     card.className = "item" + (selecionados.has(nome)? " selecionado" : "");
     card.id = "card_" + nome.replace(/\W/g, "_");
     card.innerHTML = `
-  ${getMidiaHTML(d.midia)}
-  <p>${nome}</p>
-  <div class="estoque-status ${d.qtd > 0? 'disponivel' : 'produzimos'}">
-  ${d.qtd > 0? `${d.qtd} ${d.qtd === 1 ? 'enxerto disponível' : 'enxertos disponíveis'}` : 'Produzimos pra você'}
-</div>`;
+      ${getMidiaHTML(d.midia)}
+      <p>${nome}</p>
+      <div class="estoque-status ${d.qtd > 0? 'disponivel' : 'produzimos'}">
+      ${d.qtd > 0? `${d.qtd} ${d.qtd === 1? 'enxerto disponível' : 'enxertos disponíveis'}` : 'Produzimos pra você'}
+    </div>`;
 
     card.onclick = () => {
       if (inputPesquisa.value!== "") {
