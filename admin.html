@@ -440,13 +440,50 @@
         }
 
         /* AJUSTE PC */
-        @media (min-width: 768px) {
-           .topbar { min-height: 230px; padding: 50px 0; }
-           .logo img { width: 260px; }
-           .topbar::after { height: 175px; }
-           .bottom-bar { top: 230px; }
-            #lista { grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); }
-        }
+       @media (min-width: 768px) {
+   .topbar { min-height: 230px; padding: 50px 0; }
+   .logo img { width: 260px; }
+   .topbar::after { height: 175px; }
+   .bottom-bar { top: 230px; margin-top: -1px; }
+    #lista { grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); }
+}
+    
+.upload-progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: rgba(255,255,255,0.3);
+    border-radius: 0 0 16px 16px;
+    overflow: hidden;
+    display: none;
+}
+
+.upload-progress-bar {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--accent), var(--accent-dark));
+    transition: width 0.3s ease;
+    box-shadow: 0 0 10px rgba(160, 140, 107, 0.6);
+}
+
+.upload-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(4px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    border-radius: 16px;
+    color: white;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+    
     </style>
 </head>
 <body>
@@ -561,12 +598,16 @@ function render() {
     card.innerHTML = `
   <div>
     <div class="img-container">
-      <img src="${imgUrl}" class="img" id="img_${idSeguro}" onerror="this.src='imagens/sem-foto.jpg'">
-      <label class="edit-badge" for="file_${idSeguro}">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="19" height="19"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
-      </label>
-      <input type="file" id="file_${idSeguro}" class="file-input" accept="image/*" onchange="uploadFoto(this, '${idSeguro}')">
-    </div>
+  <img src="${imgUrl}" class="img" id="img_${idSeguro}" onerror="this.src='imagens/sem-foto.jpg'">
+  <div class="upload-overlay" id="overlay_${idSeguro}">Enviando...</div>
+  <div class="upload-progress" id="progress_${idSeguro}">
+    <div class="upload-progress-bar" id="progressBar_${idSeguro}"></div>
+  </div>
+  <label class="edit-badge" for="file_${idSeguro}">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="19" height="19"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
+  </label>
+  <input type="file" id="file_${idSeguro}" class="file-input" accept="image/*" onchange="uploadFoto(this, '${idSeguro}')">
+</div>
     
     <input id="midia_${idSeguro}" value="${d.midia}" type="hidden">
     <div style="font-size:9px; color:rgba(58,54,24,0.4); text-align:center; margin:-6px 0 10px; font-weight:500; word-break:break-all; opacity:0.7;">
@@ -607,10 +648,20 @@ async function uploadFoto(input, idSeguro) {
   if (!input.files ||!input.files[0]) return;
   const file = input.files[0];
   const reader = new FileReader();
-  toast("Fazendo upload...");
+
+  const overlay = document.getElementById("overlay_" + idSeguro);
+  const progress = document.getElementById("progress_" + idSeguro);
+  const progressBar = document.getElementById("progressBar_" + idSeguro);
+
+  overlay.style.display = "flex";
+  progress.style.display = "block";
+  progressBar.style.width = "20%";
+  toast("Iniciando upload...");
 
   reader.onload = async function(e) {
     const base64Data = e.target.result.split(",")[1];
+    progressBar.style.width = "50%";
+
     try {
       const params = new URLSearchParams();
       params.append("action", "upload");
@@ -618,19 +669,33 @@ async function uploadFoto(input, idSeguro) {
       params.append("mimeType", file.type);
       params.append("data", base64Data);
 
+      progressBar.style.width = "75%";
       const res = await fetch(URL, { method: "POST", body: params });
       const json = await res.json();
 
       if (json && json.id) {
+        progressBar.style.width = "100%";
         document.getElementById("midia_" + idSeguro).value = json.id;
         document.getElementById("img_" + idSeguro).src = `https://drive.google.com/thumbnail?sz=w600&id=${json.id}`;
         toast("Foto carregada! Clique em Salvar.");
+        setTimeout(() => {
+          overlay.style.display = "none";
+          progress.style.display = "none";
+          progressBar.style.width = "0%";
+        }, 800);
+      } else {
+        throw new Error("ID não retornado");
       }
-    } catch (err) { toast("Erro no upload."); }
+    } catch (err) {
+      toast("Erro no upload.");
+      overlay.style.display = "none";
+      progress.style.display = "none";
+      progressBar.style.width = "0%";
+    }
   };
   reader.readAsDataURL(file);
 }
-
+    
 async function carregar() {
   try {
     const r = await fetch(CSV + "&t=" + Date.now());
@@ -653,7 +718,8 @@ async function carregar() {
 
 async function salvar(nomeOriginal) {
   const id = nomeOriginal.replace(/\W/g, "_");
-  const btn = document.querySelector(`.card:has(#nome_${id}).save`);
+  const card = document.getElementById("qtd_" + id).closest('.card');
+  const btn = card.querySelector('.save');
 
   btn.innerText = "Salvando...";
   btn.disabled = true;
@@ -672,7 +738,9 @@ async function salvar(nomeOriginal) {
       })
     });
     toast("Salvo com sucesso!");
-  } catch (e) { toast("Erro ao salvar"); }
+  } catch (e) {
+    toast("Erro ao salvar");
+  }
   btn.innerText = "Salvar";
   btn.disabled = false;
 }
