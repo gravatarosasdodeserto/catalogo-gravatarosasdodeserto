@@ -24,22 +24,21 @@
             padding-bottom: 230px;
         }
 
-/* ===== CABEÇALHO ===== */
 .topbar {
-    padding: 30px 0; /* Diminuí um pouco para não ocupar a tela toda no celular */
+    padding: 30px 0;
     position: sticky;
     top: 0;
-    z-index: 1100; /* Z-index maior que a barra de filtros */
+    z-index: 1100;
     display: flex;
     justify-content: center;
     align-items: center;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    background-color: rgba(255, 255, 255, 0.9); 
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    background: transparent; /* Fundo principal transparente para mostrar a foto */
     border-bottom: 2px solid #ffffff;
+    overflow: hidden; /* Garante que a faixa não escape das bordas */
 }
 
+/* A FOTO DO CABEÇALHO */
 .topbar::before {
     content: "";
     position: absolute;
@@ -47,7 +46,20 @@
     background-image: url('imagens/gravata-cabecalho.jpg');
     background-size: cover;
     background-position: top center;
-    z-index: -1; 
+    z-index: -2; /* Fica no fundo de tudo */
+}
+
+/* A FAIXA BRANCA TRANSPARENTE (NOVA) */
+.topbar::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 180px;
+    background: rgba(255, 255, 255, 0.6); /* Branco com 60% de opacidade */
+    backdrop-filter: blur(5px); /* Efeito de vidro opcional */
+    -webkit-backdrop-filter: blur(5px);
+    z-index: -1; /* Fica na frente da foto, mas atrás do logo */
 }
 
         .logo { position: relative; z-index: 3; }
