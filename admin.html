@@ -673,19 +673,46 @@ async function uploadFoto(input, idSeguro) {
       const res = await fetch(URL, { method: "POST", body: params });
       const json = await res.json();
 
-      if (json && json.id) {
-        progressBar.style.width = "100%";
-        document.getElementById("midia_" + idSeguro).value = json.id;
-        document.getElementById("img_" + idSeguro).src = `https://drive.google.com/thumbnail?sz=w600&id=${json.id}`;
-        toast("Foto carregada! Clique em Salvar.");
-        setTimeout(() => {
-          overlay.style.display = "none";
-          progress.style.display = "none";
-          progressBar.style.width = "0%";
-        }, 800);
-      } else {
-        throw new Error("ID não retornado");
-      }
+if (json && json.id) {
+  progressBar.style.width = "100%";
+  document.getElementById("midia_" + idSeguro).value = json.id;
+  toast("Foto enviada! Aguardando Drive processar...");
+  
+  // Tenta carregar a imagem e só some o overlay quando carregar
+  const img = document.getElementById("img_" + idSeguro);
+  const novaUrl = `https://drive.google.com/thumbnail?sz=w600&id=${json.id}&t=${Date.now()}`;
+  
+  img.onload = function() {
+  img.dataset.tentativas = 0; // <-- adiciona essa linha
+  toast("Pronto! Clique em Salvar.");
+  setTimeout(() => {
+    overlay.style.display = "none";
+    progress.style.display = "none";
+    progressBar.style.width = "0%";
+  }, 800);
+};
+  
+  img.onerror = function() {
+  // Limita a 3 tentativas pra não travar
+  if (!img.dataset.tentativas) img.dataset.tentativas = 0;
+  img.dataset.tentativas++;
+  
+  if (img.dataset.tentativas < 4) {
+    setTimeout(() => {
+      img.src = `https://drive.google.com/thumbnail?sz=w600&id=${json.id}&t=${Date.now()}`;
+    }, 2000);
+  } else {
+    toast("Imagem demorou pra processar. Salve mesmo assim.");
+    overlay.style.display = "none";
+    progress.style.display = "none";
+    progressBar.style.width = "0%";
+  }
+};
+  
+  img.src = novaUrl;
+} else {
+  throw new Error("ID não retornado");
+}
     } catch (err) {
       toast("Erro no upload.");
       overlay.style.display = "none";
