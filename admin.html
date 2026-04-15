@@ -343,7 +343,13 @@ async function excluir(nome) {
 
 async function criar() {
     const nome = document.getElementById("n_nome").value;
+    const btn = document.querySelector("#modal .save"); // Pega o botão do modal
     if(!nome) return alert("Digite o nome");
+
+    const textoOriginal = btn.innerText;
+    btn.innerText = "Criando...";
+    btn.disabled = true;
+
     try {
         const res = await fetch(URL, {
             method: "POST",
@@ -357,10 +363,18 @@ async function criar() {
             })
         });
         const txt = await res.text();
-        if(txt.includes("OK")) { toast("Criado!"); fecharModal(); carregar(); }
-    } catch(e) { toast("Erro ao criar"); }
+        if(txt.includes("OK")) { 
+          toast("Criado com sucesso!"); 
+          fecharModal(); 
+          carregar(); 
+        }
+    } catch(e) { 
+        toast("Erro ao criar"); 
+    } finally {
+        btn.innerText = textoOriginal;
+        btn.disabled = false;
+    }
 }
-
 carregar();
 </script>
 </body>
