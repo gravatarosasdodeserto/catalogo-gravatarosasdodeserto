@@ -17,6 +17,7 @@
         --text-main: #2e2a15;
         --accent: #a08c6b;
         --accent-dark: #7d6e53;
+        --ok: #2d5a27;
         --shadow-sm: 0 4px 12px rgba(58, 54, 24, 0.06);
         --shadow-md: 0 8px 24px rgba(58, 54, 24, 0.08);
         --shadow-lg: 0 12px 40px rgba(58, 54, 24, 0.12);
@@ -55,7 +56,7 @@
         50% { transform: scale(1.05); }
     }
 
- .topbar {
+.topbar {
         padding: 35px 0;
         position: sticky;
         top: 0;
@@ -71,7 +72,7 @@
         margin-bottom: 0;
     }
 
- .topbar::before {
+.topbar::before {
         content: "";
         position: absolute;
         inset: 0;
@@ -88,7 +89,7 @@
         to { transform: scale(1.1); }
     }
 
- .topbar::after {
+.topbar::after {
         content: "";
         position: absolute;
         left: 0;
@@ -103,7 +104,7 @@
         box-shadow: inset 0 1px 0 rgba(255,255,255,0.5);
     }
 
- .logo {
+.logo {
         position: relative;
         z-index: 3;
         display: flex;
@@ -111,7 +112,7 @@
         animation: slideUp 0.8s ease-out 0.2s both;
     }
 
- .logo img {
+.logo img {
         width: 155px;
         height: auto;
         filter: drop-shadow(0 6px 20px rgba(0,0,0,0.35));
@@ -119,11 +120,11 @@
         transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
- .logo img:hover {
+.logo img:hover {
         transform: scale(1.05) rotate(-1deg);
     }
 
- .admin-access {
+.admin-access {
         position: absolute;
         right: 20px;
         top: 50%;
@@ -145,19 +146,19 @@
         box-shadow: var(--shadow-sm);
     }
 
- .admin-access:hover {
+.admin-access:hover {
         background: rgba(255, 255, 255, 0.95);
         transform: translateY(-50%) rotate(90deg) scale(1.1);
         box-shadow: var(--shadow-md);
     }
 
- .admin-access svg {
+.admin-access svg {
         width: 18px;
         height: 18px;
         opacity: 0.8;
     }
 
- .secao-filtros {
+.secao-filtros {
         position: sticky;
         top: 160px;
         z-index: 1000;
@@ -175,7 +176,7 @@
         margin-top: -1px;
     }
 
- .filtros-topo-wrapper {
+.filtros-topo-wrapper {
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -183,7 +184,7 @@
         gap: 12px;
     }
 
- .resumo-filtros {
+.resumo-filtros {
         display: flex;
         flex-wrap: nowrap;
         overflow-x: auto;
@@ -192,9 +193,9 @@
         padding-right: 10px;
         scrollbar-width: none;
     }
- .resumo-filtros::-webkit-scrollbar { display: none; }
+.resumo-filtros::-webkit-scrollbar { display: none; }
 
- .tag-filtro-ativa {
+.tag-filtro-ativa {
         font-size: 9px;
         background: linear-gradient(135deg, var(--text-main), var(--accent-dark));
         color: white;
@@ -212,18 +213,18 @@
         animation: slideUp 0.3s ease-out;
     }
 
- .tag-filtro-ativa:hover {
+.tag-filtro-ativa:hover {
         transform: translateY(-2px);
         box-shadow: 0 4px 12px rgba(58, 54, 24, 0.3);
     }
 
- .tag-filtro-ativa span {
+.tag-filtro-ativa span {
         font-size: 13px;
         font-weight: 300;
         line-height: 1;
     }
 
- .btn-abrir-filtros {
+.btn-abrir-filtros {
         background: linear-gradient(135deg, var(--text-main), var(--accent-dark));
         color: white;
         display: flex;
@@ -242,18 +243,18 @@
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
- .btn-abrir-filtros:hover {
+.btn-abrir-filtros:hover {
         transform: translateY(-2px);
         box-shadow: 0 5px 16px rgba(58, 54, 24, 0.35);
     }
 
- .btn-abrir-filtros:active {
+.btn-abrir-filtros:active {
         transform: translateY(0);
     }
 
- .btn-abrir-filtros svg { width: 11px; height: 11px; }
+.btn-abrir-filtros svg { width: 11px; height: 11px; }
 
- .instrucao-texto {
+.instrucao-texto {
         width: calc(100% - 40px);
         margin: 30px auto 15px;
         padding: 18px 22px;
@@ -266,12 +267,12 @@
         box-shadow: var(--shadow-md);
         animation: slideUp 0.6s ease-out 0.4s both;
     }
- .instrucao-texto p {
+.instrucao-texto p {
         margin: 0;
         font-size: 14px;
         font-weight: 500;
     }
- .instrucao-texto span {
+.instrucao-texto span {
         display: block;
         margin-top: 6px;
         font-size: 11px;
@@ -279,7 +280,7 @@
         font-weight: 400;
     }
 
- .catalogo {
+.catalogo {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
         gap: 18px;
@@ -288,7 +289,7 @@
         animation: slideUp 0.6s ease-out 0.5s both;
     }
 
- .item {
+.item {
         background: var(--card-white);
         padding: 12px;
         border-radius: 24px;
@@ -299,7 +300,7 @@
         overflow: hidden;
     }
 
- .item::before {
+.item::before {
         content: '';
         position: absolute;
         top: 0;
@@ -311,22 +312,22 @@
         transition: opacity 0.4s ease;
     }
 
- .item:hover {
+.item:hover {
         transform: translateY(-8px) scale(1.02);
         box-shadow: var(--shadow-lg);
     }
 
- .item:hover::before {
+.item:hover::before {
         opacity: 1;
     }
 
- .item.selecionado {
+.item.selecionado {
         background: var(--card-selected)!important;
         transform: scale(0.96);
         box-shadow: 0 0 0 3px var(--accent), var(--shadow-md);
     }
 
- .item.selecionado::after {
+.item.selecionado::after {
         content: '✓';
         position: absolute;
         top: 8px;
@@ -344,7 +345,7 @@
         animation: pulse 0.4s ease;
     }
 
- .item img {
+.item img {
         width: 100%;
         aspect-ratio: 1/1;
         object-fit: cover;
@@ -353,18 +354,18 @@
         transition: transform 0.4s ease;
     }
 
- .item:hover img {
+.item:hover img {
         transform: scale(1.05);
     }
 
- .item p {
+.item p {
         text-align: center;
         font-size: 13px;
         font-weight: 600;
         margin: 12px 0 4px 0;
     }
 
- .estoque-status {
+.estoque-status {
         text-align: center;
         font-size: 10px;
         font-weight: 700;
@@ -372,17 +373,17 @@
         letter-spacing: 0.5px;
     }
 
- .disponivel {
-        color: #2d5a27;
+.disponivel {
+        color: var(--ok);
     }
 
- .produzimos {
+.produzimos {
         color: var(--accent-dark);
         opacity: 0.95;
         font-weight: 600;
     }
 
- .rodape-acoes {
+.rodape-acoes {
         position: fixed;
         bottom: 0;
         left: 0;
@@ -396,7 +397,7 @@
         box-shadow: 0 -8px 32px rgba(0,0,0,0.08);
     }
 
- .container-rodape {
+.container-rodape {
         max-width: 500px;
         margin: 0 auto;
         display: flex;
@@ -404,7 +405,7 @@
         gap: 10px;
     }
 
- .caixa-selecao {
+.caixa-selecao {
         display: none;
         background: #ffffff;
         padding: 8px 12px;
@@ -445,11 +446,11 @@
 }
 
 .btn-limpar-tudo:hover {
-    background: rgba(139, 45, 0.1);
+    background: rgba(139, 45, 45, 0.1);
     transform: scale(1.05);
 }
- 
- .tag-item {
+
+.tag-item {
         font-size: 10px;
         background: linear-gradient(135deg, #f5f3f0, #ebe7e1);
         padding: 5px 11px;
@@ -462,20 +463,20 @@
         animation: slideUp 0.2s ease;
     }
 
- .tag-item button {
+.tag-item button {
         border: none;
         background: none;
-        color: var(--danger);
+        color: #8b2d2d;
         cursor: pointer;
         font-weight: bold;
         transition: transform 0.2s;
     }
 
- .tag-item button:hover {
+.tag-item button:hover {
         transform: scale(1.2);
     }
 
- .campo-busca {
+.campo-busca {
         width: 100%;
         padding: 14px 22px;
         border-radius: 50px;
@@ -488,13 +489,13 @@
         transition: all 0.3s ease;
     }
 
- .campo-busca:focus {
+.campo-busca:focus {
         border-color: var(--accent);
         box-shadow: 0 0 0 4px rgba(160, 140, 107, 0.1);
         transform: scale(1.01);
     }
 
- .btn-whatsapp {
+.btn-whatsapp {
         width: 100%;
         padding: 16px;
         background: linear-gradient(135deg, var(--text-main), var(--accent-dark));
@@ -509,18 +510,18 @@
         animation: slideUp 0.4s ease;
     }
 
- .btn-whatsapp:hover {
+.btn-whatsapp:hover {
         transform: translateY(-3px);
         box-shadow: 0 10px 28px rgba(58, 54, 24, 0.4);
     }
 
- .btn-whatsapp:active {
+.btn-whatsapp:active {
         transform: translateY(-1px);
     }
 
- .oculto { display: none!important; }
+.oculto { display: none!important; }
 
- .overlay {
+.overlay {
         position: fixed;
         inset: 0;
         background: rgba(0,0,0,0.6);
@@ -530,7 +531,7 @@
         animation: fadeIn 0.3s ease;
     }
 
- .drawer-filtros {
+.drawer-filtros {
         position: fixed;
         right: -320px;
         top: 0;
@@ -546,9 +547,9 @@
         box-shadow: -12px 0 40px rgba(0,0,0,0.15);
     }
 
- .drawer-filtros.active { right: 0; }
+.drawer-filtros.active { right: 0; }
 
- .fechar-drawer {
+.fechar-drawer {
         background: rgba(255,255,255,0.6);
         border: none;
         font-size: 26px;
@@ -563,12 +564,12 @@
         backdrop-filter: blur(8px);
     }
 
- .fechar-drawer:hover {
+.fechar-drawer:hover {
         background: rgba(255,255,255,0.9);
         transform: rotate(90deg);
     }
 
- .pill {
+.pill {
         padding: 7px 16px;
         background: rgba(255, 255, 255, 0.8);
         backdrop-filter: blur(8px);
@@ -582,45 +583,34 @@
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
- .pill:hover {
+.pill:hover {
         transform: translateY(-2px);
         box-shadow: var(--shadow-sm);
     }
 
- .pill.active {
+.pill.active {
         background: linear-gradient(135deg, var(--text-main), var(--accent-dark));
         color: white;
         border-color: transparent;
         box-shadow: 0 4px 12px rgba(58, 54, 24, 0.3);
     }
 
-    @keyframes shimmer {
-        0% { background-position: -1000px 0; }
-        100% { background-position: 1000px 0; }
-    }
-
- .skeleton {
-        background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0 75%);
-        background-size: 1000px 100%;
-        animation: shimmer 2s infinite;
-    }
-
     @media (min-width: 768px) {
-     .topbar {
+    .topbar {
             padding: 50px 0;
             min-height: 230px;
         }
-     .logo img {
+    .logo img {
             width: 260px;
         }
-     .topbar::after {
+    .topbar::after {
             height: 175px;
         }
-     .secao-filtros {
+    .secao-filtros {
             top: 230px;
             margin-top: -1px;
         }
-     .catalogo { grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); }
+    .catalogo { grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); }
     }
 </style>
 </head>
@@ -682,8 +672,10 @@
 let estoque = {};
 let filtro = "";
 let filtrosAtivos = {};
+let selecionados = [];
 let colunasDeFiltro = ["camadas", "cores", "padrao", "especiais"];
 const urlPlanilha = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSochNnj1ihxWjFv_87wiDS9-ZakV1LrmdQWfZMAZMGRHf9pqCBXKQpkfQ6BDMlxwYE8E2JkWUVRYOG/pub?gid=1893895788&single=true&output=csv";
+const numeroWhatsApp = "5582999999";
 
 function parseCSV(text) {
   const lines = text.split(/\r?\n/).filter(l => l.trim());
@@ -736,7 +728,7 @@ function gerarInterfaceFiltros() {
   const drawer = document.getElementById("drawer");
   if (!drawer) return;
 
-  drawer.innerHTML = '<h3 style="margin:0 0 16px 0;">Filtros</h3>';
+  drawer.innerHTML = '<button class="fechar-drawer" onclick="toggleDrawer()">×</button><h3 style="margin:0 0 16px 0;">Filtros</h3>';
 
   colunasDeFiltro.forEach(campo => {
     const opcoes = getOpcoesUnicas(campo);
@@ -810,10 +802,82 @@ function filtrar(v) {
   montarCatalogo();
 }
 
+function toggleDrawer() {
+  document.getElementById('overlay').style.display = document.getElementById('overlay').style.display === 'block'? 'none' : 'block';
+  document.getElementById('drawer').classList.toggle('active');
+}
+
+function acessarAdmin() {
+  window.location.href = 'admin.html';
+}
+
+function atualizarResumoFiltros() {
+  const container = document.getElementById('listaFiltrosAtivos');
+  if (!container) return;
+
+  container.innerHTML = '';
+
+  Object.entries(filtrosAtivos).forEach(([campo, valor]) => {
+    if (campo === 'especiais' && valor.length > 0) {
+      valor.forEach(tag => {
+        container.innerHTML += `<div class="tag-filtro-ativa" onclick="toggleFiltroEspecial('${tag}')">${tag}<span>×</span></div>`;
+      });
+    } else if (campo!== 'especiais' && valor) {
+      container.innerHTML += `<div class="tag-filtro-ativa" onclick="aplicarFiltro('${campo}', '')">${valor}<span>×</span></div>`;
+    }
+  });
+}
+
+function selecionarItem(nome) {
+  const index = selecionados.indexOf(nome);
+  if (index > -1) {
+    selecionados.splice(index, 1);
+  } else {
+    selecionados.push(nome);
+  }
+  atualizarSelecao();
+  montarCatalogo();
+}
+
+function atualizarSelecao() {
+  const area = document.getElementById('areaSelecao');
+  const tags = document.getElementById('containerTags');
+  const contador = document.getElementById('contadorSelecao');
+  const btn = document.getElementById('btnEnviar');
+
+  if (selecionados.length === 0) {
+    area.style.display = 'none';
+    btn.classList.add('oculto');
+    return;
+  }
+
+  area.style.display = 'block';
+  contador.textContent = `${selecionados.length} ${selecionados.length === 1? 'selecionado' : 'selecionados'}`;
+  btn.classList.remove('oculto');
+  btn.textContent = `Pedir informações (${selecionados.length})`;
+
+  tags.innerHTML = selecionados.map(nome => `
+    <div class="tag-item">${nome}<button onclick="selecionarItem('${nome}')">×</button></div>
+  `).join('');
+}
+
+function limparSelecao() {
+  selecionados = [];
+  atualizarSelecao();
+  montarCatalogo();
+}
+
+function enviarPedido() {
+  if (selecionados.length === 0) return;
+  const msg = `Olá! Gostaria de informações sobre os enxertos:\n\n${selecionados.map(n => `• ${n}`).join('\n')}`;
+  window.open(`https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(msg)}`, '_blank');
+}
+
 function montarCatalogo() {
   const lista = document.getElementById("gridCatalogo");
   if (!lista) return;
 
+  atualizarResumoFiltros();
   lista.innerHTML = "";
 
   const itensFiltrados = Object.entries(estoque)
@@ -840,16 +904,18 @@ function montarCatalogo() {
 
   itensFiltrados.forEach(([nome, d], index) => {
     const imgUrl = (!d.midia || d.midia === "")? "imagens/sem-foto.jpg" : `https://drive.google.com/thumbnail?sz=w600&id=${d.midia}`;
+    const selecionado = selecionados.includes(nome);
 
     const especiaisHTML = d.especiais.length > 0
-  ? `<div style="display:flex; flex-wrap:wrap; gap:4px; margin-top:6px; justify-content:center;">
+ ? `<div style="display:flex; flex-wrap:wrap; gap:4px; margin-top:6px; justify-content:center;">
           ${d.especiais.map(tag => `<span style="font-size:8px; background:var(--accent); color:white; padding:2px 6px; border-radius:8px; font-weight:600; text-transform:uppercase;">${tag}</span>`).join('')}
          </div>`
       : '';
 
     const card = document.createElement('div');
-    card.className = 'card';
+    card.className = `item ${selecionado? 'selecionado' : ''}`;
     card.style.animationDelay = `${index * 0.03}s`;
+    card.onclick = () => selecionarItem(nome);
     card.innerHTML = `
       <div>
         <div class="img-container">
