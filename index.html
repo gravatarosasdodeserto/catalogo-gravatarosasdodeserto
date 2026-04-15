@@ -842,7 +842,7 @@ function montarCatalogo() {
     const imgUrl = (!d.midia || d.midia === "")? "imagens/sem-foto.jpg" : `https://drive.google.com/thumbnail?sz=w600&id=${d.midia}`;
 
     const especiaisHTML = d.especiais.length > 0
-   ? `<div style="display:flex; flex-wrap:wrap; gap:4px; margin-top:6px; justify-content:center;">
+  ? `<div style="display:flex; flex-wrap:wrap; gap:4px; margin-top:6px; justify-content:center;">
           ${d.especiais.map(tag => `<span style="font-size:8px; background:var(--accent); color:white; padding:2px 6px; border-radius:8px; font-weight:600; text-transform:uppercase;">${tag}</span>`).join('')}
          </div>`
       : '';
