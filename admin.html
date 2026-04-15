@@ -232,22 +232,33 @@ async function uploadFoto(input, idSeguro) {
   reader.onload = async function(e) {
     const base64Data = e.target.result.split(",")[1];
     try {
+      // Usamos URLSearchParams para enviar como formulário, que o Apps Script aceita melhor
+      const params = new URLSearchParams();
+      params.append("action", "upload");
+      params.append("nome", file.name);
+      params.append("mimeType", file.type);
+      params.append("data", base64Data);
+
       const res = await fetch(URL, {
         method: "POST",
-        body: new URLSearchParams({
-          action: "upload",
-          nome: file.name,
-          mimeType: file.type,
-          data: base64Data
-        })
+        body: params
       });
-      const json = await res.json();
-      if (json.id) {
+
+      const json = await res.json(); // O script retorna um JSON com o ID
+
+      if (json && json.id) {
+        // Atualiza o campo de texto invisível com o novo ID
         document.getElementById("midia_" + idSeguro).value = json.id;
+        // Atualiza a visualização da imagem na hora
         document.getElementById("img_" + idSeguro).src = `https://drive.google.com/thumbnail?sz=w600&id=${json.id}`;
-        toast("Foto carregada! Salve para confirmar.");
+        toast("Foto carregada! Clique em 'Salvar Alterações'.");
+      } else {
+        toast("Erro ao processar imagem no servidor.");
       }
-    } catch (err) { toast("Erro no upload."); }
+    } catch (err) { 
+      console.error(err);
+      toast("Erro de conexão no upload."); 
+    }
   };
   reader.readAsDataURL(file);
 }
