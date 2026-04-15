@@ -116,6 +116,13 @@ button{ padding:10px; border:none; border-radius:12px; cursor:pointer; font-weig
   background:#000; color:#fff; padding:10px 20px; border-radius:50px;
   display:none; z-index: 3000; font-size: 13px;
 }
+
+/* Estilo para o botão quando estiver processando */
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+  
 </style>
 </head>
 
@@ -284,12 +291,20 @@ async function carregar() {
 }
 
 async function salvar(nomeOriginal) {
+  const id = nomeOriginal.replace(/\W/g, "_");
+  const btn = document.querySelector(`.card:has(#nome_${id}) .save`); // Localiza o botão dentro do card certo
+  
+  // 1. Indicador Visual: Muda o botão antes de começar o fetch
+  const textoOriginal = btn.innerText;
+  btn.innerText = "Salvando...";
+  btn.disabled = true;
+
   try {
-    const id = nomeOriginal.replace(/\W/g, "_");
     const res = await fetch(URL, {
       method: "POST",
       body: new URLSearchParams({
-        action: "update", nome: nomeOriginal,
+        action: "update", 
+        nome: nomeOriginal,
         qtd: document.getElementById("qtd_" + id).value,
         camadas: document.getElementById("cam_" + id).value,
         cores: document.getElementById("cor_" + id).value,
@@ -297,9 +312,21 @@ async function salvar(nomeOriginal) {
         midia: document.getElementById("midia_" + id).value
       })
     });
+    
     const txt = await res.text();
-    txt.includes("OK") ? toast("Alterações salvas!") : toast("Erro ao salvar");
-  } catch (e) { toast("Erro de conexão"); }
+    
+    if (txt.includes("OK")) {
+      toast("Salvo com sucesso!");
+    } else {
+      toast("Erro ao salvar");
+    }
+  } catch (e) {
+    toast("Erro de conexão");
+  } finally {
+    // 2. Volta o botão ao estado original, independente de ter dado erro ou sucesso
+    btn.innerText = textoOriginal;
+    btn.disabled = false;
+  }
 }
 
 async function excluir(nome) {
