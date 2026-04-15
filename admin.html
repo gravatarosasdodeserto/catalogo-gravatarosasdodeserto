@@ -705,7 +705,6 @@ let colunasDeFiltro = ["camadas", "cores", "padrao", "especiais"];
 let idParaExcluir = "";
 let plantaEditando = { especiais: [] };
 const URL = "https://script.google.com/macros/s/AKfycbxs8MmNSgkb43F1vZDCtFE6AiRvWtjlTp67QxpLMcfA9mnWInHQOBm8iZuEqpF6Ctg0hA/exec";
-const CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSochNnj1ihxWjFv_87wiDS9-ZakV1LrmdQWfZMAZMGRHf9pqCBXKQpkfQ6BDMlxwYE8E2JkWUVRYOG/pub?gid=1893895788&single=true&output=csv";
 const todasEspeciais = ['Cristatas', 'floraçao em buquê', 'Mutantes', 'Perfumadas', 'Variegatas'];
 
 window.addEventListener('beforeunload', (e) => {
@@ -1061,29 +1060,27 @@ async function uploadFoto(input, idSeguro) {
 
 async function carregar() {
   try {
-    const r = await fetch(CSV + "&t=" + Date.now());
-    const t = await r.text();
-    const linhas = parseCSV(t);
-    if (linhas.length > 1) {
-      linhas.shift();
-      dados = linhas.map(l => ({
-        nome: l[0] || "",
-        camadas: l[1] || "",
-        cores: l[2] || "",
-        padrao: l[3] || "",
-        especiais: l[4] || "",
-        qtd: l[5] || "0",
-        midia: l[6] || ""
-      }));
+    const r = await fetch(URL + "?action=get&t=" + Date.now());
+    const json = await r.json();
+    if (json.error) throw new Error(json.error);
 
-      dados.sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR', { sensitivity: 'base' }));
+    dados = Object.keys(json).map(nome => ({
+      nome: nome,
+      camadas: json[nome].camadas,
+      cores: json[nome].cores,
+      padrao: json[nome].padrao,
+      especiais: json[nome].especiais,
+      qtd: json[nome].qtd,
+      midia: json[nome].midia
+    }));
 
-      render();
-      temAlteracoesNaoSalvas = false;
-    }
-  } catch (e) { toast("Erro ao carregar dados."); }
+    dados.sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR', { sensitivity: 'base' }));
+    render();
+    temAlteracoesNaoSalvas = false;
+  } catch (e) {
+    toast("Erro ao carregar dados.");
+  }
 }
-
 async function salvar(nomeOriginal) {
   const id = nomeOriginal.replace(/\W/g, "_");
   const card = document.getElementById("qtd_" + id).closest('.card');
