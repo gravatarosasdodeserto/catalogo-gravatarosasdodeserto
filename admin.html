@@ -536,6 +536,41 @@
     text-transform: uppercase;
     letter-spacing: 1px;
 }
+
+/* Checkboxes de Especiais - versão compacta */
+.especiais-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 14px;
+    padding: 10px 4px;
+    margin-top: 4px;
+}
+
+.especiais-wrap label {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 11px;
+    font-weight: 500;
+    cursor: pointer;
+    margin: 0;
+    text-transform: none;
+    letter-spacing: 0;
+    color: var(--text-main);
+    background: none;
+    border: none;
+    padding: 0;
+}
+
+.especiais-wrap input[type="checkbox"] {
+    width: 14px;
+    height: 14px;
+    accent-color: var(--accent);
+    cursor: pointer;
+    margin: 0;
+    flex-shrink: 0;
+}
+    
 </style>
 </head>
 <body>
@@ -853,13 +888,13 @@ function render() {
     ${criarSelect(`pad_${idSeguro}`, d.padrao, getOpcoesUnicas('padrao'))}
 
     <label>Especiais</label>
-    <div id="esp_${idSeguro}_container" style="display:flex; flex-wrap:wrap; gap:8px; padding:12px; border:1.5px solid #e5e0d8; border-radius:14px; background:#fcfaf7;">
+    <div id="esp_${idSeguro}_container" class="especiais-wrap">
       ${todasEspeciais.map(tag => {
         const checked = especiaisArray.includes(tag)? 'checked' : '';
-        return `<label style="display:flex; align-items:center; gap:6px; font-size:13px; font-weight:500; cursor:pointer; background:white; padding:6px 12px; border-radius:20px; border:1.5px solid #e5e0d8;">
-          <input type="checkbox" value="${tag}" ${checked} onchange="atualizarEspeciaisCard('${idSeguro}')" style="width:16px; height:16px; accent-color:var(--accent); cursor:pointer;">
-          ${tag}
-        </label>`;
+        return `<label>
+  <input type="checkbox" value="${tag}" ${checked} onchange="atualizarEspeciaisCard('${idSeguro}')">
+  ${tag}
+</label>`;
       }).join('')}
     </div>
     <input id="esp_${idSeguro}" value="${d.especiais}" type="hidden">
