@@ -374,9 +374,10 @@
         font-weight: 700;
         text-transform: uppercase;
         letter-spacing: 0.5px;
-    }
-   .disponivel { color: #2d5a27; }
-   .encomenda { color: #8a8471; opacity: 0.7; }
+
+       .disponivel { color: #2d5a27;}
+       .produzimos { color: var(--accent-dark); opacity: 0.95; font-weight: 600;
+}
 
     /* ===== RODAPÉ PREMIUM ===== */
    .rodape-acoes {
@@ -621,7 +622,7 @@
 
 <div class="instrucao-texto">
     <p>Selecione as ID's desejadas para solicitar informações sobre os enxertos</p>
-    <span>Variedades sem pronta entrega podem ser encomendadas sem custo adicional</span>
+    <span>Sua cor favorita acabou? Produzimos uma pra você sem custo adicional</span>
 </div>
 
 <div class="catalogo" id="gridCatalogo">
@@ -764,8 +765,8 @@ function montarCatalogo() {
     card.innerHTML = `
       ${getMidiaHTML(d.midia)}
       <p>${nome}</p>
-      <div class="estoque-status ${d.qtd > 0? 'disponivel' : 'encomenda'}">
-        ${d.qtd > 0? 'Disponível' : 'Por Encomenda'}
+      <div class="estoque-status ${d.qtd > 0? 'disponivel' : 'produzimos'}">
+      ${d.qtd > 0? 'Disponível' : 'Produzimos pra você'}
       </div>`;
 
     card.onclick = () => {
