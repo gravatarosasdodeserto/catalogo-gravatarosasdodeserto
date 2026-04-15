@@ -56,7 +56,7 @@
         50% { transform: scale(1.05); }
     }
 
- .topbar {
+.topbar {
         padding: 35px 0;
         position: sticky;
         top: 0;
@@ -72,7 +72,7 @@
         margin-bottom: 0;
     }
 
- .topbar::before {
+.topbar::before {
         content: "";
         position: absolute;
         inset: 0;
@@ -89,7 +89,7 @@
         to { transform: scale(1.1); }
     }
 
- .topbar::after {
+.topbar::after {
         content: "";
         position: absolute;
         left: 0;
@@ -104,7 +104,7 @@
         box-shadow: inset 0 1px 0 rgba(255,255,255,0.5);
     }
 
- .logo {
+.logo {
         position: relative;
         z-index: 3;
         display: flex;
@@ -112,7 +112,7 @@
         animation: slideUp 0.8s ease-out 0.2s both;
     }
 
- .logo img {
+.logo img {
         width: 155px;
         height: auto;
         filter: drop-shadow(0 6px 20px rgba(0,0,0,0.35));
@@ -120,11 +120,11 @@
         transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
- .logo img:hover {
+.logo img:hover {
         transform: scale(1.05) rotate(-1deg);
     }
 
- .bottom-bar {
+.bottom-bar {
         position: sticky;
         top: 160px;
         z-index: 1050;
@@ -143,7 +143,7 @@
         margin-top: -1px;
     }
 
- .btn-voltar-admin {
+.btn-voltar-admin {
         background: linear-gradient(135deg, var(--text-main), var(--accent-dark));
         color: white;
         display: flex;
@@ -163,23 +163,23 @@
         letter-spacing: 0.5px;
     }
 
- .btn-voltar-admin:hover {
+.btn-voltar-admin:hover {
         transform: translateY(-2px);
         box-shadow: 0 6px 20px rgba(58, 54, 24, 0.35);
     }
 
- .btn-voltar-admin:active {
+.btn-voltar-admin:active {
         transform: translateY(0);
     }
 
- .container {
+.container {
         padding: 20px;
         max-width: 1400px;
         margin: auto;
         animation: slideUp 0.6s ease-out 0.4s both;
     }
 
- .busca {
+.busca {
         width: 100%;
         padding: 14px 24px;
         border-radius: 50px;
@@ -195,7 +195,7 @@
         box-shadow: var(--shadow-sm);
     }
 
- .busca:focus {
+.busca:focus {
         border-color: var(--accent);
         box-shadow: 0 0 0 4px rgba(160, 140, 107, 0.1), var(--shadow-md);
         transform: scale(1.01);
@@ -208,7 +208,7 @@
         gap: 22px;
     }
 
- .card {
+.card {
         background: rgba(255, 255, 255, 0.95);
         backdrop-filter: blur(12px);
         border-radius: 24px;
@@ -220,14 +220,35 @@
         transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         border: 1.5px solid rgba(255, 255, 255, 0.6);
         animation: slideUp 0.5s ease-out both;
+        position: relative;
     }
 
- .card:hover {
+.card:hover {
         transform: translateY(-6px);
         box-shadow: var(--shadow-lg);
     }
 
- .img-container {
+.card.nao-salvo {
+        border: 2px solid #ff9500;
+        box-shadow: 0 0 0 3px rgba(255, 149, 0, 0.2), var(--shadow-md);
+    }
+
+.badge-nao-salvo {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        background: #ff9500;
+        color: white;
+        font-size: 9px;
+        font-weight: 700;
+        padding: 4px 8px;
+        border-radius: 6px;
+        text-transform: uppercase;
+        z-index: 5;
+        animation: pulse 1.5s infinite;
+    }
+
+.img-container {
         position: relative;
         width: 100%;
         aspect-ratio: 1/1;
@@ -236,7 +257,7 @@
         overflow: hidden;
     }
 
- .img {
+.img {
         width: 100%;
         height: 100%;
         object-fit: cover;
@@ -245,11 +266,11 @@
         transition: transform 0.4s ease;
     }
 
- .card:hover.img {
+.card:hover.img {
         transform: scale(1.05);
     }
 
- .edit-badge {
+.edit-badge {
         position: absolute;
         bottom: 10px;
         right: 10px;
@@ -267,12 +288,12 @@
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
- .edit-badge:hover {
+.edit-badge:hover {
         transform: scale(1.15) rotate(15deg);
         box-shadow: 0 6px 18px rgba(0,0,0,0.35);
     }
 
- .file-input { display: none; }
+.file-input { display: none; }
 
     h4 {
         margin: 6px 0 18px;
@@ -300,7 +321,7 @@
         margin-top: 4px;
         font-family: inherit;
         font-size: 13px;
-        background: rgba(250, 250, 250, 0.6);
+        background: rgba(250, 250, 0.6);
         transition: all 0.3s ease;
         cursor: pointer;
     }
@@ -312,13 +333,13 @@
         box-shadow: 0 0 0 3px rgba(160, 140, 107, 0.1);
     }
 
- .row {
+.row {
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 12px;
     }
 
- .actions {
+.actions {
         display: flex;
         gap: 10px;
         margin-top: 20px;
@@ -337,37 +358,37 @@
         letter-spacing: 0.5px;
     }
 
- .save {
+.save {
         background: linear-gradient(135deg, var(--ok), #3d7a37);
         color: #fff;
         flex: 2;
         box-shadow: 0 4px 14px rgba(45, 90, 39, 0.3);
     }
 
- .save:hover {
+.save:hover {
         transform: translateY(-2px);
         box-shadow: 0 6px 20px rgba(45, 90, 39, 0.4);
     }
 
- .save:disabled {
+.save:disabled {
         opacity: 0.6;
         cursor: not-allowed;
         transform: none;
     }
 
- .del {
+.del {
         background: rgba(245, 243, 240, 0.8);
         color: var(--danger);
         flex: 1;
         border: 1.5px solid rgba(139, 45, 45, 0.2);
     }
 
- .del:hover {
-        background: rgba(139, 45, 45, 0.1);
+.del:hover {
+        background: rgba(139, 45, 0.1);
         transform: translateY(-2px);
     }
 
- .new {
+.new {
         width: 100%;
         background: linear-gradient(135deg, var(--text-main), var(--accent-dark));
         color: #fff;
@@ -378,12 +399,12 @@
         box-shadow: 0 6px 20px rgba(58, 54, 24, 0.3);
     }
 
- .new:hover {
+.new:hover {
         transform: translateY(-3px);
         box-shadow: 0 10px 28px rgba(58, 54, 24, 0.4);
     }
 
- .toast {
+.toast {
         position: fixed;
         bottom: 25px;
         left: 50%;
@@ -412,7 +433,7 @@
         animation: fadeIn 0.3s ease;
     }
 
- .modal-content {
+.modal-content {
         background: transparent;
         backdrop-filter: none;
         padding: 0;
@@ -439,7 +460,7 @@
     font-weight: 700;
 }
 
-   .img-placeholder {
+  .img-placeholder {
         width: 100%;
         aspect-ratio: 1/1;
         background: linear-gradient(135deg, #f5f3f0, #e9e4dd);
@@ -457,7 +478,7 @@
         transition: all 0.3s ease;
     }
 
-   .img-placeholder:hover {
+  .img-placeholder:hover {
         border-color: var(--accent);
         background: linear-gradient(135deg, #fcfaf7, #f5f3f0);
     }
@@ -487,17 +508,17 @@
         100% { background-position: 1000px 0; }
     }
 
- .skeleton {
+.skeleton {
         background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
         background-size: 1000px 100%;
         animation: shimmer 2s infinite;
     }
 
    @media (min-width: 768px) {
- .topbar { min-height: 230px; padding: 50px 0; }
- .logo img { width: 260px; }
- .topbar::after { height: 175px; }
- .bottom-bar { top: 230px; margin-top: -1px; }
+.topbar { min-height: 230px; padding: 50px 0; }
+.logo img { width: 260px; }
+.topbar::after { height: 175px; }
+.bottom-bar { top: 230px; margin-top: -1px; }
     #lista { grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); }
 }
 
@@ -537,7 +558,6 @@
     letter-spacing: 1px;
 }
 
-/* Checkboxes de Especiais - versão compacta */
 .especiais-wrap {
     display: flex;
     flex-wrap: wrap;
@@ -570,7 +590,7 @@
     margin: 0;
     flex-shrink: 0;
 }
-    
+
 </style>
 </head>
 <body>
@@ -628,7 +648,7 @@
       <input id="n_nome" placeholder="Ex: TS-152">
 
       <label>Quantidade em Estoque</label>
-      <input id="n_qtd" type="number" value="0">
+      <input id="n_qtd" type="number" value="0" min="0">
 
       <div class="row">
         <div>
@@ -738,8 +758,18 @@ function getOpcoesUnicas(campo) {
 
 function mostrarBotaoSalvar(idSeguro) {
   temAlteracoesNaoSalvas = true;
-  const btn = document.getElementById("qtd_" + idSeguro).closest('.card').querySelector('.save');
+  const card = document.getElementById("qtd_" + idSeguro).closest('.card');
+  const btn = card.querySelector('.save');
+
   btn.style.display = "block";
+  card.classList.add('nao-salvo');
+
+  if (!card.querySelector('.badge-nao-salvo')) {
+    const badge = document.createElement('div');
+    badge.className = 'badge-nao-salvo';
+    badge.innerText = 'Não salvo';
+    card.querySelector('.img-container').appendChild(badge);
+  }
 }
 
 function criarSelect(id, valorAtual, opcoes) {
@@ -760,9 +790,8 @@ function gerarCheckboxesEspeciais(selecionadas = [], prefixo = 'n') {
   container.innerHTML = '';
   todasEspeciais.forEach(tag => {
     const checked = selecionadas.includes(tag)? 'checked' : '';
-    const idSeguro = prefixo === 'n'? 'nova' : prefixo;
     container.className = 'especiais-wrap';
-container.innerHTML += `
+    container.innerHTML += `
   <label>
     <input type="checkbox" value="${tag}" ${checked} onchange="atualizarEspeciais('${prefixo}')">
     ${tag}
@@ -829,8 +858,8 @@ function render() {
   el.innerHTML = "";
 
   const itensFiltrados = dados
- .filter(d => d.nome.toLowerCase().includes(filtro.toLowerCase()))
- .sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR', { sensitivity: 'base' }));
+.filter(d => d.nome.toLowerCase().includes(filtro.toLowerCase()))
+.sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR', { sensitivity: 'base' }));
 
   if (itensFiltrados.length === 0) {
     el.innerHTML = "<p style='text-align:center; grid-column: 1/-1; padding: 60px; color: rgba(58,54,24,0.4);'>Nenhuma ID encontrada</p>";
@@ -871,7 +900,7 @@ function render() {
     <input id="nome_${idSeguro}" value="${d.nome}" type="hidden">
 
     <label>Quantidade em Estoque</label>
-    <input id="qtd_${idSeguro}" value="${d.qtd}" type="number" oninput="mostrarBotaoSalvar('${idSeguro}')">
+    <input id="qtd_${idSeguro}" value="${d.qtd}" type="number" min="0" oninput="mostrarBotaoSalvar('${idSeguro}')">
 
     <div class="row">
       <div>
@@ -983,6 +1012,7 @@ async function uploadFoto(input, idSeguro) {
   const progress = document.getElementById("progress_" + idSeguro);
   const progressBar = document.getElementById("progressBar_" + idSeguro);
   const textDiv = input.closest('.card').querySelector('[style*="font-size:8px"]');
+  const oldFileId = document.getElementById("midia_" + idSeguro).value;
 
   overlay.style.display = "flex";
   progress.style.display = "block";
@@ -1000,6 +1030,7 @@ async function uploadFoto(input, idSeguro) {
       params.append("nome", file.name);
       params.append("mimeType", file.type);
       params.append("data", base64Data);
+      params.append("oldFileId", oldFileId);
 
       progressBar.style.width = "75%";
       const res = await fetch(URL, { method: "POST", body: params });
@@ -1085,17 +1116,24 @@ async function salvar(nomeOriginal) {
   const id = nomeOriginal.replace(/\W/g, "_");
   const card = document.getElementById("qtd_" + id).closest('.card');
   const btn = card.querySelector('.save');
+  const qtdInput = document.getElementById("qtd_" + id);
+
+  if (parseInt(qtdInput.value) < 0) {
+    toast("Quantidade não pode ser negativa");
+    qtdInput.value = 0;
+    return;
+  }
 
   btn.innerText = "Salvando...";
   btn.disabled = true;
 
   try {
-    await fetch(URL, {
+    const res = await fetch(URL, {
       method: "POST",
       body: new URLSearchParams({
         action: "update",
         nome: nomeOriginal,
-        qtd: document.getElementById("qtd_" + id).value,
+        qtd: qtdInput.value,
         camadas: document.getElementById("cam_" + id).value,
         cores: document.getElementById("cor_" + id).value,
         padrao: document.getElementById("pad_" + id).value,
@@ -1103,16 +1141,22 @@ async function salvar(nomeOriginal) {
         midia: document.getElementById("midia_" + id).value
       })
     });
+
+    const json = await res.json();
+    if (json.error) throw new Error(json.error);
+
     toast("Salvo com sucesso!");
     btn.style.display = "none";
     btn.innerText = "Salvar";
+    card.classList.remove('nao-salvo');
+    card.querySelector('.badge-nao-salvo')?.remove();
 
     if (!document.querySelector('.save[style*="display: block"]')) {
       temAlteracoesNaoSalvas = false;
     }
 
   } catch (e) {
-    toast("Erro ao salvar");
+    toast("Erro ao salvar: " + e.message);
     btn.innerText = "Salvar";
   }
   btn.disabled = false;
@@ -1140,11 +1184,23 @@ async function confirmarExclusao() {
 }
 
 async function criar() {
-  const btn = document.querySelector("#modal.save");
+  const btn = document.querySelector("#modal .save");
   const nome = document.getElementById("n_nome").value.trim();
+  const qtd = parseInt(document.getElementById("n_qtd").value) || 0;
 
   if (!nome) {
     toast("Digite o nome da ID");
+    return;
+  }
+
+  if (dados.some(d => d.nome.toLowerCase() === nome.toLowerCase())) {
+    toast("Essa ID já existe!");
+    return;
+  }
+
+  if (qtd < 0) {
+    toast("Quantidade não pode ser negativa");
+    document.getElementById("n_qtd").value = 0;
     return;
   }
 
@@ -1153,12 +1209,12 @@ async function criar() {
 
   try {
     const midia = document.getElementById("n_midia").value || "Não inf.";
-    await fetch(URL, {
+    const res = await fetch(URL, {
       method: "POST",
       body: new URLSearchParams({
         action: "create",
         nome: nome,
-        qtd: document.getElementById("n_qtd").value,
+        qtd: qtd,
         camadas: document.getElementById("n_camadas").value,
         cores: document.getElementById("n_cores").value,
         padrao: document.getElementById("n_padrao").value,
@@ -1166,17 +1222,20 @@ async function criar() {
         midia: midia
       })
     });
+
+    const json = await res.json();
+    if (json.error) throw new Error(json.error);
+
     toast("Criado com sucesso!");
     fecharModal();
     carregar();
   } catch(e) {
-    toast("Erro ao criar");
+    toast("Erro ao criar: " + e.message);
   }
   btn.innerText = "Criar ID";
   btn.disabled = false;
 }
 
-// Efeito parallax no scroll
 window.addEventListener('scroll', () => {
     const topbar = document.querySelector('.topbar');
     const currentScroll = window.pageYOffset;
