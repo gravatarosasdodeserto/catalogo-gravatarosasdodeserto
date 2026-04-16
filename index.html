@@ -39,7 +39,6 @@
         }
         .logo { width: 110px; display: block; }
 
-        /* Responsivo para Computador */
         @media (min-width: 1024px) {
             header { height: 350px; }
             .header-stripe { padding: 40px 0; }
@@ -63,7 +62,7 @@
             font-weight: 600; cursor: pointer; display: none;
         }
 
-        /* --- LISTA DE SELECIONADOS (ABAIXO DA BARRA) --- */
+        /* --- LISTA DE SELECIONADOS --- */
         .selected-list-area {
             background: #f0ede4;
             padding: 10px 20px;
@@ -150,11 +149,29 @@
 
 <aside class="sidebar" id="sidebar">
     <h2 style="margin-bottom: 20px; font-size: 18px;">Filtros</h2>
-    <div class="filter-section"><div class="filter-title">Cores</div><div class="check-group" id="container-cores"></div></div>
-    <div class="filter-section"><div class="filter-title">Camadas</div><div class="check-group" id="container-camadas"></div></div>
-    <div class="filter-section"><div class="filter-title">Padrões de Pétala</div><div class="check-group" id="container-padrao"></div></div>
-    <div class="filter-section"><div class="filter-title">Padrões Especiais</div><div class="check-group" id="container-especiais"></div></div>
-    <button onclick="toggleMenu()" style="width:100%; padding:12px; background:#2e2a15; color:white; border:none; border-radius:8px; cursor:pointer;">VER RESULTADOS</button>
+    
+    <div class="filter-section">
+        <div class="filter-title">Cores (Múltiplo)</div>
+        <div class="check-group" id="container-cores"></div>
+    </div>
+    
+    <div class="filter-section">
+        <div class="filter-title">Camadas (Único)</div>
+        <div class="check-group" id="container-camadas"></div>
+    </div>
+    
+    <div class="filter-section">
+        <div class="filter-title">Padrões de Pétala (Único)</div>
+        <div class="check-group" id="container-padrao"></div>
+    </div>
+    
+    <div class="filter-section">
+        <div class="filter-title">Padrões Especiais (Múltiplo)</div>
+        <div class="check-group" id="container-especiais"></div>
+    </div>
+    
+    <button onclick="clearUniqueFilters()" style="width:100%; padding:8px; background:none; border:1px solid var(--border); color:var(--text-secondary); border-radius:8px; cursor:pointer; font-size:11px; margin-bottom:10px;">Limpar Seleções Únicas</button>
+    <button onclick="toggleMenu()" style="width:100%; padding:12px; background:#2e2a15; color:white; border:none; border-radius:8px; cursor:pointer; font-weight:600;">VER RESULTADOS</button>
 </aside>
 
 <header>
@@ -170,8 +187,7 @@
     </button>
 </div>
 
-<div class="selected-list-area" id="selected-list">
-    </div>
+<div class="selected-list-area" id="selected-list"></div>
 
 <div class="controls-area">
     <input type="text" id="search" class="search-box" placeholder="Pesquisar ID ou nome..." oninput="filtrar()">
@@ -202,17 +218,27 @@
     }
 
     function popularFiltros() {
-        const preencher = (id, chave) => {
+        const preencher = (id, chave, isRadio = false) => {
             const container = document.getElementById(id);
             let vals = [];
             DADOS.forEach(d => { if(d[chave]) d[chave].split(',').forEach(v => vals.push(v.trim())); });
-            [...new Set(vals)].sort().forEach(v => {
-                container.innerHTML += `<label class="check-item"><input type="checkbox" class="filter-check" data-type="${chave}" value="${v}" onchange="filtrar()"> ${v}</label>`;
+            
+            const uniqueVals = [...new Set(vals)].sort();
+            const type = isRadio ? 'radio' : 'checkbox';
+            const name = isRadio ? `name="radio-${chave}"` : '';
+
+            uniqueVals.forEach(v => {
+                container.innerHTML += `
+                    <label class="check-item">
+                        <input type="${type}" ${name} class="filter-input" data-type="${chave}" value="${v}" onchange="filtrar()"> 
+                        ${v}
+                    </label>`;
             });
         };
+
         preencher('container-cores', 'cores');
-        preencher('container-camadas', 'camadas');
-        preencher('container-padrao', 'padrao');
+        preencher('container-camadas', 'camadas', true); // Seleção única
+        preencher('container-padrao', 'padrao', true);   // Seleção única
         preencher('container-especiais', 'especiais');
     }
 
@@ -244,13 +270,7 @@
         if (count > 0) {
             btn.style.display = 'block';
             listArea.style.display = 'flex';
-            
-            // Texto dinâmico do botão
-            textSpan.innerText = count === 1 
-                ? `Solicitar informações sobre a ID` 
-                : `Solicitar informações sobre as ${count} IDs`;
-
-            // Lista de Tags
+            textSpan.innerText = count === 1 ? `Solicitar informações sobre a ID` : `Solicitar informações sobre as ${count} IDs`;
             listArea.innerHTML = Array.from(SELECIONADOS).map(id => `
                 <div class="selected-tag">${id} <span onclick="event.stopPropagation(); toggleSelecao('${id}')">&times;</span></div>
             `).join('');
@@ -262,24 +282,31 @@
 
     function filtrar() {
         const busca = document.getElementById("search").value.toLowerCase();
-        const checks = [...document.querySelectorAll('.filter-check:checked')];
-        document.getElementById('active-filters').innerHTML = checks.map(c => `
-            <div class="filter-tag" onclick="removeFilter('${c.value}')">${c.value} <span>&times;</span></div>
+        const inputs = [...document.querySelectorAll('.filter-input:checked')];
+        
+        // Tags de filtros ativos
+        document.getElementById('active-filters').innerHTML = inputs.map(i => `
+            <div class="filter-tag" onclick="removeFilter('${i.dataset.type}', '${i.value}')">${i.value} <span>&times;</span></div>
         `).join('');
 
         DADOS_FILTRADOS = DADOS.filter(d => {
             const mBusca = d.id.toLowerCase().includes(busca);
             return mBusca && ['cores', 'camadas', 'padrao', 'especiais'].every(t => {
-                const sel = checks.filter(c => c.dataset.type === t).map(c => c.value);
+                const sel = inputs.filter(i => i.dataset.type === t).map(i => i.value);
                 return sel.length === 0 || sel.some(v => d[t] && d[t].includes(v));
             });
         });
         render();
     }
 
-    function removeFilter(val) {
-        const el = [...document.querySelectorAll('.filter-check')].find(c => c.value === val);
+    function removeFilter(type, val) {
+        const el = [...document.querySelectorAll('.filter-input')].find(i => i.dataset.type === type && i.value === val);
         if(el) { el.checked = false; filtrar(); }
+    }
+
+    function clearUniqueFilters() {
+        document.querySelectorAll('input[type="radio"]').forEach(r => r.checked = false);
+        filtrar();
     }
 
     function toggleMenu() {
