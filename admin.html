@@ -307,28 +307,45 @@
         }
 
         async function handleUpload(input, nomeRosa) {
-            const file = input.files[0];
-            if (!file) return;
-            const safeId = nomeRosa === 'new' ? 'new' : nomeRosa.replace(/\W/g, '_');
-            showToast("Enviando foto...");
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = async () => {
-                const base64 = reader.result.split(',')[1];
-                const res = await fetch(API, { method: "POST", body: new URLSearchParams({ action: "upload", nome: nomeRosa, data: base64, mimeType: file.type }) });
-                const result = await res.json();
-                if (result.success) {
-                    if (nomeRosa === 'new') {
-                        document.getElementById("n_midia").value = result.id;
-                        document.getElementById("preview_new").src = `https://drive.google.com/thumbnail?sz=w600&id=${result.id}`;
-                        document.getElementById("preview_new").style.display = "block";
-                        document.getElementById("trigger_new").style.display = "none";
-                    } else { document.getElementById(`img_${safeId}`).src = `https://drive.google.com/thumbnail?sz=w600&id=${result.id}`; }
-                }
-                showToast("Foto atualizada!");
-            };
+    const file = input.files[0];
+    if (!file) return;
+    
+    const safeId = nomeRosa === 'new' ? 'new' : nomeRosa.replace(/\W/g, '_');
+    showToast("Enviando foto...");
+    
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = async () => {
+        const base64 = reader.result.split(',')[1];
+        const res = await fetch(API, { 
+            method: "POST", 
+            body: new URLSearchParams({ 
+                action: "upload", 
+                nome: nomeRosa, 
+                data: base64, 
+                mimeType: file.type 
+            }) 
+        });
+        
+        const result = await res.json();
+        
+        if (result.success) {
+            if (nomeRosa === 'new') {
+                document.getElementById("n_midia").value = result.id;
+                const prev = document.getElementById("preview_new");
+                prev.src = `https://drive.google.com/thumbnail?sz=w600&id=${result.id}`;
+                prev.style.display = "block";
+                document.getElementById("trigger_new").style.display = "none";
+            } else {
+                // Atualiza a imagem no card
+                document.getElementById(`img_${safeId}`).src = `https://drive.google.com/thumbnail?sz=w600&id=${result.id}`;
+                // FORÇA O BOTÃO SALVAR A APARECER
+                markChange(safeId); 
+            }
+            showToast("Foto processada! Clique em Salvar.");
         }
-
+    };
+}
         async function salvarAlteracao(nome) {
             const safeId = nome.replace(/\W/g, '_');
             const esp = [...document.querySelectorAll(`#card_${safeId} .tag-check input:checked`)].map(i => i.value).join(', ');
