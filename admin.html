@@ -360,24 +360,57 @@
         }
 
         async function salvarAlteracao(nome) {
-            const safeId = nome.replace(/\W/g, '_');
-            const esp = [...document.querySelectorAll(`#card_${safeId} .tag-check input:checked`)].map(i => i.value).join(', ');
-            showToast("Salvando dados...");
-            
-            await fetch(API, { method: "POST", body: new URLSearchParams({
-                action: "update", nome,
-                qtd: document.getElementById(`qtd_${safeId}`).value,
-                camadas: document.getElementById(`cam_${safeId}`).value,
-                cores: document.getElementById(`cor_${safeId}`).value,
-                padrao: document.getElementById(`pad_${safeId}`).value,
-                especiais: esp
-            })});
-            
+    const safeId = nome.replace(/\W/g, '_');
+    
+    // 1. Pega os valores dos inputs do card
+    const qtd = document.getElementById(`qtd_${safeId}`).value;
+    const camadas = document.getElementById(`cam_${safeId}`).value;
+    const cores = document.getElementById(`cor_${safeId}`).value;
+    const padrao = document.getElementById(`pad_${safeId}`).value;
+    
+    // 2. Pega as tags especiais (checkboxes)
+    const esp = [...document.querySelectorAll(`#card_${safeId} .tag-check input:checked`)]
+                .map(i => i.value).join(', ');
+
+    // 3. BUSCA O ID DA MÍDIA QUE ESTÁ NO ARRAY LOCAL (atualizado pelo handleUpload)
+    const itemNoArray = DADOS_LOCAIS.find(d => d.nome === nome);
+    const midiaId = itemNoArray ? itemNoArray.midia : "";
+
+    showToast("Salvando alterações...");
+
+    try {
+        const res = await fetch(API, { 
+            method: "POST", 
+            body: new URLSearchParams({
+                action: "update",
+                nome: nome,
+                qtd: qtd,
+                camadas: camadas,
+                cores: cores,
+                padrao: padrao,
+                especiais: esp,
+                midia: midiaId // <--- ISSO GARANTE QUE A FOTO NÃO SUMA
+            })
+        });
+
+        const result = await res.json();
+
+        if (result.success) {
+            // Remove a marcação de "não salvo"
             document.getElementById(`save_${safeId}`).style.display = "none";
             document.getElementById(`card_${safeId}`).classList.remove('nao-salvo');
-            ALTERACOES_PENDENTES = document.querySelectorAll('.nao-salvo').length > 0;
+            
             showToast("Salvo com sucesso!");
+            
+            // Recarrega os dados para garantir que tudo está sincronizado
+            setTimeout(carregar, 500);
+        } else {
+            throw new Error();
         }
+    } catch (e) {
+        showToast("❌ Erro ao salvar dados.");
+    }
+}
 
         async function criarID() {
             const nome = document.getElementById("n_nome").value;
