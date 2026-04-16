@@ -176,7 +176,7 @@
             <h4>Novo Cadastro</h4>
             <div class="img-box" style="width:160px; height:160px">
                 <input type="file" id="file_new" hidden accept="image/*" onchange="handleUpload(this, 'new')">
-                <div class="edit-icon-btn" style="right: 50%; bottom: 50%; transform: translate(50%, 50%); width: 45px; height: 45px" onclick="document.getElementById('file_new').click()" id="trigger_new">
+                <div class="edit-icon-btn" style="right: 50%; bottom: 50%; transform: translate(50%, 50%); width: 45px; height: 45px" onclick="document.getElementById('file_new').click()" id="trigger_new"><input type="file" id="file_new" hidden accept="image/png, image/jpeg, image/gif" onchange="handleUpload(this, 'new')">
                     <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
                 </div>
                 <img id="preview_new" style="display:none">
