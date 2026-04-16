@@ -3,175 +3,196 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Admin v2 | Gravatá Rosas do Deserto</title>
+    <title>Admin Premium | Gravatá Rosas do Deserto</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #2e2a15;
             --accent: #a08c6b;
-            --accent-light: #e9e4dd;
+            --accent-light: #f4f1ec;
             --danger: #8b2d2d;
             --success: #2d5a27;
             --white: #ffffff;
-            --shadow: 0 8px 30px rgba(0,0,0,0.08);
+            --shadow: 0 10px 40px rgba(0,0,0,0.08);
+            --radius: 16px;
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         
         body {
             font-family: 'Poppins', sans-serif;
-            background: var(--accent-light);
+            background: #e9e4dd;
             color: var(--primary);
             margin: 0;
-            padding-bottom: 40px;
+            padding-bottom: 60px;
         }
 
-        /* HEADER */
+        /* HEADER & NAV */
         .header {
-            height: 180px;
+            height: 160px;
             background: url('imagens/gravata-cabecalho.jpg') center/cover;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            display: flex; align-items: center; justify-content: center;
             position: relative;
-            box-shadow: var(--shadow);
         }
-        .header::after {
-            content: ''; position: absolute; inset: 0;
-            background: rgba(255,255,255,0.4); backdrop-filter: blur(4px);
-        }
-        .logo { z-index: 10; width: 200px; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.2)); cursor: pointer; }
+        .header::after { content: ''; position: absolute; inset: 0; background: rgba(255,255,255,0.3); backdrop-filter: blur(5px); }
+        .logo { z-index: 10; width: 180px; filter: drop-shadow(0 4px 15px rgba(0,0,0,0.2)); cursor: pointer; }
 
-        /* NAV */
         .nav-bar {
-            sticky: top; position: sticky; top: 0; z-index: 100;
-            background: rgba(255,255,255,0.9); backdrop-filter: blur(10px);
-            padding: 15px; display: flex; justify-content: center;
+            position: sticky; top: 0; z-index: 100;
+            background: rgba(255,255,255,0.9); backdrop-filter: blur(12px);
+            padding: 12px; display: flex; justify-content: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
         }
         .btn-exit {
             background: var(--primary); color: white; border-radius: 50px;
-            padding: 10px 25px; text-decoration: none; font-size: 12px; font-weight: 600;
+            padding: 8px 20px; text-decoration: none; font-size: 11px; font-weight: 600;
+            transition: 0.3s;
         }
 
-        /* CONTENT */
-        .container { max-width: 1200px; margin: auto; padding: 20px; }
+        /* CONTAINER */
+        .container { max-width: 1300px; margin: auto; padding: 20px; }
         
         .btn-new {
-            width: 100%; padding: 16px; border-radius: 15px; border: none;
-            background: linear-gradient(135deg, var(--primary), var(--accent));
-            color: white; font-weight: 700; font-size: 16px; cursor: pointer;
-            margin-bottom: 20px; transition: 0.3s;
+            width: 100%; padding: 18px; border-radius: 50px; border: none;
+            background: linear-gradient(135deg, var(--primary), var(--accent-dark, #5d5434));
+            color: white; font-weight: 700; font-size: 15px; cursor: pointer;
+            margin-bottom: 20px; box-shadow: 0 4px 15px rgba(46,42,21,0.2);
         }
 
         .search-box {
-            width: 100%; padding: 15px; border-radius: 50px; border: 2px solid #ddd;
+            width: 100%; padding: 14px; border-radius: 50px; border: 1.5px solid #dcd7cf;
             margin-bottom: 30px; outline: none; font-family: inherit; text-align: center;
+            background: white; transition: 0.3s;
         }
+        .search-box:focus { border-color: var(--accent); }
 
-        /* GRID & CARDS */
-        #lista { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+        /* LISTA & CARDS */
+        #lista { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
         
         .card {
-            background: var(--white); border-radius: 20px; padding: 15px;
-            box-shadow: var(--shadow); transition: 0.3s;
+            background: var(--white); border-radius: var(--radius); padding: 16px;
+            box-shadow: var(--shadow); transition: 0.3s; border: 1px solid rgba(0,0,0,0.03);
         }
-        .card:hover { transform: translateY(-5px); }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 15px 50px rgba(0,0,0,0.12); }
+        .nao-salvo { border: 2px solid #ff9500 !important; background: #fffdf9; }
 
+        /* FOTO REDUZIDA (1/4 da altura anterior aproximada) */
         .img-box {
-            width: 100%; aspect-ratio: 1/1; border-radius: 15px;
-            background: #f0f0f0; overflow: hidden; position: relative; margin-bottom: 15px;
+            width: 100%; height: 160px; border-radius: 12px;
+            background: #f8f7f5; overflow: hidden; position: relative; margin-bottom: 12px;
         }
         .img-box img { width: 100%; height: 100%; object-fit: cover; }
 
-        /* UPLOAD TRIGGER */
         .upload-trigger {
             position: absolute; inset: 0; display: flex; flex-direction: column;
-            align-items: center; justify-content: center; background: rgba(0,0,0,0.03);
-            border: 2px dashed var(--accent); border-radius: 15px; cursor: pointer;
+            align-items: center; justify-content: center; background: rgba(0,0,0,0.02);
+            border: 2px dashed var(--accent); border-radius: 12px; cursor: pointer;
+            transition: 0.2s;
         }
-        .upload-trigger svg { width: 40px; color: var(--accent); margin-bottom: 8px; }
+        .upload-trigger:hover { background: rgba(160,140,107,0.05); }
+        .upload-trigger svg { width: 30px; color: var(--accent); margin-bottom: 5px; }
 
-        /* INPUTS */
-        .form-group { margin-bottom: 12px; }
-        label { font-size: 11px; font-weight: 700; color: var(--accent); text-transform: uppercase; }
+        /* FORMULÁRIO NOS CARDS */
+        .card h4 { margin: 0 0 12px 0; font-size: 18px; text-align: center; color: var(--primary); }
+        
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; }
+        .form-group { margin-bottom: 8px; }
+        label { font-size: 10px; font-weight: 700; color: var(--accent); text-transform: uppercase; display: block; margin-bottom: 2px; }
         input, select {
-            width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ddd;
-            font-family: inherit; font-size: 14px;
+            width: 100%; padding: 8px 10px; border-radius: 8px; border: 1px solid #e0ddd7;
+            font-family: inherit; font-size: 13px; background: #faf9f7;
         }
 
-        .card-actions { display: flex; gap: 10px; margin-top: 15px; }
-        .btn-save { flex: 2; background: var(--success); color: white; border: none; padding: 10px; border-radius: 8px; font-weight: 600; display: none; }
-        .btn-del { flex: 1; background: #eee; color: var(--danger); border: none; padding: 10px; border-radius: 8px; font-weight: 600; }
+        /* ESPECIAL WRAPPER */
+        .especiais-container {
+            display: flex; flex-wrap: wrap; gap: 5px; margin-top: 5px;
+        }
+        .tag-check {
+            font-size: 10px; background: #f0ede9; padding: 4px 8px; border-radius: 6px;
+            cursor: pointer; display: flex; align-items: center; gap: 4px; border: 1px solid transparent;
+        }
+        .tag-check input { width: auto; margin: 0; }
+        .tag-check.active { background: var(--accent); color: white; }
+
+        .card-actions { display: flex; gap: 8px; margin-top: 15px; }
+        .btn-save { flex: 2; background: var(--success); color: white; border: none; padding: 10px; border-radius: 10px; font-weight: 600; display: none; cursor: pointer; }
+        .btn-del { flex: 1; background: #f8f7f5; color: var(--danger); border: none; padding: 10px; border-radius: 10px; font-weight: 600; cursor: pointer; }
 
         /* MODAL */
         .modal {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.8);
+            position: fixed; inset: 0; background: rgba(46,42,21,0.7);
             display: none; align-items: center; justify-content: center; z-index: 1000; padding: 20px;
+            backdrop-filter: blur(8px);
         }
         .modal-content {
-            background: white; width: 100%; max-width: 400px; border-radius: 25px;
-            padding: 25px; max-height: 90vh; overflow-y: auto;
+            background: white; width: 100%; max-width: 450px; border-radius: 24px;
+            padding: 24px; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.3);
         }
 
         .loading-overlay {
             position: absolute; inset: 0; background: rgba(255,255,255,0.8);
-            display: none; align-items: center; justify-content: center; font-weight: 600;
+            display: none; align-items: center; justify-content: center; font-weight: 700; font-size: 12px; z-index: 20;
         }
 
         .toast {
-            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
-            background: var(--primary); color: white; padding: 12px 25px;
-            border-radius: 50px; z-index: 2000; display: none; font-size: 13px;
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+            background: var(--primary); color: white; padding: 14px 30px;
+            border-radius: 50px; z-index: 2000; display: none; font-size: 13px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);
         }
-
-        .nao-salvo { border: 2px solid orange !important; }
     </style>
 </head>
 <body>
 
     <header class="header">
-        <img src="logo.png" class="logo" onclick="location.href='index.html'">
+        <img src="logo.png" class="logo" onclick="safeExit()">
     </header>
 
     <nav class="nav-bar">
-        <a href="index.html" class="btn-exit">Sair do Painel</a>
+        <a href="javascript:void(0)" onclick="safeExit()" class="btn-exit">Sair do Painel</a>
     </nav>
 
     <main class="container">
-        <button class="btn-new" onclick="openModal()">+ ADICIONAR NOVA ID</button>
-        <input type="text" class="search-box" placeholder="Pesquisar rosa..." oninput="filtrar(this.value)">
+        <button class="btn-new" onclick="openModal()">+ ADICIONAR NOVA ROSA</button>
+        <input type="text" class="search-box" placeholder="Buscar pelo nome da ID..." oninput="filtrar(this.value)">
         
-        <div id="lista">
-            </div>
+        <div id="lista"></div>
     </main>
 
     <div id="modal" class="modal">
         <div class="modal-content">
-            <h3 style="margin-top:0">Nova Rosa</h3>
+            <h3 style="margin:0 0 20px 0; text-align:center">Novo Cadastro</h3>
             
             <div class="img-box" id="dropzone_new">
                 <input type="file" id="file_new" hidden accept="image/*" onchange="handleUpload(this, 'new')">
                 <div class="upload-trigger" onclick="document.getElementById('file_new').click()" id="trigger_new">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-                    <span>Selecionar Foto</span>
+                    <span>Adicionar Foto</span>
                 </div>
                 <img id="preview_new" style="display:none">
-                <div class="loading-overlay" id="load_new">Enviando...</div>
+                <div class="loading-overlay" id="load_new">Processando...</div>
             </div>
 
             <input type="hidden" id="n_midia">
-            <div class="form-group"><label>Nome da ID</label><input id="n_nome"></div>
-            <div class="form-group"><label>Estoque</label><input type="number" id="n_qtd" value="0"></div>
             
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px">
+            <div class="form-group"><label>Nome da ID</label><input id="n_nome" placeholder="Ex: TS-152"></div>
+            
+            <div class="form-grid">
+                <div class="form-group"><label>Estoque</label><input type="number" id="n_qtd" value="0"></div>
                 <div class="form-group"><label>Camadas</label><select id="n_camadas"></select></div>
-                <div class="form-group"><label>Cores</label><select id="n_cores"></select></div>
             </div>
             
-            <div class="form-group"><label>Padrão</label><select id="n_padrao"></select></div>
+            <div class="form-grid">
+                <div class="form-group"><label>Cores</label><select id="n_cores"></select></div>
+                <div class="form-group"><label>Padrão</label><select id="n_padrao"></select></div>
+            </div>
+
+            <div class="form-group">
+                <label>Características Especiais</label>
+                <div class="especiais-container" id="n_especiais"></div>
+            </div>
 
             <div class="card-actions">
-                <button class="btn-save" style="display:block; background:var(--primary)" onclick="criarID()">CRIAR AGORA</button>
+                <button class="btn-save" style="display:block; background:var(--primary)" onclick="criarID()">CADASTRAR ID</button>
                 <button class="btn-del" onclick="closeModal()">CANCELAR</button>
             </div>
         </div>
@@ -181,25 +202,42 @@
 
     <script>
         const API = "https://script.google.com/macros/s/AKfycbxs8MmNSgkb43F1vZDCtFE6AiRvWtjlTp67QxpLMcfA9mnWInHQOBm8iZuEqpF6Ctg0hA/exec";
+        const TAGS_ESPECIAIS = ['Cristatas', 'Floração em buquê', 'Mutantes', 'Perfumadas', 'Variegatas'];
         let DADOS_LOCAIS = [];
+        let ALTERACOES_PENDENTES = false;
 
         // Segurança
         if (sessionStorage.getItem("adminLogado") !== "true") {
             const pass = prompt("Senha de acesso:");
             if (btoa(pass) === "MTQwNTA4bGU=") {
                 sessionStorage.setItem("adminLogado", "true");
+            } else { location.href = "index.html"; }
+        }
+
+        // Alerta ao fechar aba
+        window.onbeforeunload = function() {
+            if (ALTERACOES_PENDENTES) return "Existem alterações não salvas. Deseja sair?";
+        };
+
+        function safeExit() {
+            if (ALTERACOES_PENDENTES) {
+                if (confirm("Você tem alterações que não foram salvas. Sair mesmo assim?")) {
+                    location.href = 'index.html';
+                }
             } else {
-                location.href = "index.html";
+                location.href = 'index.html';
             }
         }
 
         async function carregar() {
-            showToast("Sincronizando dados...");
-            const r = await fetch(API + "?action=get");
-            const json = await r.json();
-            DADOS_LOCAIS = Object.keys(json).map(k => ({ nome: k, ...json[k] }));
-            render();
-            popularSelects();
+            showToast("Atualizando dados...");
+            try {
+                const r = await fetch(API + "?action=get");
+                const json = await r.json();
+                DADOS_LOCAIS = Object.keys(json).map(k => ({ nome: k, ...json[k] }));
+                render();
+                popularSelectsModal();
+            } catch(e) { showToast("Erro ao carregar dados."); }
         }
 
         function render(filtro = "") {
@@ -211,20 +249,42 @@
             filtrados.forEach(d => {
                 const safeId = d.nome.replace(/\W/g, '_');
                 const imgUrl = d.midia ? `https://drive.google.com/thumbnail?sz=w600&id=${d.midia}` : 'imagens/sem-foto.jpg';
+                const espArray = d.especiais ? d.especiais.split(',').map(s => s.trim()) : [];
                 
                 const card = document.createElement("div");
                 card.className = "card";
+                card.id = `card_${safeId}`;
                 card.innerHTML = `
                     <div class="img-box">
                         <input type="file" id="file_${safeId}" hidden onchange="handleUpload(this, '${d.nome}')">
                         <img src="${imgUrl}" id="img_${safeId}">
                         <div class="upload-trigger" style="background:transparent; border:none; height:40px; top:auto" onclick="document.getElementById('file_${safeId}').click()">
-                            <div style="background:white; padding:5px 10px; border-radius:50px; font-size:10px; box-shadow:0 2px 5px rgba(0,0,0,0.2)">Trocar Foto</div>
+                            <div style="background:white; padding:4px 12px; border-radius:50px; font-size:9px; box-shadow:0 4px 10px rgba(0,0,0,0.1); font-weight:700">EDITAR FOTO</div>
                         </div>
                         <div class="loading-overlay" id="load_${safeId}">...</div>
                     </div>
-                    <h4 style="margin:5px 0; text-align:center">${d.nome}</h4>
-                    <div class="form-group"><label>Estoque</label><input type="number" value="${d.qtd}" oninput="changeHandler('${safeId}')" id="qtd_${safeId}"></div>
+                    
+                    <h4>${d.nome}</h4>
+                    
+                    <div class="form-grid">
+                        <div class="form-group"><label>Estoque</label><input type="number" value="${d.qtd}" id="qtd_${safeId}" oninput="markChange('${safeId}')"></div>
+                        <div class="form-group"><label>Camadas</label><select id="cam_${safeId}" onchange="markChange('${safeId}')">${getOptions('camadas', d.camadas)}</select></div>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-group"><label>Cores</label><select id="cor_${safeId}" onchange="markChange('${safeId}')">${getOptions('cores', d.cores)}</select></div>
+                        <div class="form-group"><label>Padrão</label><select id="pad_${safeId}" onchange="markChange('${safeId}')">${getOptions('padrao', d.padrao)}</select></div>
+                    </div>
+
+                    <label>Especiais</label>
+                    <div class="especiais-container">
+                        ${TAGS_ESPECIAIS.map(tag => `
+                            <label class="tag-check ${espArray.includes(tag) ? 'active' : ''}">
+                                <input type="checkbox" value="${tag}" ${espArray.includes(tag) ? 'checked' : ''} onchange="markChange('${safeId}'); this.parentElement.classList.toggle('active')"> ${tag}
+                            </label>
+                        `).join('')}
+                    </div>
+
                     <div class="card-actions">
                         <button class="btn-save" id="save_${safeId}" onclick="salvarAlteracao('${d.nome}')">SALVAR</button>
                         <button class="btn-del" onclick="excluirID('${d.nome}')">EXCLUIR</button>
@@ -234,59 +294,82 @@
             });
         }
 
-        function changeHandler(id) {
+        function getOptions(campo, selecionado) {
+            const unique = [...new Set(DADOS_LOCAIS.map(d => d[campo]))].filter(v => v && v !== "Não inf.");
+            if (!unique.includes(selecionado) && selecionado) unique.push(selecionado);
+            return `<option value="">Selecione...</option>` + unique.map(v => `<option value="${v}" ${v === selecionado ? 'selected' : ''}>${v}</option>`).join('');
+        }
+
+        function markChange(id) {
+            ALTERACOES_PENDENTES = true;
             document.getElementById(`save_${id}`).style.display = "block";
-            document.getElementById(`save_${id}`).parentElement.parentElement.classList.add('nao-salvo');
+            document.getElementById(`card_${id}`).classList.add('nao-salvo');
         }
 
         async function handleUpload(input, nomeRosa) {
             const file = input.files[0];
             if (!file) return;
-
             const safeId = nomeRosa === 'new' ? 'new' : nomeRosa.replace(/\W/g, '_');
             const overlay = document.getElementById(`load_${safeId}`);
             overlay.style.display = "flex";
 
-            try {
-                const reader = new FileReader();
-                reader.readAsDataURL(file);
-                reader.onload = async () => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = async () => {
+                try {
                     const base64 = reader.result.split(',')[1];
                     const res = await fetch(API, {
                         method: "POST",
-                        body: new URLSearchParams({
-                            action: "upload",
-                            nome: nomeRosa,
-                            data: base64,
-                            mimeType: file.type
-                        })
+                        body: new URLSearchParams({ action: "upload", nome: nomeRosa, data: base64, mimeType: file.type })
                     });
                     const result = await res.json();
-                    
                     if (result.success) {
                         if (nomeRosa === 'new') {
                             document.getElementById("n_midia").value = result.id;
-                            document.getElementById("preview_new").src = `https://drive.google.com/thumbnail?sz=w600&id=${result.id}`;
-                            document.getElementById("preview_new").style.display = "block";
+                            const pre = document.getElementById("preview_new");
+                            pre.src = `https://drive.google.com/thumbnail?sz=w600&id=${result.id}`;
+                            pre.style.display = "block";
                             document.getElementById("trigger_new").style.display = "none";
                         } else {
                             document.getElementById(`img_${safeId}`).src = `https://drive.google.com/thumbnail?sz=w600&id=${result.id}`;
-                            showToast("Foto atualizada!");
+                            showToast("Foto atualizada no servidor!");
                         }
                     }
-                    overlay.style.display = "none";
-                };
-            } catch (e) {
-                showToast("Erro no upload");
+                } catch(e) { showToast("Erro no upload."); }
                 overlay.style.display = "none";
-            }
+            };
+        }
+
+        async function salvarAlteracao(nome) {
+            const safeId = nome.replace(/\W/g, '_');
+            const esp = [...document.querySelectorAll(`#card_${safeId} .tag-check input:checked`)].map(i => i.value).join(', ');
+            
+            showToast("Salvando...");
+            const body = new URLSearchParams({
+                action: "update",
+                nome: nome,
+                qtd: document.getElementById(`qtd_${safeId}`).value,
+                camadas: document.getElementById(`cam_${safeId}`).value,
+                cores: document.getElementById(`cor_${safeId}`).value,
+                padrao: document.getElementById(`pad_${safeId}`).value,
+                especiais: esp
+            });
+
+            await fetch(API, { method: "POST", body });
+            showToast("Salvo com sucesso!");
+            document.getElementById(`save_${safeId}`).style.display = "none";
+            document.getElementById(`card_${safeId}`).classList.remove('nao-salvo');
+            
+            // Verifica se ainda existem outros não salvos
+            ALTERACOES_PENDENTES = document.querySelectorAll('.nao-salvo').length > 0;
         }
 
         async function criarID() {
             const nome = document.getElementById("n_nome").value;
-            if(!nome) return alert("Nome obrigatório");
+            if(!nome) return alert("Digite o nome da ID!");
+            const esp = [...document.querySelectorAll(`#n_especiais input:checked`)].map(i => i.value).join(', ');
 
-            showToast("Criando...");
+            showToast("Cadastrando...");
             await fetch(API, {
                 method: "POST",
                 body: new URLSearchParams({
@@ -296,6 +379,7 @@
                     camadas: document.getElementById("n_camadas").value,
                     cores: document.getElementById("n_cores").value,
                     padrao: document.getElementById("n_padrao").value,
+                    especiais: esp,
                     midia: document.getElementById("n_midia").value
                 })
             });
@@ -303,44 +387,37 @@
             carregar();
         }
 
-        async function salvarAlteracao(nome) {
-            const safeId = nome.replace(/\W/g, '_');
-            showToast("Salvando...");
-            await fetch(API, {
-                method: "POST",
-                body: new URLSearchParams({
-                    action: "update",
-                    nome: nome,
-                    qtd: document.getElementById(`qtd_${safeId}`).value
-                })
-            });
-            carregar();
-        }
-
         async function excluirID(nome) {
-            if(!confirm(`Excluir ${nome}?`)) return;
-            await fetch(API, {
-                method: "POST",
-                body: new URLSearchParams({ action: "delete", nome: nome })
-            });
+            if(!confirm(`Deseja realmente excluir a ID ${nome}?`)) return;
+            showToast("Excluindo...");
+            await fetch(API, { method: "POST", body: new URLSearchParams({ action: "delete", nome: nome }) });
             carregar();
         }
 
-        function popularSelects() {
-            const campos = { camadas: 'n_camadas', cores: 'n_cores', padrao: 'n_padrao' };
-            Object.keys(campos).forEach(c => {
-                const unique = [...new Set(DADOS_LOCAIS.map(d => d[c]))].filter(v => v);
-                const sel = document.getElementById(campos[c]);
-                sel.innerHTML = '<option value="">Selecione...</option>';
-                unique.forEach(v => sel.innerHTML += `<option value="${v}">${v}</option>`);
-            });
+        function popularSelectsModal() {
+            const configs = { 'n_camadas': 'camadas', 'n_cores': 'cores', 'n_padrao': 'padrao' };
+            for (let id in configs) {
+                const el = document.getElementById(id);
+                const unique = [...new Set(DADOS_LOCAIS.map(d => d[configs[id]]))].filter(v => v && v !== "Não inf.");
+                el.innerHTML = '<option value="">Selecione...</option>' + unique.map(v => `<option value="${v}">${v}</option>`).join('');
+            }
+            // Tags
+            const cont = document.getElementById("n_especiais");
+            cont.innerHTML = TAGS_ESPECIAIS.map(tag => `
+                <label class="tag-check">
+                    <input type="checkbox" value="${tag}" onchange="this.parentElement.classList.toggle('active')"> ${tag}
+                </label>
+            `).join('');
         }
 
         function openModal() { 
             document.getElementById("modal").style.display = "flex";
+            document.getElementById("n_nome").value = "";
+            document.getElementById("n_qtd").value = 0;
             document.getElementById("n_midia").value = "";
             document.getElementById("preview_new").style.display = "none";
             document.getElementById("trigger_new").style.display = "flex";
+            popularSelectsModal();
         }
         function closeModal() { document.getElementById("modal").style.display = "none"; }
         function filtrar(v) { render(v); }
