@@ -8,177 +8,145 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #f8f7f2;
+            --bg: #fcfbf7;
             --surface: #ffffff;
-            --text-primary: #1a1a1a;
-            --text-secondary: #666666;
-            --accent: #a69277;
-            --accent-light: #eaddca;
+            --text-primary: #1c1c1c;
+            --text-secondary: #707070;
+            --accent: #968369; /* Tom bronze/areia sofisticado */
+            --accent-light: #f0ede6;
             --border: #eceae4;
-            --radius-lg: 16px;
+            --radius-lg: 20px;
             --radius-sm: 8px;
-            --shadow: 0 4px 20px rgba(0,0,0,0.03);
+            --shadow: 0 10px 30px rgba(0,0,0,0.02);
         }
 
-        * { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); box-sizing: border-box; }
+        * { transition: all 0.3s ease; box-sizing: border-box; }
 
         body { 
             font-family: 'Inter', sans-serif; 
             background: var(--bg); 
             color: var(--text-primary); 
             margin: 0; 
-            letter-spacing: -0.01em;
-            padding-bottom: 80px;
+            padding-bottom: 100px;
         }
 
+        /* Topbar Minimalista */
         .topbar { 
-            height: 120px; 
+            height: 100px; 
             background: var(--surface);
             display: flex; 
             align-items: center; 
             justify-content: center; 
             border-bottom: 1px solid var(--border);
         }
-        .logo { width: 140px; opacity: 0.9; }
+        .logo { width: 130px; opacity: 0.8; }
 
         .nav-bar { 
-            position: sticky; 
-            top: 0; 
-            z-index: 100; 
-            background: rgba(255, 255, 255, 0.8); 
-            backdrop-filter: blur(10px); 
+            position: sticky; top: 0; z-index: 100; 
+            background: rgba(255, 255, 255, 0.85); 
+            backdrop-filter: blur(15px); 
             padding: 15px 5%;
-            display: flex; 
-            justify-content: space-between;
-            align-items: center;
+            display: flex; justify-content: space-between; align-items: center;
             border-bottom: 1px solid var(--border);
         }
 
-        .container { max-width: 1100px; margin: auto; padding: 40px 20px; }
+        .container { max-width: 1200px; margin: auto; padding: 50px 25px; }
 
+        /* Estilo Premium para Botões e Inputs */
         .btn-new { 
-            background: var(--text-primary); 
-            color: white; 
-            border: none;
-            padding: 14px 28px; 
-            border-radius: var(--radius-sm); 
-            font-weight: 500; 
-            cursor: pointer;
-            font-size: 14px;
+            background: var(--text-primary); color: white; border: none;
+            padding: 14px 30px; border-radius: 50px; 
+            font-weight: 500; cursor: pointer; font-size: 13px; letter-spacing: 0.5px;
         }
-        .btn-new:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
-
-        .btn-exit { 
-            background: transparent; 
-            border: 1px solid var(--border);
-            padding: 8px 18px;
-            border-radius: var(--radius-sm);
-            font-size: 12px;
-            cursor: pointer;
-            color: var(--text-secondary);
-        }
+        .btn-new:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
 
         .search-box { 
-            width: 100%; 
-            padding: 20px 30px; 
-            border-radius: var(--radius-lg); 
-            border: 1px solid var(--border); 
-            outline: none; 
-            font-size: 16px;
-            background: var(--surface);
-            box-shadow: var(--shadow);
-            margin-bottom: 50px;
+            width: 100%; padding: 22px 30px; 
+            border-radius: 50px; border: 1px solid var(--border); 
+            outline: none; font-size: 16px; background: var(--surface);
+            box-shadow: var(--shadow); margin-bottom: 60px;
         }
 
-        #lista { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 30px; }
+        /* Grid e Cards */
+        #lista { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 40px; }
         
         .card { 
-            background: var(--surface); 
-            border-radius: var(--radius-lg); 
-            padding: 24px; 
-            border: 1px solid var(--border);
-            box-shadow: var(--shadow);
-            animation: fadeIn 0.5s ease backwards;
+            background: var(--surface); border-radius: var(--radius-lg); 
+            padding: 30px; border: 1px solid var(--border);
+            box-shadow: var(--shadow); position: relative;
         }
-        .card:hover { border-color: var(--accent); }
-        .nao-salvo { border: 1px solid var(--accent); background: #fffdfa; }
+        .card:hover { border-color: var(--accent); transform: translateY(-5px); }
+        .nao-salvo { border: 1px solid var(--accent); background: #fdfcf9; }
 
-        .card h4 { font-family: 'Playfair Display', serif; font-size: 20px; margin: 0 0 15px 0; }
+        .card h4 { font-family: 'Playfair Display', serif; font-size: 22px; margin: 0 0 20px 0; }
 
-        label { font-size: 11px; font-weight: 600; color: var(--accent); text-transform: uppercase; margin-bottom: 6px; display: block; }
+        label { font-size: 10px; font-weight: 700; color: var(--accent); text-transform: uppercase; margin-bottom: 8px; letter-spacing: 1px; }
         input, select { 
-            width: 100%; 
-            padding: 10px 12px; 
-            border-radius: var(--radius-sm); 
-            border: 1px solid var(--border); 
-            background: #fafafa;
-            margin-bottom: 15px;
-            font-size: 14px;
+            width: 100%; padding: 12px; border-radius: var(--radius-sm); 
+            border: 1px solid var(--border); background: #fafafa;
+            margin-bottom: 18px; font-size: 14px; color: var(--text-primary);
         }
 
         .img-box { 
-            width: 100%; aspect-ratio: 1/1; border-radius: var(--radius-sm); 
-            background: #fdfdfd; overflow: hidden; position: relative; margin-bottom: 20px;
-            border: 1px solid var(--border);
+            width: 100%; aspect-ratio: 1/1; border-radius: 12px; 
+            background: #f7f6f2; overflow: hidden; position: relative; margin-bottom: 25px;
         }
         .img-box img { width: 100%; height: 100%; object-fit: cover; }
         
         .edit-icon-btn { 
-            position: absolute; top: 10px; right: 10px; 
-            background: rgba(255,255,255,0.9); width: 32px; height: 32px; 
+            position: absolute; top: 12px; right: 12px; 
+            background: white; width: 36px; height: 36px; 
             border-radius: 50%; display: flex; align-items: center; justify-content: center; 
-            cursor: pointer; font-size: 14px; backdrop-filter: blur(4px);
+            cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
 
-        .especiais-container { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 5px; }
-        .tag-check { font-size: 10px; padding: 6px 12px; border-radius: 20px; border: 1px solid var(--border); cursor: pointer; color: var(--text-secondary); }
-        .tag-check.active { background: var(--accent-light); color: var(--accent); border-color: var(--accent); }
+        .especiais-container { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 5px; }
+        .tag-check { font-size: 11px; padding: 8px 16px; border-radius: 50px; border: 1px solid var(--border); cursor: pointer; color: var(--text-secondary); background: white; }
+        .tag-check.active { background: var(--text-primary); color: white; border-color: var(--text-primary); }
         .tag-check input { display: none; }
 
-        .btn-save { width: 100%; background: var(--accent); color: white; border: none; padding: 12px; border-radius: var(--radius-sm); font-weight: 600; margin-top: 15px; cursor: pointer; display: none; }
-        .btn-del { width: 100%; background: transparent; color: #cc0000; border: none; font-size: 11px; margin-top: 10px; cursor: pointer; opacity: 0.5; }
+        .btn-save { width: 100%; background: var(--accent); color: white; border: none; padding: 14px; border-radius: 50px; font-weight: 600; margin-top: 20px; cursor: pointer; display: none; }
+        .btn-del { width: 100%; background: transparent; color: #a33; border: none; font-size: 11px; margin-top: 15px; cursor: pointer; opacity: 0.6; }
 
-        .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.4); backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; z-index: 2000; }
-        .modal-content { background: white; width: 90%; max-width: 450px; border-radius: 24px; padding: 40px; max-height: 90vh; overflow-y: auto; }
-
-        .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: var(--text-primary); color: white; padding: 16px 32px; border-radius: 12px; display: none; z-index: 3000; font-size: 14px; }
-
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        /* Modal e Toast */
+        .modal { position: fixed; inset: 0; background: rgba(28, 28, 28, 0.3); backdrop-filter: blur(10px); display: none; align-items: center; justify-content: center; z-index: 2000; }
+        .modal-content { background: white; width: 90%; max-width: 450px; border-radius: var(--radius-lg); padding: 45px; max-height: 90vh; overflow-y: auto; box-shadow: 0 30px 60px rgba(0,0,0,0.1); }
+        .toast { position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%); background: #1c1c1c; color: white; padding: 16px 35px; border-radius: 50px; display: none; z-index: 3000; font-size: 14px; box-shadow: 0 15px 30px rgba(0,0,0,0.2); }
     </style>
 </head>
 <body>
 
 <div class="topbar"><img src="logo.png" class="logo"></div>
 <nav class="nav-bar">
-    <div style="font-size: 12px; font-weight: 600; color: var(--accent); letter-spacing: 1px;">SISTEMA DE GESTÃO</div>
-    <button onclick="confirmExit()" class="btn-exit">SAIR</button>
+    <div style="font-size: 11px; font-weight: 700; color: var(--accent); letter-spacing: 2px;">COLLECTION MANAGEMENT</div>
+    <button onclick="confirmExit()" style="background:none; border:none; color:var(--text-secondary); cursor:pointer; font-size:12px">SAIR</button>
 </nav>
 
 <main class="container">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px;">
-        <h2 style="font-family: 'Playfair Display'; font-size: 32px; margin: 0;">Inventário</h2>
-        <button class="btn-new" onclick="openModal()">+ Adicionar Rosa</button>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 50px;">
+        <h2 style="font-family: 'Playfair Display'; font-size: 38px; margin: 0; font-weight: 700;">Inventário</h2>
+        <button class="btn-new" onclick="openModal()">+ Adicionar Nova ID</button>
     </div>
     
-    <input type="text" class="search-box" placeholder="Pesquisar por nome ou detalhes..." oninput="filtrar(this.value)">
+    <input type="text" class="search-box" placeholder="Pesquisar rosa, cor ou característica..." oninput="filtrar(this.value)">
     
     <div id="lista"></div>
 </main>
 
 <div id="modal" class="modal">
     <div class="modal-content">
-        <h3 style="font-family: 'Playfair Display'; margin-top: 0;">Novo Registo</h3>
+        <h3 style="font-family: 'Playfair Display'; font-size: 26px; margin-top: 0;">Novo Registro</h3>
         <div class="img-box">
             <input type="file" id="file_new" hidden accept="image/*" onchange="handleUpload(this, 'new')">
-            <div class="edit-icon-btn" onclick="document.getElementById('file_new').click()" id="trigger_new" style="inset: 0; margin: auto; border-radius: 8px; width: auto; height: 40px; padding: 0 20px;">
-                <span>Carregar Foto</span>
+            <div class="edit-icon-btn" onclick="document.getElementById('file_new').click()" id="trigger_new" style="inset: 0; margin: auto; width: 150px; border-radius: 50px; height: 40px;">
+                <span style="font-size: 12px; font-weight: 600;">CARREGAR FOTO</span>
             </div>
             <img id="preview_new" style="display:none; width:100%; height:100%; object-fit:cover;">
         </div>
         <input type="hidden" id="n_midia">
-        <label>Nome da Identificação</label><input id="n_nome" placeholder="Ex: TS-152">
+        <label>Nome da Rosa</label><input id="n_nome" placeholder="Ex: TS-152">
         <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px">
-            <div><label>Qtd. Stock</label><input type="number" id="n_qtd" value="0"></div>
+            <div><label>Quantidade</label><input type="number" id="n_qtd" value="0"></div>
             <div><label>Camadas</label><select id="n_camadas"></select></div>
         </div>
         <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px">
@@ -188,8 +156,8 @@
         <label>Atributos Especiais</label>
         <div class="especiais-container" id="n_especiais"></div>
         
-        <button class="btn-new" style="width: 100%; margin-top: 20px;" onclick="criarID()">CONFIRMAR REGISTO</button>
-        <button onclick="closeModal()" style="width:100%; background:none; border:none; color:#999; cursor:pointer; margin-top:15px; font-size:12px">CANCELAR</button>
+        <button class="btn-new" style="width: 100%; margin-top: 30px; height: 55px;" onclick="criarID()">SALVAR NA PLANILHA</button>
+        <button onclick="closeModal()" style="width:100%; background:none; border:none; color:#bbb; cursor:pointer; margin-top:15px; font-size:11px; font-weight: 600;">CANCELAR</button>
     </div>
 </div>
 
@@ -201,15 +169,26 @@
     let DADOS_LOCAIS = [];
 
     async function carregar() {
-        showToast("A sincronizar dados...");
+        showToast("Sincronizando base de dados...");
         try {
             const r = await fetch(API + "?action=get&t=" + Date.now());
             const json = await r.json();
-            DADOS_LOCAIS = Object.keys(json).map(k => ({ nome: k, ...json[k] }));
+            
+            // CORREÇÃO: Alinhando com a ordem da sua planilha
+            DADOS_LOCAIS = Object.keys(json).map(k => ({
+                nome: k,
+                camadas: json[k].camadas,
+                cores: json[k].cores,
+                padrao: json[k].padrao,
+                especiais: json[k].especiais,
+                qtd: json[k].qtd,
+                midia: json[k].midia
+            }));
+
             render();
             popularSelectsModal();
         } catch (e) {
-            showToast("Erro de ligação.");
+            showToast("Erro ao conectar com a planilha.");
         }
     }
 
@@ -234,7 +213,7 @@
                 </div>
                 <h4>${d.nome}</h4>
                 <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px">
-                    <div><label>Stock</label><input type="number" value="${d.qtd}" id="qtd_${safeId}" oninput="markChange('${safeId}')"></div>
+                    <div><label>Estoque</label><input type="number" value="${d.qtd}" id="qtd_${safeId}" oninput="markChange('${safeId}')"></div>
                     <div><label>Camadas</label><select id="cam_${safeId}" onchange="markChange('${safeId}')">${getOptions('camadas', d.camadas)}</select></div>
                 </div>
                 <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px">
@@ -249,23 +228,23 @@
                         </label>
                     `).join('')}
                 </div>
-                <button class="btn-save" id="save_${safeId}" onclick="salvarAlteracao('${d.nome}')">GUARDAR ALTERAÇÕES</button>
-                <button class="btn-del" onclick="excluirID('${d.nome}')">ELIMINAR REGISTO</button>
+                <button class="btn-save" id="save_${safeId}" onclick="salvarAlteracao('${d.nome}')">CONFIRMAR ALTERAÇÕES</button>
+                <button class="btn-del" onclick="excluirID('${d.nome}')">Remover ID</button>
             `;
             container.appendChild(card);
         });
     }
 
+    // A lógica de Upload, MarkChange, Salvar e Excluir permanece funcional e integrada
     async function handleUpload(input, nomeRosa) {
         const file = input.files[0];
         if (!file) return;
-        showToast("A processar imagem...");
+        showToast("Processando imagem...");
         const reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onload = async () => {
             const base64 = reader.result.split(',')[1];
             let oldId = (nomeRosa !== 'new') ? DADOS_LOCAIS.find(d => d.nome === nomeRosa)?.midia : "";
-
             try {
                 const res = await fetch(API, { 
                     method: "POST", 
@@ -285,60 +264,64 @@
                         markChange(nomeRosa.replace(/\W/g, '_'));
                         document.getElementById(`img_${nomeRosa.replace(/\W/g, '_')}`).src = `https://drive.google.com/thumbnail?sz=w600&id=${result.id}&t=${Date.now()}`;
                     }
-                    showToast("Imagem atualizada.");
+                    showToast("Foto atualizada com sucesso.");
                 }
-            } catch (e) { showToast("Erro no upload."); }
+            } catch (e) { showToast("Erro no servidor de imagens."); }
         };
     }
 
     function markChange(id) {
-        document.getElementById(`save_${id}`).style.display = "block";
-        document.getElementById(`card_${id}`).classList.add('nao-salvo');
+        const btn = document.getElementById(`save_${id}`);
+        if(btn) btn.style.display = "block";
+        const card = document.getElementById(`card_${id}`);
+        if(card) card.classList.add('nao-salvo');
     }
 
     async function salvarAlteracao(nome) {
         const safeId = nome.replace(/\W/g, '_');
         const item = DADOS_LOCAIS.find(d => d.nome === nome);
+        
+        // ORDEM DE ENVIO: Deve bater com o que o script .gs espera
         const params = new URLSearchParams({
             action: "update", nome: nome,
-            qtd: document.getElementById(`qtd_${safeId}`).value,
             camadas: document.getElementById(`cam_${safeId}`).value,
             cores: document.getElementById(`cor_${safeId}`).value,
             padrao: document.getElementById(`pad_${safeId}`).value,
             especiais: [...document.querySelectorAll(`#card_${safeId} input:checked`)].map(i => i.value).join(', '),
+            qtd: document.getElementById(`qtd_${safeId}`).value,
             midia: item.midia 
         });
 
-        showToast("A guardar...");
+        showToast("Salvando alterações...");
         const res = await fetch(API, { method: "POST", body: params });
         const result = await res.json();
         if(result.success) {
-            showToast("Alterações guardadas.");
+            showToast("Planilha atualizada!");
             carregar();
         }
     }
 
     async function criarID() {
         const nome = document.getElementById("n_nome").value;
-        if(!nome) return alert("O nome é obrigatório!");
+        if(!nome) return alert("Por favor, insira o nome da ID.");
         const params = new URLSearchParams({
             action: "create", nome: nome,
-            qtd: document.getElementById("n_qtd").value,
             camadas: document.getElementById("n_camadas").value,
             cores: document.getElementById("n_cores").value,
             padrao: document.getElementById("n_padrao").value,
             especiais: [...document.querySelectorAll(`#n_especiais input:checked`)].map(i => i.value).join(', '),
+            qtd: document.getElementById("n_qtd").value,
             midia: document.getElementById("n_midia").value
         });
-        showToast("A criar registo...");
+        showToast("Criando novo registro...");
         await fetch(API, { method: "POST", body: params });
         closeModal();
         carregar();
     }
 
     async function excluirID(nome) {
-        if(confirm(`Eliminar definitivamente ${nome}?`)) {
-            showToast("A eliminar...");
+        if(confirm(`Deseja realmente excluir a ID ${nome}?`)) {
+            showToast("Removendo...");
             await fetch(API, { method: "POST", body: new URLSearchParams({ action: "delete", nome }) });
             carregar();
         }
@@ -353,16 +336,18 @@
     function popularSelectsModal() {
         ['camadas', 'cores', 'padrao'].forEach(c => {
             const unique = [...new Set(DADOS_LOCAIS.map(d => d[c]))].filter(v => v && v !== "" && v !== "undefined");
-            document.getElementById('n_'+c).innerHTML = '<option value="">-</option>' + unique.map(v => `<option value="${v}">${v}</option>`).join('');
+            const el = document.getElementById('n_'+c);
+            if(el) el.innerHTML = '<option value="">-</option>' + unique.map(v => `<option value="${v}">${v}</option>`).join('');
         });
-        document.getElementById("n_especiais").innerHTML = TAGS_ESPECIAIS.map(t => `<label class="tag-check"><input type="checkbox" value="${t}" onchange="this.parentElement.classList.toggle('active')"> ${t}</label>`).join('');
+        const esp = document.getElementById("n_especiais");
+        if(esp) esp.innerHTML = TAGS_ESPECIAIS.map(t => `<label class="tag-check"><input type="checkbox" value="${t}" onchange="this.parentElement.classList.toggle('active')"> ${t}</label>`).join('');
     }
 
-    function showToast(m) { const t = document.getElementById("toast"); t.innerText = m; t.style.display = "block"; setTimeout(() => t.style.display = "none", 3000); }
+    function showToast(m) { const t = document.getElementById("toast"); if(t){t.innerText = m; t.style.display = "block"; setTimeout(() => t.style.display = "none", 4000);} }
     function openModal() { document.getElementById("modal").style.display = "flex"; }
     function closeModal() { document.getElementById("modal").style.display = "none"; }
     function filtrar(v) { render(v); }
-    function confirmExit() { if(confirm("Deseja sair do sistema?")) location.href = "index.html"; }
+    function confirmExit() { if(confirm("Deseja voltar ao catálogo?")) location.href = "index.html"; }
 
     window.onload = carregar;
 </script>
