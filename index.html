@@ -43,18 +43,35 @@
     const API = "https://script.google.com/macros/s/AKfycbzgV_H5QLTNwJ12B-78q57qNnlaVi0vbxW3jIqdnp7YH1IKCdBdFthIHymlMM9Jusqktg/exec";
     let DADOS = [];
 
-    async function carregar() {
-        try {
-            const r = await fetch(API + "?action=get");
-            const json = await r.json();
-            DADOS = Object.keys(json).map(k => ({ nome: k, ...json[k] }));
-            document.getElementById("loading").style.display = "none";
-            popularFiltros();
-            render(DADOS);
-        } catch (e) {
-            document.getElementById("loading").innerText = "Erro ao carregar dados.";
+   async function carregar() {
+    try {
+        // Adicionamos um timestamp (t=...) para evitar que o navegador use dados velhos do cache
+        const urlComCache = API + "?action=get&t=" + Date.now();
+        
+        const r = await fetch(urlComCache, {
+            method: "GET",
+            mode: "cors", 
+            redirect: "follow" // CRUCIAL: O Google redireciona a requisição
+        });
+
+        if (!r.ok) throw new Error('Falha na resposta: ' + r.status);
+        
+        const json = await r.json();
+
+        if (json.error) {
+            document.getElementById("loading").innerText = "Erro no servidor: " + json.error;
+            return;
         }
+
+        DADOS = Object.keys(json).map(k => ({ nome: k, ...json[k] }));
+        document.getElementById("loading").style.display = "none";
+        popularFiltros();
+        render(DADOS);
+    } catch (e) {
+        console.error("Erro de conexão:", e);
+        document.getElementById("loading").innerText = "Não foi possível carregar os dados. Verifique a conexão.";
     }
+}
 
     function popularFiltros() {
         const cores = [...new Set(DADOS.map(d => d.cores))].filter(v => v && v !== "Não inf.").sort();
