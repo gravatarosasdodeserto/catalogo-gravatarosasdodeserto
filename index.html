@@ -3,18 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Painel Admin | Gravatá Rosas do Deserto</title>
+    <title>Painel Admin | Gravatá RD</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --header-bg: #fcfaf7;
+            /* CORES EXATAS DO SEU INDEX */
             --body-bg: #e9e4dd;
-            --card-white: #ffffff;
             --text-main: #2e2a15;
             --accent: #a08c6b;
             --accent-dark: #7d6e53;
-            --danger: #8b2d2d;
-            --shadow-md: 0 8px 24px rgba(58, 54, 24, 0.08);
+            --card-white: #ffffff;
             --shadow-lg: 0 12px 40px rgba(58, 54, 24, 0.12);
         }
 
@@ -22,142 +20,136 @@
         
         body {
             font-family: 'Poppins', sans-serif;
+            /* FUNDO COM O MESMO GRADIENTE DO INDEX */
             background: var(--body-bg);
-            background-image: 
-                radial-gradient(at 20% 20%, rgba(160, 140, 107, 0.08) 0px, transparent 50%),
+            background-image:
+                radial-gradient(at 20% 20%, rgba(160, 140, 107, 0.12) 0px, transparent 50%),
                 radial-gradient(at 80% 80%, rgba(255, 255, 255, 0.4) 0px, transparent 50%);
             color: var(--text-main);
             margin: 0;
             padding-bottom: 60px;
         }
 
-        /* HEADER & TOPBAR (Baseado no Index) */
+        /* HEADER PREMIUM */
         .topbar {
-            height: 140px;
-            background-image: url('imagens/gravata-cabecalho.jpg');
-            background-size: cover;
-            background-position: center;
+            height: 160px;
+            background: url('imagens/gravata-cabecalho.jpg') center/cover;
             display: flex; align-items: center; justify-content: center;
-            position: relative; overflow: hidden;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+            position: relative;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
         }
         .topbar::after {
             content: ""; position: absolute; inset: 0;
-            background: rgba(255, 255, 255, 0.35);
+            background: rgba(255, 255, 255, 0.3);
             backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
         }
-        .logo { z-index: 10; width: 150px; filter: drop-shadow(0 6px 20px rgba(0,0,0,0.3)); cursor: pointer; }
+        .logo { z-index: 10; width: 180px; filter: drop-shadow(0 6px 15px rgba(0,0,0,0.2)); }
 
         .nav-bar {
             position: sticky; top: 0; z-index: 100;
-            background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px);
-            padding: 12px; display: flex; justify-content: center;
-            border-bottom: 1px solid rgba(0,0,0,0.04);
-        }
-        .btn-exit {
-            background: linear-gradient(135deg, var(--text-main), var(--accent-dark));
-            color: white; border-radius: 50px; padding: 8px 20px;
-            text-decoration: none; font-size: 10px; font-weight: 700;
-            text-transform: uppercase; border: none; cursor: pointer;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(15px);
+            padding: 15px; display: flex; justify-content: center;
+            border-bottom: 1.5px solid rgba(255, 255, 255, 0.5);
         }
 
-        /* CONTAINER */
-        .container { max-width: 1200px; margin: auto; padding: 20px; }
+        /* BOTÃO SAIR (ESTILO TAG FILTRO) */
+        .btn-exit {
+            background: linear-gradient(135deg, var(--text-main), var(--accent-dark));
+            color: white; border-radius: 50px; padding: 10px 25px;
+            font-size: 11px; font-weight: 700; text-transform: uppercase;
+            border: none; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .container { max-width: 1200px; margin: auto; padding: 25px; }
         
+        /* BOTÃO CADASTRAR (ESTILO WHATSAPP DO INDEX) */
         .btn-new {
             width: 100%; padding: 18px; border-radius: 50px; border: none;
             background: linear-gradient(135deg, var(--text-main), var(--accent-dark));
             color: white; font-weight: 700; font-size: 14px; cursor: pointer;
-            margin-bottom: 25px; box-shadow: var(--shadow-md);
-            text-transform: uppercase; letter-spacing: 1px;
-            transition: 0.3s;
+            margin-bottom: 30px; box-shadow: 0 6px 20px rgba(58, 54, 24, 0.3);
+            text-transform: uppercase; transition: 0.3s;
         }
-        .btn-new:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
 
+        /* BUSCA (ESTILO CAMPO-BUSCA DO INDEX) */
         .search-box {
-            width: 100%; padding: 14px 22px; border-radius: 50px; 
-            border: 2px solid rgba(0,0,0,0.08); margin-bottom: 30px; 
-            outline: none; font-family: inherit; text-align: center;
-            background: white; transition: 0.3s;
+            width: 100%; padding: 16px 25px; border-radius: 50px; 
+            border: 2px solid rgba(0,0,0,0.08); margin-bottom: 40px; 
+            outline: none; text-align: center; background: white;
+            font-size: 14px; box-shadow: 0 4px 12px rgba(0,0,0,0.03);
         }
-        .search-box:focus { border-color: var(--accent); transform: scale(1.01); }
 
-        /* CARDS */
-        #lista { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
-        
+        /* CARDS (ESTILO ITEM DO INDEX) */
+        #lista { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; }
         .card {
-            background: var(--card-white); border-radius: 24px; padding: 20px;
-            box-shadow: var(--shadow-sm); transition: 0.3s; 
-            border: 1.5px solid transparent; position: relative;
+            background: var(--card-white); border-radius: 28px; padding: 25px;
+            box-shadow: 0 8px 24px rgba(58, 54, 24, 0.08); transition: 0.4s; 
+            border: 1px solid rgba(255,255,255,0.8);
         }
-        .card:hover { transform: translateY(-5px); box-shadow: var(--shadow-lg); }
-        .nao-salvo { border-color: var(--accent) !important; background: #fffdf9; }
+        .card:hover { transform: translateY(-8px); box-shadow: var(--shadow-lg); }
+        .nao-salvo { border: 2px solid var(--accent) !important; background: #fffcf5; }
 
-        /* FOTO QUADRADA */
+        /* FOTO QUADRADA COM ÍCONE */
         .img-box {
-            width: 130px; height: 130px; border-radius: 18px;
-            background: #f0ede9; overflow: hidden; position: relative; 
-            margin: 0 auto 15px; border: 1px solid rgba(0,0,0,0.05);
+            width: 140px; height: 140px; border-radius: 20px;
+            background: #f5f3f0; overflow: hidden; position: relative; 
+            margin: 0 auto 20px; border: 1px solid rgba(0,0,0,0.04);
         }
         .img-box img { width: 100%; height: 100%; object-fit: cover; }
-
         .edit-icon-btn {
-            position: absolute; right: 8px; bottom: 8px; 
-            background: white; width: 32px; height: 32px; border-radius: 50%;
+            position: absolute; right: 10px; bottom: 10px; 
+            background: white; width: 35px; height: 35px; border-radius: 50%;
             display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1); cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15); cursor: pointer;
         }
-        .edit-icon-btn svg { width: 16px; color: var(--text-main); }
 
-        /* FORMULÁRIO */
-        .card h4 { margin: 0 0 15px 0; font-size: 16px; font-weight: 700; text-align: center; color: var(--text-main); text-transform: uppercase; }
-        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
-        label { font-size: 10px; font-weight: 700; color: var(--accent); text-transform: uppercase; display: block; margin-bottom: 4px; }
+        /* FORMULÁRIO DISCRETO */
+        .card h4 { margin: 0 0 20px 0; font-size: 18px; font-weight: 700; text-align: center; letter-spacing: -0.5px; }
+        label { font-size: 10px; font-weight: 700; color: var(--accent); text-transform: uppercase; margin-bottom: 5px; margin-left: 5px; }
         input, select {
-            width: 100%; padding: 10px; border-radius: 12px; border: 1.5px solid #e5e0d8;
-            font-family: inherit; font-size: 13px; background: #fafafa; outline: none;
+            width: 100%; padding: 12px; border-radius: 15px; border: 1.5px solid #ebe7e1;
+            font-size: 13px; background: #fdfdfd; outline: none; margin-bottom: 12px;
         }
 
-        /* TAGS (Baseado no Index) */
-        .especiais-container { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 5px; }
+        /* TAGS (ESTILO TAG-ITEM DO INDEX) */
+        .especiais-container { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
         .tag-check {
-            font-size: 10px; background: #f2f0ed; padding: 6px 12px; border-radius: 10px;
-            cursor: pointer; border: 1.5px solid #e5e0d8; transition: 0.2s; color: var(--text-main); font-weight: 600;
+            font-size: 10px; background: #f5f3f0; padding: 7px 14px; border-radius: 12px;
+            cursor: pointer; border: 1px solid #ebe7e1; transition: 0.2s; font-weight: 700;
         }
-        .tag-check input { display: none; }
         .tag-check.active { 
             background: linear-gradient(135deg, var(--text-main), var(--accent-dark)); 
-            color: white; border-color: var(--text-main); 
+            color: white; border: none; box-shadow: 0 4px 10px rgba(58,54,24,0.2);
         }
+        .tag-check input { display: none; }
 
-        .card-actions { display: flex; gap: 10px; margin-top: 20px; }
+        /* AÇÕES DO CARD */
+        .card-actions { display: flex; gap: 12px; margin-top: 25px; }
         .btn-save { 
             flex: 2; background: #2d5a27; color: white; border: none; 
-            padding: 12px; border-radius: 14px; font-weight: 700; 
-            display: none; cursor: pointer; text-transform: uppercase; font-size: 11px;
+            padding: 14px; border-radius: 50px; font-weight: 700; 
+            display: none; cursor: pointer; text-transform: uppercase; font-size: 10px;
         }
         .btn-del { 
-            flex: 1; background: #f8f7f5; color: var(--danger); 
-            border: 1px solid #efebeb; padding: 12px; border-radius: 14px; 
-            font-weight: 700; cursor: pointer; text-transform: uppercase; font-size: 11px;
+            flex: 1; background: #fff5f5; color: #8b2d2d; 
+            border: 1px solid #fee; padding: 14px; border-radius: 50px; 
+            font-weight: 700; cursor: pointer; text-transform: uppercase; font-size: 10px;
         }
 
-        /* MODAIS (Estilo Index) */
+        /* MODAIS IGUAIS AO ACESSO RESTRITO */
         .modal {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(8px);
+            position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px);
             display: none; align-items: center; justify-content: center; z-index: 2000; padding: 20px;
         }
         .modal-content {
-            background: white; width: 100%; max-width: 380px; border-radius: 24px;
-            padding: 30px; text-align: center; box-shadow: var(--shadow-lg);
+            background: white; width: 100%; max-width: 360px; border-radius: 28px;
+            padding: 35px; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.3);
             animation: slideUp 0.4s ease;
         }
-        .modal-content h4 { margin: 0 0 15px 0; font-weight: 700; color: var(--text-main); font-size: 20px; }
-        .modal-content p { font-size: 14px; color: var(--accent-dark); margin-bottom: 25px; }
+        .modal-content h4 { font-size: 22px; font-weight: 700; margin-bottom: 10px; color: var(--text-main); }
+        .modal-content p { font-size: 14px; color: #666; margin-bottom: 30px; line-height: 1.5; }
 
-        .loading-overlay { position: absolute; inset: 0; background: rgba(255,255,255,0.8); display: none; align-items: center; justify-content: center; font-weight: 700; font-size: 12px; z-index: 20; border-radius: 18px;}
-        .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: var(--text-main); color: white; padding: 14px 30px; border-radius: 50px; z-index: 3000; display: none; font-size: 12px; box-shadow: var(--shadow-lg); }
+        .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: var(--text-main); color: white; padding: 15px 35px; border-radius: 50px; z-index: 3000; display: none; font-size: 13px; font-weight: 500; }
 
         @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
     </style>
@@ -165,7 +157,7 @@
 <body>
 
     <div class="topbar">
-        <img src="logo.png" class="logo" onclick="confirmExit()">
+        <img src="logo.png" class="logo">
     </div>
 
     <nav class="nav-bar">
@@ -173,59 +165,59 @@
     </nav>
 
     <main class="container">
-        <button class="btn-new" onclick="openModal()">+ Cadastrar Nova ID</button>
-        <input type="text" class="search-box" placeholder="Filtrar por nome no painel..." oninput="filtrar(this.value)">
+        <button class="btn-new" onclick="openModal()">+ Adicionar Nova ID ao Estoque</button>
+        <input type="text" class="search-box" placeholder="Pesquisar rosa pelo nome..." oninput="filtrar(this.value)">
         
         <div id="lista"></div>
     </main>
 
     <div id="modal" class="modal">
-        <div class="modal-content">
+        <div class="modal-content" style="max-width: 400px;">
             <h4>Novo Cadastro</h4>
-            <div class="img-box" style="width:150px; height:150px">
+            <div class="img-box" style="width:160px; height:160px">
                 <input type="file" id="file_new" hidden accept="image/*" onchange="handleUpload(this, 'new')">
                 <div class="edit-icon-btn" style="right: 50%; bottom: 50%; transform: translate(50%, 50%); width: 45px; height: 45px" onclick="document.getElementById('file_new').click()" id="trigger_new">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
                 </div>
                 <img id="preview_new" style="display:none">
-                <div class="loading-overlay" id="load_new">Processando...</div>
             </div>
             <input type="hidden" id="n_midia">
-            <div class="form-group"><label>Nome da ID</label><input id="n_nome" placeholder="Ex: TS-152"></div>
-            <div class="form-grid">
-                <div class="form-group"><label>Estoque</label><input type="number" id="n_qtd" value="0"></div>
-                <div class="form-group"><label>Camadas</label><select id="n_camadas"></select></div>
+            <label>Nome da Rosa</label><input id="n_nome" placeholder="Ex: TS-152">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <div><label>Estoque</label><input type="number" id="n_qtd" value="0"></div>
+                <div><label>Camadas</label><select id="n_camadas"></select></div>
             </div>
-            <div class="form-grid">
-                <div class="form-group"><label>Cores</label><select id="n_cores"></select></div>
-                <div class="form-group"><label>Padrão</label><select id="n_padrao"></select></div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <div><label>Cores</label><select id="n_cores"></select></div>
+                <div><label>Padrão</label><select id="n_padrao"></select></div>
             </div>
-            <div class="form-group"><label>Especiais</label><div class="especiais-container" id="n_especiais"></div></div>
-            <div class="card-actions" style="margin-top: 30px;">
-                <button class="btn-save" style="display:block; background: linear-gradient(135deg, var(--text-main), var(--accent-dark));" onclick="criarID()">SALVAR ID</button>
-                <button class="btn-del" onclick="closeModal()" style="border:none">CANCELAR</button>
+            <label>Especiais</label><div class="especiais-container" id="n_especiais"></div>
+            
+            <div class="card-actions" style="margin-top: 35px;">
+                <button class="btn-new" style="margin:0; flex:1" onclick="criarID()">SALVAR AGORA</button>
+                <button onclick="closeModal()" style="background:none; border:none; color:#999; font-weight:700; cursor:pointer">CANCELAR</button>
             </div>
         </div>
     </div>
 
     <div id="modalExcluir" class="modal">
         <div class="modal-content">
-            <h4 style="color: var(--danger);">Excluir ID</h4>
-            <p>Deseja realmente remover a ID <b id="nomeExcluir"></b>? Esta ação não pode ser desfeita.</p>
+            <h4 style="color: #8b2d2d;">Excluir ID?</h4>
+            <p>Você tem certeza que deseja remover <b id="nomeExcluir"></b>?</p>
             <div class="card-actions">
-                <button class="btn-save" style="display:block; background: var(--danger);" id="btnConfirmarExcluir">EXCLUIR AGORA</button>
-                <button class="btn-del" onclick="closeModalExcluir()" style="border:none">VOLTAR</button>
+                <button class="btn-exit" style="background:#8b2d2d; flex:1" id="btnConfirmarExcluir">SIM, EXCLUIR</button>
+                <button class="btn-exit" style="background:#eee; color:#333; flex:1" onclick="closeModalExcluir()">NÃO</button>
             </div>
         </div>
     </div>
 
     <div id="modalSair" class="modal">
         <div class="modal-content">
-            <h4 style="color: var(--accent);">Alterações Pendentes</h4>
-            <p>Você tem edições que não foram salvas. Se sair agora, elas serão perdidas.</p>
+            <h4>Sair Agora?</h4>
+            <p>Alterações não salvas serão perdidas.</p>
             <div class="card-actions">
-                <button class="btn-save" style="display:block; background: var(--text-main);" onclick="window.location.href='index.html'">SAIR E PERDER</button>
-                <button class="btn-del" onclick="closeModalSair()" style="border:none">CONTINUAR AQUI</button>
+                <button class="btn-new" style="margin:0; flex:1" onclick="window.location.href='index.html'">SAIR</button>
+                <button class="btn-new" style="margin:0; flex:1; background:#eee; color:#333" onclick="closeModalSair()">FICAR</button>
             </div>
         </div>
     </div>
@@ -238,9 +230,7 @@
         let DADOS_LOCAIS = [];
         let ALTERACOES_PENDENTES = false;
 
-        if (sessionStorage.getItem("adminLogado") !== "true") {
-            location.href = "index.html"; 
-        }
+        if (sessionStorage.getItem("adminLogado") !== "true") { location.href = "index.html"; }
 
         function confirmExit() {
             if (ALTERACOES_PENDENTES) document.getElementById("modalSair").style.display = "flex";
@@ -249,7 +239,7 @@
         function closeModalSair() { document.getElementById("modalSair").style.display = "none"; }
 
         async function carregar() {
-            showToast("Sincronizando com a nuvem...");
+            showToast("Sincronizando estoque...");
             const r = await fetch(API + "?action=get");
             const json = await r.json();
             DADOS_LOCAIS = Object.keys(json).map(k => ({ nome: k, ...json[k] }));
@@ -275,18 +265,17 @@
                         <input type="file" id="file_${safeId}" hidden onchange="handleUpload(this, '${d.nome}')">
                         <img src="${imgUrl}" id="img_${safeId}">
                         <div class="edit-icon-btn" onclick="document.getElementById('file_${safeId}').click()">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
                         </div>
-                        <div class="loading-overlay" id="load_${safeId}">...</div>
                     </div>
                     <h4>${d.nome}</h4>
-                    <div class="form-grid">
-                        <div class="form-group"><label>Estoque</label><input type="number" value="${d.qtd}" id="qtd_${safeId}" oninput="markChange('${safeId}')"></div>
-                        <div class="form-group"><label>Camadas</label><select id="cam_${safeId}" onchange="markChange('${safeId}')">${getOptions('camadas', d.camadas)}</select></div>
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px">
+                        <div><label>Estoque</label><input type="number" value="${d.qtd}" id="qtd_${safeId}" oninput="markChange('${safeId}')"></div>
+                        <div><label>Camadas</label><select id="cam_${safeId}" onchange="markChange('${safeId}')">${getOptions('camadas', d.camadas)}</select></div>
                     </div>
-                    <div class="form-grid">
-                        <div class="form-group"><label>Cores</label><select id="cor_${safeId}" onchange="markChange('${safeId}')">${getOptions('cores', d.cores)}</select></div>
-                        <div class="form-group"><label>Padrão</label><select id="pad_${safeId}" onchange="markChange('${safeId}')">${getOptions('padrao', d.padrao)}</select></div>
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px">
+                        <div><label>Cores</label><select id="cor_${safeId}" onchange="markChange('${safeId}')">${getOptions('cores', d.cores)}</select></div>
+                        <div><label>Padrão</label><select id="pad_${safeId}" onchange="markChange('${safeId}')">${getOptions('padrao', d.padrao)}</select></div>
                     </div>
                     <label>Especiais</label>
                     <div class="especiais-container">
@@ -321,8 +310,7 @@
             const file = input.files[0];
             if (!file) return;
             const safeId = nomeRosa === 'new' ? 'new' : nomeRosa.replace(/\W/g, '_');
-            const overlay = document.getElementById(`load_${safeId}`);
-            overlay.style.display = "flex";
+            showToast("Enviando foto...");
             const reader = new FileReader();
             reader.readAsDataURL(file);
             reader.onload = async () => {
@@ -337,16 +325,16 @@
                         document.getElementById("trigger_new").style.display = "none";
                     } else { document.getElementById(`img_${safeId}`).src = `https://drive.google.com/thumbnail?sz=w600&id=${result.id}`; }
                 }
-                overlay.style.display = "none";
+                showToast("Foto atualizada!");
             };
         }
 
         async function salvarAlteracao(nome) {
             const safeId = nome.replace(/\W/g, '_');
             const esp = [...document.querySelectorAll(`#card_${safeId} .tag-check input:checked`)].map(i => i.value).join(', ');
-            showToast("Salvando alterações...");
+            showToast("Salvando...");
             await fetch(API, { method: "POST", body: new URLSearchParams({
-                action: "update", nome: nome,
+                action: "update", nome,
                 qtd: document.getElementById(`qtd_${safeId}`).value,
                 camadas: document.getElementById(`cam_${safeId}`).value,
                 cores: document.getElementById(`cor_${safeId}`).value,
@@ -356,14 +344,14 @@
             document.getElementById(`save_${safeId}`).style.display = "none";
             document.getElementById(`card_${safeId}`).classList.remove('nao-salvo');
             ALTERACOES_PENDENTES = document.querySelectorAll('.nao-salvo').length > 0;
-            showToast("ID atualizada com sucesso!");
+            showToast("Salvo!");
         }
 
         async function criarID() {
             const nome = document.getElementById("n_nome").value;
-            if(!nome) return alert("Defina um nome!");
+            if(!nome) return alert("Nome é obrigatório!");
             const esp = [...document.querySelectorAll(`#n_especiais input:checked`)].map(i => i.value).join(', ');
-            showToast("Cadastrando nova ID...");
+            showToast("Cadastrando...");
             await fetch(API, { method: "POST", body: new URLSearchParams({
                 action: "create", nome,
                 qtd: document.getElementById("n_qtd").value,
@@ -385,7 +373,6 @@
             };
         }
         function closeModalExcluir() { document.getElementById("modalExcluir").style.display = "none"; }
-
         function popularSelectsModal() {
             const campos = { 'n_camadas': 'camadas', 'n_cores': 'cores', 'n_padrao': 'padrao' };
             for (let id in campos) {
@@ -394,7 +381,6 @@
             }
             document.getElementById("n_especiais").innerHTML = TAGS_ESPECIAIS.map(tag => `<label class="tag-check"><input type="checkbox" value="${tag}" onchange="this.parentElement.classList.toggle('active')"> ${tag}</label>`).join('');
         }
-
         function openModal() { document.getElementById("modal").style.display = "flex"; popularSelectsModal(); }
         function closeModal() { document.getElementById("modal").style.display = "none"; }
         function filtrar(v) { render(v); }
