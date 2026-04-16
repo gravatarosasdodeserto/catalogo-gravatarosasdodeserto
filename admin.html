@@ -21,7 +21,7 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
         body { background: var(--bg); color: var(--text-primary); }
 
-        /* --- HEADER (IGUAL AO INDEX) --- */
+        /* --- HEADER --- */
         header { 
             height: 150px; 
             background: url('imagens/gravata-cabecalho.jpg') center/cover no-repeat;
@@ -73,19 +73,17 @@
             border: 1px solid var(--border); overflow: hidden;
             box-shadow: 0 10px 30px rgba(0,0,0,0.05);
         }
-        .img-preview { width: 100%; aspect-ratio: 1/1; background: #eee; position: relative; }
+        .img-preview { width: 100%; aspect-ratio: 1/1; background: #eee; }
         .img-preview img { width: 100%; height: 100%; object-fit: cover; }
         
         .edit-content { padding: 25px; }
         .id-label { font-size: 18px; font-weight: 600; margin-bottom: 20px; display: block; color: var(--accent); }
         
-        /* Estilização dos Filtros no Card */
         .filter-group { margin-bottom: 20px; border-bottom: 1px solid #f0f0f0; padding-bottom: 15px; }
         .filter-group-title { font-size: 11px; font-weight: 700; color: var(--accent); text-transform: uppercase; margin-bottom: 10px; display: block; }
         .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
         .option-item { display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer; }
 
-        /* Campos de input */
         .input-field {
             width: 100%; padding: 10px; border: 1px solid var(--border);
             border-radius: 8px; margin-top: 5px; outline: none; font-size: 14px;
@@ -110,12 +108,12 @@
 </header>
 
 <div class="top-action-bar">
-    <span class="bar-title">GESTÃO DAS ID'S</span>
+    <span class="bar-title">Gestão das ID'S</span>
     <a href="index.html" class="btn-logout">SAIR</a>
 </div>
 
 <div class="controls-area">
-    <input type="text" id="search-id" class="search-box" placeholder="Digite a ID exata para editar..." onchange="buscarItem()">
+    <input type="text" id="search-id" class="search-box" placeholder="Digite a ID exata e aperte Enter..." onchange="buscarItem()">
 </div>
 
 <main class="container">
@@ -130,7 +128,7 @@
                 
                 <div class="filter-group">
                     <span class="filter-group-title">Estoque Disponível</span>
-                    <input type="number" id="input-qtd" class="input-field" placeholder="Ex: 5">
+                    <input type="number" id="input-qtd" class="input-field">
                 </div>
 
                 <div class="filter-group">
@@ -139,27 +137,23 @@
                 </div>
 
                 <div class="filter-group">
-                    <span class="filter-group-title">Camadas (Seleção Única)</span>
-                    <div class="options-grid" id="edit-camadas">
-                        </div>
+                    <span class="filter-group-title">Camadas (Única)</span>
+                    <div class="options-grid" id="edit-camadas"></div>
                 </div>
 
                 <div class="filter-group">
-                    <span class="filter-group-title">Padrão de Pétala (Seleção Única)</span>
-                    <div class="options-grid" id="edit-padrao">
-                        </div>
+                    <span class="filter-group-title">Padrão de Pétala (Única)</span>
+                    <div class="options-grid" id="edit-padrao"></div>
                 </div>
 
                 <div class="filter-group">
                     <span class="filter-group-title">Cores (Múltiplas)</span>
-                    <div class="options-grid" id="edit-cores">
-                        </div>
+                    <div class="options-grid" id="edit-cores"></div>
                 </div>
 
                 <div class="filter-group">
                     <span class="filter-group-title">Padrões Especiais (Múltiplas)</span>
-                    <div class="options-grid" id="edit-especiais">
-                        </div>
+                    <div class="options-grid" id="edit-especiais"></div>
                 </div>
 
                 <button class="btn-save" onclick="salvar()">SALVAR ALTERAÇÕES</button>
@@ -172,7 +166,7 @@
 <script>
     const API = "https://script.google.com/macros/s/AKfycbzgV_H5QLTNwJ12B-78q57qNnlaVi0vbxW3jIqdnp7YH1IKCdBdFthIHymlMM9Jusqktg/exec";
     
-    // Definição das opções (deve ser igual ao que você usa no Index)
+    // Lista de opções baseada no que você usa no catálogo
     const OPCOES = {
         camadas: ["Simples", "Dobrada", "Tripla", "Multi-pétalas"],
         padrao: ["Lisa", "Borda Colorida", "Riscada", "Matizada"],
@@ -188,14 +182,13 @@
             container.innerHTML = lista.map(opt => `
                 <label class="option-item">
                     <input type="${isRadio ? 'radio' : 'checkbox'}" 
-                           name="${chave}" 
+                           name="${isRadio ? 'radio-'+chave : ''}" 
                            class="input-opt" 
                            data-type="${chave}" 
                            value="${opt}"> ${opt}
                 </label>
             `).join('');
         };
-
         montar('edit-camadas', OPCOES.camadas, 'camadas', true);
         montar('edit-padrao', OPCOES.padrao, 'padrao', true);
         montar('edit-cores', OPCOES.cores, 'cores', false);
@@ -203,23 +196,30 @@
     }
 
     async function buscarItem() {
-        const id = document.getElementById('search-id').value.trim().toUpperCase();
-        if(!id) return;
+        const idBusca = document.getElementById('search-id').value.trim().toUpperCase();
+        if(!idBusca) return;
 
-        document.getElementById('msg').innerText = "Buscando...";
+        const msgEl = document.getElementById('msg');
+        msgEl.innerText = "Buscando ID...";
+        msgEl.style.color = "var(--text-secondary)";
+
         try {
             const r = await fetch(`${API}?action=get&t=${Date.now()}`);
             const dados = await r.json();
             
-            if(dados[id]) {
-                itemAtual = { id, ...dados[id] };
+            if(dados[idBusca]) {
+                itemAtual = { id: idBusca, ...dados[idBusca] };
                 abrirEditor();
+                msgEl.innerText = "";
             } else {
-                alert("ID não encontrada.");
+                alert("ID " + idBusca + " não encontrada no banco de dados.");
                 document.getElementById('editor').style.display = 'none';
+                msgEl.innerText = "ID não encontrada.";
             }
-        } catch(e) { console.error(e); }
-        document.getElementById('msg').innerText = "";
+        } catch(e) { 
+            console.error(e);
+            msgEl.innerText = "Erro na conexão.";
+        }
     }
 
     function abrirEditor() {
@@ -229,10 +229,16 @@
         document.getElementById('input-midia').value = itemAtual.midia || "";
         atualizarPreview();
 
-        // Marcar inputs baseado nos dados atuais
+        // Limpa seleções anteriores
+        document.querySelectorAll('.input-opt').forEach(input => input.checked = false);
+
+        // Marca as opções baseadas no item encontrado
         document.querySelectorAll('.input-opt').forEach(input => {
-            const valorItem = itemAtual[input.dataset.type] || "";
-            input.checked = valorItem.split(',').map(s => s.trim()).includes(input.value);
+            const campo = itemAtual[input.dataset.type] || "";
+            const valores = campo.split(',').map(s => s.trim());
+            if(valores.includes(input.value)) {
+                input.checked = true;
+            }
         });
     }
 
@@ -244,31 +250,35 @@
 
     async function salvar() {
         const msgEl = document.getElementById('msg');
-        msgEl.innerText = "Salvando...";
-        msgEl.style.color = "var(--text-secondary)";
-
+        msgEl.innerText = "Salvando alterações...";
+        
         const payload = {
             action: "upsert",
             id: itemAtual.id,
             qtd: document.getElementById('input-qtd').value,
-            midia: document.getElementById('input-midia').value
+            midia: document.getElementById('input-midia').value,
+            camadas: "", padrao: "", cores: "", especiais: ""
         };
 
-        // Coletar valores dos filtros
-        const inputs = [...document.querySelectorAll('.input-opt:checked')];
+        const selecionados = [...document.querySelectorAll('.input-opt:checked')];
+        
         ['camadas', 'padrao', 'cores', 'especiais'].forEach(chave => {
-            payload[chave] = inputs.filter(i => i.dataset.type === chave).map(i => i.value).join(', ');
+            payload[chave] = selecionados
+                .filter(i => i.dataset.type === chave)
+                .map(i => i.value)
+                .join(', ');
         });
 
         try {
-            await fetch(API, {
+            const response = await fetch(API, {
                 method: "POST",
                 body: JSON.stringify(payload)
             });
-            msgEl.innerText = "SUCESSO: Alterações salvas!";
+            msgEl.innerText = "Alterações salvas com sucesso!";
             msgEl.style.color = "green";
+            setTimeout(() => { msgEl.innerText = ""; }, 3000);
         } catch(e) {
-            msgEl.innerText = "ERRO ao salvar.";
+            msgEl.innerText = "Erro ao salvar na planilha.";
             msgEl.style.color = "red";
         }
     }
