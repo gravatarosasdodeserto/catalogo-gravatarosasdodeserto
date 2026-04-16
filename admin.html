@@ -39,7 +39,7 @@
 <body>
 
 <div class="topbar"><img src="logo.png" class="logo"></div>
-<nav class="nav-bar"><button onclick="confirmExit()" class="btn-exit">Voltar ao Site</button></nav>
+<nav class="nav-bar"><button onclick="confirmExit()" class="btn-exit">Sair do Painel</button></nav>
 
 <main class="container">
     <button class="btn-new" onclick="openModal()">+ Adicionar Nova ID</button>
@@ -80,8 +80,7 @@
     const TAGS_ESPECIAIS = ['Cristatas', 'Floração em buquê', 'Mutantes', 'Perfumadas', 'Variegatas'];
     let DADOS_LOCAIS = [];
 
-    // Comente a linha abaixo se quiser entrar sem precisar de login por enquanto
-    // if (sessionStorage.getItem("adminLogado") !== "true") { location.href = "index.html"; }
+    // Verificação de login removida para não fechar sozinho
     
     async function carregar() {
         showToast("Sincronizando estoque...");
@@ -92,12 +91,14 @@
             render();
             popularSelectsModal();
         } catch (e) {
+            console.error(e);
             showToast("Erro ao carregar dados.");
         }
     }
 
     function render(filtro = "") {
         const container = document.getElementById("lista");
+        if (!container) return;
         container.innerHTML = "";
         
         const filtrados = DADOS_LOCAIS.filter(d => d.nome.toLowerCase().includes(filtro.toLowerCase()));
@@ -106,7 +107,6 @@
             const safeId = d.nome.replace(/\W/g, '_');
             const thumb = d.midia ? `https://drive.google.com/thumbnail?sz=w600&id=${d.midia}` : 'imagens/sem-foto.jpg';
             
-            // Correção aqui: Proteção para o split
             const espArray = (String(d.especiais || "")).split(',')
                 .filter(t => t.trim() !== "")
                 .map(t => t.trim());
@@ -266,18 +266,21 @@
     function popularSelectsModal() {
         ['camadas', 'cores', 'padrao'].forEach(c => {
             const unique = [...new Set(DADOS_LOCAIS.map(d => d[c]))].filter(v => v && v !== "" && v !== "undefined");
-            document.getElementById('n_'+c).innerHTML = '<option value="">-</option>' + unique.map(v => `<option value="${v}">${v}</option>`).join('');
+            const el = document.getElementById('n_'+c);
+            if(el) el.innerHTML = '<option value="">-</option>' + unique.map(v => `<option value="${v}">${v}</option>`).join('');
         });
-        document.getElementById("n_especiais").innerHTML = TAGS_ESPECIAIS.map(t => `<label class="tag-check"><input type="checkbox" value="${t}" onchange="this.parentElement.classList.toggle('active')"> ${t}</label>`).join('');
+        const esp = document.getElementById("n_especiais");
+        if(esp) esp.innerHTML = TAGS_ESPECIAIS.map(t => `<label class="tag-check"><input type="checkbox" value="${t}" onchange="this.parentElement.classList.toggle('active')"> ${t}</label>`).join('');
     }
 
-    function showToast(m) { const t = document.getElementById("toast"); t.innerText = m; t.style.display = "block"; setTimeout(() => t.style.display = "none", 3000); }
+    function showToast(m) { const t = document.getElementById("toast"); if(t) { t.innerText = m; t.style.display = "block"; setTimeout(() => t.style.display = "none", 3000); } }
     function openModal() { document.getElementById("modal").style.display = "flex"; }
     function closeModal() { document.getElementById("modal").style.display = "none"; }
     function filtrar(v) { render(v); }
-    function confirmExit() { location.href = "index.html"; }
+    function confirmExit() { if(confirm("Deseja voltar ao site?")) location.href = "index.html"; }
 
-    carregar();
+    // Inicia o carregamento apenas após o DOM estar pronto
+    window.onload = carregar;
 </script>
 </body>
 </html>
