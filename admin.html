@@ -619,25 +619,45 @@ function render() {
 
     itens.forEach(d => {
         const id = d.nome.replace(/\W/g, "_");
+        const img = d.midia || "imagens/sem-foto.jpg";
 
         el.innerHTML += `
         <div class="card">
+
+            <!-- IMAGEM -->
+            <div class="img-container">
+                <img src="${img}" class="img">
+
+                <label class="edit-badge">
+                    <input type="file" class="file-input" accept="image/*" onchange="uploadFoto('${d.nome}', this)">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="18">
+                        <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+                    </svg>
+                </label>
+            </div>
+
             <h4>${d.nome}</h4>
 
             <label>Quantidade</label>
             <input id="qtd_${id}" type="number" value="${d.qtd}" oninput="mostrarBotaoSalvar('${id}')">
 
-            <label>Camadas</label>
-            ${criarSelect(`cam_${id}`, d.camadas, getOpcoesUnicas('camadas'))}
+            <div class="row">
+                <div>
+                    <label>Camadas</label>
+                    ${criarSelect(`cam_${id}`, d.camadas, getOpcoesUnicas('camadas'))}
+                </div>
 
-            <label>Cores</label>
-            ${criarSelect(`cor_${id}`, d.cores, getOpcoesUnicas('cores'))}
+                <div>
+                    <label>Cores</label>
+                    ${criarSelect(`cor_${id}`, d.cores, getOpcoesUnicas('cores'))}
+                </div>
+            </div>
 
             <label>Padrão</label>
             ${criarSelect(`pad_${id}`, d.padrao, getOpcoesUnicas('padrao'))}
 
             <label>Especiais</label>
-            <div id="esp_${id}_container">
+            <div class="especiais-wrap" id="esp_${id}_container">
                 ${todasEspeciais.map(tag => `
                     <label>
                         <input type="checkbox" ${d.especiais?.includes(tag) ? 'checked' : ''} onchange="atualizarEspeciais('${id}')">
@@ -652,6 +672,7 @@ function render() {
                 <button class="save" onclick="salvar('${d.nome}')" style="display:none;">Salvar</button>
                 <button class="del" onclick="excluir('${d.nome}')">Excluir</button>
             </div>
+
         </div>
         `;
     });
