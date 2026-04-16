@@ -78,6 +78,7 @@ body {
 .logo img {
     width: 180px;
     filter: drop-shadow(0 6px 20px rgba(0,0,0,0.35));
+    cursor: pointer;
 }
 
 /* ===== BARRA ===== */
@@ -295,18 +296,18 @@ input:focus, select:focus {
 }
 
 .especiais-wrap label {
-    display: flex !important;
+    display: flex!important;
     align-items: center;
     gap: 10px;
-    font-size: 13px !important;
-    font-weight: 500 !important;
+    font-size: 13px!important;
+    font-weight: 500!important;
     cursor: pointer;
     background: rgba(255,255,255,0.7);
     padding: 8px 12px;
     border-radius: 12px;
     border: 1.5px solid #e5e0d8;
-    margin-top: 0 !important;
-    color: var(--text-main) !important;
+    margin-top: 0!important;
+    color: var(--text-main)!important;
     transition: all 0.2s ease;
 }
 
@@ -421,8 +422,8 @@ button:active {
 }
 
 /* modais secundários */
-#modalExcluir .modal-content,
-#modalSair .modal-content {
+#modalExcluir.modal-content,
+#modalSair.modal-content {
     background: rgba(255,255,255,0.98);
     border-radius: 24px;
     padding: 26px;
@@ -450,14 +451,26 @@ button:active {
     z-index: 3000;
 }
 
+.upload-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    color: white;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    border-radius: 16px;
+    font-size: 12px;
+    z-index: 5;
+}
+
 /* ===== RESPONSIVO ===== */
 @media (min-width:768px){
-    .topbar { min-height: 230px; }
-    .logo img { width: 260px; }
+   .topbar { min-height: 230px; }
+   .logo img { width: 260px; }
     #lista { grid-template-columns: repeat(auto-fill,minmax(260px,1fr)); }
 }
 </style>
-    
 </head>
 <body>
 
@@ -490,7 +503,7 @@ button:active {
      <h4 id="tituloModal">Nova Rosa do Deserto</h4>
 
       <div class="img-container">
-        <img class="img" id="img_nova">
+        <img class="img" id="img_nova" style="display:none;">
         <div class="img-placeholder" id="placeholder_nova" onclick="document.getElementById('file_nova').click()">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="36" height="36">
             <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
@@ -500,11 +513,11 @@ button:active {
           <span style="font-weight:600;">Adicionar foto</span>
           <span style="font-size:10px;opacity:0.7;">Opcional - clique ou arraste</span>
         </div>
-        <div class="upload-overlay" id="overlay_nova" style="display:none;position:absolute;inset:0;background:rgba(0,0,0,0.6);color:white;display:flex;align-items:center;justify-content:center;border-radius:16px;font-size:12px;">Enviando...</div>
+        <div class="upload-overlay" id="overlay_nova">Enviando...</div>
         <label class="edit-badge" for="file_nova">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M12 20h9"></path>
-            <path d="M16.5 3.5a2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+            <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
           </svg>
         </label>
         <input type="file" id="file_nova" class="file-input" accept="image/*" onchange="uploadFotoNova(this)">
@@ -588,7 +601,7 @@ let plantaEditando = { especiais: [] };
     const senhaCorreta = "MTQwNTA4bGU=";
     const tentativa = prompt("Área restrita. Digite a senha:");
 
-    if (!tentativa || btoa(tentativa) !== senhaCorreta) {
+    if (!tentativa || btoa(tentativa)!== senhaCorreta) {
         alert("Acesso negado!");
         window.location.href = "index.html";
         return;
@@ -603,6 +616,15 @@ function toast(msg) {
     t.innerText = msg;
     t.style.display = "block";
     setTimeout(() => t.style.display = "none", 3000);
+}
+
+function fileToBase64(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result.split(',')[1]);
+        reader.onerror = error => reject(error);
+    });
 }
 
 // ================= CONTROLE ALTERAÇÃO =================
@@ -621,7 +643,7 @@ function criarSelect(id, valorAtual, opcoes) {
     return `
         <select id="${id}" onchange="mostrarBotaoSalvar('${idSeguro}')">
             <option value="">Selecione...</option>
-            ${opcoes.map(op => `<option ${op === valorAtual ? 'selected' : ''}>${op}</option>`).join('')}
+            ${opcoes.map(op => `<option ${op === valorAtual? 'selected' : ''}>${op}</option>`).join('')}
         </select>
     `;
 }
@@ -634,7 +656,7 @@ function gerarCheckboxesEspeciais(selecionadas = [], prefixo = 'n') {
     todasEspeciais.forEach(tag => {
         container.innerHTML += `
             <label>
-                <input type="checkbox" value="${tag}" ${selecionadas.includes(tag) ? 'checked' : ''} onchange="atualizarEspeciais('${prefixo}')">
+                <input type="checkbox" value="${tag}" ${selecionadas.includes(tag)? 'checked' : ''} onchange="atualizarEspeciais('${prefixo}')">
                 ${tag}
             </label>
         `;
@@ -659,6 +681,7 @@ function abrirModal() {
     document.getElementById('n_nome').value = '';
     document.getElementById('n_qtd').value = 0;
     document.getElementById('img_nova').style.display = "none";
+    document.getElementById('img_nova').src = "";
     document.getElementById('placeholder_nova').style.display = "flex";
     document.getElementById('n_midia').value = '';
     document.getElementById('n_camadas_container').innerHTML = criarSelect('n_camadas', '', getOpcoesUnicas('camadas'));
@@ -686,24 +709,27 @@ function render() {
     el.innerHTML = "";
 
     const itens = dados
-        .filter(d => d.nome.toLowerCase().includes(filtro))
-        .sort((a, b) => a.nome.localeCompare(b.nome));
+       .filter(d => d.nome.toLowerCase().includes(filtro))
+       .sort((a, b) => a.nome.localeCompare(b.nome));
 
     itens.forEach(d => {
         const id = d.nome.replace(/\W/g, "_");
         const img = d.midia && d.midia!== "Não inf."
-   ? `https://drive.google.com/thumbnail?sz=w600&id=${d.midia}`
-    : "imagens/sem-foto.jpg";
-        
+           ? `https://drive.google.com/thumbnail?sz=w600&id=${d.midia}`
+            : "imagens/sem-foto.jpg";
+
         el.innerHTML += `
         <div class="card">
 
             <div class="img-container">
-                <img src="${img}" class="img">
+                <img src="${img}" class="img" style="display:block;" onerror="this.src='imagens/sem-foto.jpg'">
 
                 <label class="edit-badge">
                     <input type="file" class="file-input" accept="image/*" onchange="uploadFoto('${d.nome}', this)">
-                    ✎
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 20h9"></path>
+                        <path d="M16.5 3.5a2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+                    </svg>
                 </label>
             </div>
 
@@ -722,10 +748,10 @@ function render() {
             ${criarSelect(`pad_${id}`, d.padrao, getOpcoesUnicas('padrao'))}
 
             <label>Especiais</label>
-           <div id="esp_${id}_container" class="especiais-wrap">
+            <div id="esp_${id}_container" class="especiais-wrap">
                 ${todasEspeciais.map(tag => `
                     <label>
-                        <input type="checkbox" value="${tag}" ${d.especiais?.includes(tag) ? 'checked' : ''} onchange="atualizarEspeciais('${id}')">
+                        <input type="checkbox" value="${tag}" ${d.especiais?.includes(tag)? 'checked' : ''} onchange="atualizarEspeciais('${id}')">
                         ${tag}
                     </label>
                 `).join('')}
@@ -750,7 +776,7 @@ async function carregar() {
 
     dados = Object.keys(json).map(nome => ({
         nome,
-        ...json[nome]
+       ...json[nome]
     }));
 
     render();
@@ -760,7 +786,7 @@ async function uploadFotoNova(input) {
     const file = input.files[0];
     if (!file) return;
 
-    document.getElementById('overlay_nova').style.display = "block";
+    document.getElementById('overlay_nova').style.display = "flex";
 
     try {
         const base64Data = await fileToBase64(file);
@@ -778,10 +804,11 @@ async function uploadFotoNova(input) {
         const result = await res.json();
 
         if (result.success) {
-            document.getElementById('img_nova').src = `https://drive.google.com/thumbnail?sz=w600&id=${result.id}`;
-            document.getElementById('img_nova').style.display = "block";
+            const imgEl = document.getElementById('img_nova');
+            imgEl.src = `https://drive.google.com/thumbnail?sz=w600&id=${result.id}`;
+            imgEl.style.display = "block";
             document.getElementById('placeholder_nova').style.display = "none";
-            document.getElementById('n_midia').value = result.id; // <- salva o ID
+            document.getElementById('n_midia').value = result.id;
         } else {
             toast("Erro: " + result.error);
         }
@@ -806,7 +833,7 @@ async function criar() {
             cores: document.getElementById("n_cores").value,
             padrao: document.getElementById("n_padrao").value,
             especiais: plantaEditando.especiais.join(', '),
-            midia: document.getElementById('n_midia').value // <- agora envia a foto
+            midia: document.getElementById('n_midia').value
         })
     });
 
@@ -815,16 +842,6 @@ async function criar() {
     carregar();
 }
 
-    function fileToBase64(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result.split(',')[1]);
-    reader.onerror = error => reject(error);
-  });
-}
-
-// ================= UPLOAD FOTO CARD EXISTENTE =================
 async function uploadFoto(nome, input) {
     const file = input.files[0];
     if (!file) return;
@@ -834,7 +851,7 @@ async function uploadFoto(nome, input) {
     const imgEl = card.querySelector('img');
     const oldUrl = imgEl.src;
     const oldFileId = oldUrl.includes('id=')? oldUrl.split('id=')[1].split('&')[0] : '';
-    
+
     toast("Enviando imagem...");
 
     try {
@@ -854,10 +871,8 @@ async function uploadFoto(nome, input) {
         const result = await res.json();
 
         if (result.success) {
-            // Atualiza a imagem na tela
             imgEl.src = `https://drive.google.com/thumbnail?sz=w600&id=${result.id}`;
 
-            // Salva o novo ID na planilha
             await fetch(URL, {
                 method: "POST",
                 body: new URLSearchParams({
@@ -883,7 +898,6 @@ async function uploadFoto(nome, input) {
     }
 }
 
-// ================= EXCLUIR =================
 function excluir(nome) {
     idParaExcluir = nome;
     document.getElementById('textoExcluir').innerText = `Tem certeza que deseja excluir a ID "${nome}"? Essa ação não pode ser desfeita.`;
@@ -911,12 +925,10 @@ async function confirmarExclusao() {
     carregar();
 }
 
-// ================= CORRIGE getOpcoesUnicas =================
 function getOpcoesUnicas(campo) {
     return [...new Set(dados.map(d => d[campo]).filter(v => v && v!== "Não inf."))].sort();
 }
 
-// ================= AJUSTE NO salvar() PRA TIRAR BADGE LARANJA =================
 async function salvar(nome) {
     const id = nome.replace(/\W/g, "_");
     const imgEl = document.getElementById("qtd_" + id).closest('.card').querySelector('img');
@@ -940,7 +952,7 @@ async function salvar(nome) {
     toast("Salvo!");
     carregar();
 }
-    
+
 // ================= INIT =================
 carregar();
 </script>
