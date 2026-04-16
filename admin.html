@@ -301,48 +301,69 @@
         }
 
         function markChange(id) {
-            ALTERACOES_PENDENTES = true;
-            document.getElementById(`save_${id}`).style.display = "block";
-            document.getElementById(`card_${id}`).classList.add('nao-salvo');
-        }
-
+    ALTERACOES_PENDENTES = true;
+    const btnSave = document.getElementById(`save_${id}`);
+    const card = document.getElementById(`card_${id}`);
+    
+    if (btnSave) btnSave.style.display = "block"; // Mostra o botão verde
+    if (card) card.classList.add('nao-salvo');    // Destaca a borda (estilo Index)
+}
         async function handleUpload(input, nomeRosa) {
     const file = input.files[0];
     if (!file) return;
-    
+
+    // Verifica se é GIF para dar um alerta de processamento (GIFs são mais pesados)
+    if (file.type === 'image/gif') {
+        showToast("Processando GIF... isso pode levar alguns segundos.");
+    }
+
     const safeId = nomeRosa === 'new' ? 'new' : nomeRosa.replace(/\W/g, '_');
-    showToast("Enviando foto...");
-    
+    const overlay = document.getElementById(`load_${safeId}`);
+    if (overlay) overlay.style.display = "flex";
+
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = async () => {
         const base64 = reader.result.split(',')[1];
-        const res = await fetch(API, { 
-            method: "POST", 
-            body: new URLSearchParams({ 
-                action: "upload", 
-                nome: nomeRosa, 
-                data: base64, 
-                mimeType: file.type 
-            }) 
-        });
         
-        const result = await res.json();
-        
-        if (result.success) {
-            if (nomeRosa === 'new') {
-                document.getElementById("n_midia").value = result.id;
-                const prev = document.getElementById("preview_new");
-                prev.src = `https://drive.google.com/thumbnail?sz=w600&id=${result.id}`;
-                prev.style.display = "block";
-                document.getElementById("trigger_new").style.display = "none";
+        try {
+            const res = await fetch(API, { 
+                method: "POST", 
+                body: new URLSearchParams({ 
+                    action: "upload", 
+                    nome: nomeRosa, 
+                    data: base64, 
+                    mimeType: file.type // Envia o tipo real (image/gif, image/jpeg, etc)
+                }) 
+            });
+            
+            const result = await res.json();
+            
+            if (result.success) {
+                const imgThumb = `https://drive.google.com/thumbnail?sz=w600&id=${result.id}`;
+                
+                if (nomeRosa === 'new') {
+                    document.getElementById("n_midia").value = result.id;
+                    const prev = document.getElementById("preview_new");
+                    prev.src = imgThumb;
+                    prev.style.display = "block";
+                    document.getElementById("trigger_new").style.display = "none";
+                } else {
+                    // Atualiza a imagem no card
+                    const imgElement = document.getElementById(`img_${safeId}`);
+                    imgElement.src = imgThumb;
+                    
+                    // IMPORTANTE: Faz o botão SALVAR aparecer após trocar a foto
+                    markChange(safeId); 
+                }
+                showToast("Imagem/GIF carregado! Não esqueça de Salvar.");
             } else {
-                // Atualiza a imagem no card
-                document.getElementById(`img_${safeId}`).src = `https://drive.google.com/thumbnail?sz=w600&id=${result.id}`;
-                // FORÇA O BOTÃO SALVAR A APARECER
-                markChange(safeId); 
+                showToast("Erro ao processar arquivo.");
             }
-            showToast("Foto processada! Clique em Salvar.");
+        } catch (e) {
+            showToast("Erro na conexão com o servidor.");
+        } finally {
+            if (overlay) overlay.style.display = "none";
         }
     };
 }
