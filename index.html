@@ -61,23 +61,17 @@
             padding: 10px 20px; border-radius: 50px; border: 1px solid var(--border);
             outline: none; font-size: 14px;
         }
-        .active-filters {
-            display: flex; flex-wrap: wrap; gap: 8px; justify-content: center;
-        }
+        .active-filters { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
         .filter-tag {
             background: white; border: 1px solid var(--accent); color: var(--accent);
             padding: 4px 12px; border-radius: 50px; font-size: 11px;
             display: flex; align-items: center; gap: 6px; cursor: pointer;
         }
-        .filter-tag:hover { background: #fff5e6; }
 
         /* --- GRID --- */
         .container { max-width: 1400px; margin: auto; padding: 20px 10px 100px; }
-        #catalogo { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); 
-            gap: 15px; 
-        }
+        #catalogo { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; }
+        
         .card { 
             background: var(--surface); border-radius: var(--radius); overflow: hidden; 
             border: 1px solid var(--border); cursor: pointer; transition: 0.2s;
@@ -107,6 +101,15 @@
         .check-group { display: flex; flex-direction: column; gap: 8px; }
         .check-item { display: flex; align-items: center; gap: 10px; font-size: 13px; cursor: pointer; }
 
+        /* --- ENGRENAGEM ADMIN (DISCRETA) --- */
+        .btn-admin-gear {
+            position: fixed; bottom: 20px; left: 20px;
+            color: var(--border); text-decoration: none;
+            font-size: 18px; z-index: 1500; opacity: 0.4;
+            transition: 0.3s;
+        }
+        .btn-admin-gear:hover { opacity: 1; color: var(--accent); transform: rotate(45deg); }
+
         @media (max-width: 600px) { #catalogo { grid-template-columns: 1fr 1fr; } }
     </style>
 </head>
@@ -116,28 +119,11 @@
 
 <aside class="sidebar" id="sidebar">
     <h2 style="margin-bottom: 20px; font-size: 18px;">Filtros</h2>
-    <div class="filter-section">
-        <div class="filter-title">Cores</div>
-        <div class="check-group" id="container-cores"></div>
-    </div>
-    <div class="filter-section">
-        <div class="filter-title">Camadas</div>
-        <div class="check-group" id="container-camadas"></div>
-    </div>
-    <div class="filter-section">
-        <div class="filter-title">Padrões de Pétala</div>
-        <div class="check-group" id="container-padrao"></div>
-    </div>
-    <div class="filter-section">
-        <div class="filter-title">Padrões Especiais</div>
-        <div class="check-group" id="container-especiais"></div>
-    </div>
+    <div class="filter-section"><div class="filter-title">Cores</div><div class="check-group" id="container-cores"></div></div>
+    <div class="filter-section"><div class="filter-title">Camadas</div><div class="check-group" id="container-camadas"></div></div>
+    <div class="filter-section"><div class="filter-title">Padrões de Pétala</div><div class="check-group" id="container-padrao"></div></div>
+    <div class="filter-section"><div class="filter-title">Padrões Especiais</div><div class="check-group" id="container-especiais"></div></div>
     <button onclick="toggleMenu()" style="width:100%; padding:12px; background:#2e2a15; color:white; border:none; border-radius:8px; cursor:pointer;">VER RESULTADOS</button>
-    <div style="margin-top: 50px; padding-top: 20px; border-top: 1px solid var(--border); text-align: center;">
-        <a href="admin.html" style="font-size: 11px; color: var(--text-secondary); text-decoration: none; opacity: 0.5;">
-            🔒 Acesso Administrativo
-        </a>
-    </div>
 </aside>
 
 <header><div class="logo-box"><img src="logo.png" class="logo"></div></header>
@@ -153,6 +139,8 @@
 </div>
 
 <main class="container"><div id="catalogo"></div></main>
+
+<a href="admin.html" class="btn-admin-gear" title="Administração">⚙</a>
 
 <script>
     const API = "https://script.google.com/macros/s/AKfycbzgV_H5QLTNwJ12B-78q57qNnlaVi0vbxW3jIqdnp7YH1IKCdBdFthIHymlMM9Jusqktg/exec";
@@ -177,9 +165,7 @@
         const preencher = (id, chave) => {
             const container = document.getElementById(id);
             let vals = [];
-            DADOS.forEach(d => {
-                if(d[chave]) d[chave].split(',').forEach(v => vals.push(v.trim()));
-            });
+            DADOS.forEach(d => { if(d[chave]) d[chave].split(',').forEach(v => vals.push(v.trim())); });
             [...new Set(vals)].sort().forEach(v => {
                 container.innerHTML += `<label class="check-item"><input type="checkbox" class="filter-check" data-type="${chave}" value="${v}" onchange="filtrar()"> ${v}</label>`;
             });
@@ -196,22 +182,16 @@
             const sel = SELECIONADOS.has(d.id);
             const foto = d.midia ? `https://drive.google.com/thumbnail?sz=w600&id=${d.midia}` : 'imagens/sem-foto.jpg';
             const stockHtml = d.qtd > 0 ? `${d.qtd} disponível${d.qtd > 1 ? 's' : ''}` : `<span class="stock-none">Encomendar sem custo</span>`;
-            
-            return `
-                <div class="card ${sel ? 'selected' : ''}" onclick="toggleSelecao('${d.id}')">
+            return `<div class="card ${sel ? 'selected' : ''}" onclick="toggleSelecao('${d.id}')">
                     <div class="img-container"><img src="${foto}" loading="lazy"></div>
-                    <div class="info">
-                        <h3>${d.id}</h3>
-                        <p class="stock-text">${stockHtml}</p>
-                    </div>
+                    <div class="info"><h3>${d.id}</h3><p class="stock-text">${stockHtml}</p></div>
                 </div>`;
         }).join('');
     }
 
     function toggleSelecao(id) {
         if (SELECIONADOS.has(id)) SELECIONADOS.delete(id); else SELECIONADOS.add(id);
-        const btn = document.getElementById('btn-whats');
-        btn.style.display = SELECIONADOS.size > 0 ? 'block' : 'none';
+        document.getElementById('btn-whats').style.display = SELECIONADOS.size > 0 ? 'block' : 'none';
         document.getElementById('count').innerText = SELECIONADOS.size;
         render();
     }
@@ -219,20 +199,15 @@
     function filtrar() {
         const busca = document.getElementById("search").value.toLowerCase();
         const checks = [...document.querySelectorAll('.filter-check:checked')];
-        
-        // Atualizar Tags Visíveis
-        const tagBox = document.getElementById('active-filters');
-        tagBox.innerHTML = checks.map(c => `
+        document.getElementById('active-filters').innerHTML = checks.map(c => `
             <div class="filter-tag" onclick="removeFilter('${c.value}')">${c.value} <span>&times;</span></div>
         `).join('');
 
         DADOS_FILTRADOS = DADOS.filter(d => {
             const mBusca = d.id.toLowerCase().includes(busca);
-            const tipos = ['cores', 'camadas', 'padrao', 'especiais'];
-            
-            return mBusca && tipos.every(t => {
-                const selecionados = checks.filter(c => c.dataset.type === t).map(c => c.value);
-                return selecionados.length === 0 || selecionados.some(v => d[t] && d[t].includes(v));
+            return mBusca && ['cores', 'camadas', 'padrao', 'especiais'].every(t => {
+                const sel = checks.filter(c => c.dataset.type === t).map(c => c.value);
+                return sel.length === 0 || sel.some(v => d[t] && d[t].includes(v));
             });
         });
         render();
@@ -255,9 +230,5 @@
 
     window.onload = carregar;
 </script>
-<footer style="padding: 40px 20px; text-align: center; background: var(--bg);">
-    <p style="font-size: 12px; color: var(--text-secondary);">&copy; 2024 Gravatá RD - Todos os direitos reservados</p>
-    <a href="admin.html" style="font-size: 10px; color: var(--border); text-decoration: none; display: inline-block; margin-top: 10px;">Painel de Controle</a>
-</footer>
 </body>
 </html>
