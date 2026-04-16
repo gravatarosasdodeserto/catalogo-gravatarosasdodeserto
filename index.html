@@ -657,25 +657,21 @@ const areaSelecao = document.getElementById("areaSelecao");
 const listaFiltrosAtivos = document.getElementById("listaFiltrosAtivos");
 
 function getMidiaHTML(m) {
-  if (!m || m.trim() === "" || m === "Não inf.") {
-    return `<img src="imagens/sem-foto.jpg">`;
-  }
-  
-  const id = m.trim();
-  
-  // Criamos uma função interna para tentar o link direto se o thumbnail falhar
-  // O link uc?export=view é o mais confiável para GIFs animados
-  const imgUrl = `https://drive.google.com/thumbnail?sz=w600&id=${id}`;
-  const directUrl = `https://lh3.googleusercontent.com/u/0/d/${id}`; // Alternativa rápida
-  const fallbackUrl = `https://docs.google.com/uc?export=view&id=${id}`;
+    // Verifica se a mídia é válida
+    if (!m || m === "" || m === "Não inf." || m === "undefined") {
+        return `<img src="imagens/sem-foto.jpg" alt="Sem foto">`;
+    }
+    
+    const id = m.trim();
+    // Link de Thumbnail: sz=w600 (tamanho) e &t= (força atualização se a foto mudar)
+    const thumbUrl = `https://drive.google.com/thumbnail?sz=w600&id=${id}&t=${Date.now()}`;
+    const fallbackUrl = `https://docs.google.com/uc?export=view&id=${id}`;
 
-  // Se for GIF, o ideal é ir direto para o link que preserva a animação
-  // Mas como não sabemos a extensão pela ID, usamos o onerror para tentar o link de visualização direta
-  return `<img src="${imgUrl}" 
-               onerror="this.onerror=null; this.src='${fallbackUrl}';" 
-               loading="lazy">`;
+    return `<img src="${thumbUrl}" 
+                 onerror="this.onerror=null; this.src='${fallbackUrl}';" 
+                 loading="lazy">`;
 }
-
+    
 function parseCSV(text) {
   const lines = text.split(/\r?\n/).filter(l => l.trim()!== "");
   return lines.map(line => {
