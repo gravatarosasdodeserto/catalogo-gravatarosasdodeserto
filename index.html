@@ -30,11 +30,10 @@
             justify-content: center;
         }
 
-        /* A faixa agora ocupa toda a largura */
         .header-stripe {
             width: 100%;
-            background: rgba(255, 255, 255, 0.4); /* Bem transparente */
-            backdrop-filter: blur(15px); /* Efeito fosco intenso */
+            background: rgba(255, 255, 255, 0.4); 
+            backdrop-filter: blur(15px);
             -webkit-backdrop-filter: blur(15px);
             padding: 20px 0;
             display: flex;
@@ -112,14 +111,26 @@
         .check-group { display: flex; flex-direction: column; gap: 8px; }
         .check-item { display: flex; align-items: center; gap: 10px; font-size: 13px; cursor: pointer; }
 
-        /* --- ENGRENAGEM ADMIN (DISCRETA) --- */
+        /* --- ENGRENAGEM ADMIN (AJUSTADA) --- */
         .btn-admin-gear {
-            position: fixed; bottom: 20px; left: 20px;
-            color: var(--border); text-decoration: none;
-            font-size: 18px; z-index: 1500; opacity: 0.4;
+            position: fixed; 
+            bottom: 15px; 
+            left: 15px;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255,255,255,0.3); /* Fundo sutil para não sumir */
+            border-radius: 50%;
+            color: var(--accent); 
+            text-decoration: none;
+            font-size: 18px; 
+            z-index: 2000; /* Garantir que fique acima de tudo */
+            opacity: 0.5;
             transition: 0.3s;
         }
-        .btn-admin-gear:hover { opacity: 1; color: var(--accent); transform: rotate(45deg); }
+        .btn-admin-gear:hover { opacity: 1; color: var(--text-primary); transform: rotate(90deg); }
 
         @media (max-width: 600px) { #catalogo { grid-template-columns: 1fr 1fr; } }
     </style>
