@@ -4,9 +4,10 @@
     <link rel="icon" type="image/png" href="favicon.png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Catálogo | Gravatá RD</title>
+    <title>Gravatá RD | Catálogo de Rosas do Deserto</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
+        /* MANTENDO TODO O SEU VISUAL ORIGINAL */
         :root {
             --bg: #fcfbf7;
             --surface: #ffffff;
@@ -19,307 +20,219 @@
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-        body { background: var(--bg); color: var(--text-primary); }
+        body { background: var(--bg); color: var(--text-primary); overflow-x: hidden; }
 
-        /* --- HEADER --- */
+        /* HEADER PREMIUM */
         header { 
             height: 150px; 
             background: url('imagens/gravata-cabecalho.jpg') center/cover no-repeat;
             display: flex; align-items: center; justify-content: center;
+            transition: height 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
         .header-stripe {
             width: 100%;
             background: rgba(255, 255, 255, 0.4); 
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            padding: 20px 0;
-            display: flex; justify-content: center; align-items: center;
-            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            padding: 20px 0; border-top: 1px solid rgba(255, 255, 255, 0.2);
             border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            display: flex; justify-content: center;
         }
-        .logo { width: 110px; display: block; }
+        .logo { width: 110px; transition: width 0.6s ease; }
 
         @media (min-width: 1024px) {
             header { height: 350px; }
-            .header-stripe { padding: 40px 0; }
             .logo { width: 180px; }
+            .header-stripe { padding: 40px 0; }
         }
 
-        /* --- BARRA DE AÇÃO (SUPERIOR) --- */
-        .top-action-bar {
-            background: #2e2a15;
-            padding: 8px 20px;
+        /* BARRA DE FILTROS (ESCURA) */
+        .filter-bar {
+            background: #2e2a15; padding: 12px 20px;
             display: flex; justify-content: space-between; align-items: center;
             position: sticky; top: 0; z-index: 1000;
         }
-        .btn-top-filter {
-            background: none; border: none; color: white; font-size: 12px; 
-            font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 6px;
-        }
-        .btn-top-request {
-            background: var(--premium-grad); color: white; border: none;
-            padding: 8px 20px; border-radius: 50px; font-size: 11px;
-            font-weight: 600; cursor: pointer; display: none;
+        .filter-title { color: white; font-size: 13px; font-weight: 500; letter-spacing: 1px; }
+        .btn-filter-trigger { 
+            background: var(--premium-grad); color: white; border: none; 
+            padding: 8px 18px; border-radius: 50px; font-size: 12px; font-weight: 600; cursor: pointer;
         }
 
-        /* --- LISTA DE SELECIONADOS --- */
-        .selected-list-area {
-            background: #f0ede4;
-            padding: 10px 20px;
-            display: none;
-            flex-wrap: wrap;
-            gap: 8px;
-            border-bottom: 1px solid var(--border);
+        /* MENU LATERAL (DRAWER) */
+        .drawer {
+            position: fixed; top: 0; right: -320px; width: 300px; height: 100%;
+            background: var(--bg); z-index: 2000; box-shadow: -10px 0 30px rgba(0,0,0,0.1);
+            transition: 0.4s; display: flex; flex-direction: column;
         }
-        .selected-tag {
-            background: var(--text-primary);
-            color: white;
-            padding: 4px 12px;
-            border-radius: 50px;
-            font-size: 11px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .selected-tag span { cursor: pointer; font-weight: bold; font-size: 14px; }
+        .drawer.active { right: 0; }
+        .drawer-header { padding: 25px; background: #2e2a15; color: white; display: flex; justify-content: space-between; }
+        .drawer-content { padding: 20px; overflow-y: auto; flex: 1; }
 
-        /* --- BUSCA E TAGS DE FILTRO --- */
-        .controls-area { padding: 15px; background: var(--bg); border-bottom: 1px solid var(--border); }
-        .search-box {
-            width: 100%; max-width: 800px; margin: 0 auto 10px; display: block;
-            padding: 10px 20px; border-radius: 50px; border: 1px solid var(--border);
-            outline: none; font-size: 14px;
-        }
-        .active-filters { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
-        .filter-tag {
-            background: white; border: 1px solid var(--accent); color: var(--accent);
-            padding: 4px 12px; border-radius: 50px; font-size: 11px;
-            display: flex; align-items: center; gap: 6px; cursor: pointer;
-        }
-
-        /* --- GRID --- */
-        .container { max-width: 1400px; margin: auto; padding: 20px 10px 100px; }
-        #catalogo { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; }
-        
-        .card { 
-            background: var(--surface); border-radius: var(--radius); overflow: hidden; 
-            border: 1px solid var(--border); cursor: pointer; transition: 0.2s;
-        }
-        .card.selected { border: 2.5px solid var(--accent); transform: scale(0.97); }
-        .img-container { width: 100%; aspect-ratio: 1/1; background: #f0f0f0; }
-        .img-container img { width: 100%; height: 100%; object-fit: cover; }
-        
-        .info { padding: 10px; text-align: center; }
-        .info h3 { font-size: 13px; font-weight: 600; margin-bottom: 2px; }
-        .stock-text { font-size: 11px; color: var(--text-secondary); }
-        .stock-none { color: var(--accent); font-weight: 500; }
-
-        /* --- DRAWER --- */
-        .sidebar { 
-            position: fixed; left: -320px; top: 0; width: 300px; height: 100%;
-            background: var(--surface); z-index: 3000; padding: 30px 20px;
-            box-shadow: 10px 0 30px rgba(0,0,0,0.1); transition: 0.4s;
-            overflow-y: auto;
-        }
-        .sidebar.active { left: 0; }
-        .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.3); z-index: 2999; display: none; }
-        .overlay.active { display: block; }
-        
+        /* SEÇÕES DE FILTRO DENTRO DO MENU */
         .filter-section { margin-bottom: 25px; }
-        .filter-title { font-size: 11px; font-weight: 700; color: var(--accent); text-transform: uppercase; margin-bottom: 12px; }
-        .check-group { display: flex; flex-direction: column; gap: 8px; }
-        .check-item { display: flex; align-items: center; gap: 10px; font-size: 13px; cursor: pointer; }
+        .filter-section h4 { font-size: 11px; font-weight: 700; color: var(--accent); text-transform: uppercase; margin-bottom: 12px; letter-spacing: 1px; }
+        .options-grid { display: grid; gap: 10px; }
+        .option-item { display: flex; align-items: center; gap: 10px; font-size: 14px; cursor: pointer; color: var(--text-secondary); }
 
-        /* --- ENGRENAGEM ADMIN --- */
-        .btn-admin-gear {
-            position: fixed; bottom: 15px; left: 15px;
-            width: 35px; height: 35px; display: flex; align-items: center; justify-content: center;
-            background: rgba(255,255,255,0.3); border-radius: 50%;
-            color: var(--accent); text-decoration: none; font-size: 18px; z-index: 2000;
-            opacity: 0.5; transition: 0.3s;
-        }
-        .btn-admin-gear:hover { opacity: 1; transform: rotate(90deg); }
+        /* GRID DE PRODUTOS */
+        .catalog-container { max-width: 1400px; margin: auto; padding: 30px 15px 100px; }
+        .search-area { text-align: center; margin-bottom: 30px; }
+        .search-box { width: 100%; max-width: 500px; padding: 12px 25px; border-radius: 50px; border: 1px solid var(--border); outline: none; }
 
-        @media (max-width: 600px) { #catalogo { grid-template-columns: 1fr 1fr; } }
+        #grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; }
+        @media (min-width: 768px) { #grid { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 25px; } }
+
+        /* CARDS */
+        .card { background: var(--surface); border-radius: var(--radius); border: 1px solid var(--border); overflow: hidden; position: relative; transition: 0.3s; }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 15px 35px rgba(0,0,0,0.05); }
+        .card img { width: 100%; aspect-ratio: 1/1; object-fit: cover; }
+        .card-body { padding: 15px; text-align: center; }
+        .card-id { font-size: 16px; font-weight: 600; color: var(--text-primary); }
+        .tag-indisponivel { position: absolute; top: 10px; left: 10px; background: #e74c3c; color: white; padding: 4px 10px; border-radius: 40px; font-size: 10px; font-weight: 700; }
+
+        /* OVERLAY DO MENU */
+        .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); display: none; z-index: 1500; }
+        .overlay.active { display: block; }
     </style>
 </head>
 <body>
 
-<div class="overlay" id="overlay" onclick="toggleMenu()"></div>
-
-<aside class="sidebar" id="sidebar">
-    <h2 style="margin-bottom: 20px; font-size: 18px;">Filtros</h2>
-    
-    <div class="filter-section">
-        <div class="filter-title">Cores (Múltiplo)</div>
-        <div class="check-group" id="container-cores"></div>
-    </div>
-    
-    <div class="filter-section">
-        <div class="filter-title">Camadas (Único)</div>
-        <div class="check-group" id="container-camadas"></div>
-    </div>
-    
-    <div class="filter-section">
-        <div class="filter-title">Padrões de Pétala (Único)</div>
-        <div class="check-group" id="container-padrao"></div>
-    </div>
-    
-    <div class="filter-section">
-        <div class="filter-title">Padrões Especiais (Múltiplo)</div>
-        <div class="check-group" id="container-especiais"></div>
-    </div>
-    
-    <button onclick="clearUniqueFilters()" style="width:100%; padding:8px; background:none; border:1px solid var(--border); color:var(--text-secondary); border-radius:8px; cursor:pointer; font-size:11px; margin-bottom:10px;">Limpar Seleções Únicas</button>
-    <button onclick="toggleMenu()" style="width:100%; padding:12px; background:#2e2a15; color:white; border:none; border-radius:8px; cursor:pointer; font-weight:600;">VER RESULTADOS</button>
-</aside>
-
 <header>
     <div class="header-stripe">
-        <img src="logo.png" class="logo" alt="Logo Gravatá RD">
+        <img src="logo.png" class="logo">
     </div>
 </header>
-    
-<div class="top-action-bar">
-    <button class="btn-top-filter" onclick="toggleMenu()"><span>≡</span> FILTRAR</button>
-    <button class="btn-top-request" id="btn-whats" onclick="enviarPedido()">
-        <span id="request-text">Solicitar informações</span>
-    </button>
+
+<div class="filter-bar">
+    <span class="filter-title">COLLECTION MANAGEMENT</span>
+    <button class="btn-filter-trigger" onclick="toggleDrawer()">FILTRAR</button>
 </div>
 
-<div class="selected-list-area" id="selected-list"></div>
-
-<div class="controls-area">
-    <input type="text" id="search" class="search-box" placeholder="Pesquisar ID ou nome..." oninput="filtrar()">
-    <div class="active-filters" id="active-filters"></div>
+<div class="catalog-container">
+    <div class="search-area">
+        <input type="text" id="search" class="search-box" placeholder="Buscar por ID..." oninput="aplicarFiltros()">
+    </div>
+    <div id="grid">
+        </div>
 </div>
 
-<main class="container"><div id="catalogo"></div></main>
-
-<a href="admin.html" class="btn-admin-gear" title="Administração">⚙</a>
+<div class="overlay" onclick="toggleDrawer()"></div>
+<div class="drawer" id="drawer">
+    <div class="drawer-header">
+        <span>FILTROS</span>
+        <span style="cursor:pointer" onclick="toggleDrawer()">&times;</span>
+    </div>
+    <div class="drawer-content">
+        <div class="filter-section">
+            <h4>Cores</h4>
+            <div class="options-grid" id="filtro-cores"></div>
+        </div>
+        <div class="filter-section">
+            <h4>Camadas</h4>
+            <div class="options-grid" id="filtro-camadas"></div>
+        </div>
+        <div class="filter-section">
+            <h4>Padrão de Pétala</h4>
+            <div class="options-grid" id="filtro-padrao"></div>
+        </div>
+        <div class="filter-section">
+            <h4>Especiais</h4>
+            <div class="options-grid" id="filtro-especiais"></div>
+        </div>
+        <button class="btn-filter-trigger" style="width:100%; margin-top: 20px;" onclick="toggleDrawer()">VER RESULTADOS</button>
+    </div>
+</div>
 
 <script>
     const API = "https://script.google.com/macros/s/AKfycbzgV_H5QLTNwJ12B-78q57qNnlaVi0vbxW3jIqdnp7YH1IKCdBdFthIHymlMM9Jusqktg/exec";
-    let DADOS = [], SELECIONADOS = new Set(), DADOS_FILTRADOS = [];
+    let DADOS_ORIGINAIS = [];
 
-    async function carregar() {
+    async function inicializar() {
         try {
-            const r = await fetch(API + "?action=get&t=" + Date.now());
+            const r = await fetch(`${API}?action=get&t=${Date.now()}`);
             const json = await r.json();
-            DADOS = Object.keys(json).map(k => ({
-                id: k, camadas: json[k].camadas, cores: json[k].cores,
-                padrao: json[k].padrao, especiais: json[k].especiais,
-                qtd: parseInt(json[k].qtd) || 0, midia: json[k].midia
-            }));
-            DADOS_FILTRADOS = [...DADOS];
-            popularFiltros();
-            render();
-        } catch (e) { console.error("Erro ao carregar"); }
+            // Converte o objeto da planilha em uma lista fácil de usar
+            DADOS_ORIGINAIS = Object.keys(json).map(id => ({ id, ...json[id] }));
+            
+            gerarFiltrosDinamicos();
+            aplicarFiltros();
+        } catch (e) { console.error("Erro ao carregar catálogo", e); }
     }
 
-    function popularFiltros() {
-        const preencher = (id, chave, isRadio = false) => {
-            const container = document.getElementById(id);
-            let vals = [];
-            DADOS.forEach(d => { if(d[chave]) d[chave].split(',').forEach(v => vals.push(v.trim())); });
-            
-            const uniqueVals = [...new Set(vals)].sort();
-            const type = isRadio ? 'radio' : 'checkbox';
-            const name = isRadio ? `name="radio-${chave}"` : '';
-
-            uniqueVals.forEach(v => {
-                container.innerHTML += `
-                    <label class="check-item">
-                        <input type="${type}" ${name} class="filter-input" data-type="${chave}" value="${v}" onchange="filtrar()"> 
-                        ${v}
-                    </label>`;
-            });
+    function gerarFiltrosDinamicos() {
+        const categorias = {
+            cores: 'filtro-cores',
+            camadas: 'filtro-camadas',
+            padrao: 'filtro-padrao',
+            especiais: 'filtro-especiais'
         };
 
-        preencher('container-cores', 'cores');
-        preencher('container-camadas', 'camadas', true); // Seleção única
-        preencher('container-padrao', 'padrao', true);   // Seleção única
-        preencher('container-especiais', 'especiais');
-    }
-
-    function render() {
-        const container = document.getElementById("catalogo");
-        container.innerHTML = DADOS_FILTRADOS.map(d => {
-            const sel = SELECIONADOS.has(d.id);
-            const foto = d.midia ? `https://drive.google.com/thumbnail?sz=w600&id=${d.midia}` : 'imagens/sem-foto.jpg';
-            const stockHtml = d.qtd > 0 ? `${d.qtd} disponível${d.qtd > 1 ? 's' : ''}` : `<span class="stock-none">Encomendar sem custo</span>`;
-            return `<div class="card ${sel ? 'selected' : ''}" onclick="toggleSelecao('${d.id}')">
-                    <div class="img-container"><img src="${foto}" loading="lazy"></div>
-                    <div class="info"><h3>${d.id}</h3><p class="stock-text">${stockHtml}</p></div>
-                </div>`;
-        }).join('');
-        updateSelectedUI();
-    }
-
-    function toggleSelecao(id) {
-        if (SELECIONADOS.has(id)) SELECIONADOS.delete(id); else SELECIONADOS.add(id);
-        render();
-    }
-
-    function updateSelectedUI() {
-        const btn = document.getElementById('btn-whats');
-        const textSpan = document.getElementById('request-text');
-        const listArea = document.getElementById('selected-list');
-        const count = SELECIONADOS.size;
-
-        if (count > 0) {
-            btn.style.display = 'block';
-            listArea.style.display = 'flex';
-            textSpan.innerText = count === 1 ? `Solicitar informações sobre a ID` : `Solicitar informações sobre as ${count} IDs`;
-            listArea.innerHTML = Array.from(SELECIONADOS).map(id => `
-                <div class="selected-tag">${id} <span onclick="event.stopPropagation(); toggleSelecao('${id}')">&times;</span></div>
-            `).join('');
-        } else {
-            btn.style.display = 'none';
-            listArea.style.display = 'none';
-        }
-    }
-
-    function filtrar() {
-        const busca = document.getElementById("search").value.toLowerCase();
-        const inputs = [...document.querySelectorAll('.filter-input:checked')];
-        
-        // Tags de filtros ativos
-        document.getElementById('active-filters').innerHTML = inputs.map(i => `
-            <div class="filter-tag" onclick="removeFilter('${i.dataset.type}', '${i.value}')">${i.value} <span>&times;</span></div>
-        `).join('');
-
-        DADOS_FILTRADOS = DADOS.filter(d => {
-            const mBusca = d.id.toLowerCase().includes(busca);
-            return mBusca && ['cores', 'camadas', 'padrao', 'especiais'].every(t => {
-                const sel = inputs.filter(i => i.dataset.type === t).map(i => i.value);
-                return sel.length === 0 || sel.some(v => d[t] && d[t].includes(v));
+        Object.keys(categorias).forEach(cat => {
+            // Varre o banco de dados e pega todas as opções únicas de cada categoria
+            let listaBruta = [];
+            DADOS_ORIGINAIS.forEach(item => {
+                if (item[cat]) {
+                    item[cat].split(',').forEach(val => listaBruta.push(val.trim()));
+                }
             });
+
+            const listaUnica = [...new Set(listaBruta)].filter(v => v !== "").sort();
+            const container = document.getElementById(categorias[cat]);
+            
+            container.innerHTML = listaUnica.map(opcao => `
+                <label class="option-item">
+                    <input type="checkbox" class="chk-filtro" data-cat="${cat}" value="${opcao}" onchange="aplicarFiltros()">
+                    ${opcao}
+                </label>
+            `).join('');
         });
-        render();
     }
 
-    function removeFilter(type, val) {
-        const el = [...document.querySelectorAll('.filter-input')].find(i => i.dataset.type === type && i.value === val);
-        if(el) { el.checked = false; filtrar(); }
+    function aplicarFiltros() {
+        const busca = document.getElementById('search').value.toUpperCase();
+        
+        // Pega quais filtros estão marcados
+        const selecionados = {};
+        document.querySelectorAll('.chk-filtro:checked').forEach(chk => {
+            const cat = chk.dataset.cat;
+            if (!selecionados[cat]) selecionados[cat] = [];
+            selecionados[cat].push(chk.value);
+        });
+
+        const filtrados = DADOS_ORIGINAIS.filter(item => {
+            // Filtro de Texto
+            const bateBusca = item.id.toUpperCase().includes(busca);
+            
+            // Filtros de Categoria (Lógica: dentro de uma categoria é "OU", entre categorias é "E")
+            const bateCategorias = Object.keys(selecionados).every(cat => {
+                const valoresDoItem = (item[cat] || "").split(',').map(v => v.trim());
+                return selecionados[cat].some(s => valoresDoItem.includes(s));
+            });
+
+            return bateBusca && bateCategorias;
+        });
+
+        renderizarGrid(filtrados);
     }
 
-    function clearUniqueFilters() {
-        document.querySelectorAll('input[type="radio"]').forEach(r => r.checked = false);
-        filtrar();
+    function renderizarGrid(lista) {
+        const grid = document.getElementById('grid');
+        grid.innerHTML = lista.map(item => `
+            <div class="card">
+                ${item.qtd <= 0 ? '<div class="tag-indisponivel">ESGOTADO</div>' : ''}
+                <img src="${item.midia ? 'https://drive.google.com/thumbnail?sz=w600&id=' + item.midia : 'imagens/sem-foto.jpg'}" loading="lazy">
+                <div class="card-body">
+                    <div class="card-id">${item.id}</div>
+                </div>
+            </div>
+        `).join('');
     }
 
-    function toggleMenu() {
-        document.getElementById('sidebar').classList.toggle('active');
-        document.getElementById('overlay').classList.toggle('active');
+    function toggleDrawer() {
+        document.getElementById('drawer').classList.toggle('active');
+        document.querySelector('.overlay').classList.toggle('active');
     }
 
-    function enviarPedido() {
-        const msg = `Olá, Gravatá RD! 👋\nTenho interesse nestas IDs:\n\n*${Array.from(SELECIONADOS).join(', ')}*`;
-        window.open(`https://wa.me/5581992665421?text=${encodeURIComponent(msg)}`, '_blank');
-    }
-
-    window.onload = carregar;
+    window.onload = inicializar;
 </script>
 </body>
 </html>
