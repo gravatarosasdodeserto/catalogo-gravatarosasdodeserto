@@ -48,31 +48,34 @@
 
         /* --- BUSCA --- */
         .controls-area { padding: 20px 15px; background: var(--bg); border-bottom: 1px solid var(--border); text-align: center; }
-        .search-box { width: 100%; max-width: 500px; padding: 10px 20px; border-radius: 50px; border: 1px solid var(--border); outline: none; }
+        .search-box { width: 100%; max-width: 500px; padding: 10px 20px; border-radius: 50px; border: 1px solid var(--border); outline: none; font-size: 14px; }
 
-        /* --- GRID DE CARDS --- */
+        /* --- GRID --- */
         .container { max-width: 1400px; margin: auto; padding: 20px 10px 100px; }
         #lista-admin { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; }
-        .card { background: var(--surface); border-radius: var(--radius); border: 1px solid var(--border); overflow: hidden; cursor: pointer; text-align: center; padding-bottom: 10px; }
-        .card img { width: 100%; aspect-ratio: 1/1; object-fit: cover; background: #eee; }
-        .card h3 { font-size: 13px; margin: 8px 0 4px; }
-        .btn-edit-card { font-size: 10px; color: var(--accent); font-weight: 600; text-transform: uppercase; }
+        .card { background: var(--surface); border-radius: var(--radius); border: 1px solid var(--border); overflow: hidden; cursor: pointer; transition: 0.2s; }
+        .card:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
+        .card img { width: 100%; aspect-ratio: 1/1; object-fit: cover; background: #f0f0f0; }
+        .card-info { padding: 10px; text-align: center; }
+        .card-info h3 { font-size: 13px; font-weight: 600; }
+        .card-info p { font-size: 11px; color: var(--text-secondary); margin-top: 4px; }
 
-        /* --- MODAL DE EDIÇÃO --- */
+        /* --- MODAL --- */
         .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.6); display: none; align-items: center; justify-content: center; z-index: 2000; padding: 20px; }
-        .modal-content { background: var(--bg); width: 100%; max-width: 500px; max-height: 90vh; overflow-y: auto; border-radius: 20px; position: relative; }
-        .modal-header { padding: 20px; background: #2e2a15; color: white; display: flex; justify-content: space-between; align-items: center; }
-        .close-modal { cursor: pointer; font-size: 24px; }
+        .modal-content { background: var(--bg); width: 100%; max-width: 550px; max-height: 90vh; overflow-y: auto; border-radius: 20px; position: relative; box-shadow: 0 20px 50px rgba(0,0,0,0.3); }
+        .modal-header { padding: 20px; background: #2e2a15; color: white; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 10; }
+        .close-modal { cursor: pointer; font-size: 24px; line-height: 1; }
         
         .edit-form { padding: 20px; }
-        .filter-group { margin-bottom: 15px; border-bottom: 1px solid var(--border); padding-bottom: 15px; }
-        .filter-title { font-size: 11px; font-weight: 700; color: var(--accent); text-transform: uppercase; margin-bottom: 8px; display: block; }
+        .form-section { margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 15px; }
+        .section-title { font-size: 11px; font-weight: 700; color: var(--accent); text-transform: uppercase; margin-bottom: 12px; display: block; }
         .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-        .option-item { display: flex; align-items: center; gap: 8px; font-size: 13px; }
-        .input-field { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 8px; margin-top: 5px; outline: none; }
-        .btn-save { width: 100%; padding: 15px; background: var(--premium-grad); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; margin-top: 10px; }
+        .option-item { display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer; }
+        .input-field { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; margin-top: 5px; outline: none; font-size: 14px; background: white; }
 
-        #msg-global { position: fixed; bottom: 20px; right: 20px; padding: 15px 25px; border-radius: 10px; color: white; display: none; z-index: 3000; }
+        .btn-save { width: 100%; padding: 16px; background: var(--premium-grad); color: white; border: none; border-radius: 12px; font-weight: 600; cursor: pointer; margin-top: 10px; font-size: 14px; }
+
+        #toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); padding: 12px 30px; border-radius: 50px; color: white; font-weight: 500; font-size: 13px; display: none; z-index: 4000; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
     </style>
 </head>
 <body>
@@ -81,12 +84,12 @@
 
 <div class="top-action-bar">
     <button class="btn-new" onclick="novoItem()">+ NOVA ID</button>
-    <span style="color:white; font-size: 12px;">Gestão das ID's</span>
-    <a href="index.html" class="btn-logout">SAIR</a>
+    <span style="color:white; font-size: 11px; font-weight: 500; letter-spacing: 1px;">PAINEL ADMINISTRATIVO</span>
+    <a href="index.html" class="btn-logout">VOLTAR</a>
 </div>
 
 <div class="controls-area">
-    <input type="text" id="search" class="search-box" placeholder="Filtrar por ID ou nome..." oninput="filtrar()">
+    <input type="text" id="search" class="search-box" placeholder="Pesquisar ID na lista..." oninput="filtrar()">
 </div>
 
 <main class="container">
@@ -100,41 +103,28 @@
             <span class="close-modal" onclick="fecharModal()">&times;</span>
         </div>
         <div class="edit-form">
-            <div class="filter-group">
-                <span class="filter-title">Identificação (ID)</span>
-                <input type="text" id="input-id" class="input-field" placeholder="Ex: RD-01">
-            </div>
-            <div class="filter-group">
-                <span class="filter-title">Quantidade em Estoque</span>
-                <input type="number" id="input-qtd" class="input-field">
-            </div>
-            <div class="filter-group">
-                <span class="filter-title">ID da Imagem (Google Drive)</span>
-                <input type="text" id="input-midia" class="input-field">
+            <div class="form-section">
+                <span class="section-title">Informações Básicas</span>
+                <input type="text" id="input-id" class="input-field" placeholder="Identificação da ID">
+                <input type="number" id="input-qtd" class="input-field" placeholder="Quantidade em estoque">
+                <input type="text" id="input-midia" class="input-field" placeholder="ID da imagem (Google Drive)">
             </div>
 
-            <div class="filter-group"><span class="filter-title">Camadas</span><div class="options-grid" id="edit-camadas"></div></div>
-            <div class="filter-group"><span class="filter-title">Padrão Pétala</span><div class="options-grid" id="edit-padrao"></div></div>
-            <div class="filter-group"><span class="filter-title">Cores</span><div class="options-grid" id="edit-cores"></div></div>
-            <div class="filter-group"><span class="filter-title">Especiais</span><div class="options-grid" id="edit-especiais"></div></div>
+            <div class="form-section"><span class="section-title">Cores</span><div class="options-grid" id="form-cores"></div></div>
+            <div class="form-section"><span class="section-title">Camadas (Única)</span><div class="options-grid" id="form-camadas"></div></div>
+            <div class="form-section"><span class="section-title">Padrão de Pétala (Única)</span><div class="options-grid" id="form-padrao"></div></div>
+            <div class="form-section"><span class="section-title">Padrões Especiais</span><div class="options-grid" id="form-especiais"></div></div>
 
-            <button class="btn-save" onclick="salvar()">SALVAR NA PLANILHA</button>
+            <button class="btn-save" onclick="salvar()">SALVAR ALTERAÇÕES</button>
         </div>
     </div>
 </div>
 
-<div id="msg-global"></div>
+<div id="toast"></div>
 
 <script>
     const API = "https://script.google.com/macros/s/AKfycbzgV_H5QLTNwJ12B-78q57qNnlaVi0vbxW3jIqdnp7YH1IKCdBdFthIHymlMM9Jusqktg/exec";
-    const OPCOES = {
-        camadas: ["Simples", "Dobrada", "Tripla", "Multi-pétalas"],
-        padrao: ["Lisa", "Borda Colorida", "Riscada", "Matizada"],
-        cores: ["Amarela", "Branca", "Negra", "Rosa", "Roxa", "Vermelha", "Vinho"],
-        especiais: ["Fragrância", "Negra Retinta", "Pétala Rasgada"]
-    };
-
-    let DADOS = [], DADOS_FILTRADOS = [];
+    let DADOS = [], DADOS_FILTRADOS = [], OPCOES_DINAMICAS = {};
 
     async function carregar() {
         try {
@@ -142,44 +132,62 @@
             const json = await r.json();
             DADOS = Object.keys(json).map(k => ({ id: k, ...json[k] }));
             DADOS_FILTRADOS = [...DADOS];
+            
+            extrairOpcoesDaPlanilha();
             renderLista();
-        } catch (e) { showMsg("Erro ao carregar dados", "red"); }
+        } catch (e) { showToast("Erro ao carregar dados", "#e74c3c"); }
+    }
+
+    // EXTRAI AUTOMATICAMENTE AS OPÇÕES EXISTENTES NA PLANILHA
+    function extrairOpcoesDaPlanilha() {
+        const extrair = (chave) => {
+            let vals = [];
+            DADOS.forEach(d => { if(d[chave]) d[chave].split(',').forEach(v => vals.push(v.trim())); });
+            return [...new Set(vals)].filter(v => v !== "").sort();
+        };
+
+        OPCOES_DINAMICAS = {
+            cores: extrair('cores'),
+            camadas: extrair('camadas'),
+            padrao: extrair('padrao'),
+            especiais: extrair('especiais')
+        };
+        
+        renderFiltrosNoForm();
+    }
+
+    function renderFiltrosNoForm() {
+        const montar = (containerId, lista, chave, isRadio) => {
+            const cont = document.getElementById(containerId);
+            cont.innerHTML = lista.map(opt => `
+                <label class="option-item">
+                    <input type="${isRadio ? 'radio' : 'checkbox'}" name="f-${chave}" class="in-opt" data-type="${chave}" value="${opt}"> ${opt}
+                </label>
+            `).join('');
+        };
+
+        montar('form-cores', OPCOES_DINAMICAS.cores, 'cores', false);
+        montar('form-camadas', OPCOES_DINAMICAS.camadas, 'camadas', true);
+        montar('form-padrao', OPCOES_DINAMICAS.padrao, 'padrao', true);
+        montar('form-especiais', OPCOES_DINAMICAS.especiais, 'especiais', false);
     }
 
     function renderLista() {
         const cont = document.getElementById('lista-admin');
         cont.innerHTML = DADOS_FILTRADOS.map(d => `
             <div class="card" onclick="abrirEditor('${d.id}')">
-                <img src="${d.midia ? 'https://drive.google.com/thumbnail?sz=w600&id='+d.midia : 'imagens/sem-foto.jpg'}">
-                <h3>${d.id}</h3>
-                <span class="btn-edit-card">Editar</span>
+                <img src="${d.midia ? 'https://drive.google.com/thumbnail?sz=w600&id='+d.midia : 'imagens/sem-foto.jpg'}" loading="lazy">
+                <div class="card-info">
+                    <h3>${d.id}</h3>
+                    <p>${d.qtd} em estoque</p>
+                </div>
             </div>
         `).join('');
     }
 
-    function filtrar() {
-        const b = document.getElementById('search').value.toUpperCase();
-        DADOS_FILTRADOS = DADOS.filter(d => d.id.toUpperCase().includes(b));
-        renderLista();
-    }
-
-    function renderFiltrosForm() {
-        const montar = (id, lista, chave, isRadio) => {
-            document.getElementById(id).innerHTML = lista.map(opt => `
-                <label class="option-item">
-                    <input type="${isRadio ? 'radio' : 'checkbox'}" name="f-${chave}" class="in-opt" data-type="${chave}" value="${opt}"> ${opt}
-                </label>
-            `).join('');
-        };
-        montar('edit-camadas', OPCOES.camadas, 'camadas', true);
-        montar('edit-padrao', OPCOES.padrao, 'padrao', true);
-        montar('edit-cores', OPCOES.cores, 'cores', false);
-        montar('edit-especiais', OPCOES.especiais, 'especiais', false);
-    }
-
     function abrirEditor(id) {
         const item = DADOS.find(d => d.id === id);
-        document.getElementById('modal-title').innerText = "Editar " + id;
+        document.getElementById('modal-title').innerText = "Editar ID: " + id;
         document.getElementById('input-id').value = item.id;
         document.getElementById('input-id').readOnly = true;
         document.getElementById('input-qtd').value = item.qtd || 0;
@@ -197,19 +205,17 @@
         document.getElementById('modal-title').innerText = "Cadastrar Nova ID";
         document.getElementById('input-id').value = "";
         document.getElementById('input-id').readOnly = false;
-        document.getElementById('input-qtd').value = 0;
+        document.getElementById('input-qtd').value = "";
         document.getElementById('input-midia').value = "";
         document.querySelectorAll('.in-opt').forEach(i => i.checked = false);
         document.getElementById('modalEditor').style.display = 'flex';
     }
 
-    function fecharModal() { document.getElementById('modalEditor').style.display = 'none'; }
-
     async function salvar() {
         const id = document.getElementById('input-id').value.trim().toUpperCase();
-        if(!id) return alert("Digite uma ID");
+        if(!id) return alert("A ID é obrigatória");
 
-        showMsg("Enviando para planilha...", "orange");
+        showToast("⏳ Salvando alterações...", "#2e2a15");
 
         const payload = {
             action: "upsert", id: id,
@@ -217,26 +223,34 @@
             midia: document.getElementById('input-midia').value
         };
 
-        ['camadas', 'padrao', 'cores', 'especiais'].forEach(ch => {
+        ['cores', 'camadas', 'padrao', 'especiais'].forEach(ch => {
             const sel = [...document.querySelectorAll(`.in-opt[data-type="${ch}"]:checked`)];
             payload[ch] = sel.map(s => s.value).join(', ');
         });
 
         try {
             await fetch(API, { method: "POST", body: JSON.stringify(payload) });
-            showMsg("Salvo com sucesso!", "green");
+            showToast("✅ Salvo com sucesso!", "#a08c6b");
             fecharModal();
-            carregar(); // Recarrega a lista
-        } catch (e) { showMsg("Erro ao salvar", "red"); }
+            carregar(); 
+        } catch (e) { showToast("Erro ao salvar", "#e74c3c"); }
     }
 
-    function showMsg(txt, color) {
-        const m = document.getElementById('msg-global');
-        m.innerText = txt; m.style.background = color; m.style.display = 'block';
-        setTimeout(() => m.style.display = 'none', 3000);
+    function filtrar() {
+        const b = document.getElementById('search').value.toUpperCase();
+        DADOS_FILTRADOS = DADOS.filter(d => d.id.toUpperCase().includes(b));
+        renderLista();
     }
 
-    window.onload = () => { renderFiltrosForm(); carregar(); };
+    function fecharModal() { document.getElementById('modalEditor').style.display = 'none'; }
+
+    function showToast(txt, color) {
+        const t = document.getElementById('toast');
+        t.innerText = txt; t.style.background = color; t.style.display = 'block';
+        setTimeout(() => t.style.display = 'none', 3000);
+    }
+
+    window.onload = carregar;
 </script>
 </body>
 </html>
