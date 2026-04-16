@@ -24,6 +24,36 @@
         .stock { position: absolute; top: 10px; right: 10px; background: var(--primary); color: white; padding: 5px 12px; border-radius: 15px; font-size: 12px; font-weight: 600; }
         .out-of-stock { filter: grayscale(1); opacity: 0.7; }
         .loader { text-align: center; padding: 50px; font-weight: 600; color: var(--accent); }
+    
+    /* Botão flutuante para o Admin no canto inferior direito */
+.admin-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: var(--primary);
+    color: white;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    z-index: 1000;
+    transition: transform 0.3s;
+}
+
+.admin-btn:hover {
+    transform: scale(1.1);
+    background: var(--accent);
+}
+
+/* Ícone simples usando engrenagem (emoji ou texto) */
+.admin-btn::before {
+    content: "⚙️";
+    font-size: 20px;
+}
     </style>
 </head>
 <body>
@@ -127,5 +157,6 @@
 
     carregar();
 </script>
+    <a href="admin.html" class="admin-btn" title="Acessar Painel Admin"></a>
 </body>
 </html>
