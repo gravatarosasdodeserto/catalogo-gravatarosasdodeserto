@@ -4,141 +4,176 @@
     <link rel="icon" type="image/png" href="favicon.png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gravatá RD | Catálogo de IDs</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <title>Catálogo | Gravatá RD</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #2e2a15; --accent: #a08c6b; --bg: #f9f7f2; }
-        body { font-family: 'Poppins', sans-serif; background: var(--bg); color: var(--primary); margin: 0; }
-        .header { height: 200px; background: url('imagens/gravata-cabecalho.jpg') center/cover; position: relative; display: flex; align-items: center; justify-content: center; }
-        .header::after { content: ''; position: absolute; inset: 0; background: rgba(255,255,255,0.2); backdrop-filter: blur(5px); }
-        .logo { z-index: 10; width: 180px; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.2)); }
-        .filters { position: sticky; top: 0; z-index: 100; background: rgba(255,255,255,0.9); backdrop-filter: blur(10px); padding: 15px; display: flex; gap: 10px; overflow-x: auto; border-bottom: 1px solid #ddd; }
-        select, input { padding: 10px; border-radius: 20px; border: 1px solid #ccc; outline: none; font-size: 14px; min-width: 140px; }
-        .container { padding: 20px; display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; max-width: 1200px; margin: auto; }
-        .card { background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.05); transition: 0.3s; position: relative; }
-        .img-container { width: 100%; aspect-ratio: 1/1; background: #eee; overflow: hidden; }
+        :root {
+            --bg: #fcfbf7;
+            --surface: #ffffff;
+            --text-primary: #1c1c1c;
+            --text-secondary: #707070;
+            --accent: #968369;
+            --border: #eceae4;
+            --radius: 20px;
+            --shadow: 0 10px 30px rgba(0,0,0,0.02);
+        }
+
+        * { transition: all 0.3s ease; box-sizing: border-box; }
+
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: var(--bg); 
+            color: var(--text-primary); 
+            margin: 0; 
+        }
+
+        /* Header Sofisticado */
+        .header { 
+            height: 250px; 
+            background: linear-gradient(rgba(255,255,255,0.1), rgba(255,255,255,0.1)), url('imagens/gravata-cabecalho.jpg') center/cover;
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            position: relative;
+        }
+
+        .logo { width: 180px; z-index: 10; filter: drop-shadow(0 4px 15px rgba(0,0,0,0.1)); }
+
+        /* Filtros Modernos */
+        .filters { 
+            position: sticky; top: 0; z-index: 100; 
+            background: rgba(255, 255, 255, 0.8); 
+            backdrop-filter: blur(15px); 
+            padding: 20px 5%;
+            display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .filters input, .filters select {
+            padding: 12px 20px; border-radius: 50px; border: 1px solid var(--border);
+            background: var(--surface); outline: none; font-size: 14px; min-width: 200px;
+        }
+
+        /* Grid de Cards */
+        .container { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
+        #catalogo { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
+            gap: 30px; 
+        }
+
+        .card { 
+            background: var(--surface); border-radius: var(--radius); 
+            overflow: hidden; border: 1px solid var(--border);
+            box-shadow: var(--shadow); position: relative;
+        }
+        .card:hover { transform: translateY(-8px); border-color: var(--accent); }
+
+        .img-container { width: 100%; aspect-ratio: 1/1; overflow: hidden; background: #f7f6f2; }
         .img-container img { width: 100%; height: 100%; object-fit: cover; }
-        .info { padding: 15px; }
-        .info h3 { margin: 0 0 10px; font-size: 18px; color: var(--primary); }
-        .tag { display: inline-block; background: #f0ede6; padding: 4px 10px; border-radius: 8px; font-size: 11px; margin: 2px; font-weight: 600; }
-        .stock { position: absolute; top: 10px; right: 10px; background: var(--primary); color: white; padding: 5px 12px; border-radius: 15px; font-size: 12px; font-weight: 600; }
-        .out-of-stock { filter: grayscale(1); opacity: 0.7; }
-        .loader { text-align: center; padding: 50px; font-weight: 600; color: var(--accent); }
-    
-    /* Botão flutuante para o Admin no canto inferior direito */
-.admin-btn {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background: var(--primary);
-    color: white;
-    width: 45px;
-    height: 45px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-decoration: none;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-    z-index: 1000;
-    transition: transform 0.3s;
-}
 
-.admin-btn:hover {
-    transform: scale(1.1);
-    background: var(--accent);
-}
+        .info { padding: 20px; text-align: center; }
+        .info h3 { 
+            font-family: 'Playfair Display', serif; font-size: 20px; 
+            margin: 0 0 12px 0; color: var(--text-primary);
+        }
 
-/* Ícone simples usando engrenagem (emoji ou texto) */
-.admin-btn::before {
-    content: "⚙️";
-    font-size: 20px;
-}
+        /* Tags de Informação */
+        .tag-group { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+        .tag { 
+            font-size: 10px; text-transform: uppercase; font-weight: 700; 
+            letter-spacing: 0.5px; padding: 5px 12px; border-radius: 50px;
+            background: var(--bg); color: var(--text-secondary); border: 1px solid var(--border);
+        }
+        .tag-accent { background: var(--accent); color: white; border: none; }
+
+        .stock-badge { 
+            position: absolute; top: 15px; right: 15px; 
+            background: rgba(255,255,255,0.9); padding: 5px 12px; 
+            border-radius: 50px; font-size: 11px; font-weight: 600;
+            backdrop-filter: blur(5px); box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        .out-of-stock { opacity: 0.7; filter: grayscale(0.5); }
+        .out-of-stock .stock-badge { background: #fee; color: #a33; }
     </style>
 </head>
 <body>
 
-<div class="header"><img src="logo.png" class="logo"></div>
+<header class="header"><img src="logo.png" class="logo"></header>
 
 <div class="filters">
-    <input type="text" id="search" placeholder="Buscar ID..." oninput="filtrar()">
+    <input type="text" id="search" placeholder="Procurar Rosa..." oninput="filtrar()">
     <select id="f_cores" onchange="filtrar()"><option value="">Todas as Cores</option></select>
-    <select id="f_camadas" onchange="filtrar()"><option value="">Todas as Camadas</option></select>
+    <select id="f_camadas" onchange="filtrar()"><option value="">Camadas</option></select>
 </div>
 
-<div id="loading" class="loader">Carregando estoque...</div>
-<main class="container" id="lista"></main>
+<div class="container">
+    <div id="catalogo"></div>
+</div>
 
 <script>
     const API = "https://script.google.com/macros/s/AKfycbzgV_H5QLTNwJ12B-78q57qNnlaVi0vbxW3jIqdnp7YH1IKCdBdFthIHymlMM9Jusqktg/exec";
     let DADOS = [];
 
-   async function carregar() {
-    try {
-        // Adicionamos um timestamp (t=...) para evitar que o navegador use dados velhos do cache
-        const urlComCache = API + "?action=get&t=" + Date.now();
-        
-        const r = await fetch(urlComCache, {
-            method: "GET",
-            mode: "cors", 
-            redirect: "follow" // CRUCIAL: O Google redireciona a requisição
-        });
+    async function carregar() {
+        try {
+            const r = await fetch(API + "?action=get&t=" + Date.now());
+            const json = await r.json();
+            
+            // CORREÇÃO: Mapeando os dados na ordem correta da sua planilha
+            DADOS = Object.keys(json).map(k => ({
+                nome: k,
+                camadas: json[k].camadas,
+                cores: json[k].cores,
+                padrao: json[k].padrao,
+                especiais: json[k].especiais,
+                qtd: parseInt(json[k].qtd) || 0,
+                midia: json[k].midia
+            }));
 
-        if (!r.ok) throw new Error('Falha na resposta: ' + r.status);
-        
-        const json = await r.json();
-
-        if (json.error) {
-            document.getElementById("loading").innerText = "Erro no servidor: " + json.error;
-            return;
-        }
-
-        DADOS = Object.keys(json).map(k => ({ nome: k, ...json[k] }));
-        document.getElementById("loading").style.display = "none";
-        popularFiltros();
-        render(DADOS);
-    } catch (e) {
-        console.error("Erro de conexão:", e);
-        document.getElementById("loading").innerText = "Não foi possível carregar os dados. Verifique a conexão.";
-    }
-}
-
-    function popularFiltros() {
-        const cores = [...new Set(DADOS.map(d => d.cores))].filter(v => v && v !== "Não inf.").sort();
-        const camadas = [...new Set(DADOS.map(d => d.camadas))].filter(v => v && v !== "Não inf.").sort();
-        
-        const selCor = document.getElementById("f_cores");
-        const selCam = document.getElementById("f_camadas");
-
-        selCor.innerHTML = '<option value="">Todas as Cores</option>';
-        selCam.innerHTML = '<option value="">Todas as Camadas</option>';
-
-        cores.forEach(c => selCor.innerHTML += `<option value="${c}">${c}</option>`);
-        camadas.forEach(c => selCam.innerHTML += `<option value="${c}">${c}</option>`);
+            popularFiltros();
+            render(DADOS);
+        } catch (e) { console.error("Erro ao carregar dados"); }
     }
 
     function render(lista) {
-        const container = document.getElementById("lista");
+        const container = document.getElementById("catalogo");
         container.innerHTML = lista.map(d => {
+            const emEstoque = d.qtd > 0;
             const foto = d.midia ? `https://drive.google.com/thumbnail?sz=w600&id=${d.midia}` : 'imagens/sem-foto.jpg';
-            const emEstoque = parseInt(d.qtd) > 0;
-            const tags = d.especiais ? d.especiais.split(',').map(t => `<span class="tag">${t.trim()}</span>`).join('') : '';
+            const tagsEspeciais = d.especiais ? d.especiais.split(',').map(t => `<span class="tag">${t.trim()}</span>`).join('') : '';
             
             return `
                 <div class="card ${!emEstoque ? 'out-of-stock' : ''}">
-                    <div class="stock">${emEstoque ? d.qtd + ' unid.' : 'Esgotado'}</div>
+                    <div class="stock-badge">${emEstoque ? d.qtd + ' em stock' : 'Esgotado'}</div>
                     <div class="img-container">
                         <img src="${foto}" onerror="this.src='imagens/sem-foto.jpg'">
                     </div>
                     <div class="info">
                         <h3>${d.nome}</h3>
-                        <div class="tag" style="background:var(--accent); color:white">${d.cores}</div>
-                        <div class="tag">${d.camadas}</div>
-                        <div style="margin-top:8px">${tags}</div>
+                        <div class="tag-group">
+                            <span class="tag tag-accent">${d.cores}</span>
+                            <span class="tag">${d.camadas}</span>
+                        </div>
+                        <div class="tag-group" style="opacity:0.8">
+                            ${tagsEspeciais}
+                        </div>
                     </div>
                 </div>
             `;
         }).join('');
+    }
+
+    function popularFiltros() {
+        const cores = [...new Set(DADOS.map(d => d.cores))].filter(v => v).sort();
+        const camadas = [...new Set(DADOS.map(d => d.camadas))].filter(v => v).sort();
+        
+        const fCores = document.getElementById("f_cores");
+        const fCamadas = document.getElementById("f_camadas");
+
+        cores.forEach(c => fCores.innerHTML += `<option value="${c}">${c}</option>`);
+        camadas.forEach(c => fCamadas.innerHTML += `<option value="${c}">${c}</option>`);
     }
 
     function filtrar() {
@@ -155,8 +190,7 @@
         render(filtrados);
     }
 
-    carregar();
+    window.onload = carregar;
 </script>
-    <a href="admin.html" class="admin-btn" title="Acessar Painel Admin"></a>
 </body>
 </html>
