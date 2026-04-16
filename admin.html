@@ -204,6 +204,7 @@ body {
     cursor: pointer;
     border: 3px solid white;
     transition: all 0.2s ease;
+    z-index: 10; /* <- adiciona isso pra ficar sempre por cima */
 }
 
 .edit-badge:hover {
@@ -478,9 +479,9 @@ button:active {
           <div class="upload-progress-bar" id="progressBar_nova"></div>
         </div>
         <label class="edit-badge" for="file_nova">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="19" height="19"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
-        </label>
-        <input type="file" id="file_nova" class="file-input" accept="image/*" onchange="uploadFotoNova(this)">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="19" height="19"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
+</label>
+<input type="file" id="file_nova" class="file-input" accept="image/*" onchange="uploadFotoNova(this)">
       </div>
 
       <input id="n_midia" value="" type="hidden">
