@@ -276,59 +276,81 @@
             });
         }
 
-        async function handleUpload(input, nomeRosa) {
-            const file = input.files[0];
-            if (!file) return;
+  async function handleUpload(input, nomeRosa) {
+    const file = input.files[0];
+    if (!file) return;
 
-            const safeId = nomeRosa === 'new' ? 'new' : nomeRosa.replace(/\W/g, '_');
-            const imgElement = (nomeRosa === 'new') ? document.getElementById("preview_new") : document.getElementById(`img_${safeId}`);
+    const isNew = (nomeRosa === 'new');
+    const safeId = isNew ? 'new' : nomeRosa.replace(/\W/g, '_');
+    const imgElement = isNew ? document.getElementById("preview_new") : document.getElementById(`img_${safeId}`);
+    
+    // 1. Feedback visual: a imagem fica clarinha enquanto sobe
+    if (imgElement) {
+        imgElement.style.opacity = "0.3";
+    }
+    showToast("Fazendo upload da imagem...");
+
+    // 2. Localiza o ID da mídia antiga para o Script poder apagar do Drive
+    let oldFileId = "";
+    if (!isNew) {
+        const itemOriginal = DADOS_LOCAIS.find(d => d.nome === nomeRosa);
+        oldFileId = itemOriginal ? itemOriginal.midia : "";
+    }
+
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = async () => {
+        const base64 = reader.result.split(',')[1];
+        try {
+            const res = await fetch(API, { 
+                method: "POST", 
+                body: new URLSearchParams({ 
+                    action: "upload", 
+                    nome: nomeRosa, 
+                    data: base64, 
+                    mimeType: file.type,
+                    oldFileId: oldFileId 
+                }) 
+            });
+            const result = await res.json();
             
-            // Início do Feedback Visual
-            if (imgElement) imgElement.style.opacity = "0.3";
-            showToast("Fazendo upload... aguarde.");
-
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = async () => {
-                const base64 = reader.result.split(',')[1];
-                try {
-                    const res = await fetch(API, { 
-                        method: "POST", 
-                        body: new URLSearchParams({ 
-                            action: "upload", 
-                            nome: nomeRosa, 
-                            data: base64, 
-                            mimeType: file.type 
-                        }) 
-                    });
-                    const result = await res.json();
-                    
-                    if (result.success) {
-                        // Link direto com timestamp para ignorar cache e evitar 404 inicial
-                        const finalUrl = `https://docs.google.com/uc?export=view&id=${result.id}&t=${Date.now()}`;
-                        
-                        if (nomeRosa === 'new') {
-                            document.getElementById("n_midia").value = result.id;
-                            imgElement.src = finalUrl;
-                            imgElement.style.display = "block";
-                            imgElement.style.opacity = "1";
-                            document.getElementById("trigger_new").style.display = "none";
-                        } else {
-                            imgElement.src = finalUrl;
-                            imgElement.style.opacity = "1";
-                            markChange(safeId); // Ativa botão salvar
-                        }
-                        showToast("✅ Foto enviada! Clique em SALVAR.");
+            if (result.success) {
+                // 3. Usamos o link de THUMBNAIL com um timestamp (&t=) para forçar o navegador a atualizar
+                const finalUrl = `https://drive.google.com/thumbnail?sz=w600&id=${result.id}&t=${Date.now()}`;
+                
+                // Pequeno tempo de espera para o Google processar a permissão
+                setTimeout(() => {
+                    if (isNew) {
+                        // Se for cadastro novo, guarda o ID no campo oculto do modal
+                        document.getElementById("n_midia").value = result.id;
+                        imgElement.src = finalUrl;
+                        imgElement.style.display = "block";
+                        imgElement.style.opacity = "1";
+                        document.getElementById("trigger_new").style.display = "none";
                     } else {
-                        throw new Error("Erro no servidor");
+                        // Se for edição, atualiza a imagem no card e marca como pendente de salvar
+                        imgElement.src = finalUrl;
+                        imgElement.style.opacity = "1";
+                        
+                        // Atualiza o ID da mídia no nosso array local para que o botão "Salvar" envie o ID certo
+                        const index = DADOS_LOCAIS.findIndex(d => d.nome === nomeRosa);
+                        if(index !== -1) {
+                            DADOS_LOCAIS[index].midia = result.id;
+                        }
+                        markChange(safeId);
                     }
-                } catch (e) {
-                    showToast("❌ Falha no upload.");
-                    if (imgElement) imgElement.style.opacity = "1";
-                }
-            };
+                    showToast("✅ Foto carregada com sucesso!");
+                }, 1500);
+            } else {
+                throw new Error("Erro no upload");
+            }
+        } catch (e) {
+            console.error(e);
+            showToast("❌ Falha ao subir imagem.");
+            if (imgElement) imgElement.style.opacity = "1";
         }
-
+    };
+}
         function markChange(id) {
             ALTERACOES_PENDENTES = true;
             const btn = document.getElementById(`save_${id}`);
