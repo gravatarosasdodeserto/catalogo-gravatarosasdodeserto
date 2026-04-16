@@ -14,8 +14,7 @@
         --body-bg: #e9e4dd;
         --text-main: #2e2a15;
         --card-white: #ffffff;
-        --danger: #c41e3a;
-        --danger-dark: #9e1829;
+        --danger: #8b2d2d;
         --ok: #2d5a27;
         --accent: #a08c6b;
         --accent-dark: #7d6e53;
@@ -53,8 +52,8 @@
     }
 
     @keyframes pulse {
-        0%, 100% { transform: scale(1); opacity: 1; }
-        50% { transform: scale(1.05); opacity: 0.9; }
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.05); }
     }
 
 .topbar {
@@ -96,13 +95,13 @@
         left: 0;
         width: 100%;
         height: 115px;
-        background: rgba(255, 255, 0.35);
+        background: rgba(255, 255, 255, 0.35);
         backdrop-filter: blur(8px) saturate(180%);
         -webkit-backdrop-filter: blur(8px) saturate(180%);
         z-index: -1;
         border-top: 1px solid rgba(255, 255, 255, 0.3);
         border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-        box-shadow: inset 0 1px 0 rgba(255,255,0.5);
+        box-shadow: inset 0 1px 0 rgba(255,255,255,0.5);
     }
 
 .logo {
@@ -230,25 +229,23 @@
     }
 
 .card.nao-salvo {
-        border: 2px solid var(--danger);
-        box-shadow: 0 0 0 3px rgba(196, 30, 58, 0.15), var(--shadow-md);
+        border: 2px solid #ff9500;
+        box-shadow: 0 0 0 3px rgba(255, 149, 0, 0.2), var(--shadow-md);
     }
 
 .badge-nao-salvo {
         position: absolute;
         top: 10px;
         left: 10px;
-        background: linear-gradient(135deg, var(--danger), var(--danger-dark));
+        background: #ff9500;
         color: white;
         font-size: 9px;
         font-weight: 700;
-        padding: 5px 10px;
-        border-radius: 8px;
+        padding: 4px 8px;
+        border-radius: 6px;
         text-transform: uppercase;
         z-index: 5;
         animation: pulse 1.5s infinite;
-        box-shadow: 0 4px 12px rgba(196, 30, 58, 0.4);
-        letter-spacing: 0.5px;
     }
 
 .img-container {
@@ -324,7 +321,7 @@
         margin-top: 4px;
         font-family: inherit;
         font-size: 13px;
-        background: rgba(252, 250, 247, 0.6);
+        background: rgba(250, 250, 0.6);
         transition: all 0.3s ease;
         cursor: pointer;
     }
@@ -383,13 +380,12 @@
         background: rgba(245, 243, 240, 0.8);
         color: var(--danger);
         flex: 1;
-        border: 1.5px solid rgba(196, 30, 58, 0.2);
+        border: 1.5px solid rgba(139, 45, 45, 0.2);
     }
 
 .del:hover {
-        background: rgba(196, 30, 58, 0.1);
+        background: rgba(139, 45, 0.1);
         transform: translateY(-2px);
-        border-color: rgba(196, 30, 58, 0.4);
     }
 
 .new {
@@ -429,15 +425,15 @@
         display: none;
         position: fixed;
         inset: 0;
-        background: rgba(0,0,0,0.75);
+        background: rgba(0,0,0,0.7);
         align-items: center;
         justify-content: center;
         z-index: 2000;
-        backdrop-filter: blur(10px);
+        backdrop-filter: blur(8px);
         animation: fadeIn 0.3s ease;
     }
 
-    #modal.modal-content {
+.modal-content {
         background: transparent;
         backdrop-filter: none;
         padding: 0;
@@ -447,24 +443,24 @@
     }
 
     #modal.card-modal {
-        background: rgba(255, 255, 255, 0.98);
-        backdrop-filter: blur(16px);
-        border-radius: 24px;
-        padding: 18px;
-        box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-        border: 2px solid rgba(255, 255, 255, 0.8);
-        animation: slideUp 0.4s ease;
-    }
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(16px);
+    border-radius: 24px;
+    padding: 18px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    border: 2px solid rgba(255, 255, 255, 0.8);
+    animation: slideUp 0.4s ease;
+}
 
     #modal.card-modal h4 {
-        margin: 6px 0 18px;
-        text-align: center;
-        font-size: 20px;
-        color: var(--text-main);
-        font-weight: 700;
-    }
+    margin: 6px 0 18px;
+    text-align: center;
+    font-size: 20px;
+    color: var(--text-main);
+    font-weight: 700;
+}
 
-.img-placeholder {
+  .img-placeholder {
         width: 100%;
         aspect-ratio: 1/1;
         background: linear-gradient(135deg, #f5f3f0, #e9e4dd);
@@ -482,7 +478,7 @@
         transition: all 0.3s ease;
     }
 
-.img-placeholder:hover {
+  .img-placeholder:hover {
         border-color: var(--accent);
         background: linear-gradient(135deg, #fcfaf7, #f5f3f0);
     }
@@ -491,82 +487,20 @@
     #modalSair.modal-content {
         background: rgba(255, 255, 255, 0.98);
         backdrop-filter: blur(16px);
-        padding: 0;
+        padding: 32px;
         border-radius: 28px;
         width: 90%;
         max-width: 420px;
-        box-shadow: 0 24px 70px rgba(0,0,0,0.4);
+        box-shadow: 0 20px 60px rgba(0,0,0,0.3);
         border: 2px solid rgba(255, 255, 255, 0.8);
         animation: slideUp 0.4s ease;
-        overflow: hidden;
     }
 
- .modal-header {
-        background: linear-gradient(135deg, var(--danger), var(--danger-dark));
-        padding: 28px 32px 24px;
-        text-align: center;
-        position: relative;
-    }
-
- .modal-icon {
-        width: 64px;
-        height: 64px;
-        background: rgba(255, 255, 255, 0.15);
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin: 0 auto 16px;
-        backdrop-filter: blur(8px);
-        border: 3px solid rgba(255, 255, 255, 0.3);
-    }
-
- .modal-header h4 {
-        margin: 0;
-        font-size: 22px;
-        color: white;
-        font-weight: 700;
-        letter-spacing: 0.5px;
-    }
-
- .modal-body {
-        padding: 28px 32px;
-        text-align: center;
-    }
-
- .modal-body p {
-        font-size: 14px;
-        color: rgba(58,54,24,0.75);
-        margin: 0 0 28px;
-        line-height: 1.6;
-    }
-
- .modal-body.actions {
+    #modalExcluir.modal-content h4,
+    #modalSair.modal-content h4 {
         margin-top: 0;
-    }
-
- .modal-body.btn-confirmar {
-        background: linear-gradient(135deg, var(--danger), var(--danger-dark));
-        color: white;
-        flex: 1;
-        box-shadow: 0 4px 14px rgba(196, 30, 58, 0.3);
-    }
-
- .modal-body.btn-confirmar:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(196, 30, 58, 0.4);
-    }
-
- .modal-body.btn-cancelar {
-        background: linear-gradient(135deg, #4a4a4a, #2e2e2e);
-        color: white;
-        flex: 1;
-        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
-    }
-
- .modal-body.btn-cancelar:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        font-size: 24px;
+        margin-bottom: 24px;
     }
 
     @keyframes shimmer {
@@ -575,7 +509,7 @@
     }
 
 .skeleton {
-        background: linear-gradient(90deg, #f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+        background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
         background-size: 1000px 100%;
         animation: shimmer 2s infinite;
     }
@@ -671,7 +605,7 @@
     <a href="index.html" class="btn-voltar-admin">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" width="15">
             <line x1="19" y1="12" x2="5" y2="12"></line>
-            <polyline points="12 19 5 12 5"></polyline>
+            <polyline points="12 19 5 12 12 5"></polyline>
         </svg>
         Sair do Painel
     </a>
@@ -682,8 +616,7 @@
   <input class="busca" placeholder="Buscar ID pelo nome..." oninput="filtrar(this.value)">
   <div id="lista"></div>
 </div>
-
-<div id="modal" onclick="if(event.target == this) fecharModal()">
+    <div id="modal" onclick="if(event.target == this) fecharModal()">
   <div class="modal-content">
     <div class="card card-modal">
      <h4 id="tituloModal">Nova Rosa do Deserto</h4>
@@ -704,7 +637,7 @@
           <div class="upload-progress-bar" id="progressBar_nova"></div>
         </div>
         <label class="edit-badge" for="file_nova">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="19" height="19"><path d="M17 3a2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="19" height="19"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
         </label>
         <input type="file" id="file_nova" class="file-input" accept="image/*" onchange="uploadFotoNova(this)">
       </div>
@@ -743,45 +676,23 @@
 </div>
 
 <div id="modalExcluir" onclick="if(event.target == this) fecharModalExcluir()">
-  <div class="modal-content">
-    <div class="modal-header">
-      <div class="modal-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" width="32" height="32">
-          <circle cx="12" cy="12" r="10"></circle>
-          <line x1="15" y1="9" x2="9" y2="15"></line>
-          <line x1="9" y1="9" x2="15" y2="15"></line>
-        </svg>
-      </div>
-      <h4>Excluir ID</h4>
-    </div>
-    <div class="modal-body">
-      <p id="textoExcluir"></p>
-      <div class="actions">
-        <button class="btn-confirmar" onclick="confirmarExclusao()">Confirmar Exclusão</button>
-        <button class="btn-cancelar" onclick="fecharModalExcluir()">Cancelar</button>
-      </div>
+  <div class="modal-content" style="text-align:center;">
+    <h4 style="margin-top:0;font-size:20px;margin-bottom:16px;">Excluir ID</h4>
+    <p id="textoExcluir" style="font-size:14px;color:rgba(58,54,24,0.8);margin-bottom:24px;"></p>
+    <div class="actions">
+        <button class="del" onclick="confirmarExclusao()" style="flex:1;">Confirmar</button>
+        <button class="save" onclick="fecharModalExcluir()" style="flex:1;background:linear-gradient(135deg,#666,#444);">Cancelar</button>
     </div>
   </div>
 </div>
 
 <div id="modalSair" onclick="if(event.target == this) fecharModalSair()">
-  <div class="modal-content">
-    <div class="modal-header">
-      <div class="modal-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" width="32" height="32">
-          <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
-          <line x1="12" y1="9" x2="12" y2="13"></line>
-          <line x1="12" y1="17" x2="12.01" y2="17"></line>
-        </svg>
-      </div>
-      <h4>Alterações não salvas</h4>
-    </div>
-    <div class="modal-body">
-      <p>Você tem alterações que não foram salvas.<br>Tem certeza que deseja sair?</p>
-      <div class="actions">
-        <button class="btn-confirmar" onclick="confirmarSair()">Sair mesmo assim</button>
-        <button class="btn-cancelar" onclick="fecharModalSair()">Continuar editando</button>
-      </div>
+  <div class="modal-content" style="text-align:center;">
+    <h4 style="margin-top:0;font-size:20px;margin-bottom:16px;">Alterações não salvas</h4>
+    <p style="font-size:14px;color:rgba(58,54,24,0.8);margin-bottom:24px;">Você tem alterações que não foram salvas.<br>Tem certeza que deseja sair?</p>
+    <div class="actions">
+        <button class="del" onclick="confirmarSair()" style="flex:1;">Sair mesmo assim</button>
+        <button class="save" onclick="fecharModalSair()" style="flex:1;background:linear-gradient(135deg,#666,#444);">Continuar editando</button>
     </div>
   </div>
 </div>
@@ -911,332 +822,430 @@ function abrirModal() {
   document.getElementById('n_cores_container').innerHTML = criarSelect('n_cores', '', getOpcoesUnicas('cores'));
   document.getElementById('n_padrao_container').innerHTML = criarSelect('n_padrao', '', getOpcoesUnicas('padrao'));
   gerarCheckboxesEspeciais([], 'n');
-  document.getElementById('modal').style.display = "flex";
+  document.getElementById("modal").style.display = "flex";
 }
 
 function fecharModal() {
-  document.getElementById('modal').style.display = "none";
-}
-
-function abrirModalExcluir(id) {
-  idParaExcluir = id;
-  document.getElementById('textoExcluir').innerHTML = `Tem certeza que deseja excluir a ID <strong>${id}</strong>?<br>Esta ação não pode ser desfeita.`;
-  document.getElementById('modalExcluir').style.display = "flex";
+  document.getElementById("modal").style.display = "none";
 }
 
 function fecharModalExcluir() {
-  document.getElementById('modalExcluir').style.display = "none";
+  document.getElementById("modalExcluir").style.display = "none";
   idParaExcluir = "";
 }
 
 function fecharModalSair() {
-  document.getElementById('modalSair').style.display = "none";
+  document.getElementById("modalSair").style.display = "none";
 }
 
 function confirmarSair() {
   temAlteracoesNaoSalvas = false;
-  window.location.href = 'index.html';
+  window.location.href = "index.html";
 }
 
-async function confirmarExclusao() {
-  const nome = idParaExcluir;
-  const btn = document.querySelector('#modalExcluir .btn-confirmar');
-  const originalText = btn.innerText;
-  btn.disabled = true;
-  btn.innerText = "Excluindo...";
-  try {
-    await fetch(URL, { method: "POST", body: JSON.stringify({ action: "delete", nome }) });
-    toast("ID excluída com sucesso!");
-    carregar();
-  } catch (err) {
-    toast("Erro ao excluir: " + err);
-  }
-  btn.disabled = false;
-  btn.innerText = originalText;
-  fecharModalExcluir();
-}
+function filtrar(v) { filtro = v; render(); }
 
-function mostrarProgressoUpload(prefixo, mostrar) {
-  const overlay = document.getElementById('overlay_' + prefixo);
-  const progress = document.getElementById('progress_' + prefixo);
-  if (mostrar) {
-    overlay.style.display = 'flex';
-    progress.style.display = 'block';
-  } else {
-    overlay.style.display = 'none';
-    progress.style.display = 'none';
-    document.getElementById('progressBar_' + prefixo).style.width = '0%';
-  }
-}
-
-function atualizarProgressoUpload(prefixo, porcentagem) {
-  document.getElementById('progressBar_' + prefixo).style.width = porcentagem + '%';
-}
-
-async function uploadFoto(idSeguro, file) {
-  const idReal = idSeguro.replace(/_/g, '-');
-  const item = dados.find(d => d.nome === idReal);
-  if (!item) {
-    toast("ID não encontrada");
-    return;
-  }
-
-  mostrarProgressoUpload(idSeguro, true);
-  atualizarProgressoUpload(idSeguro, 20);
-
-  const reader = new FileReader();
-  reader.onload = async () => {
-    try {
-      atualizarProgressoUpload(idSeguro, 40);
-      const base64 = reader.result.split(',')[1];
-
-      atualizarProgressoUpload(idSeguro, 60);
-      const res = await fetch(URL, {
-        method: "POST",
-        body: JSON.stringify({
-          action: "upload",
-          data: base64,
-          mimeType: file.type,
-          nome: file.name,
-          oldFileId: item.midia || ''
-        })
-      });
-
-      atualizarProgressoUpload(idSeguro, 80);
-      const j = await res.json();
-
-      if (j.success) {
-        const img = document.getElementById("img_" + idSeguro);
-        const oldMidia = item.midia;
-        img.src = j.url;
-        item.midia = j.id;
-        mostrarBotaoSalvar(idSeguro);
-
-        if (oldMidia && oldMidia!== "Não inf.") {
-          toast("Foto substituída! Lembre de salvar.");
-        } else {
-          toast("Foto enviada! Lembre de salvar.");
-        }
-        atualizarProgressoUpload(idSeguro, 100);
-      } else {
-        toast("Erro: " + j.error);
-      }
-    } catch (err) {
-      toast("Erro ao enviar: " + err);
-    } finally {
-      setTimeout(() => mostrarProgressoUpload(idSeguro, false), 500);
-    }
-  };
-  reader.readAsDataURL(file);
-}
-
-async function uploadFotoNova(file) {
-  mostrarProgressoUpload('nova', true);
-  atualizarProgressoUpload('nova', 20);
-
-  const reader = new FileReader();
-  reader.onload = async () => {
-    try {
-      atualizarProgressoUpload('nova', 40);
-      const base64 = reader.result.split(',')[1];
-
-      atualizarProgressoUpload('nova', 60);
-      const res = await fetch(URL, {
-        method: "POST",
-        body: JSON.stringify({
-          action: "upload",
-          data: base64,
-          mimeType: file.type,
-          nome: file.name
-        })
-      });
-
-      atualizarProgressoUpload('nova', 80);
-      const j = await res.json();
-
-      if (j.success) {
-        document.getElementById("n_midia").value = j.id;
-        document.getElementById("img_nova").src = j.url;
-        document.getElementById("img_nova").style.display = "block";
-        document.getElementById("placeholder_nova").style.display = "none";
-        atualizarProgressoUpload('nova', 100);
-        toast("Foto enviada!");
-      } else {
-        toast("Erro: " + j.error);
-      }
-    } catch (err) {
-      toast("Erro ao enviar: " + err);
-    } finally {
-      setTimeout(() => mostrarProgressoUpload('nova', false), 500);
-    }
-  };
-  reader.readAsDataURL(file);
-}
-
-async function criar() {
-  const nome = document.getElementById("n_nome").value.trim().toUpperCase();
-  if (!nome) return toast("O campo Nome da ID é obrigatório!");
-
-  const existe = dados.find(d => d.nome === nome);
-  if (existe) {
-    toast("Essa ID já existe! Use outro nome.");
-    return;
-  }
-
-  const obj = {
-    action: "create",
-    nome: nome,
-    camadas: document.getElementById("n_camadas").value || "Não inf.",
-    cores: document.getElementById("n_cores").value || "Não inf.",
-    padrao: document.getElementById("n_padrao").value || "Não inf.",
-    especiais: plantaEditando.especiais,
-    qtd: Math.max(0, parseInt(document.getElementById("n_qtd").value) || 0),
-    midia: document.getElementById("n_midia").value || "Não inf."
-  };
-
-  const btn = document.querySelector('#modal .save');
-  const originalText = btn.innerText;
-  btn.disabled = true;
-  btn.innerText = "Criando...";
-  try {
-    const res = await fetch(URL, { method: "POST", body: JSON.stringify(obj) });
-    const j = await res.json();
-    if (j.success) {
-      toast("ID criada com sucesso!");
-      fecharModal();
-      carregar();
-    } else {
-      toast("Erro: " + j.error);
-    }
-  } catch (err) {
-    toast("Erro ao criar: " + err);
-  }
-  btn.disabled = false;
-  btn.innerText = originalText;
-}
-
-async function salvar(idSeguro) {
-  const idReal = idSeguro.replace(/_/g, '-');
-  const item = dados.find(d => d.nome === idReal);
-  if (!item) return toast("Erro: item não encontrado.");
-
-  const getVal = (id) => document.getElementById(id)?.value || "Não inf.";
-  const checkboxes = document.querySelectorAll('#esp_' + idSeguro + ' input:checked');
-  const especiaisSelecionadas = Array.from(checkboxes).map(cb => cb.value);
-
-  const obj = {
-    action: "update",
-    nome: idReal,
-    camadas: getVal("cam_" + idSeguro),
-    cores: getVal("cor_" + idSeguro),
-    padrao: getVal("pad_" + idSeguro),
-    especiais: especiaisSelecionadas,
-    qtd: Math.max(0, parseInt(getVal("qtd_" + idSeguro)) || 0),
-    midia: item.midia || "Não inf."
-  };
-
-  const card = document.getElementById("qtd_" + idSeguro).closest('.card');
-  const btn = card.querySelector('.save');
-  const originalText = btn.innerText;
-  btn.disabled = true;
-  btn.innerText = "Salvando...";
-  try {
-    await fetch(URL, { method: "POST", body: JSON.stringify(obj) });
-    toast("ID atualizada com sucesso!");
-    temAlteracoesNaoSalvas = false;
-    card.classList.remove('nao-salvo');
-    const badge = card.querySelector('.badge-nao-salvo');
-    if (badge) badge.remove();
-    btn.style.display = "none";
-    carregar();
-  } catch (err) {
-    toast("Erro ao salvar: " + err);
-    btn.disabled = false;
-    btn.innerText = originalText;
-  }
-}
-
-async function carregar() {
-  const container = document.getElementById("lista");
-  container.innerHTML = "";
-  for (let i = 0; i < 6; i++) {
-    container.innerHTML += `
-      <div class="card">
-        <div class="img-container skeleton" style="height: 290px; border-radius: 18px; margin-bottom: 14px;"></div>
-        <div class="skeleton" style="height: 20px; margin: 6px 0 18px; border-radius: 6px;"></div>
-        <div class="skeleton" style="height: 12px; margin-top: 12px; border-radius: 4px;"></div>
-        <div class="skeleton" style="height: 36px; margin-top: 4px; border-radius: 10px;"></div>
-      </div>`;
-  }
-  try {
-    const res = await fetch(URL + "?action=get");
-    const json = await res.json();
-    dados = Object.keys(json).map(k => ({ nome: k,...json[k] }));
-    ordenarDadosAZ();
-    render();
-    temAlteracoesNaoSalvas = false;
-  } catch (err) {
-    container.innerHTML = `<p style='text-align:center;color:var(--danger);padding:40px 20px;font-weight:600;'>Erro ao carregar catálogo</p>`;
-  }
-}
-
-function ordenarDadosAZ() {
-  dados.sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR', { numeric: true, sensitivity: 'base' }));
-}
-
-function render() {
-  const lista = document.getElementById("lista");
-  lista.innerHTML = "";
-  let filtrados = dados.filter(d => d.nome.toLowerCase().includes(filtro.toLowerCase()));
-  if (filtrados.length === 0) {
-    lista.innerHTML = "<p style='grid-column:1/-1;text-align:center;padding:60px 20px;color:rgba(58,54,24,0.5);font-weight:500;'>Nenhuma ID encontrada</p>";
-    return;
-  }
-  filtrados.forEach(d => {
-    const idSeguro = d.nome.replace(/-/g, '_');
-    const url = d.midia && d.midia!== "Não inf."? `https://drive.google.com/thumbnail?id=${d.midia}&sz=w600` : "imagens/sem-foto.jpg";
-    const card = document.createElement("div");
-    card.className = "card";
-    card.innerHTML = `
-      <div class="img-container">
-        <img src="${url}" class="img" id="img_${idSeguro}">
-        <label class="edit-badge" for="file_${idSeguro}">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="19" height="19"><path d="M17 3a2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
-        </label>
-        <input type="file" id="file_${idSeguro}" class="file-input" accept="image/*" onchange="uploadFoto('${idSeguro}', this.files[0])">
-      </div>
-      <h4>${d.nome}</h4>
-      <label>Quantidade em Estoque</label>
-      <input id="qtd_${idSeguro}" type="number" value="${d.qtd}" min="0" oninput="mostrarBotaoSalvar('${idSeguro}')">
-      <div class="row">
-        <div>
-          <label>Camadas</label>
-          ${criarSelect('cam_' + idSeguro, d.camadas, getOpcoesUnicas('camadas'))}
-        </div>
-        <div>
-          <label>Cores</label>
-          ${criarSelect('cor_' + idSeguro, d.cores, getOpcoesUnicas('cores'))}
-        </div>
-      </div>
-      <label>Padrão</label>
-      ${criarSelect('pad_' + idSeguro, d.padrao, getOpcoesUnicas('padrao'))}
-      <label>Especiais</label>
-      <div id="esp_${idSeguro}" class="especiais-wrap"></div>
-      <div class="actions">
-        <button class="save" onclick="salvar('${idSeguro}')" style="display:none;">Salvar</button>
-        <button class="del" onclick="abrirModalExcluir('${d.nome}')">Excluir</button>
-      </div>
-    `;
-    lista.appendChild(card);
-    const especiaisAtuais = d.especiais? d.especiais.split(',').map(s => s.trim()) : [];
-    gerarCheckboxesEspeciais(especiaisAtuais, 'esp_' + idSeguro);
+function parseCSV(text) {
+  const lines = text.split(/\r?\n/).filter(l => l.trim());
+  return lines.map(line => {
+    const cells = line.match(/(".*?"|[^",\r\n]+)(?=\s*,|\s*$)/g) || [];
+    return cells.map(c => c.replace(/^"|"$/g, '').trim());
   });
 }
 
-function filtrar(v) {
-  filtro = v;
-  render();
+function render() {
+  const el = document.getElementById("lista");
+  el.innerHTML = "";
+
+  const itensFiltrados = dados
+.filter(d => d.nome.toLowerCase().includes(filtro.toLowerCase()))
+.sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR', { sensitivity: 'base' }));
+
+  if (itensFiltrados.length === 0) {
+    el.innerHTML = "<p style='text-align:center; grid-column: 1/-1; padding: 60px; color: rgba(58,54,24,0.4);'>Nenhuma ID encontrada</p>";
+    return;
+  }
+
+  itensFiltrados.forEach((d, index) => {
+    const idSeguro = d.nome.replace(/\W/g, "_");
+    const imgUrl = (!d.midia || d.midia === "Não inf.")? "imagens/sem-foto.jpg" : `https://drive.google.com/thumbnail?sz=w600&id=${d.midia}`;
+    const especiaisArray = d.especiais? d.especiais.split(',').map(s => s.trim()).filter(s => s) : [];
+
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.style.animationDelay = `${index * 0.05}s`;
+    card.innerHTML = `
+  <div>
+    <div class="img-container">
+      <img src="${imgUrl}" class="img" id="img_${idSeguro}" onerror="this.src='imagens/sem-foto.jpg'">
+      <div class="upload-overlay" id="overlay_${idSeguro}">Enviando...</div>
+      <div class="upload-progress" id="progress_${idSeguro}">
+        <div class="upload-progress-bar" id="progressBar_${idSeguro}"></div>
+      </div>
+      <label class="edit-badge" for="file_${idSeguro}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="19" height="19"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
+      </label>
+      <input type="file" id="file_${idSeguro}" class="file-input" accept="image/*" onchange="uploadFoto(this, '${idSeguro}')">
+    </div>
+
+    <input id="midia_${idSeguro}" value="${d.midia}" type="hidden">
+    <div style="font-size:8px; color:rgba(58,54,24,0.6); text-align:center; margin:-6px 0 10px; font-weight:500; word-break:break-all; opacity:0.9;">
+      ${d.midia && d.midia!== "Não inf."?
+        `https://drive.google.com/thumbnail?sz=w600&id=${d.midia}`
+        : '<span style="color:var(--accent);font-size:9px;">📷 Aguardando foto</span>'
+      }
+    </div>
+
+    <h4>${d.nome}</h4>
+    <input id="nome_${idSeguro}" value="${d.nome}" type="hidden">
+
+    <label>Quantidade em Estoque</label>
+    <input id="qtd_${idSeguro}" value="${d.qtd}" type="number" min="0" oninput="mostrarBotaoSalvar('${idSeguro}')">
+
+    <div class="row">
+      <div>
+        <label>Camadas</label>
+        ${criarSelect(`cam_${idSeguro}`, d.camadas, getOpcoesUnicas('camadas'))}
+      </div>
+      <div>
+         <label>Cores</label>
+         ${criarSelect(`cor_${idSeguro}`, d.cores, getOpcoesUnicas('cores'))}
+      </div>
+    </div>
+
+    <label>Padrão</label>
+    ${criarSelect(`pad_${idSeguro}`, d.padrao, getOpcoesUnicas('padrao'))}
+
+    <label>Especiais</label>
+    <div id="esp_${idSeguro}_container" class="especiais-wrap">
+      ${todasEspeciais.map(tag => {
+        const checked = especiaisArray.includes(tag)? 'checked' : '';
+        return `<label>
+  <input type="checkbox" value="${tag}" ${checked} onchange="atualizarEspeciaisCard('${idSeguro}')">
+  ${tag}
+</label>`;
+      }).join('')}
+    </div>
+    <input id="esp_${idSeguro}" value="${d.especiais}" type="hidden">
+  </div>
+
+  <div class="actions">
+    <button class="save" onclick="salvar('${d.nome}')" style="display:none;">Salvar</button>
+    <button class="del" onclick="excluir('${d.nome}')">Excluir</button>
+  </div>
+`;
+    el.appendChild(card);
+  });
 }
+
+function atualizarEspeciaisCard(idSeguro) {
+  const checkboxes = document.querySelectorAll('#esp_' + idSeguro + '_container input:checked');
+  const selecionadas = Array.from(checkboxes).map(cb => cb.value);
+  document.getElementById('esp_' + idSeguro).value = selecionadas.join(', ');
+  mostrarBotaoSalvar(idSeguro);
+}
+
+async function uploadFotoNova(input) {
+  if (!input.files ||!input.files[0]) return;
+  const file = input.files[0];
+  const reader = new FileReader();
+
+  const overlay = document.getElementById("overlay_nova");
+  const progress = document.getElementById("progress_nova");
+  const progressBar = document.getElementById("progressBar_nova");
+  const img = document.getElementById("img_nova");
+  const placeholder = document.getElementById("placeholder_nova");
+
+  overlay.style.display = "flex";
+  progress.style.display = "block";
+  progressBar.style.width = "20%";
+  toast("Iniciando upload...");
+
+  reader.onload = async function(e) {
+    const base64Data = e.target.result.split(",")[1];
+    progressBar.style.width = "50%";
+
+    try {
+      const params = new URLSearchParams();
+      params.append("action", "upload");
+      params.append("nome", file.name);
+      params.append("mimeType", file.type);
+      params.append("data", base64Data);
+
+      progressBar.style.width = "75%";
+      const res = await fetch(URL, { method: "POST", body: params });
+      const json = await res.json();
+
+      if (json && json.id) {
+        progressBar.style.width = "100%";
+        document.getElementById("n_midia").value = json.id;
+
+        img.src = `https://drive.google.com/thumbnail?sz=w600&id=${json.id}`;
+        img.style.display = "block";
+        placeholder.style.display = "none";
+
+        toast("Foto enviada! Pronta pra criar.");
+        setTimeout(() => {
+          overlay.style.display = "none";
+          progress.style.display = "none";
+          progressBar.style.width = "0%";
+        }, 800);
+      } else {
+        throw new Error("ID não retornado");
+      }
+    } catch (err) {
+      toast("Erro no upload.");
+      overlay.style.display = "none";
+      progress.style.display = "none";
+      progressBar.style.width = "0%";
+    }
+  };
+  reader.readAsDataURL(file);
+}
+
+async function uploadFoto(input, idSeguro) {
+  if (!input.files ||!input.files[0]) return;
+  const file = input.files[0];
+  const reader = new FileReader();
+
+  const overlay = document.getElementById("overlay_" + idSeguro);
+  const progress = document.getElementById("progress_" + idSeguro);
+  const progressBar = document.getElementById("progressBar_" + idSeguro);
+  const textDiv = input.closest('.card').querySelector('[style*="font-size:8px"]');
+  const oldFileId = document.getElementById("midia_" + idSeguro).value;
+
+  overlay.style.display = "flex";
+  progress.style.display = "block";
+  progressBar.style.width = "20%";
+  textDiv.innerHTML = `<span style="color:var(--accent);font-size:9px;">⏳ Processando...</span>`;
+  toast("Iniciando upload...");
+
+  reader.onload = async function(e) {
+    const base64Data = e.target.result.split(",")[1];
+    progressBar.style.width = "50%";
+
+    try {
+      const params = new URLSearchParams();
+      params.append("action", "upload");
+      params.append("nome", file.name);
+      params.append("mimeType", file.type);
+      params.append("data", base64Data);
+      params.append("oldFileId", oldFileId);
+
+      progressBar.style.width = "75%";
+      const res = await fetch(URL, { method: "POST", body: params });
+      const json = await res.json();
+
+      if (json && json.id) {
+        progressBar.style.width = "100%";
+        document.getElementById("midia_" + idSeguro).value = json.id;
+        toast("Foto enviada! Aguardando Drive processar...");
+
+        const img = document.getElementById("img_" + idSeguro);
+        const novaUrl = `https://drive.google.com/thumbnail?sz=w600&id=${json.id}&t=${Date.now()}`;
+
+        img.onload = function() {
+          img.dataset.tentativas = 0;
+          textDiv.innerHTML = `https://drive.google.com/thumbnail?sz=w600&id=${json.id}`;
+          mostrarBotaoSalvar(idSeguro);
+          toast("Pronto! Clique em Salvar.");
+          setTimeout(() => {
+            overlay.style.display = "none";
+            progress.style.display = "none";
+            progressBar.style.width = "0%";
+          }, 800);
+        };
+
+        img.onerror = function() {
+          if (!img.dataset.tentativas) img.dataset.tentativas = 0;
+          img.dataset.tentativas++;
+
+          if (img.dataset.tentativas < 4) {
+            setTimeout(() => {
+              img.src = `https://drive.google.com/thumbnail?sz=w600&id=${json.id}&t=${Date.now()}`;
+            }, 2000);
+          } else {
+            textDiv.innerHTML = `https://drive.google.com/thumbnail?sz=w600&id=${json.id}`;
+            mostrarBotaoSalvar(idSeguro);
+            toast("Imagem demorou pra processar. Salve mesmo assim.");
+            overlay.style.display = "none";
+            progress.style.display = "none";
+            progressBar.style.width = "0%";
+          }
+        };
+
+        img.src = novaUrl;
+      } else {
+        throw new Error("ID não retornado");
+      }
+    } catch (err) {
+      toast("Erro no upload.");
+      textDiv.innerHTML = `<span style="color:var(--accent);font-size:9px;">📷 Aguardando foto</span>`;
+      overlay.style.display = "none";
+      progress.style.display = "none";
+      progressBar.style.width = "0%";
+    }
+  };
+  reader.readAsDataURL(file);
+}
+
+async function carregar() {
+  try {
+    const r = await fetch(URL + "?action=get&t=" + Date.now());
+    const json = await r.json();
+    if (json.error) throw new Error(json.error);
+
+    dados = Object.keys(json).map(nome => ({
+      nome: nome,
+      camadas: json[nome].camadas,
+      cores: json[nome].cores,
+      padrao: json[nome].padrao,
+      especiais: json[nome].especiais,
+      qtd: json[nome].qtd,
+      midia: json[nome].midia
+    }));
+
+    dados.sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR', { sensitivity: 'base' }));
+    render();
+    temAlteracoesNaoSalvas = false;
+  } catch (e) {
+    toast("Erro ao carregar dados.");
+  }
+}
+async function salvar(nomeOriginal) {
+  const id = nomeOriginal.replace(/\W/g, "_");
+  const card = document.getElementById("qtd_" + id).closest('.card');
+  const btn = card.querySelector('.save');
+  const qtdInput = document.getElementById("qtd_" + id);
+
+  if (parseInt(qtdInput.value) < 0) {
+    toast("Quantidade não pode ser negativa");
+    qtdInput.value = 0;
+    return;
+  }
+
+  btn.innerText = "Salvando...";
+  btn.disabled = true;
+
+  try {
+    const res = await fetch(URL, {
+      method: "POST",
+      body: new URLSearchParams({
+        action: "update",
+        nome: nomeOriginal,
+        qtd: qtdInput.value,
+        camadas: document.getElementById("cam_" + id).value,
+        cores: document.getElementById("cor_" + id).value,
+        padrao: document.getElementById("pad_" + id).value,
+        especiais: document.getElementById("esp_" + id).value,
+        midia: document.getElementById("midia_" + id).value
+      })
+    });
+
+    const json = await res.json();
+    if (json.error) throw new Error(json.error);
+
+    toast("Salvo com sucesso!");
+    btn.style.display = "none";
+    btn.innerText = "Salvar";
+    card.classList.remove('nao-salvo');
+    card.querySelector('.badge-nao-salvo')?.remove();
+
+    if (!document.querySelector('.save[style*="display: block"]')) {
+      temAlteracoesNaoSalvas = false;
+    }
+
+  } catch (e) {
+    toast("Erro ao salvar: " + e.message);
+    btn.innerText = "Salvar";
+  }
+  btn.disabled = false;
+}
+
+function excluir(nome) {
+  idParaExcluir = nome;
+  document.getElementById("textoExcluir").innerHTML = `Tem certeza que quer excluir <strong>${nome}</strong>?`;
+  document.getElementById("modalExcluir").style.display = "flex";
+}
+
+async function confirmarExclusao() {
+  if (!idParaExcluir) return;
+  try {
+    await fetch(URL, {
+      method: "POST",
+      body: new URLSearchParams({ action: "delete", nome: idParaExcluir })
+    });
+    toast("Excluído!");
+    fecharModalExcluir();
+    carregar();
+  } catch (e) {
+    toast("Erro ao excluir");
+  }
+}
+
+async function criar() {
+  const btn = document.querySelector("#modal .save");
+  const nome = document.getElementById("n_nome").value.trim();
+  const qtd = parseInt(document.getElementById("n_qtd").value) || 0;
+
+  if (!nome) {
+    toast("Digite o nome da ID");
+    return;
+  }
+
+  if (dados.some(d => d.nome.toLowerCase() === nome.toLowerCase())) {
+    toast("Essa ID já existe!");
+    return;
+  }
+
+  if (qtd < 0) {
+    toast("Quantidade não pode ser negativa");
+    document.getElementById("n_qtd").value = 0;
+    return;
+  }
+
+  btn.innerText = "Criando...";
+  btn.disabled = true;
+
+  try {
+    const midia = document.getElementById("n_midia").value || "Não inf.";
+    const res = await fetch(URL, {
+      method: "POST",
+      body: new URLSearchParams({
+        action: "create",
+        nome: nome,
+        qtd: qtd,
+        camadas: document.getElementById("n_camadas").value,
+        cores: document.getElementById("n_cores").value,
+        padrao: document.getElementById("n_padrao").value,
+        especiais: plantaEditando.especiais.join(', '),
+        midia: midia
+      })
+    });
+
+    const json = await res.json();
+    if (json.error) throw new Error(json.error);
+
+    toast("Criado com sucesso!");
+    fecharModal();
+    carregar();
+  } catch(e) {
+    toast("Erro ao criar: " + e.message);
+  }
+  btn.innerText = "Criar ID";
+  btn.disabled = false;
+}
+
+window.addEventListener('scroll', () => {
+    const topbar = document.querySelector('.topbar');
+    const currentScroll = window.pageYOffset;
+
+    if (currentScroll > 50) {
+        topbar.style.boxShadow = '0 12px 40px rgba(0, 0, 0, 0.18)';
+    } else {
+        topbar.style.boxShadow = '0 8px 32px rgba(0, 0, 0, 0.12)';
+    }
+});
 
 carregar();
 </script>
