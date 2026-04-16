@@ -486,10 +486,6 @@ function toast(msg) {
     setTimeout(() => t.style.display = "none", 3000);
 }
 
-function getOpcoesUnicas(campo) {
-    return [...new Set(dados.map(d => d[campo]).filter(v => v && v !== "Não inf."))].sort();
-}
-
 // ================= CONTROLE ALTERAÇÃO =================
 function mostrarBotaoSalvar(id) {
     temAlteracoesNaoSalvas = true;
@@ -576,8 +572,10 @@ function render() {
 
     itens.forEach(d => {
         const id = d.nome.replace(/\W/g, "_");
-        const img = d.midia || "imagens/sem-foto.jpg";
-
+        const img = d.midia && d.midia!== "Não inf."
+   ? `https://drive.google.com/thumbnail?sz=w600&id=${d.midia}`
+    : "imagens/sem-foto.jpg";
+        
         el.innerHTML += `
         <div class="card">
 
@@ -637,29 +635,6 @@ async function carregar() {
     }));
 
     render();
-}
-
-async function salvar(nome) {
-    const id = nome.replace(/\W/g, "_");
-    const imgEl = document.getElementById("qtd_" + id).closest('.card').querySelector('img');
-    const midiaId = imgEl.src.includes('id=')? imgEl.src.split('id=')[1] : '';
-
-    await fetch(URL, {
-        method: "POST",
-        body: new URLSearchParams({
-            action: "update",
-            nome,
-            qtd: document.getElementById("qtd_" + id).value,
-            camadas: document.getElementById("cam_" + id).value,
-            cores: document.getElementById("cor_" + id).value,
-            padrao: document.getElementById("pad_" + id).value,
-            especiais: document.getElementById("esp_" + id).value,
-            midia: midiaId // <- agora salva a foto também
-        })
-    });
-
-    toast("Salvo!");
-    carregar();
 }
 
 async function uploadFotoNova(input) {
@@ -730,6 +705,123 @@ async function criar() {
   });
 }
 
+// ================= UPLOAD FOTO CARD EXISTENTE =================
+async function uploadFoto(nome, input) {
+    const file = input.files[0];
+    if (!file) return;
+
+    const id = nome.replace(/\W/g, "_");
+    const card = document.getElementById("qtd_" + id).closest('.card');
+    const imgEl = card.querySelector('img');
+    const oldUrl = imgEl.src;
+    const oldFileId = oldUrl.includes('id=')? oldUrl.split('id=')[1].split('&')[0] : '';
+    
+    toast("Enviando imagem...");
+
+    try {
+        const base64Data = await fileToBase64(file);
+
+        const res = await fetch(URL, {
+            method: "POST",
+            body: new URLSearchParams({
+                action: "upload",
+                nome: nome,
+                data: base64Data,
+                mimeType: file.type,
+                oldFileId: oldFileId
+            })
+        });
+
+        const result = await res.json();
+
+        if (result.success) {
+            // Atualiza a imagem na tela
+            imgEl.src = `https://drive.google.com/thumbnail?sz=w600&id=${result.id}`;
+
+            // Salva o novo ID na planilha
+            await fetch(URL, {
+                method: "POST",
+                body: new URLSearchParams({
+                    action: "update",
+                    nome: nome,
+                    qtd: document.getElementById("qtd_" + id).value,
+                    camadas: document.getElementById("cam_" + id).value,
+                    cores: document.getElementById("cor_" + id).value,
+                    padrao: document.getElementById("pad_" + id).value,
+                    especiais: document.getElementById("esp_" + id).value,
+                    midia: result.id
+                })
+            });
+
+            toast("Imagem atualizada!");
+            carregar();
+        } else {
+            toast("Erro: " + result.error);
+        }
+    } catch (e) {
+        console.error(e);
+        toast("Erro de conexão");
+    }
+}
+
+// ================= EXCLUIR =================
+function excluir(nome) {
+    idParaExcluir = nome;
+    document.getElementById('textoExcluir').innerText = `Tem certeza que deseja excluir a ID "${nome}"? Essa ação não pode ser desfeita.`;
+    document.getElementById('modalExcluir').style.display = "flex";
+}
+
+function fecharModalExcluir() {
+    document.getElementById('modalExcluir').style.display = "none";
+    idParaExcluir = "";
+}
+
+async function confirmarExclusao() {
+    if (!idParaExcluir) return;
+
+    await fetch(URL, {
+        method: "POST",
+        body: new URLSearchParams({
+            action: "delete",
+            nome: idParaExcluir
+        })
+    });
+
+    toast("ID excluída!");
+    fecharModalExcluir();
+    carregar();
+}
+
+// ================= CORRIGE getOpcoesUnicas =================
+function getOpcoesUnicas(campo) {
+    return [...new Set(dados.map(d => d[campo]).filter(v => v && v!== "Não inf."))].sort();
+}
+
+// ================= AJUSTE NO salvar() PRA TIRAR BADGE LARANJA =================
+async function salvar(nome) {
+    const id = nome.replace(/\W/g, "_");
+    const imgEl = document.getElementById("qtd_" + id).closest('.card').querySelector('img');
+    const midiaId = imgEl.src.includes('id=')? imgEl.src.split('id=')[1].split('&')[0] : '';
+
+    await fetch(URL, {
+        method: "POST",
+        body: new URLSearchParams({
+            action: "update",
+            nome,
+            qtd: document.getElementById("qtd_" + id).value,
+            camadas: document.getElementById("cam_" + id).value,
+            cores: document.getElementById("cor_" + id).value,
+            padrao: document.getElementById("pad_" + id).value,
+            especiais: document.getElementById("esp_" + id).value,
+            midia: midiaId
+        })
+    });
+
+    temAlteracoesNaoSalvas = false;
+    toast("Salvo!");
+    carregar();
+}
+    
 // ================= INIT =================
 carregar();
 </script>
