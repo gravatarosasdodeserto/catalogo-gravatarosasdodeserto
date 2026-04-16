@@ -129,19 +129,19 @@ body {
 /* ===== GRID ===== */
 #lista {
     display: grid;
-    grid-template-columns: repeat(auto-fill,minmax(240px,1fr)); /* era 290px */
-    gap: 18px; /* era 22px */
+    grid-template-columns: repeat(auto-fill,minmax(240px,1fr));
+    gap: 18px;
 }
 
 /* ===== CARD ===== */
 .card {
     background: rgba(255,255,255,0.95);
-    border-radius: 20px; /* era 24px */
-    padding: 14px; /* era 18px */
+    border-radius: 20px;
+    padding: 14px;
     box-shadow: var(--shadow-md);
     display: flex;
     flex-direction: column;
-    gap: 6px; /* era 8px */
+    gap: 6px;
     transition: 0.3s;
     position: relative;
 }
@@ -167,8 +167,8 @@ body {
 }
 
 .card h4 {
-     margin: 0;
-    font-size: 16px; /* era 18px */
+    margin: 0;
+    font-size: 16px;
     text-align: center;
 }
 
@@ -176,15 +176,21 @@ body {
 .img-container {
     position: relative;
     width: 100%;
-    aspect-ratio: 4/3; /* era 1/1 - agora mais retangular e menor */
-    margin-bottom: 10px; /* era 14px */
-    border-radius: 16px; /* era 18px */
+    aspect-ratio: 4/3;
+    margin-bottom: 10px;
+    border-radius: 16px;
     overflow: hidden;
+    background: #f5f3f0;
 }
+
 .img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: none;
 }
 
 /* botão editar premium */
@@ -230,6 +236,29 @@ body {
 }
 
 .file-input { display:none; }
+
+/* placeholder imagem */
+.img-placeholder {
+    position: absolute;
+    inset: 0;
+    border: 2px dashed rgba(160,140,107,0.4);
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--accent);
+    font-size: 12px;
+    gap: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: rgba(255,255,255,0.5);
+}
+
+.img-placeholder:hover {
+    background: rgba(160,140,107,0.08);
+    border-color: var(--accent);
+}
 
 /* ===== INPUTS ===== */
 label {
@@ -392,28 +421,6 @@ button:active {
     margin-top: 0;
 }
 
-/* placeholder imagem */
-.img-placeholder {
-    width: 100%;
-    height: 100%;
-    border: 2px dashed rgba(160,140,107,0.4);
-    border-radius: 18px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    color: var(--accent);
-    font-size: 12px;
-    gap: 8px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.img-placeholder:hover {
-    background: rgba(160,140,107,0.05);
-    border-color: var(--accent);
-}
-
 /* modais secundários */
 #modalExcluir .modal-content,
 #modalSair .modal-content {
@@ -448,7 +455,7 @@ button:active {
 @media (min-width:768px){
     .topbar { min-height: 230px; }
     .logo img { width: 260px; }
-    #lista { grid-template-columns: repeat(auto-fill,minmax(320px,1fr)); }
+    #lista { grid-template-columns: repeat(auto-fill,minmax(260px,1fr)); }
 }
 </style>
     
@@ -476,33 +483,32 @@ button:active {
   <input class="busca" placeholder="Buscar ID pelo nome..." oninput="filtrar(this.value)">
   <div id="lista"></div>
 </div>
-    <div id="modal" onclick="if(event.target == this) fecharModal()">
+
+<!-- MODAL NOVA ID -->
+<div id="modal" onclick="if(event.target == this) fecharModal()">
   <div class="modal-content">
     <div class="card card-modal">
      <h4 id="tituloModal">Nova Rosa do Deserto</h4>
 
       <div class="img-container">
-        <img src="imagens/sem-foto.jpg" class="img" id="img_nova" style="display:none;">
+        <img class="img" id="img_nova">
         <div class="img-placeholder" id="placeholder_nova" onclick="document.getElementById('file_nova').click()">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="32" height="32">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="36" height="36">
             <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
             <circle cx="8.5" cy="8.5" r="1.5"></circle>
             <polyline points="21 15 16 10 5 21"></polyline>
           </svg>
-          <span>Clique para adicionar foto</span>
-          <span style="font-size:10px;opacity:0.7;">Opcional</span>
+          <span style="font-weight:600;">Adicionar foto</span>
+          <span style="font-size:10px;opacity:0.7;">Opcional - clique ou arraste</span>
         </div>
-        <div class="upload-overlay" id="overlay_nova">Enviando...</div>
-        <div class="upload-progress" id="progress_nova">
-          <div class="upload-progress-bar" id="progressBar_nova"></div>
-        </div>
+        <div class="upload-overlay" id="overlay_nova" style="display:none;position:absolute;inset:0;background:rgba(0,0,0,0.6);color:white;display:flex;align-items:center;justify-content:center;border-radius:16px;font-size:12px;">Enviando...</div>
         <label class="edit-badge" for="file_nova">
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M12 20h9"></path>
-    <path d="M16.5 3.5a2.121 2.121 0 0 1 3L7 19l-4 1 1-4L16.5 3.5z"></path>
-  </svg>
-</label>
-<input type="file" id="file_nova" class="file-input" accept="image/*" onchange="uploadFotoNova(this)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 20h9"></path>
+            <path d="M16.5 3.5a2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+          </svg>
+        </label>
+        <input type="file" id="file_nova" class="file-input" accept="image/*" onchange="uploadFotoNova(this)">
       </div>
 
       <input id="n_midia" value="" type="hidden">
@@ -538,6 +544,7 @@ button:active {
   </div>
 </div>
 
+<!-- MODAL EXCLUIR -->
 <div id="modalExcluir" onclick="if(event.target == this) fecharModalExcluir()">
   <div class="modal-content" style="text-align:center;">
     <h4 style="margin-top:0;font-size:20px;margin-bottom:16px;">Excluir ID</h4>
@@ -549,6 +556,7 @@ button:active {
   </div>
 </div>
 
+<!-- MODAL SAIR -->
 <div id="modalSair" onclick="if(event.target == this) fecharModalSair()">
   <div class="modal-content" style="text-align:center;">
     <h4 style="margin-top:0;font-size:20px;margin-bottom:16px;">Alterações não salvas</h4>
