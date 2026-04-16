@@ -477,23 +477,6 @@ let plantaEditando = { especiais: [] };
     sessionStorage.setItem("adminLogado", "true");
 })();
 
-// ================= EVENTOS =================
-window.addEventListener('beforeunload', (e) => {
-    if (temAlteracoesNaoSalvas) {
-        e.preventDefault();
-        e.returnValue = '';
-    }
-});
-
-document.addEventListener('DOMContentLoaded', () => {
-    document.querySelector('.btn-voltar-admin').addEventListener('click', (e) => {
-        if (temAlteracoesNaoSalvas) {
-            e.preventDefault();
-            document.getElementById("modalSair").style.display = "flex";
-        }
-    });
-});
-
 // ================= UTIL =================
 function toast(msg) {
     const t = document.getElementById("toast");
@@ -506,7 +489,7 @@ function getOpcoesUnicas(campo) {
     return [...new Set(dados.map(d => d[campo]).filter(v => v && v !== "Não inf."))].sort();
 }
 
-// ================= UI =================
+// ================= CONTROLE ALTERAÇÃO =================
 function mostrarBotaoSalvar(id) {
     temAlteracoesNaoSalvas = true;
     const card = document.getElementById("qtd_" + id).closest('.card');
@@ -514,15 +497,9 @@ function mostrarBotaoSalvar(id) {
 
     btn.style.display = "block";
     card.classList.add('nao-salvo');
-
-    if (!card.querySelector('.badge-nao-salvo')) {
-        const badge = document.createElement('div');
-        badge.className = 'badge-nao-salvo';
-        badge.innerText = 'Não salvo';
-        card.querySelector('.img-container').appendChild(badge);
-    }
 }
 
+// ================= SELECT =================
 function criarSelect(id, valorAtual, opcoes) {
     const idSeguro = id.replace(/^(cam_|cor_|pad_)/, '');
     return `
@@ -549,14 +526,9 @@ function gerarCheckboxesEspeciais(selecionadas = [], prefixo = 'n') {
 }
 
 function atualizarEspeciais(prefixo) {
-    const selecionadas = [...document.querySelectorAll(`#${prefixo}_especiais_container input:checked`)].map(cb => cb.value);
-
-    if (prefixo === 'n') {
-        plantaEditando.especiais = selecionadas;
-    } else {
-        document.getElementById(`esp_${prefixo}`).value = selecionadas.join(', ');
-        mostrarBotaoSalvar(prefixo);
-    }
+    const selecionadas = [...document.querySelectorAll(`#esp_${prefixo}_container input:checked`)].map(cb => cb.value);
+    document.getElementById(`esp_${prefixo}`).value = selecionadas.join(', ');
+    mostrarBotaoSalvar(prefixo);
 }
 
 // ================= MODAL =================
@@ -565,10 +537,6 @@ function abrirModal() {
 
     document.getElementById('n_nome').value = '';
     document.getElementById('n_qtd').value = 0;
-    document.getElementById('n_midia').value = '';
-
-    document.getElementById('img_nova').style.display = "none";
-    document.getElementById('placeholder_nova').style.display = "flex";
 
     document.getElementById('n_camadas_container').innerHTML = criarSelect('n_camadas', '', getOpcoesUnicas('camadas'));
     document.getElementById('n_cores_container').innerHTML = criarSelect('n_cores', '', getOpcoesUnicas('cores'));
@@ -581,20 +549,6 @@ function abrirModal() {
 
 function fecharModal() {
     document.getElementById("modal").style.display = "none";
-}
-
-function fecharModalExcluir() {
-    document.getElementById("modalExcluir").style.display = "none";
-    idParaExcluir = "";
-}
-
-function fecharModalSair() {
-    document.getElementById("modalSair").style.display = "none";
-}
-
-function confirmarSair() {
-    temAlteracoesNaoSalvas = false;
-    window.location.href = "index.html";
 }
 
 // ================= FILTRO =================
@@ -612,11 +566,6 @@ function render() {
         .filter(d => d.nome.toLowerCase().includes(filtro))
         .sort((a, b) => a.nome.localeCompare(b.nome));
 
-    if (!itens.length) {
-        el.innerHTML = "<p style='text-align:center;padding:50px;'>Nenhuma ID encontrada</p>";
-        return;
-    }
-
     itens.forEach(d => {
         const id = d.nome.replace(/\W/g, "_");
         const img = d.midia || "imagens/sem-foto.jpg";
@@ -624,15 +573,12 @@ function render() {
         el.innerHTML += `
         <div class="card">
 
-            <!-- IMAGEM -->
             <div class="img-container">
                 <img src="${img}" class="img">
 
                 <label class="edit-badge">
-                    <input type="file" class="file-input" accept="image/*" onchange="alert('Upload ainda não configurado')">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="18">
-                        <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
-                    </svg>
+                    <input type="file" class="file-input" accept="image/*" onchange="uploadFoto('${d.nome}', this)">
+                    ✎
                 </label>
             </div>
 
@@ -641,26 +587,20 @@ function render() {
             <label>Quantidade</label>
             <input id="qtd_${id}" type="number" value="${d.qtd}" oninput="mostrarBotaoSalvar('${id}')">
 
-            <div class="row">
-                <div>
-                    <label>Camadas</label>
-                    ${criarSelect(`cam_${id}`, d.camadas, getOpcoesUnicas('camadas'))}
-                </div>
+            <label>Camadas</label>
+            ${criarSelect(`cam_${id}`, d.camadas, getOpcoesUnicas('camadas'))}
 
-                <div>
-                    <label>Cores</label>
-                    ${criarSelect(`cor_${id}`, d.cores, getOpcoesUnicas('cores'))}
-                </div>
-            </div>
+            <label>Cores</label>
+            ${criarSelect(`cor_${id}`, d.cores, getOpcoesUnicas('cores'))}
 
             <label>Padrão</label>
             ${criarSelect(`pad_${id}`, d.padrao, getOpcoesUnicas('padrao'))}
 
             <label>Especiais</label>
-            <div class="especiais-wrap" id="esp_${id}_container">
+            <div id="esp_${id}_container">
                 ${todasEspeciais.map(tag => `
                     <label>
-                        <input type="checkbox" ${d.especiais?.includes(tag) ? 'checked' : ''} onchange="atualizarEspeciais('${id}')">
+                        <input type="checkbox" value="${tag}" ${d.especiais?.includes(tag) ? 'checked' : ''} onchange="atualizarEspeciais('${id}')">
                         ${tag}
                     </label>
                 `).join('')}
@@ -680,74 +620,41 @@ function render() {
 
 // ================= CRUD =================
 async function carregar() {
-    try {
-        const res = await fetch(URL + "?action=get");
-        const json = await res.json();
+    const res = await fetch(URL + "?action=get");
+    const json = await res.json();
 
-        dados = Object.keys(json).map(nome => ({
-            nome,
-            ...json[nome]
-        }));
+    dados = Object.keys(json).map(nome => ({
+        nome,
+        ...json[nome]
+    }));
 
-        render();
-        temAlteracoesNaoSalvas = false;
-
-    } catch {
-        toast("Erro ao carregar dados");
-    }
+    render();
 }
 
 async function salvar(nome) {
     const id = nome.replace(/\W/g, "_");
 
-    try {
-        await fetch(URL, {
-            method: "POST",
-            body: new URLSearchParams({
-                action: "update",
-                nome,
-                qtd: document.getElementById("qtd_" + id).value,
-                camadas: document.getElementById("cam_" + id).value,
-                cores: document.getElementById("cor_" + id).value,
-                padrao: document.getElementById("pad_" + id).value,
-                especiais: document.getElementById("esp_" + id).value
-            })
-        });
-
-        toast("Salvo!");
-        carregar();
-
-    } catch {
-        toast("Erro ao salvar");
-    }
-}
-
-function excluir(nome) {
-    idParaExcluir = nome;
-    document.getElementById("textoExcluir").innerHTML = `Excluir <b>${nome}</b>?`;
-    document.getElementById("modalExcluir").style.display = "flex";
-}
-
-async function confirmarExclusao() {
-    if (!idParaExcluir) return;
-
     await fetch(URL, {
         method: "POST",
-        body: new URLSearchParams({ action: "delete", nome: idParaExcluir })
+        body: new URLSearchParams({
+            action: "update",
+            nome,
+            qtd: document.getElementById("qtd_" + id).value,
+            camadas: document.getElementById("cam_" + id).value,
+            cores: document.getElementById("cor_" + id).value,
+            padrao: document.getElementById("pad_" + id).value,
+            especiais: document.getElementById("esp_" + id).value
+        })
     });
 
-    toast("Excluído");
-    fecharModalExcluir();
+    toast("Salvo!");
     carregar();
 }
 
 async function criar() {
     const nome = document.getElementById("n_nome").value.trim();
 
-    if (!nome) {
-        toast("Digite o nome");
-        return;
-    }
+    if (!nome) return toast("Digite o nome");
 
     await fetch(URL, {
         method: "POST",
@@ -762,7 +669,13 @@ async function criar() {
         })
     });
 
-    async function uploadFoto(nome, input) {
+    toast("Criado!");
+    fecharModal();
+    carregar();
+}
+
+// ================= UPLOAD =================
+async function uploadFoto(nome, input) {
     const file = input.files[0];
     if (!file) return;
 
@@ -783,17 +696,13 @@ async function criar() {
             toast("Imagem atualizada!");
             carregar();
         } else {
-            toast("Erro ao enviar imagem");
             console.error(txt);
+            toast("Erro ao enviar imagem");
         }
     } catch (e) {
         console.error(e);
         toast("Erro de conexão");
     }
-}
-    toast("Criado!");
-    fecharModal();
-    carregar();
 }
 
 // ================= INIT =================
