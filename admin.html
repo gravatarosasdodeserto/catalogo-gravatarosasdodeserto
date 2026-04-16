@@ -277,7 +277,7 @@
                         <div><label>Cores</label><select id="cor_${safeId}" onchange="markChange('${safeId}')">${getOptions('cores', d.cores)}</select></div>
                         <div><label>Padrão</label><select id="pad_${safeId}" onchange="markChange('${safeId}')">${getOptions('padrao', d.padrao)}</select></div>
                     </div>
-                    <label>Especiais</label>
+                    <label>Características Especiais:</label>
                     <div class="especiais-container">
                         ${TAGS_ESPECIAIS.map(tag => `
                             <label class="tag-check ${espArray.includes(tag) ? 'active' : ''}">
