@@ -191,6 +191,31 @@ body {
     position: absolute;
     top: 0;
     left: 0;
+    z-index: 2;
+}
+
+/* placeholder imagem */
+.img-placeholder {
+    position: absolute;
+    inset: 0;
+    border: 2px dashed rgba(160,140,107,0.4);
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--accent);
+    font-size: 12px;
+    gap: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: rgba(255,255,255,0.5);
+    z-index: 1;
+}
+
+.img-placeholder:hover {
+    background: rgba(160,140,107,0.08);
+    border-color: var(--accent);
 }
 
 /* botão editar premium */
@@ -236,29 +261,6 @@ body {
 }
 
 .file-input { display:none; }
-
-/* placeholder imagem */
-.img-placeholder {
-    position: absolute;
-    inset: 0;
-    border: 2px dashed rgba(160,140,107,0.4);
-    border-radius: 16px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    color: var(--accent);
-    font-size: 12px;
-    gap: 8px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    background: rgba(255,255,255,0.5);
-}
-
-.img-placeholder:hover {
-    background: rgba(160,140,107,0.08);
-    border-color: var(--accent);
-}
 
 /* ===== INPUTS ===== */
 label {
@@ -466,8 +468,8 @@ button:active {
 
 /* ===== RESPONSIVO ===== */
 @media (min-width:768px){
-   .topbar { min-height: 230px; }
-   .logo img { width: 260px; }
+  .topbar { min-height: 230px; }
+  .logo img { width: 260px; }
     #lista { grid-template-columns: repeat(auto-fill,minmax(260px,1fr)); }
 }
 </style>
@@ -503,7 +505,6 @@ button:active {
      <h4 id="tituloModal">Nova Rosa do Deserto</h4>
 
       <div class="img-container">
-        <img class="img" id="img_nova" style="display:none;">
         <div class="img-placeholder" id="placeholder_nova" onclick="document.getElementById('file_nova').click()">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="36" height="36">
             <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
@@ -511,13 +512,14 @@ button:active {
             <polyline points="21 15 16 10 5 21"></polyline>
           </svg>
           <span style="font-weight:600;">Adicionar foto</span>
-          <span style="font-size:10px;opacity:0.7;">Opcional - clique ou arraste</span>
+          <span style="font-size:10px;opacity:0.7;">Opcional - clique aqui</span>
         </div>
+        <img class="img" id="img_nova" style="display:none;">
         <div class="upload-overlay" id="overlay_nova">Enviando...</div>
         <label class="edit-badge" for="file_nova">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M12 20h9"></path>
-            <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+            <path d="M16.5 3.5a2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
           </svg>
         </label>
         <input type="file" id="file_nova" class="file-input" accept="image/*" onchange="uploadFotoNova(this)">
@@ -709,13 +711,13 @@ function render() {
     el.innerHTML = "";
 
     const itens = dados
-       .filter(d => d.nome.toLowerCase().includes(filtro))
-       .sort((a, b) => a.nome.localeCompare(b.nome));
+      .filter(d => d.nome.toLowerCase().includes(filtro))
+      .sort((a, b) => a.nome.localeCompare(b.nome));
 
     itens.forEach(d => {
         const id = d.nome.replace(/\W/g, "_");
         const img = d.midia && d.midia!== "Não inf."
-           ? `https://drive.google.com/thumbnail?sz=w600&id=${d.midia}`
+          ? `https://drive.google.com/thumbnail?sz=w600&id=${d.midia}`
             : "imagens/sem-foto.jpg";
 
         el.innerHTML += `
@@ -728,7 +730,7 @@ function render() {
                     <input type="file" class="file-input" accept="image/*" onchange="uploadFoto('${d.nome}', this)">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M12 20h9"></path>
-                        <path d="M16.5 3.5a2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+                        <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
                     </svg>
                 </label>
             </div>
@@ -776,7 +778,7 @@ async function carregar() {
 
     dados = Object.keys(json).map(nome => ({
         nome,
-       ...json[nome]
+      ...json[nome]
     }));
 
     render();
