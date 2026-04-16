@@ -3,353 +3,277 @@
 <head>
     <link rel="icon" type="image/png" href="favicon.png">
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Management | Gravatá RD</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel Admin | Gravatá RD</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg: #fcfbf7;
             --surface: #ffffff;
-            --text-primary: #1c1c1c;
-            --text-secondary: #707070;
-            --accent: #968369; /* Tom bronze/areia sofisticado */
-            --accent-light: #f0ede6;
+            --text-primary: #2e2a15;
+            --text-secondary: #7d6e53;
+            --accent: #a08c6b;
             --border: #eceae4;
-            --radius-lg: 20px;
-            --radius-sm: 8px;
-            --shadow: 0 10px 30px rgba(0,0,0,0.02);
+            --radius: 12px;
+            --premium-grad: linear-gradient(135deg, #a08c6b 0%, #7d6e53 100%);
         }
 
-        * { transition: all 0.3s ease; box-sizing: border-box; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background: var(--bg); color: var(--text-primary); }
 
-        body { 
-            font-family: 'Inter', sans-serif; 
-            background: var(--bg); 
-            color: var(--text-primary); 
-            margin: 0; 
-            padding-bottom: 100px;
+        /* --- HEADER (IGUAL AO INDEX) --- */
+        header { 
+            height: 150px; 
+            background: url('imagens/gravata-cabecalho.jpg') center/cover no-repeat;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .header-stripe {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.4); 
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            padding: 20px 0;
+            display: flex; justify-content: center; align-items: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .logo { width: 110px; display: block; }
+
+        @media (min-width: 1024px) {
+            header { height: 350px; }
+            .header-stripe { padding: 40px 0; }
+            .logo { width: 180px; }
         }
 
-        /* Topbar Minimalista */
-        .topbar { 
-            height: 100px; 
-            background: var(--surface);
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            border-bottom: 1px solid var(--border);
-        }
-        .logo { width: 130px; opacity: 0.8; }
-
-        .nav-bar { 
-            position: sticky; top: 0; z-index: 100; 
-            background: rgba(255, 255, 255, 0.85); 
-            backdrop-filter: blur(15px); 
-            padding: 15px 5%;
+        /* --- BARRA DE GESTÃO --- */
+        .top-action-bar {
+            background: #2e2a15;
+            padding: 12px 20px;
             display: flex; justify-content: space-between; align-items: center;
-            border-bottom: 1px solid var(--border);
+            position: sticky; top: 0; z-index: 1000;
+        }
+        .bar-title { color: white; font-size: 14px; font-weight: 500; letter-spacing: 1px; }
+        .btn-logout {
+            background: none; border: none; color: white; font-size: 12px; 
+            font-weight: 500; cursor: pointer; text-decoration: none;
         }
 
-        .container { max-width: 1200px; margin: auto; padding: 50px 25px; }
-
-        /* Estilo Premium para Botões e Inputs */
-        .btn-new { 
-            background: var(--text-primary); color: white; border: none;
-            padding: 14px 30px; border-radius: 50px; 
-            font-weight: 500; cursor: pointer; font-size: 13px; letter-spacing: 0.5px;
-        }
-        .btn-new:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
-
-        .search-box { 
-            width: 100%; padding: 22px 30px; 
-            border-radius: 50px; border: 1px solid var(--border); 
-            outline: none; font-size: 16px; background: var(--surface);
-            box-shadow: var(--shadow); margin-bottom: 60px;
+        /* --- ÁREA DE BUSCA --- */
+        .controls-area { padding: 25px 15px; background: var(--bg); text-align: center; }
+        .search-box {
+            width: 100%; max-width: 500px; padding: 12px 25px; 
+            border-radius: 50px; border: 1px solid var(--border);
+            outline: none; font-size: 14px; box-shadow: 0 4px 15px rgba(0,0,0,0.03);
         }
 
-        /* Grid e Cards */
-        #lista { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 40px; }
+        /* --- CARD DE EDIÇÃO --- */
+        .container { max-width: 600px; margin: auto; padding: 0 20px 100px; }
+        .admin-card {
+            background: var(--surface); border-radius: var(--radius);
+            border: 1px solid var(--border); overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+        .img-preview { width: 100%; aspect-ratio: 1/1; background: #eee; position: relative; }
+        .img-preview img { width: 100%; height: 100%; object-fit: cover; }
         
-        .card { 
-            background: var(--surface); border-radius: var(--radius-lg); 
-            padding: 30px; border: 1px solid var(--border);
-            box-shadow: var(--shadow); position: relative;
-        }
-        .card:hover { border-color: var(--accent); transform: translateY(-5px); }
-        .nao-salvo { border: 1px solid var(--accent); background: #fdfcf9; }
-
-        .card h4 { font-family: 'Playfair Display', serif; font-size: 22px; margin: 0 0 20px 0; }
-
-        label { font-size: 10px; font-weight: 700; color: var(--accent); text-transform: uppercase; margin-bottom: 8px; letter-spacing: 1px; }
-        input, select { 
-            width: 100%; padding: 12px; border-radius: var(--radius-sm); 
-            border: 1px solid var(--border); background: #fafafa;
-            margin-bottom: 18px; font-size: 14px; color: var(--text-primary);
-        }
-
-        .img-box { 
-            width: 100%; aspect-ratio: 1/1; border-radius: 12px; 
-            background: #f7f6f2; overflow: hidden; position: relative; margin-bottom: 25px;
-        }
-        .img-box img { width: 100%; height: 100%; object-fit: cover; }
+        .edit-content { padding: 25px; }
+        .id-label { font-size: 18px; font-weight: 600; margin-bottom: 20px; display: block; color: var(--accent); }
         
-        .edit-icon-btn { 
-            position: absolute; top: 12px; right: 12px; 
-            background: white; width: 36px; height: 36px; 
-            border-radius: 50%; display: flex; align-items: center; justify-content: center; 
-            cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        /* Estilização dos Filtros no Card */
+        .filter-group { margin-bottom: 20px; border-bottom: 1px solid #f0f0f0; padding-bottom: 15px; }
+        .filter-group-title { font-size: 11px; font-weight: 700; color: var(--accent); text-transform: uppercase; margin-bottom: 10px; display: block; }
+        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .option-item { display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer; }
+
+        /* Campos de input */
+        .input-field {
+            width: 100%; padding: 10px; border: 1px solid var(--border);
+            border-radius: 8px; margin-top: 5px; outline: none; font-size: 14px;
         }
 
-        .especiais-container { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 5px; }
-        .tag-check { font-size: 11px; padding: 8px 16px; border-radius: 50px; border: 1px solid var(--border); cursor: pointer; color: var(--text-secondary); background: white; }
-        .tag-check.active { background: var(--text-primary); color: white; border-color: var(--text-primary); }
-        .tag-check input { display: none; }
+        .btn-save {
+            width: 100%; padding: 15px; background: var(--premium-grad);
+            color: white; border: none; border-radius: 8px; font-weight: 600;
+            cursor: pointer; margin-top: 20px; transition: 0.3s;
+        }
+        .btn-save:hover { opacity: 0.9; transform: translateY(-2px); }
 
-        .btn-save { width: 100%; background: var(--accent); color: white; border: none; padding: 14px; border-radius: 50px; font-weight: 600; margin-top: 20px; cursor: pointer; display: none; }
-        .btn-del { width: 100%; background: transparent; color: #a33; border: none; font-size: 11px; margin-top: 15px; cursor: pointer; opacity: 0.6; }
-
-        /* Modal e Toast */
-        .modal { position: fixed; inset: 0; background: rgba(28, 28, 28, 0.3); backdrop-filter: blur(10px); display: none; align-items: center; justify-content: center; z-index: 2000; }
-        .modal-content { background: white; width: 90%; max-width: 450px; border-radius: var(--radius-lg); padding: 45px; max-height: 90vh; overflow-y: auto; box-shadow: 0 30px 60px rgba(0,0,0,0.1); }
-        .toast { position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%); background: #1c1c1c; color: white; padding: 16px 35px; border-radius: 50px; display: none; z-index: 3000; font-size: 14px; box-shadow: 0 15px 30px rgba(0,0,0,0.2); }
+        #msg { text-align: center; margin-top: 15px; font-size: 13px; font-weight: 500; }
     </style>
 </head>
 <body>
 
-<div class="topbar"><img src="logo.png" class="logo"></div>
-<nav class="nav-bar">
-    <div style="font-size: 11px; font-weight: 700; color: var(--accent); letter-spacing: 2px;">COLLECTION MANAGEMENT</div>
-    <button onclick="confirmExit()" style="background:none; border:none; color:var(--text-secondary); cursor:pointer; font-size:12px">SAIR</button>
-</nav>
-
-<main class="container">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 50px;">
-        <h2 style="font-family: 'Playfair Display'; font-size: 38px; margin: 0; font-weight: 700;">Inventário</h2>
-        <button class="btn-new" onclick="openModal()">+ Adicionar Nova ID</button>
+<header>
+    <div class="header-stripe">
+        <img src="logo.png" class="logo">
     </div>
-    
-    <input type="text" class="search-box" placeholder="Pesquisar rosa, cor ou característica..." oninput="filtrar(this.value)">
-    
-    <div id="lista"></div>
-</main>
+</header>
 
-<div id="modal" class="modal">
-    <div class="modal-content">
-        <h3 style="font-family: 'Playfair Display'; font-size: 26px; margin-top: 0;">Novo Registro</h3>
-        <div class="img-box">
-            <input type="file" id="file_new" hidden accept="image/*" onchange="handleUpload(this, 'new')">
-            <div class="edit-icon-btn" onclick="document.getElementById('file_new').click()" id="trigger_new" style="inset: 0; margin: auto; width: 150px; border-radius: 50px; height: 40px;">
-                <span style="font-size: 12px; font-weight: 600;">CARREGAR FOTO</span>
-            </div>
-            <img id="preview_new" style="display:none; width:100%; height:100%; object-fit:cover;">
-        </div>
-        <input type="hidden" id="n_midia">
-        <label>Nome da Rosa</label><input id="n_nome" placeholder="Ex: TS-152">
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px">
-            <div><label>Quantidade</label><input type="number" id="n_qtd" value="0"></div>
-            <div><label>Camadas</label><select id="n_camadas"></select></div>
-        </div>
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px">
-            <div><label>Cores</label><select id="n_cores"></select></div>
-            <div><label>Padrão</label><select id="n_padrao"></select></div>
-        </div>
-        <label>Atributos Especiais</label>
-        <div class="especiais-container" id="n_especiais"></div>
-        
-        <button class="btn-new" style="width: 100%; margin-top: 30px; height: 55px;" onclick="criarID()">SALVAR NA PLANILHA</button>
-        <button onclick="closeModal()" style="width:100%; background:none; border:none; color:#bbb; cursor:pointer; margin-top:15px; font-size:11px; font-weight: 600;">CANCELAR</button>
-    </div>
+<div class="top-action-bar">
+    <span class="bar-title">GESTÃO DAS ID'S</span>
+    <a href="index.html" class="btn-logout">SAIR</a>
 </div>
 
-<div class="toast" id="toast"></div>
+<div class="controls-area">
+    <input type="text" id="search-id" class="search-box" placeholder="Digite a ID exata para editar..." onchange="buscarItem()">
+</div>
+
+<main class="container">
+    <div id="editor" style="display: none;">
+        <div class="admin-card">
+            <div class="img-preview">
+                <img id="preview-img" src="" alt="Preview">
+            </div>
+            
+            <div class="edit-content">
+                <span class="id-label" id="display-id">ID: ---</span>
+                
+                <div class="filter-group">
+                    <span class="filter-group-title">Estoque Disponível</span>
+                    <input type="number" id="input-qtd" class="input-field" placeholder="Ex: 5">
+                </div>
+
+                <div class="filter-group">
+                    <span class="filter-group-title">ID da Imagem (Google Drive)</span>
+                    <input type="text" id="input-midia" class="input-field" oninput="atualizarPreview()">
+                </div>
+
+                <div class="filter-group">
+                    <span class="filter-group-title">Camadas (Seleção Única)</span>
+                    <div class="options-grid" id="edit-camadas">
+                        </div>
+                </div>
+
+                <div class="filter-group">
+                    <span class="filter-group-title">Padrão de Pétala (Seleção Única)</span>
+                    <div class="options-grid" id="edit-padrao">
+                        </div>
+                </div>
+
+                <div class="filter-group">
+                    <span class="filter-group-title">Cores (Múltiplas)</span>
+                    <div class="options-grid" id="edit-cores">
+                        </div>
+                </div>
+
+                <div class="filter-group">
+                    <span class="filter-group-title">Padrões Especiais (Múltiplas)</span>
+                    <div class="options-grid" id="edit-especiais">
+                        </div>
+                </div>
+
+                <button class="btn-save" onclick="salvar()">SALVAR ALTERAÇÕES</button>
+                <div id="msg"></div>
+            </div>
+        </div>
+    </div>
+</main>
 
 <script>
     const API = "https://script.google.com/macros/s/AKfycbzgV_H5QLTNwJ12B-78q57qNnlaVi0vbxW3jIqdnp7YH1IKCdBdFthIHymlMM9Jusqktg/exec";
-    const TAGS_ESPECIAIS = ['Cristatas', 'Floração em buquê', 'Mutantes', 'Perfumadas', 'Variegatas'];
-    let DADOS_LOCAIS = [];
+    
+    // Definição das opções (deve ser igual ao que você usa no Index)
+    const OPCOES = {
+        camadas: ["Simples", "Dobrada", "Tripla", "Multi-pétalas"],
+        padrao: ["Lisa", "Borda Colorida", "Riscada", "Matizada"],
+        cores: ["Amarela", "Branca", "Negra", "Rosa", "Roxa", "Vermelha", "Vinho"],
+        especiais: ["Fragrância", "Negra Retinta", "Pétala Rasgada"]
+    };
 
-    async function carregar() {
-        showToast("Sincronizando base de dados...");
-        try {
-            const r = await fetch(API + "?action=get&t=" + Date.now());
-            const json = await r.json();
-            
-            // CORREÇÃO: Alinhando com a ordem da sua planilha
-            DADOS_LOCAIS = Object.keys(json).map(k => ({
-                nome: k,
-                camadas: json[k].camadas,
-                cores: json[k].cores,
-                padrao: json[k].padrao,
-                especiais: json[k].especiais,
-                qtd: json[k].qtd,
-                midia: json[k].midia
-            }));
+    let itemAtual = null;
 
-            render();
-            popularSelectsModal();
-        } catch (e) {
-            showToast("Erro ao conectar com a planilha.");
-        }
-    }
-
-    function render(filtro = "") {
-        const container = document.getElementById("lista");
-        container.innerHTML = "";
-        const filtrados = DADOS_LOCAIS.filter(d => d.nome.toLowerCase().includes(filtro.toLowerCase()));
-        
-        filtrados.forEach(d => {
-            const safeId = d.nome.replace(/\W/g, '_');
-            const thumb = d.midia ? `https://drive.google.com/thumbnail?sz=w600&id=${d.midia}` : 'imagens/sem-foto.jpg';
-            const espArray = (String(d.especiais || "")).split(',').filter(t => t.trim() !== "").map(t => t.trim());
-            
-            const card = document.createElement("div");
-            card.className = "card";
-            card.id = `card_${safeId}`;
-            card.innerHTML = `
-                <div class="img-box">
-                    <input type="file" id="file_${safeId}" hidden onchange="handleUpload(this, '${d.nome}')">
-                    <img src="${thumb}" id="img_${safeId}" onerror="this.src='imagens/sem-foto.jpg'">
-                    <div class="edit-icon-btn" onclick="document.getElementById('file_${safeId}').click()">✎</div>
-                </div>
-                <h4>${d.nome}</h4>
-                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px">
-                    <div><label>Estoque</label><input type="number" value="${d.qtd}" id="qtd_${safeId}" oninput="markChange('${safeId}')"></div>
-                    <div><label>Camadas</label><select id="cam_${safeId}" onchange="markChange('${safeId}')">${getOptions('camadas', d.camadas)}</select></div>
-                </div>
-                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px">
-                    <div><label>Cores</label><select id="cor_${safeId}" onchange="markChange('${safeId}')">${getOptions('cores', d.cores)}</select></div>
-                    <div><label>Padrão</label><select id="pad_${safeId}" onchange="markChange('${safeId}')">${getOptions('padrao', d.padrao)}</select></div>
-                </div>
-                <label>Especiais</label>
-                <div class="especiais-container">
-                    ${TAGS_ESPECIAIS.map(tag => `
-                        <label class="tag-check ${espArray.includes(tag) ? 'active' : ''}">
-                            <input type="checkbox" value="${tag}" ${espArray.includes(tag) ? 'checked' : ''} onchange="markChange('${safeId}'); this.parentElement.classList.toggle('active')"> ${tag}
-                        </label>
-                    `).join('')}
-                </div>
-                <button class="btn-save" id="save_${safeId}" onclick="salvarAlteracao('${d.nome}')">CONFIRMAR ALTERAÇÕES</button>
-                <button class="btn-del" onclick="excluirID('${d.nome}')">Remover ID</button>
-            `;
-            container.appendChild(card);
-        });
-    }
-
-    // A lógica de Upload, MarkChange, Salvar e Excluir permanece funcional e integrada
-    async function handleUpload(input, nomeRosa) {
-        const file = input.files[0];
-        if (!file) return;
-        showToast("Processando imagem...");
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = async () => {
-            const base64 = reader.result.split(',')[1];
-            let oldId = (nomeRosa !== 'new') ? DADOS_LOCAIS.find(d => d.nome === nomeRosa)?.midia : "";
-            try {
-                const res = await fetch(API, { 
-                    method: "POST", 
-                    body: new URLSearchParams({ action: "upload", nome: nomeRosa, data: base64, mimeType: file.type, oldFileId: oldId }) 
-                });
-                const result = await res.json();
-                if(result.success) {
-                    if(nomeRosa === 'new') {
-                        document.getElementById("n_midia").value = result.id;
-                        const pr = document.getElementById("preview_new");
-                        pr.src = `https://drive.google.com/thumbnail?sz=w600&id=${result.id}`;
-                        pr.style.display = "block";
-                        document.getElementById("trigger_new").style.display = "none";
-                    } else {
-                        const idx = DADOS_LOCAIS.findIndex(d => d.nome === nomeRosa);
-                        if(idx !== -1) DADOS_LOCAIS[idx].midia = result.id;
-                        markChange(nomeRosa.replace(/\W/g, '_'));
-                        document.getElementById(`img_${nomeRosa.replace(/\W/g, '_')}`).src = `https://drive.google.com/thumbnail?sz=w600&id=${result.id}&t=${Date.now()}`;
-                    }
-                    showToast("Foto atualizada com sucesso.");
-                }
-            } catch (e) { showToast("Erro no servidor de imagens."); }
+    function renderOpcoes() {
+        const montar = (containerId, lista, chave, isRadio) => {
+            const container = document.getElementById(containerId);
+            container.innerHTML = lista.map(opt => `
+                <label class="option-item">
+                    <input type="${isRadio ? 'radio' : 'checkbox'}" 
+                           name="${chave}" 
+                           class="input-opt" 
+                           data-type="${chave}" 
+                           value="${opt}"> ${opt}
+                </label>
+            `).join('');
         };
+
+        montar('edit-camadas', OPCOES.camadas, 'camadas', true);
+        montar('edit-padrao', OPCOES.padrao, 'padrao', true);
+        montar('edit-cores', OPCOES.cores, 'cores', false);
+        montar('edit-especiais', OPCOES.especiais, 'especiais', false);
     }
 
-    function markChange(id) {
-        const btn = document.getElementById(`save_${id}`);
-        if(btn) btn.style.display = "block";
-        const card = document.getElementById(`card_${id}`);
-        if(card) card.classList.add('nao-salvo');
+    async function buscarItem() {
+        const id = document.getElementById('search-id').value.trim().toUpperCase();
+        if(!id) return;
+
+        document.getElementById('msg').innerText = "Buscando...";
+        try {
+            const r = await fetch(`${API}?action=get&t=${Date.now()}`);
+            const dados = await r.json();
+            
+            if(dados[id]) {
+                itemAtual = { id, ...dados[id] };
+                abrirEditor();
+            } else {
+                alert("ID não encontrada.");
+                document.getElementById('editor').style.display = 'none';
+            }
+        } catch(e) { console.error(e); }
+        document.getElementById('msg').innerText = "";
     }
 
-    async function salvarAlteracao(nome) {
-        const safeId = nome.replace(/\W/g, '_');
-        const item = DADOS_LOCAIS.find(d => d.nome === nome);
-        
-        // ORDEM DE ENVIO: Deve bater com o que o script .gs espera
-        const params = new URLSearchParams({
-            action: "update", nome: nome,
-            camadas: document.getElementById(`cam_${safeId}`).value,
-            cores: document.getElementById(`cor_${safeId}`).value,
-            padrao: document.getElementById(`pad_${safeId}`).value,
-            especiais: [...document.querySelectorAll(`#card_${safeId} input:checked`)].map(i => i.value).join(', '),
-            qtd: document.getElementById(`qtd_${safeId}`).value,
-            midia: item.midia 
+    function abrirEditor() {
+        document.getElementById('editor').style.display = 'block';
+        document.getElementById('display-id').innerText = `ID: ${itemAtual.id}`;
+        document.getElementById('input-qtd').value = itemAtual.qtd || 0;
+        document.getElementById('input-midia').value = itemAtual.midia || "";
+        atualizarPreview();
+
+        // Marcar inputs baseado nos dados atuais
+        document.querySelectorAll('.input-opt').forEach(input => {
+            const valorItem = itemAtual[input.dataset.type] || "";
+            input.checked = valorItem.split(',').map(s => s.trim()).includes(input.value);
+        });
+    }
+
+    function atualizarPreview() {
+        const midiaId = document.getElementById('input-midia').value;
+        const img = document.getElementById('preview-img');
+        img.src = midiaId ? `https://drive.google.com/thumbnail?sz=w600&id=${midiaId}` : 'imagens/sem-foto.jpg';
+    }
+
+    async function salvar() {
+        const msgEl = document.getElementById('msg');
+        msgEl.innerText = "Salvando...";
+        msgEl.style.color = "var(--text-secondary)";
+
+        const payload = {
+            action: "upsert",
+            id: itemAtual.id,
+            qtd: document.getElementById('input-qtd').value,
+            midia: document.getElementById('input-midia').value
+        };
+
+        // Coletar valores dos filtros
+        const inputs = [...document.querySelectorAll('.input-opt:checked')];
+        ['camadas', 'padrao', 'cores', 'especiais'].forEach(chave => {
+            payload[chave] = inputs.filter(i => i.dataset.type === chave).map(i => i.value).join(', ');
         });
 
-        showToast("Salvando alterações...");
-        const res = await fetch(API, { method: "POST", body: params });
-        const result = await res.json();
-        if(result.success) {
-            showToast("Planilha atualizada!");
-            carregar();
+        try {
+            await fetch(API, {
+                method: "POST",
+                body: JSON.stringify(payload)
+            });
+            msgEl.innerText = "SUCESSO: Alterações salvas!";
+            msgEl.style.color = "green";
+        } catch(e) {
+            msgEl.innerText = "ERRO ao salvar.";
+            msgEl.style.color = "red";
         }
     }
 
-    async function criarID() {
-        const nome = document.getElementById("n_nome").value;
-        if(!nome) return alert("Por favor, insira o nome da ID.");
-        const params = new URLSearchParams({
-            action: "create", nome: nome,
-            camadas: document.getElementById("n_camadas").value,
-            cores: document.getElementById("n_cores").value,
-            padrao: document.getElementById("n_padrao").value,
-            especiais: [...document.querySelectorAll(`#n_especiais input:checked`)].map(i => i.value).join(', '),
-            qtd: document.getElementById("n_qtd").value,
-            midia: document.getElementById("n_midia").value
-        });
-        showToast("Criando novo registro...");
-        await fetch(API, { method: "POST", body: params });
-        closeModal();
-        carregar();
-    }
-
-    async function excluirID(nome) {
-        if(confirm(`Deseja realmente excluir a ID ${nome}?`)) {
-            showToast("Removendo...");
-            await fetch(API, { method: "POST", body: new URLSearchParams({ action: "delete", nome }) });
-            carregar();
-        }
-    }
-
-    function getOptions(campo, sel) {
-        const unique = [...new Set(DADOS_LOCAIS.map(d => d[campo]))].filter(v => v && v !== "" && v !== "undefined");
-        if (sel && !unique.includes(sel)) unique.push(sel);
-        return `<option value="">-</option>` + unique.map(v => `<option value="${v}" ${v==sel?'selected':''}>${v}</option>`).join('');
-    }
-
-    function popularSelectsModal() {
-        ['camadas', 'cores', 'padrao'].forEach(c => {
-            const unique = [...new Set(DADOS_LOCAIS.map(d => d[c]))].filter(v => v && v !== "" && v !== "undefined");
-            const el = document.getElementById('n_'+c);
-            if(el) el.innerHTML = '<option value="">-</option>' + unique.map(v => `<option value="${v}">${v}</option>`).join('');
-        });
-        const esp = document.getElementById("n_especiais");
-        if(esp) esp.innerHTML = TAGS_ESPECIAIS.map(t => `<label class="tag-check"><input type="checkbox" value="${t}" onchange="this.parentElement.classList.toggle('active')"> ${t}</label>`).join('');
-    }
-
-    function showToast(m) { const t = document.getElementById("toast"); if(t){t.innerText = m; t.style.display = "block"; setTimeout(() => t.style.display = "none", 4000);} }
-    function openModal() { document.getElementById("modal").style.display = "flex"; }
-    function closeModal() { document.getElementById("modal").style.display = "none"; }
-    function filtrar(v) { render(v); }
-    function confirmExit() { if(confirm("Deseja voltar ao catálogo?")) location.href = "index.html"; }
-
-    window.onload = carregar;
+    window.onload = renderOpcoes;
 </script>
 </body>
 </html>
