@@ -37,7 +37,7 @@
             border-top: 1px solid rgba(255, 255, 255, 0.2);
             border-bottom: 1px solid rgba(255, 255, 255, 0.2);
         }
-        .logo { width: 110px; display: block; }
+        .logo { width: 110px; }
 
         @media (min-width: 1024px) {
             header { height: 350px; }
@@ -52,13 +52,10 @@
             display: flex; justify-content: space-between; align-items: center;
             position: sticky; top: 0; z-index: 1000;
         }
-        .bar-title { color: white; font-size: 14px; font-weight: 500; letter-spacing: 1px; }
-        .btn-logout {
-            background: none; border: none; color: white; font-size: 12px; 
-            font-weight: 500; cursor: pointer; text-decoration: none;
-        }
+        .bar-title { color: white; font-size: 14px; font-weight: 500; }
+        .btn-logout { background: none; border: none; color: white; font-size: 12px; text-decoration: none; font-weight: 500; }
 
-        /* --- ÁREA DE BUSCA --- */
+        /* --- ÁREA DE BUSCA (IGUAL INDEX) --- */
         .controls-area { padding: 25px 15px; background: var(--bg); text-align: center; }
         .search-box {
             width: 100%; max-width: 500px; padding: 12px 25px; 
@@ -94,35 +91,31 @@
             color: white; border: none; border-radius: 8px; font-weight: 600;
             cursor: pointer; margin-top: 20px; transition: 0.3s;
         }
-        .btn-save:hover { opacity: 0.9; transform: translateY(-2px); }
+        .btn-save:hover { opacity: 0.9; }
 
-        #msg { text-align: center; margin-top: 15px; font-size: 13px; font-weight: 500; }
+        #msg { text-align: center; margin-top: 15px; font-size: 13px; font-weight: 500; min-height: 20px; }
     </style>
 </head>
 <body>
 
 <header>
-    <div class="header-stripe">
-        <img src="logo.png" class="logo">
-    </div>
+    <div class="header-stripe"><img src="logo.png" class="logo"></div>
 </header>
 
 <div class="top-action-bar">
-    <span class="bar-title">Gestão das ID'S</span>
+    <span class="bar-title">Gestão das ID's</span>
     <a href="index.html" class="btn-logout">SAIR</a>
 </div>
 
 <div class="controls-area">
-    <input type="text" id="search-id" class="search-box" placeholder="Digite a ID exata e aperte Enter..." onchange="buscarItem()">
+    <input type="text" id="search-id" class="search-box" placeholder="Pesquisar ID para editar..." oninput="buscarDinamico()">
+    <div id="msg"></div>
 </div>
 
 <main class="container">
     <div id="editor" style="display: none;">
         <div class="admin-card">
-            <div class="img-preview">
-                <img id="preview-img" src="" alt="Preview">
-            </div>
-            
+            <div class="img-preview"><img id="preview-img" src=""></div>
             <div class="edit-content">
                 <span class="id-label" id="display-id">ID: ---</span>
                 
@@ -136,28 +129,12 @@
                     <input type="text" id="input-midia" class="input-field" oninput="atualizarPreview()">
                 </div>
 
-                <div class="filter-group">
-                    <span class="filter-group-title">Camadas (Única)</span>
-                    <div class="options-grid" id="edit-camadas"></div>
-                </div>
-
-                <div class="filter-group">
-                    <span class="filter-group-title">Padrão de Pétala (Única)</span>
-                    <div class="options-grid" id="edit-padrao"></div>
-                </div>
-
-                <div class="filter-group">
-                    <span class="filter-group-title">Cores (Múltiplas)</span>
-                    <div class="options-grid" id="edit-cores"></div>
-                </div>
-
-                <div class="filter-group">
-                    <span class="filter-group-title">Padrões Especiais (Múltiplas)</span>
-                    <div class="options-grid" id="edit-especiais"></div>
-                </div>
+                <div class="filter-group"><span class="filter-group-title">Camadas (Única)</span><div class="options-grid" id="edit-camadas"></div></div>
+                <div class="filter-group"><span class="filter-group-title">Padrão de Pétala (Única)</span><div class="options-grid" id="edit-padrao"></div></div>
+                <div class="filter-group"><span class="filter-group-title">Cores (Múltiplas)</span><div class="options-grid" id="edit-cores"></div></div>
+                <div class="filter-group"><span class="filter-group-title">Padrões Especiais (Múltiplas)</span><div class="options-grid" id="edit-especiais"></div></div>
 
                 <button class="btn-save" onclick="salvar()">SALVAR ALTERAÇÕES</button>
-                <div id="msg"></div>
             </div>
         </div>
     </div>
@@ -166,7 +143,6 @@
 <script>
     const API = "https://script.google.com/macros/s/AKfycbzgV_H5QLTNwJ12B-78q57qNnlaVi0vbxW3jIqdnp7YH1IKCdBdFthIHymlMM9Jusqktg/exec";
     
-    // Lista de opções baseada no que você usa no catálogo
     const OPCOES = {
         camadas: ["Simples", "Dobrada", "Tripla", "Multi-pétalas"],
         padrao: ["Lisa", "Borda Colorida", "Riscada", "Matizada"],
@@ -174,7 +150,21 @@
         especiais: ["Fragrância", "Negra Retinta", "Pétala Rasgada"]
     };
 
+    let BANCO_DADOS = null;
     let itemAtual = null;
+
+    // 1. Carrega todos os dados uma vez só ao abrir a página (igual o Index faz)
+    async function inicializar() {
+        renderOpcoes();
+        try {
+            const r = await fetch(`${API}?action=get&t=${Date.now()}`);
+            BANCO_DADOS = await r.json();
+            document.getElementById('msg').innerText = "Banco de dados pronto.";
+            setTimeout(() => document.getElementById('msg').innerText = "", 2000);
+        } catch(e) {
+            document.getElementById('msg').innerText = "Erro ao carregar banco de dados.";
+        }
+    }
 
     function renderOpcoes() {
         const montar = (containerId, lista, chave, isRadio) => {
@@ -182,7 +172,7 @@
             container.innerHTML = lista.map(opt => `
                 <label class="option-item">
                     <input type="${isRadio ? 'radio' : 'checkbox'}" 
-                           name="${isRadio ? 'radio-'+chave : ''}" 
+                           name="${isRadio ? 'radio-'+chave : 'check-'+chave}" 
                            class="input-opt" 
                            data-type="${chave}" 
                            value="${opt}"> ${opt}
@@ -195,30 +185,23 @@
         montar('edit-especiais', OPCOES.especiais, 'especiais', false);
     }
 
-    async function buscarItem() {
+    // 2. Busca dinâmica: igual ao index
+    function buscarDinamico() {
         const idBusca = document.getElementById('search-id').value.trim().toUpperCase();
-        if(!idBusca) return;
+        const editor = document.getElementById('editor');
+        const msg = document.getElementById('msg');
 
-        const msgEl = document.getElementById('msg');
-        msgEl.innerText = "Buscando ID...";
-        msgEl.style.color = "var(--text-secondary)";
+        if (!BANCO_DADOS) return; // Espera o banco carregar
 
-        try {
-            const r = await fetch(`${API}?action=get&t=${Date.now()}`);
-            const dados = await r.json();
-            
-            if(dados[idBusca]) {
-                itemAtual = { id: idBusca, ...dados[idBusca] };
-                abrirEditor();
-                msgEl.innerText = "";
-            } else {
-                alert("ID " + idBusca + " não encontrada no banco de dados.");
-                document.getElementById('editor').style.display = 'none';
-                msgEl.innerText = "ID não encontrada.";
-            }
-        } catch(e) { 
-            console.error(e);
-            msgEl.innerText = "Erro na conexão.";
+        if (BANCO_DADOS[idBusca]) {
+            itemAtual = { id: idBusca, ...BANCO_DADOS[idBusca] };
+            abrirEditor();
+            msg.innerText = "✅ Editando ID: " + idBusca;
+            msg.style.color = "green";
+        } else {
+            editor.style.display = 'none';
+            msg.innerText = idBusca === "" ? "" : "ID não encontrada...";
+            msg.style.color = "var(--text-secondary)";
         }
     }
 
@@ -229,61 +212,53 @@
         document.getElementById('input-midia').value = itemAtual.midia || "";
         atualizarPreview();
 
-        // Limpa seleções anteriores
-        document.querySelectorAll('.input-opt').forEach(input => input.checked = false);
+        document.querySelectorAll('.input-opt').forEach(i => i.checked = false);
 
-        // Marca as opções baseadas no item encontrado
-        document.querySelectorAll('.input-opt').forEach(input => {
-            const campo = itemAtual[input.dataset.type] || "";
-            const valores = campo.split(',').map(s => s.trim());
-            if(valores.includes(input.value)) {
-                input.checked = true;
-            }
+        ['camadas', 'padrao', 'cores', 'especiais'].forEach(chave => {
+            const valorSalvo = (itemAtual[chave] || "").toString();
+            const listaValores = valorSalvo.split(',').map(v => v.trim());
+            document.querySelectorAll(`.input-opt[data-type="${chave}"]`).forEach(input => {
+                if(listaValores.includes(input.value)) input.checked = true;
+            });
         });
     }
 
     function atualizarPreview() {
         const midiaId = document.getElementById('input-midia').value;
-        const img = document.getElementById('preview-img');
-        img.src = midiaId ? `https://drive.google.com/thumbnail?sz=w600&id=${midiaId}` : 'imagens/sem-foto.jpg';
+        document.getElementById('preview-img').src = midiaId ? `https://drive.google.com/thumbnail?sz=w600&id=${midiaId}` : 'imagens/sem-foto.jpg';
     }
 
     async function salvar() {
         const msgEl = document.getElementById('msg');
-        msgEl.innerText = "Salvando alterações...";
+        msgEl.innerText = "💾 Salvando...";
         
         const payload = {
             action: "upsert",
             id: itemAtual.id,
             qtd: document.getElementById('input-qtd').value,
-            midia: document.getElementById('input-midia').value,
-            camadas: "", padrao: "", cores: "", especiais: ""
+            midia: document.getElementById('input-midia').value
         };
 
-        const selecionados = [...document.querySelectorAll('.input-opt:checked')];
-        
         ['camadas', 'padrao', 'cores', 'especiais'].forEach(chave => {
-            payload[chave] = selecionados
-                .filter(i => i.dataset.type === chave)
-                .map(i => i.value)
-                .join(', ');
+            const marcados = [...document.querySelectorAll(`.input-opt[data-type="${chave}"]:checked`)];
+            payload[chave] = marcados.map(m => m.value).join(', ');
         });
 
         try {
-            const response = await fetch(API, {
-                method: "POST",
-                body: JSON.stringify(payload)
-            });
-            msgEl.innerText = "Alterações salvas com sucesso!";
+            await fetch(API, { method: "POST", body: JSON.stringify(payload) });
+            // Atualiza o banco local para a próxima busca ser rápida
+            BANCO_DADOS[itemAtual.id] = { ...payload };
+            delete BANCO_DADOS[itemAtual.id].action;
+            
+            msgEl.innerText = "✨ Alterações salvas com sucesso!";
             msgEl.style.color = "green";
-            setTimeout(() => { msgEl.innerText = ""; }, 3000);
         } catch(e) {
-            msgEl.innerText = "Erro ao salvar na planilha.";
+            msgEl.innerText = "❌ Erro ao salvar.";
             msgEl.style.color = "red";
         }
     }
 
-    window.onload = renderOpcoes;
+    window.onload = inicializar;
 </script>
 </body>
 </html>
