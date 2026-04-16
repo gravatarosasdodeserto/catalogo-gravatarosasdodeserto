@@ -13,14 +13,16 @@
             --text-primary: #2e2a15;
             --text-secondary: #7d6e53;
             --accent: #a08c6b;
+            --accent-dark: #7d6e53;
             --border: #eceae4;
             --radius: 12px;
+            --premium-grad: linear-gradient(135deg, #a08c6b 0%, #7d6e53 100%);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
         body { background: var(--bg); color: var(--text-primary); overflow-x: hidden; }
 
-        /* --- HEADER COM FAIXA FOSCA --- */
+        /* --- HEADER --- */
         header { 
             height: 180px; 
             background: url('imagens/gravata-cabecalho.jpg') center/cover no-repeat;
@@ -35,7 +37,7 @@
         }
         .logo { width: 130px; display: block; }
 
-        /* --- ÁREA DE BUSCA FIXA ABAIXO DO HEADER --- */
+        /* --- BUSCA --- */
         .search-container {
             padding: 20px;
             background: var(--bg);
@@ -44,21 +46,15 @@
             border-bottom: 1px solid var(--border);
         }
         .search-box {
-            width: 100%;
-            max-width: 600px;
-            padding: 12px 20px;
-            border-radius: 50px;
-            border: 1px solid var(--border);
-            background: var(--surface);
-            outline: none;
-            font-size: 15px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+            width: 100%; max-width: 600px; padding: 12px 25px;
+            border-radius: 50px; border: 1px solid var(--border);
+            background: var(--surface); outline: none; font-size: 15px;
         }
 
-        /* --- MENU LATERAL (GAVETA DE FILTROS) --- */
+        /* --- DRAWER (GAVETA) --- */
         .sidebar { 
-            position: fixed; left: -300px; top: 0; width: 300px; height: 100%;
-            background: var(--surface); z-index: 3000; padding: 30px 20px;
+            position: fixed; left: -320px; top: 0; width: 320px; height: 100%;
+            background: var(--surface); z-index: 3000; padding: 35px 25px;
             box-shadow: 10px 0 30px rgba(0,0,0,0.1); transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             overflow-y: auto;
         }
@@ -69,54 +65,62 @@
         }
         .overlay.active { display: block; }
 
-        .filter-section { margin-bottom: 25px; }
-        .filter-title { font-size: 11px; font-weight: 700; color: var(--accent); text-transform: uppercase; margin-bottom: 12px; }
-        .check-group { display: flex; flex-direction: column; gap: 10px; }
+        .filter-section { margin-bottom: 30px; }
+        .filter-title { font-size: 11px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 15px; border-bottom: 1px solid var(--border); padding-bottom: 5px; }
+        
+        .check-group { display: flex; flex-direction: column; gap: 12px; }
         .check-item { display: flex; align-items: center; gap: 10px; cursor: pointer; font-size: 13px; color: var(--text-secondary); }
         .check-item input { accent-color: var(--accent); width: 18px; height: 18px; }
 
-        /* --- RODAPÉ FLUTUANTE (BARRA DE AÇÃO) --- */
+        /* --- ACTION BAR RODAPÉ --- */
         .action-bar {
-            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
-            width: 90%; max-width: 500px;
-            background: rgba(46, 42, 21, 0.95);
-            backdrop-filter: blur(10px);
-            padding: 12px 20px;
+            position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%);
+            width: 92%; max-width: 550px;
+            background: rgba(46, 42, 21, 0.98);
+            backdrop-filter: blur(15px);
+            padding: 10px 10px 10px 25px;
             border-radius: 100px;
             display: flex; justify-content: space-between; align-items: center;
             z-index: 2000;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
         }
-        .btn-action {
-            background: none; border: none; color: white; font-weight: 600;
-            font-size: 13px; cursor: pointer; display: flex; align-items: center; gap: 8px;
+        .btn-filter {
+            background: none; border: none; color: white; font-weight: 500;
+            font-size: 13px; cursor: pointer; display: flex; align-items: center; gap: 10px;
         }
         .btn-request {
-            background: #25d366; color: white; padding: 10px 20px;
-            border-radius: 50px; font-size: 13px; text-decoration: none;
-            display: none; /* Só aparece quando algo for selecionado */
+            background: var(--premium-grad); color: white; padding: 12px 28px;
+            border-radius: 50px; font-size: 13px; font-weight: 600; text-decoration: none;
+            display: none; border: none; cursor: pointer;
+            box-shadow: 0 4px 15px rgba(125, 110, 83, 0.4);
         }
 
-        /* --- GRID E CARDS --- */
-        .container { max-width: 1400px; margin: auto; padding: 20px 15px 120px; }
+        /* --- GRID --- */
+        .container { max-width: 1400px; margin: auto; padding: 25px 15px 130px; }
         #catalogo { 
             display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); 
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); 
             gap: 15px; 
         }
         .card { 
             background: var(--surface); border-radius: var(--radius); overflow: hidden; 
-            border: 1px solid var(--border); cursor: pointer; position: relative;
+            border: 1px solid var(--border); cursor: pointer; position: relative; transition: 0.3s;
         }
-        .card.selected { border: 2.5px solid var(--accent); }
-        .img-container { width: 100%; aspect-ratio: 1/1; background: #f7f6f2; }
+        .card.selected { border: 3px solid var(--accent); transform: scale(0.98); }
+        .img-container { width: 100%; aspect-ratio: 1/1; background: #f7f6f2; overflow: hidden; }
         .img-container img { width: 100%; height: 100%; object-fit: cover; }
-        .info { padding: 12px; }
-        .info h3 { font-size: 13px; font-weight: 600; }
-        .info p { font-size: 10px; color: var(--text-secondary); }
+        .info { padding: 12px; text-align: center; }
+        .info h3 { font-size: 14px; font-weight: 500; letter-spacing: 0.5px; }
+        
+        .badge { 
+            position: absolute; top: 8px; right: 8px; padding: 3px 8px; border-radius: 50px;
+            font-size: 8px; font-weight: 700; background: rgba(255,255,255,0.9);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
 
         @media (max-width: 600px) {
-            #catalogo { grid-template-columns: 1fr 1fr; }
+            #catalogo { grid-template-columns: 1fr 1fr; gap: 10px; }
+            .action-bar { padding-left: 15px; }
         }
     </style>
 </head>
@@ -125,20 +129,29 @@
 <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
 
 <aside class="sidebar" id="sidebar">
-    <h2 style="font-size: 18px; margin-bottom: 25px;">Refinar Busca</h2>
+    <h2 style="font-size: 1.2rem; margin-bottom: 30px; font-weight: 600;">Filtros de Luxo</h2>
+    
     <div class="filter-section">
-        <div class="filter-title">Cores</div>
+        <div class="filter-title">Cores (Múltiplo)</div>
         <div class="check-group" id="container-cores"></div>
     </div>
+
     <div class="filter-section">
-        <div class="filter-title">Camadas</div>
+        <div class="filter-title">Camadas (Único)</div>
         <div class="check-group" id="container-camadas"></div>
     </div>
+
     <div class="filter-section">
-        <div class="filter-title">Padrão</div>
+        <div class="filter-title">Padrão (Único)</div>
         <div class="check-group" id="container-padrao"></div>
     </div>
-    <button onclick="toggleMenu()" style="width:100%; background:var(--accent); color:white; border:none; padding:12px; border-radius:8px; font-weight:600; cursor:pointer;">APLICAR</button>
+
+    <div class="filter-section">
+        <div class="filter-title">Padroes Especiais (Múltiplo)</div>
+        <div class="check-group" id="container-especiais"></div>
+    </div>
+
+    <button onclick="toggleMenu()" style="width:100%; background:var(--text-primary); color:white; border:none; padding:15px; border-radius:8px; font-weight:600; cursor:pointer; margin-top:10px;">APLICAR FILTROS</button>
 </aside>
 
 <header>
@@ -146,7 +159,7 @@
 </header>
 
 <div class="search-container">
-    <input type="text" id="search" class="search-box" placeholder="Pesquisar por nome ou ID..." oninput="filtrar()">
+    <input type="text" id="search" class="search-box" placeholder="Procurar Rosa ou ID..." oninput="filtrar()">
 </div>
 
 <main class="container">
@@ -154,11 +167,11 @@
 </main>
 
 <div class="action-bar">
-    <button class="btn-action" onclick="toggleMenu()">
-        <span>≡</span> FILTRAR
+    <button class="btn-filter" onclick="toggleMenu()">
+        <span style="font-size:18px">≡</span> FILTRAR
     </button>
-    <div id="info-selecao" style="color: rgba(255,255,255,0.6); font-size: 11px;">
-        Selecione as rosas
+    <div id="info-selecao" style="color: rgba(255,255,255,0.5); font-size: 11px; font-weight: 300;">
+        Escolha suas preferidas
     </div>
     <button class="btn-request" id="btn-whats" onclick="enviarPedido()">
         SOLICITAR (<span id="count">0</span>)
@@ -175,24 +188,47 @@
             const json = await r.json();
             DADOS = Object.keys(json).map(k => ({
                 nome: k, camadas: json[k].camadas, cores: json[k].cores,
-                padrao: json[k].padrao, qtd: parseInt(json[k].qtd) || 0, midia: json[k].midia
+                padrao: json[k].padrao, especiais: json[k].especiais,
+                qtd: parseInt(json[k].qtd) || 0, midia: json[k].midia
             }));
             DADOS_FILTRADOS = [...DADOS];
             popularFiltros();
             render();
-        } catch (e) { console.error("Erro"); }
+        } catch (e) { console.error("Erro na carga"); }
     }
 
     function popularFiltros() {
-        const preencher = (id, chave) => {
+        const preencher = (id, chave, isRadio = false) => {
             const container = document.getElementById(id);
-            [...new Set(DADOS.map(d => d[chave]))].filter(v => v).sort().forEach(val => {
-                container.innerHTML += `<label class="check-item"><input type="checkbox" value="${val}" onchange="filtrar()"> ${val}</label>`;
+            container.innerHTML = "";
+            let itens = [];
+            
+            // Tratamento especial para colunas que podem ter múltiplos valores separados por vírgula (Cores e Especiais)
+            if (chave === 'cores' || chave === 'especiais') {
+                let todosValores = [];
+                DADOS.forEach(d => {
+                    if(d[chave]) d[chave].split(',').forEach(v => todosValores.push(v.trim()));
+                });
+                itens = [...new Set(todosValores)];
+            } else {
+                itens = [...new Set(DADOS.map(d => d[chave]))];
+            }
+
+            itens.filter(v => v).sort().forEach(val => {
+                const type = isRadio ? 'radio' : 'checkbox';
+                const nameAttr = isRadio ? `name="${chave}"` : "";
+                container.innerHTML += `
+                    <label class="check-item">
+                        <input type="${type}" ${nameAttr} value="${val}" onchange="filtrar()"> ${val}
+                    </label>
+                `;
             });
         };
-        preencher('container-cores', 'cores');
-        preencher('container-camadas', 'camadas');
-        preencher('container-padrao', 'padrao');
+
+        preencher('container-cores', 'cores'); // Checkbox
+        preencher('container-camadas', 'camadas', true); // Radio
+        preencher('container-padrao', 'padrao', true); // Radio
+        preencher('container-especiais', 'especiais'); // Checkbox
     }
 
     function render() {
@@ -202,10 +238,10 @@
             const foto = d.midia ? `https://drive.google.com/thumbnail?sz=w600&id=${d.midia}` : 'imagens/sem-foto.jpg';
             return `
                 <div class="card ${sel ? 'selected' : ''}" onclick="toggleSelecao('${d.nome}')">
+                    <div class="badge" style="color:${d.qtd > 0 ? '#28a745' : '#a08c6b'}">${d.qtd > 0 ? 'DISPONÍVEL' : 'ENCOMENDAR'}</div>
                     <div class="img-container"><img src="${foto}" loading="lazy"></div>
                     <div class="info">
                         <h3>${d.nome}</h3>
-                        <p>${d.cores} • ${d.camadas}</p>
                     </div>
                 </div>`;
         }).join('');
@@ -213,7 +249,6 @@
 
     function toggleSelecao(nome) {
         if (SELECIONADOS.has(nome)) SELECIONADOS.delete(nome); else SELECIONADOS.add(nome);
-        
         const count = SELECIONADOS.size;
         document.getElementById('btn-whats').style.display = count > 0 ? 'block' : 'none';
         document.getElementById('info-selecao').style.display = count > 0 ? 'none' : 'block';
@@ -223,14 +258,29 @@
 
     function filtrar() {
         const busca = document.getElementById("search").value.toLowerCase();
+        
+        // Captura valores dos filtros
         const getChecks = id => [...document.querySelectorAll(`#${id} input:checked`)].map(i => i.value);
-        const c = getChecks('container-cores'), cam = getChecks('container-camadas'), p = getChecks('container-padrao');
+        
+        const coresSel = getChecks('container-cores');
+        const camadasSel = getChecks('container-camadas');
+        const padraoSel = getChecks('container-padrao');
+        const especiaisSel = getChecks('container-especiais');
 
         DADOS_FILTRADOS = DADOS.filter(d => {
-            return d.nome.toLowerCase().includes(busca) &&
-                   (c.length === 0 || c.includes(d.cores)) &&
-                   (cam.length === 0 || cam.includes(d.camadas)) &&
-                   (p.length === 0 || p.includes(d.padrao));
+            const matchBusca = d.nome.toLowerCase().includes(busca);
+            
+            // Lógica acumulativa para cores (se a flor tem QUALQUER uma das cores selecionadas)
+            const matchCores = coresSel.length === 0 || coresSel.some(c => d.cores && d.cores.includes(c));
+            
+            // Lógica única para camadas e padrão
+            const matchCamadas = camadasSel.length === 0 || camadasSel.includes(d.camadas);
+            const matchPadrao = padraoSel.length === 0 || padraoSel.includes(d.padrao);
+
+            // Lógica acumulativa para especiais
+            const matchEsp = especiaisSel.length === 0 || especiaisSel.some(e => d.especiais && d.especiais.includes(e));
+
+            return matchBusca && matchCores && matchCamadas && matchPadrao && matchEsp;
         });
         render();
     }
@@ -241,8 +291,10 @@
     }
 
     function enviarPedido() {
-        const msg = `Olá, Gravatá RD! 👋\nGostaria de saber mais sobre estas IDs:\n\n*${Array.from(SELECIONADOS).join(', ')}*`;
-        window.open(`https://wa.me/558992665421?text=${encodeURIComponent(msg)}`, '_blank');
+        const saudacao = "Olá, Gravatá RD! 👋";
+        const corpo = `Gostaria de solicitar informações sobre estas IDs que selecionei no catálogo:\n\n*${Array.from(SELECIONADOS).join(', ')}*`;
+        const url = `https://wa.me/5581992665421?text=${encodeURIComponent(saudacao + "\n\n" + corpo)}`;
+        window.open(url, '_blank');
     }
 
     window.onload = carregar;
