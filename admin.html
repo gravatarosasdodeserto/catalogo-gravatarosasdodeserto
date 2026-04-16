@@ -526,9 +526,14 @@ function gerarCheckboxesEspeciais(selecionadas = [], prefixo = 'n') {
 }
 
 function atualizarEspeciais(prefixo) {
-    const selecionadas = [...document.querySelectorAll(`#esp_${prefixo}_container input:checked`)].map(cb => cb.value);
-    document.getElementById(`esp_${prefixo}`).value = selecionadas.join(', ');
-    mostrarBotaoSalvar(prefixo);
+    const selecionadas = [...document.querySelectorAll(`#${prefixo}_especiais_container input:checked`)].map(cb => cb.value);
+
+    if (prefixo === 'n') {
+        plantaEditando.especiais = selecionadas;
+    } else {
+        document.getElementById(`esp_${prefixo}`).value = selecionadas.join(', ');
+        mostrarBotaoSalvar(prefixo);
+    }
 }
 
 // ================= MODAL =================
@@ -537,7 +542,9 @@ function abrirModal() {
 
     document.getElementById('n_nome').value = '';
     document.getElementById('n_qtd').value = 0;
-
+    document.getElementById('img_nova').style.display = "none";
+    document.getElementById('placeholder_nova').style.display = "flex";
+    document.getElementById('n_midia').value = '';
     document.getElementById('n_camadas_container').innerHTML = criarSelect('n_camadas', '', getOpcoesUnicas('camadas'));
     document.getElementById('n_cores_container').innerHTML = criarSelect('n_cores', '', getOpcoesUnicas('cores'));
     document.getElementById('n_padrao_container').innerHTML = criarSelect('n_padrao', '', getOpcoesUnicas('padrao'));
