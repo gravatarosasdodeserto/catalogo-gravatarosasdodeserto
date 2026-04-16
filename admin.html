@@ -693,7 +693,7 @@ function render() {
             ${criarSelect(`pad_${id}`, d.padrao, getOpcoesUnicas('padrao'))}
 
             <label>Especiais</label>
-            <div id="esp_${id}_container">
+           <div id="esp_${id}_container" class="especiais-wrap">
                 ${todasEspeciais.map(tag => `
                     <label>
                         <input type="checkbox" value="${tag}" ${d.especiais?.includes(tag) ? 'checked' : ''} onchange="atualizarEspeciais('${id}')">
