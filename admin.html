@@ -28,121 +28,105 @@
             display: flex; align-items: center; justify-content: center;
         }
         .header-stripe {
-            width: 100%;
-            background: rgba(255, 255, 255, 0.4); 
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            padding: 20px 0;
-            display: flex; justify-content: center; align-items: center;
+            width: 100%; background: rgba(255, 255, 255, 0.4); 
+            backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            padding: 20px 0; display: flex; justify-content: center;
             border-top: 1px solid rgba(255, 255, 255, 0.2);
             border-bottom: 1px solid rgba(255, 255, 255, 0.2);
         }
         .logo { width: 110px; }
-
-        @media (min-width: 1024px) {
-            header { height: 350px; }
-            .header-stripe { padding: 40px 0; }
-            .logo { width: 180px; }
-        }
+        @media (min-width: 1024px) { header { height: 350px; } .logo { width: 180px; } .header-stripe { padding: 40px 0; } }
 
         /* --- BARRA DE GESTÃO --- */
         .top-action-bar {
-            background: #2e2a15;
-            padding: 12px 20px;
+            background: #2e2a15; padding: 12px 20px;
             display: flex; justify-content: space-between; align-items: center;
             position: sticky; top: 0; z-index: 1000;
         }
-        .bar-title { color: white; font-size: 14px; font-weight: 500; }
-        .btn-logout { background: none; border: none; color: white; font-size: 12px; text-decoration: none; font-weight: 500; }
+        .btn-new { background: var(--premium-grad); color: white; border: none; padding: 8px 15px; border-radius: 50px; font-size: 11px; font-weight: 600; cursor: pointer; }
+        .btn-logout { background: none; border: none; color: white; font-size: 12px; text-decoration: none; }
 
-        /* --- ÁREA DE BUSCA (IGUAL INDEX) --- */
-        .controls-area { padding: 25px 15px; background: var(--bg); text-align: center; }
-        .search-box {
-            width: 100%; max-width: 500px; padding: 12px 25px; 
-            border-radius: 50px; border: 1px solid var(--border);
-            outline: none; font-size: 14px; box-shadow: 0 4px 15px rgba(0,0,0,0.03);
-        }
+        /* --- BUSCA --- */
+        .controls-area { padding: 20px 15px; background: var(--bg); border-bottom: 1px solid var(--border); text-align: center; }
+        .search-box { width: 100%; max-width: 500px; padding: 10px 20px; border-radius: 50px; border: 1px solid var(--border); outline: none; }
 
-        /* --- CARD DE EDIÇÃO --- */
-        .container { max-width: 600px; margin: auto; padding: 0 20px 100px; }
-        .admin-card {
-            background: var(--surface); border-radius: var(--radius);
-            border: 1px solid var(--border); overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-        }
-        .img-preview { width: 100%; aspect-ratio: 1/1; background: #eee; }
-        .img-preview img { width: 100%; height: 100%; object-fit: cover; }
+        /* --- GRID DE CARDS --- */
+        .container { max-width: 1400px; margin: auto; padding: 20px 10px 100px; }
+        #lista-admin { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; }
+        .card { background: var(--surface); border-radius: var(--radius); border: 1px solid var(--border); overflow: hidden; cursor: pointer; text-align: center; padding-bottom: 10px; }
+        .card img { width: 100%; aspect-ratio: 1/1; object-fit: cover; background: #eee; }
+        .card h3 { font-size: 13px; margin: 8px 0 4px; }
+        .btn-edit-card { font-size: 10px; color: var(--accent); font-weight: 600; text-transform: uppercase; }
+
+        /* --- MODAL DE EDIÇÃO --- */
+        .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.6); display: none; align-items: center; justify-content: center; z-index: 2000; padding: 20px; }
+        .modal-content { background: var(--bg); width: 100%; max-width: 500px; max-height: 90vh; overflow-y: auto; border-radius: 20px; position: relative; }
+        .modal-header { padding: 20px; background: #2e2a15; color: white; display: flex; justify-content: space-between; align-items: center; }
+        .close-modal { cursor: pointer; font-size: 24px; }
         
-        .edit-content { padding: 25px; }
-        .id-label { font-size: 18px; font-weight: 600; margin-bottom: 20px; display: block; color: var(--accent); }
-        
-        .filter-group { margin-bottom: 20px; border-bottom: 1px solid #f0f0f0; padding-bottom: 15px; }
-        .filter-group-title { font-size: 11px; font-weight: 700; color: var(--accent); text-transform: uppercase; margin-bottom: 10px; display: block; }
+        .edit-form { padding: 20px; }
+        .filter-group { margin-bottom: 15px; border-bottom: 1px solid var(--border); padding-bottom: 15px; }
+        .filter-title { font-size: 11px; font-weight: 700; color: var(--accent); text-transform: uppercase; margin-bottom: 8px; display: block; }
         .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-        .option-item { display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer; }
+        .option-item { display: flex; align-items: center; gap: 8px; font-size: 13px; }
+        .input-field { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 8px; margin-top: 5px; outline: none; }
+        .btn-save { width: 100%; padding: 15px; background: var(--premium-grad); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; margin-top: 10px; }
 
-        .input-field {
-            width: 100%; padding: 10px; border: 1px solid var(--border);
-            border-radius: 8px; margin-top: 5px; outline: none; font-size: 14px;
-        }
-
-        .btn-save {
-            width: 100%; padding: 15px; background: var(--premium-grad);
-            color: white; border: none; border-radius: 8px; font-weight: 600;
-            cursor: pointer; margin-top: 20px; transition: 0.3s;
-        }
-        .btn-save:hover { opacity: 0.9; }
-
-        #msg { text-align: center; margin-top: 15px; font-size: 13px; font-weight: 500; min-height: 20px; }
+        #msg-global { position: fixed; bottom: 20px; right: 20px; padding: 15px 25px; border-radius: 10px; color: white; display: none; z-index: 3000; }
     </style>
 </head>
 <body>
 
-<header>
-    <div class="header-stripe"><img src="logo.png" class="logo"></div>
-</header>
+<header><div class="header-stripe"><img src="logo.png" class="logo"></div></header>
 
 <div class="top-action-bar">
-    <span class="bar-title">Gestão das ID's</span>
+    <button class="btn-new" onclick="novoItem()">+ NOVA ID</button>
+    <span style="color:white; font-size: 12px;">Gestão das ID's</span>
     <a href="index.html" class="btn-logout">SAIR</a>
 </div>
 
 <div class="controls-area">
-    <input type="text" id="search-id" class="search-box" placeholder="Pesquisar ID para editar..." oninput="buscarDinamico()">
-    <div id="msg"></div>
+    <input type="text" id="search" class="search-box" placeholder="Filtrar por ID ou nome..." oninput="filtrar()">
 </div>
 
 <main class="container">
-    <div id="editor" style="display: none;">
-        <div class="admin-card">
-            <div class="img-preview"><img id="preview-img" src=""></div>
-            <div class="edit-content">
-                <span class="id-label" id="display-id">ID: ---</span>
-                
-                <div class="filter-group">
-                    <span class="filter-group-title">Estoque Disponível</span>
-                    <input type="number" id="input-qtd" class="input-field">
-                </div>
+    <div id="lista-admin"></div>
+</main>
 
-                <div class="filter-group">
-                    <span class="filter-group-title">ID da Imagem (Google Drive)</span>
-                    <input type="text" id="input-midia" class="input-field" oninput="atualizarPreview()">
-                </div>
-
-                <div class="filter-group"><span class="filter-group-title">Camadas (Única)</span><div class="options-grid" id="edit-camadas"></div></div>
-                <div class="filter-group"><span class="filter-group-title">Padrão de Pétala (Única)</span><div class="options-grid" id="edit-padrao"></div></div>
-                <div class="filter-group"><span class="filter-group-title">Cores (Múltiplas)</span><div class="options-grid" id="edit-cores"></div></div>
-                <div class="filter-group"><span class="filter-group-title">Padrões Especiais (Múltiplas)</span><div class="options-grid" id="edit-especiais"></div></div>
-
-                <button class="btn-save" onclick="salvar()">SALVAR ALTERAÇÕES</button>
+<div class="modal" id="modalEditor">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 id="modal-title">Editar ID</h3>
+            <span class="close-modal" onclick="fecharModal()">&times;</span>
+        </div>
+        <div class="edit-form">
+            <div class="filter-group">
+                <span class="filter-title">Identificação (ID)</span>
+                <input type="text" id="input-id" class="input-field" placeholder="Ex: RD-01">
             </div>
+            <div class="filter-group">
+                <span class="filter-title">Quantidade em Estoque</span>
+                <input type="number" id="input-qtd" class="input-field">
+            </div>
+            <div class="filter-group">
+                <span class="filter-title">ID da Imagem (Google Drive)</span>
+                <input type="text" id="input-midia" class="input-field">
+            </div>
+
+            <div class="filter-group"><span class="filter-title">Camadas</span><div class="options-grid" id="edit-camadas"></div></div>
+            <div class="filter-group"><span class="filter-title">Padrão Pétala</span><div class="options-grid" id="edit-padrao"></div></div>
+            <div class="filter-group"><span class="filter-title">Cores</span><div class="options-grid" id="edit-cores"></div></div>
+            <div class="filter-group"><span class="filter-title">Especiais</span><div class="options-grid" id="edit-especiais"></div></div>
+
+            <button class="btn-save" onclick="salvar()">SALVAR NA PLANILHA</button>
         </div>
     </div>
-</main>
+</div>
+
+<div id="msg-global"></div>
 
 <script>
     const API = "https://script.google.com/macros/s/AKfycbzgV_H5QLTNwJ12B-78q57qNnlaVi0vbxW3jIqdnp7YH1IKCdBdFthIHymlMM9Jusqktg/exec";
-    
     const OPCOES = {
         camadas: ["Simples", "Dobrada", "Tripla", "Multi-pétalas"],
         padrao: ["Lisa", "Borda Colorida", "Riscada", "Matizada"],
@@ -150,32 +134,40 @@
         especiais: ["Fragrância", "Negra Retinta", "Pétala Rasgada"]
     };
 
-    let BANCO_DADOS = null;
-    let itemAtual = null;
+    let DADOS = [], DADOS_FILTRADOS = [];
 
-    // 1. Carrega todos os dados uma vez só ao abrir a página (igual o Index faz)
-    async function inicializar() {
-        renderOpcoes();
+    async function carregar() {
         try {
             const r = await fetch(`${API}?action=get&t=${Date.now()}`);
-            BANCO_DADOS = await r.json();
-            document.getElementById('msg').innerText = "Banco de dados pronto.";
-            setTimeout(() => document.getElementById('msg').innerText = "", 2000);
-        } catch(e) {
-            document.getElementById('msg').innerText = "Erro ao carregar banco de dados.";
-        }
+            const json = await r.json();
+            DADOS = Object.keys(json).map(k => ({ id: k, ...json[k] }));
+            DADOS_FILTRADOS = [...DADOS];
+            renderLista();
+        } catch (e) { showMsg("Erro ao carregar dados", "red"); }
     }
 
-    function renderOpcoes() {
-        const montar = (containerId, lista, chave, isRadio) => {
-            const container = document.getElementById(containerId);
-            container.innerHTML = lista.map(opt => `
+    function renderLista() {
+        const cont = document.getElementById('lista-admin');
+        cont.innerHTML = DADOS_FILTRADOS.map(d => `
+            <div class="card" onclick="abrirEditor('${d.id}')">
+                <img src="${d.midia ? 'https://drive.google.com/thumbnail?sz=w600&id='+d.midia : 'imagens/sem-foto.jpg'}">
+                <h3>${d.id}</h3>
+                <span class="btn-edit-card">Editar</span>
+            </div>
+        `).join('');
+    }
+
+    function filtrar() {
+        const b = document.getElementById('search').value.toUpperCase();
+        DADOS_FILTRADOS = DADOS.filter(d => d.id.toUpperCase().includes(b));
+        renderLista();
+    }
+
+    function renderFiltrosForm() {
+        const montar = (id, lista, chave, isRadio) => {
+            document.getElementById(id).innerHTML = lista.map(opt => `
                 <label class="option-item">
-                    <input type="${isRadio ? 'radio' : 'checkbox'}" 
-                           name="${isRadio ? 'radio-'+chave : 'check-'+chave}" 
-                           class="input-opt" 
-                           data-type="${chave}" 
-                           value="${opt}"> ${opt}
+                    <input type="${isRadio ? 'radio' : 'checkbox'}" name="f-${chave}" class="in-opt" data-type="${chave}" value="${opt}"> ${opt}
                 </label>
             `).join('');
         };
@@ -185,80 +177,66 @@
         montar('edit-especiais', OPCOES.especiais, 'especiais', false);
     }
 
-    // 2. Busca dinâmica: igual ao index
-    function buscarDinamico() {
-        const idBusca = document.getElementById('search-id').value.trim().toUpperCase();
-        const editor = document.getElementById('editor');
-        const msg = document.getElementById('msg');
-
-        if (!BANCO_DADOS) return; // Espera o banco carregar
-
-        if (BANCO_DADOS[idBusca]) {
-            itemAtual = { id: idBusca, ...BANCO_DADOS[idBusca] };
-            abrirEditor();
-            msg.innerText = "✅ Editando ID: " + idBusca;
-            msg.style.color = "green";
-        } else {
-            editor.style.display = 'none';
-            msg.innerText = idBusca === "" ? "" : "ID não encontrada...";
-            msg.style.color = "var(--text-secondary)";
-        }
-    }
-
-    function abrirEditor() {
-        document.getElementById('editor').style.display = 'block';
-        document.getElementById('display-id').innerText = `ID: ${itemAtual.id}`;
-        document.getElementById('input-qtd').value = itemAtual.qtd || 0;
-        document.getElementById('input-midia').value = itemAtual.midia || "";
-        atualizarPreview();
-
-        document.querySelectorAll('.input-opt').forEach(i => i.checked = false);
-
-        ['camadas', 'padrao', 'cores', 'especiais'].forEach(chave => {
-            const valorSalvo = (itemAtual[chave] || "").toString();
-            const listaValores = valorSalvo.split(',').map(v => v.trim());
-            document.querySelectorAll(`.input-opt[data-type="${chave}"]`).forEach(input => {
-                if(listaValores.includes(input.value)) input.checked = true;
-            });
+    function abrirEditor(id) {
+        const item = DADOS.find(d => d.id === id);
+        document.getElementById('modal-title').innerText = "Editar " + id;
+        document.getElementById('input-id').value = item.id;
+        document.getElementById('input-id').readOnly = true;
+        document.getElementById('input-qtd').value = item.qtd || 0;
+        document.getElementById('input-midia').value = item.midia || "";
+        
+        document.querySelectorAll('.in-opt').forEach(i => {
+            const valSalvo = (item[i.dataset.type] || "").split(',').map(v => v.trim());
+            i.checked = valSalvo.includes(i.value);
         });
+
+        document.getElementById('modalEditor').style.display = 'flex';
     }
 
-    function atualizarPreview() {
-        const midiaId = document.getElementById('input-midia').value;
-        document.getElementById('preview-img').src = midiaId ? `https://drive.google.com/thumbnail?sz=w600&id=${midiaId}` : 'imagens/sem-foto.jpg';
+    function novoItem() {
+        document.getElementById('modal-title').innerText = "Cadastrar Nova ID";
+        document.getElementById('input-id').value = "";
+        document.getElementById('input-id').readOnly = false;
+        document.getElementById('input-qtd').value = 0;
+        document.getElementById('input-midia').value = "";
+        document.querySelectorAll('.in-opt').forEach(i => i.checked = false);
+        document.getElementById('modalEditor').style.display = 'flex';
     }
+
+    function fecharModal() { document.getElementById('modalEditor').style.display = 'none'; }
 
     async function salvar() {
-        const msgEl = document.getElementById('msg');
-        msgEl.innerText = "💾 Salvando...";
-        
+        const id = document.getElementById('input-id').value.trim().toUpperCase();
+        if(!id) return alert("Digite uma ID");
+
+        showMsg("Enviando para planilha...", "orange");
+
         const payload = {
-            action: "upsert",
-            id: itemAtual.id,
+            action: "upsert", id: id,
             qtd: document.getElementById('input-qtd').value,
             midia: document.getElementById('input-midia').value
         };
 
-        ['camadas', 'padrao', 'cores', 'especiais'].forEach(chave => {
-            const marcados = [...document.querySelectorAll(`.input-opt[data-type="${chave}"]:checked`)];
-            payload[chave] = marcados.map(m => m.value).join(', ');
+        ['camadas', 'padrao', 'cores', 'especiais'].forEach(ch => {
+            const sel = [...document.querySelectorAll(`.in-opt[data-type="${ch}"]:checked`)];
+            payload[ch] = sel.map(s => s.value).join(', ');
         });
 
         try {
             await fetch(API, { method: "POST", body: JSON.stringify(payload) });
-            // Atualiza o banco local para a próxima busca ser rápida
-            BANCO_DADOS[itemAtual.id] = { ...payload };
-            delete BANCO_DADOS[itemAtual.id].action;
-            
-            msgEl.innerText = "✨ Alterações salvas com sucesso!";
-            msgEl.style.color = "green";
-        } catch(e) {
-            msgEl.innerText = "❌ Erro ao salvar.";
-            msgEl.style.color = "red";
-        }
+            showMsg("Salvo com sucesso!", "green");
+            fecharModal();
+            carregar(); // Recarrega a lista
+        } catch (e) { showMsg("Erro ao salvar", "red"); }
     }
 
-    window.onload = inicializar;
+    function showMsg(txt, color) {
+        const m = document.getElementById('msg-global');
+        m.innerText = txt; m.style.background = color; m.style.display = 'block';
+        setTimeout(() => m.style.display = 'none', 3000);
+    }
+
+    window.onload = () => { renderFiltrosForm(); carregar(); };
 </script>
 </body>
 </html>
