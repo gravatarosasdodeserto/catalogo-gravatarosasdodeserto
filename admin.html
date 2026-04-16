@@ -187,27 +187,46 @@ body {
     object-fit: cover;
 }
 
-/* botão lápis */
+/* botão editar premium */
 .edit-badge {
     position: absolute;
-    bottom: 10px;
-    right: 10px;
-    background: linear-gradient(135deg,var(--text-main),var(--accent-dark));
-    color: white;
-    width: 42px;
-    height: 42px;
+    bottom: 12px;
+    right: 12px;
+    width: 44px;
+    height: 44px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    border: 3px solid white;
-    transition: all 0.2s ease;
-    z-index: 10; /* <- adiciona isso pra ficar sempre por cima */
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(12px) saturate(180%);
+    -webkit-backdrop-filter: blur(12px) saturate(180%);
+    border: 1.5px solid rgba(255, 255, 255, 0.4);
+    box-shadow:
+        0 4px 16px rgba(0, 0, 0, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.5);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 10;
 }
 
 .edit-badge:hover {
-    transform: scale(1.1);
+    background: rgba(255, 255, 255, 0.4);
+    transform: scale(1.08) rotate(5deg);
+    box-shadow:
+        0 6px 24px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+.edit-badge:active {
+    transform: scale(0.96);
+}
+
+.edit-badge svg {
+    width: 18px;
+    height: 18px;
+    stroke: var(--text-main);
+    filter: drop-shadow(0 1px 2px rgba(0,0,0,0.1));
 }
 
 .file-input { display:none; }
@@ -478,7 +497,10 @@ button:active {
           <div class="upload-progress-bar" id="progressBar_nova"></div>
         </div>
         <label class="edit-badge" for="file_nova">
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="19" height="19"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 20h9"></path>
+    <path d="M16.5 3.5a2.121 2.121 0 0 1 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+  </svg>
 </label>
 <input type="file" id="file_nova" class="file-input" accept="image/*" onchange="uploadFotoNova(this)">
       </div>
