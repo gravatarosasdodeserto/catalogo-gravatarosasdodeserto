@@ -32,14 +32,14 @@
         .btn-save { width: 100%; background: #2d5a27; color: white; border: none; padding: 14px; border-radius: 50px; font-weight: 700; cursor: pointer; display: none; margin-bottom: 10px; }
         .btn-del { width: 100%; background: #fff5f5; color: #8b2d2d; border: 1px solid #fee; padding: 10px; border-radius: 50px; font-size: 10px; font-weight: 700; cursor: pointer; }
         .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; z-index: 2000; }
-        .modal-content { background: white; width: 90%; max-width: 400px; border-radius: 28px; padding: 30px; }
+        .modal-content { background: white; width: 90%; max-width: 400px; border-radius: 28px; padding: 30px; overflow-y: auto; max-height: 90vh; }
         .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: var(--text-main); color: white; padding: 12px 25px; border-radius: 50px; display: none; z-index: 3000; font-size: 13px; }
     </style>
 </head>
 <body>
 
 <div class="topbar"><img src="logo.png" class="logo"></div>
-<nav class="nav-bar"><button onclick="confirmExit()" class="btn-exit">Sair do Painel</button></nav>
+<nav class="nav-bar"><button onclick="confirmExit()" class="btn-exit">Voltar ao Site</button></nav>
 
 <main class="container">
     <button class="btn-new" onclick="openModal()">+ Adicionar Nova ID</button>
@@ -55,7 +55,7 @@
             <div class="edit-icon-btn" onclick="document.getElementById('file_new').click()" id="trigger_new" style="right:50%; bottom:50%; transform:translate(50%,50%)">
                 <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
             </div>
-            <img id="preview_new" style="display:none">
+            <img id="preview_new" style="display:none; width:100%; height:100%; object-fit:cover;">
         </div>
         <input type="hidden" id="n_midia">
         <label>Nome</label><input id="n_nome" placeholder="Ex: TS-152">
@@ -79,32 +79,37 @@
     const API = "https://script.google.com/macros/s/AKfycbzgV_H5QLTNwJ12B-78q57qNnlaVi0vbxW3jIqdnp7YH1IKCdBdFthIHymlMM9Jusqktg/exec";
     const TAGS_ESPECIAIS = ['Cristatas', 'Floração em buquê', 'Mutantes', 'Perfumadas', 'Variegatas'];
     let DADOS_LOCAIS = [];
-    let ALTERACOES_PENDENTES = false;
 
-    if (sessionStorage.getItem("adminLogado") !== "true") { location.href = "index.html"; }
+    // Comente a linha abaixo se quiser entrar sem precisar de login por enquanto
+    if (sessionStorage.getItem("adminLogado") !== "true") { /* location.href = "index.html"; */ }
 
     async function carregar() {
         showToast("Sincronizando estoque...");
-        const r = await fetch(API + "?action=get&t=" + Date.now());
-        const json = await r.json();
-        DADOS_LOCAIS = Object.keys(json).map(k => ({ nome: k, ...json[k] }));
-        render();
-        popularSelectsModal();
+        try {
+            const r = await fetch(API + "?action=get&t=" + Date.now());
+            const json = await r.json();
+            DADOS_LOCAIS = Object.keys(json).map(k => ({ nome: k, ...json[k] }));
+            render();
+            popularSelectsModal();
+        } catch (e) {
+            showToast("Erro ao carregar dados.");
+        }
     }
 
     function render(filtro = "") {
         const container = document.getElementById("lista");
         container.innerHTML = "";
+        
         const filtrados = DADOS_LOCAIS.filter(d => d.nome.toLowerCase().includes(filtro.toLowerCase()));
-        const tags = (String(d.especiais || "")).split(',')
-    .filter(t => t.trim() !== "")
-    .map(t => `<span class="tag">${t.trim()}</span>`)
-    .join('');
         
         filtrados.forEach(d => {
             const safeId = d.nome.replace(/\W/g, '_');
             const thumb = d.midia ? `https://drive.google.com/thumbnail?sz=w600&id=${d.midia}` : 'imagens/sem-foto.jpg';
-            const espArray = d.especiais ? d.especiais.split(',').map(s => s.trim()) : [];
+            
+            // Correção aqui: Proteção para o split
+            const espArray = (String(d.especiais || "")).split(',')
+                .filter(t => t.trim() !== "")
+                .map(t => t.trim());
             
             const card = document.createElement("div");
             card.className = "card";
@@ -124,6 +129,7 @@
                     <div><label>Cores</label><select id="cor_${safeId}" onchange="markChange('${safeId}')">${getOptions('cores', d.cores)}</select></div>
                     <div><label>Padrão</label><select id="pad_${safeId}" onchange="markChange('${safeId}')">${getOptions('padrao', d.padrao)}</select></div>
                 </div>
+                <label>Especiais</label>
                 <div class="especiais-container">
                     ${TAGS_ESPECIAIS.map(tag => `
                         <label class="tag-check ${espArray.includes(tag) ? 'active' : ''}">
@@ -153,39 +159,42 @@
                 oldId = item ? item.midia : "";
             }
 
-            const res = await fetch(API, { 
-                method: "POST", 
-                body: new URLSearchParams({ 
-                    action: "upload", 
-                    nome: nomeRosa, 
-                    data: base64, 
-                    mimeType: file.type, 
-                    oldFileId: oldId 
-                }) 
-            });
-            const result = await res.json();
-            
-            if(result.success) {
-                if(nomeRosa === 'new') {
-                    document.getElementById("n_midia").value = result.id;
-                    const preview = document.getElementById("preview_new");
-                    preview.src = `https://drive.google.com/thumbnail?sz=w600&id=${result.id}`;
-                    preview.style.display = "block";
-                    document.getElementById("trigger_new").style.display = "none";
-                } else {
-                    const idx = DADOS_LOCAIS.findIndex(d => d.nome === nomeRosa);
-                    if(idx !== -1) DADOS_LOCAIS[idx].midia = result.id;
-                    const safeId = nomeRosa.replace(/\W/g, '_');
-                    markChange(safeId);
-                    document.getElementById(`img_${safeId}`).src = `https://drive.google.com/thumbnail?sz=w600&id=${result.id}&t=${Date.now()}`;
+            try {
+                const res = await fetch(API, { 
+                    method: "POST", 
+                    body: new URLSearchParams({ 
+                        action: "upload", 
+                        nome: nomeRosa, 
+                        data: base64, 
+                        mimeType: file.type, 
+                        oldFileId: oldId 
+                    }) 
+                });
+                const result = await res.json();
+                
+                if(result.success) {
+                    if(nomeRosa === 'new') {
+                        document.getElementById("n_midia").value = result.id;
+                        const preview = document.getElementById("preview_new");
+                        preview.src = `https://drive.google.com/thumbnail?sz=w600&id=${result.id}`;
+                        preview.style.display = "block";
+                        document.getElementById("trigger_new").style.display = "none";
+                    } else {
+                        const idx = DADOS_LOCAIS.findIndex(d => d.nome === nomeRosa);
+                        if(idx !== -1) DADOS_LOCAIS[idx].midia = result.id;
+                        const safeId = nomeRosa.replace(/\W/g, '_');
+                        markChange(safeId);
+                        document.getElementById(`img_${safeId}`).src = `https://drive.google.com/thumbnail?sz=w600&id=${result.id}&t=${Date.now()}`;
+                    }
+                    showToast("✅ Foto atualizada!");
                 }
-                showToast("✅ Foto atualizada!");
+            } catch (e) {
+                showToast("Erro no upload.");
             }
         };
     }
 
     function markChange(id) {
-        ALTERACOES_PENDENTES = true;
         const btn = document.getElementById(`save_${id}`);
         if(btn) btn.style.display = "block";
         const card = document.getElementById(`card_${id}`);
@@ -204,15 +213,17 @@
             cores: document.getElementById(`cor_${safeId}`).value,
             padrao: document.getElementById(`pad_${safeId}`).value,
             especiais: [...document.querySelectorAll(`#card_${safeId} input:checked`)].map(i => i.value).join(', '),
-            midia: item.midia // Crucial para não perder a foto
+            midia: item.midia 
         });
 
-        showToast("Salvando dados...");
+        showToast("Salvando...");
         const res = await fetch(API, { method: "POST", body: params });
         const result = await res.json();
         if(result.success) {
-            ALTERACOES_PENDENTES = false;
             showToast("✅ Salvo!");
+            const card = document.getElementById(`card_${safeId}`);
+            if(card) card.classList.remove('nao-salvo');
+            document.getElementById(`save_${safeId}`).style.display = "none";
             carregar();
         }
     }
@@ -232,14 +243,14 @@
             midia: document.getElementById("n_midia").value
         });
 
-        showToast("Criando ID...");
+        showToast("Criando...");
         await fetch(API, { method: "POST", body: params });
         closeModal();
         carregar();
     }
 
     async function excluirID(nome) {
-        if(confirm(`Tem certeza que deseja excluir a ID ${nome}?`)) {
+        if(confirm(`Excluir ${nome}?`)) {
             showToast("Excluindo...");
             await fetch(API, { method: "POST", body: new URLSearchParams({ action: "delete", nome }) });
             carregar();
@@ -247,14 +258,14 @@
     }
 
     function getOptions(campo, sel) {
-        const unique = [...new Set(DADOS_LOCAIS.map(d => d[campo]))].filter(v => v && v !== "Não inf.");
+        const unique = [...new Set(DADOS_LOCAIS.map(d => d[campo]))].filter(v => v && v !== "" && v !== "undefined");
         if (sel && !unique.includes(sel)) unique.push(sel);
         return `<option value="">-</option>` + unique.map(v => `<option value="${v}" ${v==sel?'selected':''}>${v}</option>`).join('');
     }
 
     function popularSelectsModal() {
         ['camadas', 'cores', 'padrao'].forEach(c => {
-            const unique = [...new Set(DADOS_LOCAIS.map(d => d[c]))].filter(v => v && v !== "Não inf.");
+            const unique = [...new Set(DADOS_LOCAIS.map(d => d[c]))].filter(v => v && v !== "" && v !== "undefined");
             document.getElementById('n_'+c).innerHTML = '<option value="">-</option>' + unique.map(v => `<option value="${v}">${v}</option>`).join('');
         });
         document.getElementById("n_especiais").innerHTML = TAGS_ESPECIAIS.map(t => `<label class="tag-check"><input type="checkbox" value="${t}" onchange="this.parentElement.classList.toggle('active')"> ${t}</label>`).join('');
