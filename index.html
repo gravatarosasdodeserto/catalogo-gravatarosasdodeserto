@@ -15,106 +15,130 @@
             --accent: #a08c6b;
             --border: #eceae4;
             --radius: 12px;
+            --sidebar-width: 280px;
         }
 
-        * { transition: all 0.2s ease; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
 
-        body { background: var(--bg); color: var(--text-primary); margin: 0; display: flex; }
+        body { background: var(--bg); color: var(--text-primary); display: flex; min-height: 100vh; }
 
-        /* Sidebar (Menu Lateral) */
+        /* --- SIDEBAR (MENU LATERAL) --- */
         .sidebar { 
-            width: 300px; height: 100vh; background: var(--surface); 
-            border-right: 1px solid var(--border); position: fixed; 
-            padding: 30px; overflow-y: auto; z-index: 1000;
+            width: var(--sidebar-width); 
+            height: 100vh; 
+            background: var(--surface); 
+            border-right: 1px solid var(--border); 
+            position: fixed; 
+            left: 0; top: 0;
+            padding: 30px 20px; 
+            overflow-y: auto; 
+            z-index: 1000;
         }
 
-        .main-content { margin-left: 300px; width: 100%; }
+        .sidebar h2 { font-size: 1.2rem; margin-bottom: 25px; font-weight: 600; color: var(--text-primary); }
 
-        /* Header com Logo Destacada (Faixa Fosca) */
-        .header { 
-            height: 200px; 
-            background: url('imagens/gravata-cabecalho.jpg') center/cover;
-            display: flex; align-items: center; justify-content: center;
+        .filter-section { margin-bottom: 30px; }
+        .filter-title { 
+            font-size: 11px; font-weight: 700; color: var(--accent); 
+            text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 15px; 
         }
-        .logo-wrap {
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(10px);
-            padding: 20px 40px;
-            border-radius: var(--radius);
-            box-shadow: 0 8px 32px rgba(0,0,0,0.05);
-        }
-        .logo { width: 160px; display: block; }
-
-        /* Filtros Acumulativos */
-        .filter-section { margin-bottom: 25px; }
-        .filter-title { font-size: 12px; font-weight: 600; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
         
-        .check-group { display: flex; flex-direction: column; gap: 8px; }
-        .check-item { display: flex; align-items: center; gap: 10px; cursor: pointer; font-size: 14px; color: var(--text-secondary); }
-        .check-item input { accent-color: var(--accent); cursor: pointer; }
+        .search-input {
+            width: 100%; padding: 12px; border-radius: 8px; 
+            border: 1px solid var(--border); outline: none; background: #fafafa; margin-bottom: 20px;
+        }
+
+        .check-group { display: flex; flex-direction: column; gap: 10px; }
+        .check-item { 
+            display: flex; align-items: center; gap: 10px; cursor: pointer; 
+            font-size: 13px; color: var(--text-secondary); transition: 0.2s;
+        }
+        .check-item input { accent-color: var(--accent); width: 16px; height: 16px; cursor: pointer; }
         .check-item:hover { color: var(--text-primary); }
 
-        /* Grid Compacto */
-        .container { padding: 30px; }
+        /* --- CONTEÚDO PRINCIPAL --- */
+        .main-content { 
+            margin-left: var(--sidebar-width); 
+            flex: 1;
+            width: calc(100% - var(--sidebar-width));
+        }
+
+        /* Header com Faixa Fosca */
+        .header { 
+            height: 220px; 
+            background: url('imagens/gravata-cabecalho.jpg') center/cover no-repeat;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .logo-container {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(12px);
+            padding: 25px 50px;
+            border-radius: var(--radius);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+        .logo { width: 150px; display: block; }
+
+        /* Grid do Catálogo */
+        .container { padding: 40px; }
         #catalogo { 
             display: grid; 
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); 
-            gap: 20px; 
+            gap: 25px; 
         }
 
-        /* Card de Produto */
+        /* --- CARDS --- */
         .card { 
             background: var(--surface); border-radius: var(--radius); 
             overflow: hidden; border: 1px solid var(--border);
-            position: relative; cursor: pointer;
+            position: relative; cursor: pointer; transition: 0.3s;
         }
-        .card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 12px 25px rgba(0,0,0,0.05); }
         .card.selected { border: 2px solid var(--accent); background: #fdfaf5; }
 
-        .img-container { width: 100%; aspect-ratio: 1/1; background: #f7f6f2; position: relative; }
+        .img-container { width: 100%; aspect-ratio: 1/1; background: #f7f6f2; overflow: hidden; }
         .img-container img { width: 100%; height: 100%; object-fit: cover; }
 
-        .info { padding: 15px; text-align: left; }
-        .info h3 { font-size: 16px; margin: 0 0 5px 0; font-weight: 600; }
-        .info p { font-size: 12px; margin: 0; color: var(--text-secondary); }
+        .info { padding: 15px; }
+        .info h3 { font-size: 15px; margin-bottom: 4px; font-weight: 600; color: var(--text-primary); }
+        .info p { font-size: 11px; color: var(--text-secondary); line-height: 1.4; }
 
         .badge-status { 
-            position: absolute; top: 10px; right: 10px; padding: 4px 10px; 
-            border-radius: 50px; font-size: 10px; font-weight: 600;
-            background: rgba(255,255,255,0.9); backdrop-filter: blur(4px);
+            position: absolute; top: 12px; right: 12px; padding: 4px 10px; 
+            border-radius: 50px; font-size: 9px; font-weight: 700; text-transform: uppercase;
+            background: rgba(255,255,255,0.95); backdrop-filter: blur(4px); box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
 
-        /* Botão de WhatsApp Flutuante */
+        /* --- BOTÃO WHATSAPP --- */
         .btn-whatsapp {
             position: fixed; bottom: 30px; right: 30px;
             background: #25d366; color: white; border: none;
-            padding: 15px 30px; border-radius: 50px; font-weight: 600;
-            box-shadow: 0 10px 30px rgba(37, 211, 102, 0.3);
-            display: none; cursor: pointer; z-index: 2000;
+            padding: 16px 32px; border-radius: 50px; font-weight: 600;
+            box-shadow: 0 15px 35px rgba(37, 211, 102, 0.4);
+            display: none; cursor: pointer; z-index: 2000; font-size: 14px;
         }
-        .btn-whatsapp:hover { transform: scale(1.05); }
+        .btn-whatsapp:hover { transform: scale(1.05); background: #20ba5a; }
 
-        /* Responsividade */
-        @media (max-width: 768px) {
+        /* --- RESPONSIVIDADE --- */
+        @media (max-width: 900px) {
             body { flex-direction: column; }
-            .sidebar { width: 100%; height: auto; position: relative; border-right: none; border-bottom: 1px solid var(--border); }
-            .main-content { margin-left: 0; }
-            #catalogo { grid-template-columns: 1fr 1fr; gap: 10px; } /* Mínimo 2 por linha no celular */
-            .container { padding: 10px; }
-            .card .info h3 { font-size: 14px; }
+            .sidebar { 
+                width: 100%; height: auto; position: relative; 
+                border-right: none; border-bottom: 1px solid var(--border); 
+            }
+            .main-content { margin-left: 0; width: 100%; }
+            #catalogo { grid-template-columns: 1fr 1fr; gap: 12px; }
+            .container { padding: 15px; }
+            .logo-container { padding: 15px 30px; }
+            .logo { width: 120px; }
         }
     </style>
 </head>
 <body>
 
 <aside class="sidebar">
-    <div style="margin-bottom: 30px;">
-        <h2 style="font-size: 18px; font-weight: 600;">Filtros</h2>
-    </div>
+    <h2>Filtros</h2>
 
-    <div class="filter-section">
-        <input type="text" id="search" placeholder="Buscar ID..." oninput="filtrar()" style="width:100%; padding:10px; border-radius:8px; border:1px solid var(--border); outline:none;">
-    </div>
+    <input type="text" id="search" class="search-input" placeholder="Buscar por ID..." oninput="filtrar()">
 
     <div class="filter-section">
         <div class="filter-title">Cores</div>
@@ -134,8 +158,8 @@
 
 <main class="main-content">
     <header class="header">
-        <div class="logo-wrap">
-            <img src="logo.png" class="logo">
+        <div class="logo-container">
+            <img src="logo.png" class="logo" alt="Gravatá RD Logo">
         </div>
     </header>
 
@@ -151,12 +175,14 @@
 <script>
     const API = "https://script.google.com/macros/s/AKfycbzgV_H5QLTNwJ12B-78q57qNnlaVi0vbxW3jIqdnp7YH1IKCdBdFthIHymlMM9Jusqktg/exec";
     let DADOS = [];
+    let DADOS_FILTRADOS = [];
     let SELECIONADOS = new Set();
 
     async function carregar() {
         try {
             const r = await fetch(API + "?action=get&t=" + Date.now());
             const json = await r.json();
+            
             DADOS = Object.keys(json).map(k => ({
                 nome: k,
                 camadas: json[k].camadas,
@@ -166,15 +192,22 @@
                 qtd: parseInt(json[k].qtd) || 0,
                 midia: json[k].midia
             }));
+            
+            DADOS_FILTRADOS = [...DADOS];
             gerarFiltrosCheckboxes();
-            render(DADOS);
-        } catch (e) { console.error("Erro"); }
+            render();
+        } catch (e) {
+            console.error("Erro ao carregar dados:", e);
+        }
     }
 
     function gerarFiltrosCheckboxes() {
-        const criarCheck = (idContainer, lista) => {
-            const container = document.getElementById(idContainer);
-            [...new Set(lista)].filter(v => v).sort().forEach(valor => {
+        const extrairEPopular = (containerId, chave) => {
+            const container = document.getElementById(containerId);
+            container.innerHTML = "";
+            const itensUnicos = [...new Set(DADOS.map(d => d[chave]))].filter(v => v).sort();
+            
+            itensUnicos.forEach(valor => {
                 container.innerHTML += `
                     <label class="check-item">
                         <input type="checkbox" value="${valor}" onchange="filtrar()"> ${valor}
@@ -182,27 +215,30 @@
                 `;
             });
         };
-        criarCheck('container-cores', DADOS.map(d => d.cores));
-        criarCheck('container-camadas', DADOS.map(d => d.camadas));
-        criarCheck('container-padrao', DADOS.map(d => d.padrao));
+
+        extrairEPopular('container-cores', 'cores');
+        extrairEPopular('container-camadas', 'camadas');
+        extrairEPopular('container-padrao', 'padrao');
     }
 
-    function render(lista) {
+    function render() {
         const container = document.getElementById("catalogo");
-        container.innerHTML = lista.map(d => {
+        container.innerHTML = DADOS_FILTRADOS.map(d => {
             const emEstoque = d.qtd > 0;
             const selecionado = SELECIONADOS.has(d.nome);
             const foto = d.midia ? `https://drive.google.com/thumbnail?sz=w600&id=${d.midia}` : 'imagens/sem-foto.jpg';
             
             return `
                 <div class="card ${selecionado ? 'selected' : ''}" onclick="toggleSelecao('${d.nome}')">
-                    <div class="badge-status">${emEstoque ? 'Em Stock' : 'Encomendar'}</div>
+                    <div class="badge-status" style="color: ${emEstoque ? '#28a745' : '#968369'}">
+                        ${emEstoque ? 'Disponível' : 'Encomendar'}
+                    </div>
                     <div class="img-container">
-                        <img src="${foto}">
+                        <img src="${foto}" loading="lazy">
                     </div>
                     <div class="info">
                         <h3>${d.nome}</h3>
-                        <p>${d.cores} • ${d.camadas}</p>
+                        <p>${d.cores}<br>${d.camadas} • ${d.padrao}</p>
                     </div>
                 </div>
             `;
@@ -213,35 +249,43 @@
         if (SELECIONADOS.has(nome)) SELECIONADOS.delete(nome);
         else SELECIONADOS.add(nome);
         
-        document.getElementById('btn-whats').style.display = SELECIONADOS.size > 0 ? 'block' : 'none';
-        document.getElementById('count').innerText = SELECIONADOS.size;
-        render(DADOS_FILTRADOS);
+        const btn = document.getElementById('btn-whats');
+        const countSpan = document.getElementById('count');
+        
+        btn.style.display = SELECIONADOS.size > 0 ? 'block' : 'none';
+        countSpan.innerText = SELECIONADOS.size;
+        
+        render(); // Re-renderiza para mostrar as bordas de seleção
     }
 
-    let DADOS_FILTRADOS = [];
     function filtrar() {
         const busca = document.getElementById("search").value.toLowerCase();
-        const coresCheck = [...document.querySelectorAll('#container-cores input:checked')].map(i => i.value);
-        const camadasCheck = [...document.querySelectorAll('#container-camadas input:checked')].map(i => i.value);
-        const padraoCheck = [...document.querySelectorAll('#container-padrao input:checked')].map(i => i.value);
+        
+        const obterSelecionados = (containerId) => 
+            [...document.querySelectorAll(`#${containerId} input:checked`)].map(i => i.value);
+
+        const coresSel = obterSelecionados('container-cores');
+        const camadasSel = obterSelecionados('container-camadas');
+        const padraoSel = obterSelecionados('container-padrao');
 
         DADOS_FILTRADOS = DADOS.filter(d => {
-            const matchNome = d.nome.toLowerCase().includes(busca);
-            const matchCor = coresCheck.length === 0 || coresCheck.includes(d.cores);
-            const matchCamada = camadasCheck.length === 0 || camadasCheck.includes(d.camadas);
-            const matchPadrao = padraoCheck.length === 0 || padraoCheck.includes(d.padrao);
-            return matchNome && matchCor && matchCamada && matchPadrao;
+            const matchBusca = d.nome.toLowerCase().includes(busca);
+            const matchCores = coresSel.length === 0 || coresSel.includes(d.cores);
+            const matchCamadas = camadasSel.length === 0 || camadasSel.includes(d.camadas);
+            const matchPadrao = padraoSel.length === 0 || padraoSel.includes(d.padrao);
+            
+            return matchBusca && matchCores && matchCamadas && matchPadrao;
         });
-        render(DADOS_FILTRADOS);
+
+        render();
     }
 
     function enviarPedido() {
-        const listaNomes = Array.from(SELECIONADOS).join(', ');
-        const saudacao = "Olá, Gravatá RD! Estive a visitar o vosso catálogo e fiquei encantado com algumas flores.";
-        const corpo = `Poderia me passar mais informações sobre estas IDs?\n\n*IDs selecionadas:* ${listaNomes}`;
-        const final = "\n\nAguardo o vosso retorno. Obrigado!";
+        const IDs = Array.from(SELECIONADOS).join(', ');
+        const saudacao = "Olá, Gravatá RD! 👋";
+        const corpo = `Estive a ver o vosso catálogo e gostei muito destas IDs:\n\n*${IDs}*\n\nPoderiam me dar mais informações sobre a disponibilidade e valores?`;
         
-        const url = `https://wa.me/558992665421?text=${encodeURIComponent(saudacao + "\n\n" + corpo + final)}`;
+        const url = `https://wa.me/558992665421?text=${encodeURIComponent(saudacao + "\n\n" + corpo)}`;
         window.open(url, '_blank');
     }
 
