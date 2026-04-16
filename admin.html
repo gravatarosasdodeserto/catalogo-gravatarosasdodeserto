@@ -591,6 +591,99 @@
     flex-shrink: 0;
 }
 
+
+/* ===== CORREÇÃO MODAIS (NOVO PADRÃO) ===== */
+
+#modal, #modalExcluir, #modalSair {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.65);
+    backdrop-filter: blur(10px);
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+}
+
+/* estrutura do modal */
+#modal .modal-content,
+#modalExcluir .modal-content,
+#modalSair .modal-content {
+    width: 92%;
+    max-width: 420px;
+    animation: slideUp 0.35s ease;
+}
+
+/* modal principal (nova ID) */
+#modal .card-modal {
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(18px);
+    border-radius: 26px;
+    padding: 22px;
+    box-shadow: 0 25px 70px rgba(0,0,0,0.35);
+    border: 1.5px solid rgba(255,255,255,0.7);
+}
+
+#modal .card-modal h4 {
+    text-align: center;
+    font-size: 20px;
+    margin-bottom: 18px;
+}
+
+#modal .card-modal label {
+    margin-top: 10px;
+}
+
+#modal .card-modal input,
+#modal .card-modal select {
+    margin-top: 6px;
+}
+
+#modal .card-modal .actions {
+    margin-top: 18px;
+}
+
+/* imagem */
+#modal .img-container {
+    margin-bottom: 12px;
+}
+
+#modal .img-placeholder {
+    font-size: 11px;
+    text-align: center;
+    padding: 10px;
+}
+
+/* modais secundários */
+#modalExcluir .modal-content,
+#modalSair .modal-content {
+    background: rgba(255,255,255,0.98);
+    backdrop-filter: blur(16px);
+    border-radius: 24px;
+    padding: 26px;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+}
+
+#modalExcluir h4,
+#modalSair h4 {
+    font-size: 20px;
+    margin-bottom: 12px;
+}
+
+#modalExcluir p,
+#modalSair p {
+    font-size: 14px;
+    color: rgba(58,54,24,0.75);
+    line-height: 1.5;
+}
+
+/* botões dentro dos modais */
+#modalExcluir .actions,
+#modalSair .actions {
+    margin-top: 20px;
+}
+    
 </style>
 </head>
 <body>
