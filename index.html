@@ -25,33 +25,32 @@
         header { 
             height: 150px; 
             background: url('imagens/gravata-cabecalho.jpg') center/cover no-repeat;
-            display: flex; 
-            align-items: center; 
-            justify-content: center;
+            display: flex; align-items: center; justify-content: center;
         }
-
         .header-stripe {
             width: 100%;
             background: rgba(255, 255, 255, 0.4); 
             backdrop-filter: blur(15px);
             -webkit-backdrop-filter: blur(15px);
             padding: 20px 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            display: flex; justify-content: center; align-items: center;
             border-top: 1px solid rgba(255, 255, 255, 0.2);
             border-bottom: 1px solid rgba(255, 255, 255, 0.2);
         }
-
         .logo { width: 110px; display: block; }
+
+        /* Responsivo para Computador */
+        @media (min-width: 1024px) {
+            header { height: 350px; }
+            .header-stripe { padding: 40px 0; }
+            .logo { width: 180px; }
+        }
 
         /* --- BARRA DE AÇÃO (SUPERIOR) --- */
         .top-action-bar {
             background: #2e2a15;
             padding: 8px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            display: flex; justify-content: space-between; align-items: center;
             position: sticky; top: 0; z-index: 1000;
         }
         .btn-top-filter {
@@ -60,11 +59,32 @@
         }
         .btn-top-request {
             background: var(--premium-grad); color: white; border: none;
-            padding: 6px 18px; border-radius: 50px; font-size: 11px;
+            padding: 8px 20px; border-radius: 50px; font-size: 11px;
             font-weight: 600; cursor: pointer; display: none;
         }
 
-        /* --- BUSCA E TAGS --- */
+        /* --- LISTA DE SELECIONADOS (ABAIXO DA BARRA) --- */
+        .selected-list-area {
+            background: #f0ede4;
+            padding: 10px 20px;
+            display: none;
+            flex-wrap: wrap;
+            gap: 8px;
+            border-bottom: 1px solid var(--border);
+        }
+        .selected-tag {
+            background: var(--text-primary);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 50px;
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .selected-tag span { cursor: pointer; font-weight: bold; font-size: 14px; }
+
+        /* --- BUSCA E TAGS DE FILTRO --- */
         .controls-area { padding: 15px; background: var(--bg); border-bottom: 1px solid var(--border); }
         .search-box {
             width: 100%; max-width: 800px; margin: 0 auto 10px; display: block;
@@ -111,26 +131,15 @@
         .check-group { display: flex; flex-direction: column; gap: 8px; }
         .check-item { display: flex; align-items: center; gap: 10px; font-size: 13px; cursor: pointer; }
 
-        /* --- ENGRENAGEM ADMIN (AJUSTADA) --- */
+        /* --- ENGRENAGEM ADMIN --- */
         .btn-admin-gear {
-            position: fixed; 
-            bottom: 15px; 
-            left: 15px;
-            width: 35px;
-            height: 35px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: rgba(255,255,255,0.3); /* Fundo sutil para não sumir */
-            border-radius: 50%;
-            color: var(--accent); 
-            text-decoration: none;
-            font-size: 18px; 
-            z-index: 2000; /* Garantir que fique acima de tudo */
-            opacity: 0.5;
-            transition: 0.3s;
+            position: fixed; bottom: 15px; left: 15px;
+            width: 35px; height: 35px; display: flex; align-items: center; justify-content: center;
+            background: rgba(255,255,255,0.3); border-radius: 50%;
+            color: var(--accent); text-decoration: none; font-size: 18px; z-index: 2000;
+            opacity: 0.5; transition: 0.3s;
         }
-        .btn-admin-gear:hover { opacity: 1; color: var(--text-primary); transform: rotate(90deg); }
+        .btn-admin-gear:hover { opacity: 1; transform: rotate(90deg); }
 
         @media (max-width: 600px) { #catalogo { grid-template-columns: 1fr 1fr; } }
     </style>
@@ -156,8 +165,13 @@
     
 <div class="top-action-bar">
     <button class="btn-top-filter" onclick="toggleMenu()"><span>≡</span> FILTRAR</button>
-    <button class="btn-top-request" id="btn-whats" onclick="enviarPedido()">SOLICITAR (<span id="count">0</span>)</button>
+    <button class="btn-top-request" id="btn-whats" onclick="enviarPedido()">
+        <span id="request-text">Solicitar informações</span>
+    </button>
 </div>
+
+<div class="selected-list-area" id="selected-list">
+    </div>
 
 <div class="controls-area">
     <input type="text" id="search" class="search-box" placeholder="Pesquisar ID ou nome..." oninput="filtrar()">
@@ -213,13 +227,37 @@
                     <div class="info"><h3>${d.id}</h3><p class="stock-text">${stockHtml}</p></div>
                 </div>`;
         }).join('');
+        updateSelectedUI();
     }
 
     function toggleSelecao(id) {
         if (SELECIONADOS.has(id)) SELECIONADOS.delete(id); else SELECIONADOS.add(id);
-        document.getElementById('btn-whats').style.display = SELECIONADOS.size > 0 ? 'block' : 'none';
-        document.getElementById('count').innerText = SELECIONADOS.size;
         render();
+    }
+
+    function updateSelectedUI() {
+        const btn = document.getElementById('btn-whats');
+        const textSpan = document.getElementById('request-text');
+        const listArea = document.getElementById('selected-list');
+        const count = SELECIONADOS.size;
+
+        if (count > 0) {
+            btn.style.display = 'block';
+            listArea.style.display = 'flex';
+            
+            // Texto dinâmico do botão
+            textSpan.innerText = count === 1 
+                ? `Solicitar informações sobre a ID` 
+                : `Solicitar informações sobre as ${count} IDs`;
+
+            // Lista de Tags
+            listArea.innerHTML = Array.from(SELECIONADOS).map(id => `
+                <div class="selected-tag">${id} <span onclick="event.stopPropagation(); toggleSelecao('${id}')">&times;</span></div>
+            `).join('');
+        } else {
+            btn.style.display = 'none';
+            listArea.style.display = 'none';
+        }
     }
 
     function filtrar() {
