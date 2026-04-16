@@ -96,6 +96,10 @@
         const container = document.getElementById("lista");
         container.innerHTML = "";
         const filtrados = DADOS_LOCAIS.filter(d => d.nome.toLowerCase().includes(filtro.toLowerCase()));
+        const tags = (String(d.especiais || "")).split(',')
+    .filter(t => t.trim() !== "")
+    .map(t => `<span class="tag">${t.trim()}</span>`)
+    .join('');
         
         filtrados.forEach(d => {
             const safeId = d.nome.replace(/\W/g, '_');
