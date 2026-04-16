@@ -129,19 +129,19 @@ body {
 /* ===== GRID ===== */
 #lista {
     display: grid;
-    grid-template-columns: repeat(auto-fill,minmax(290px,1fr));
-    gap: 22px;
+    grid-template-columns: repeat(auto-fill,minmax(240px,1fr)); /* era 290px */
+    gap: 18px; /* era 22px */
 }
 
 /* ===== CARD ===== */
 .card {
     background: rgba(255,255,255,0.95);
-    border-radius: 24px;
-    padding: 18px;
+    border-radius: 20px; /* era 24px */
+    padding: 14px; /* era 18px */
     box-shadow: var(--shadow-md);
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 6px; /* era 8px */
     transition: 0.3s;
     position: relative;
 }
@@ -167,8 +167,8 @@ body {
 }
 
 .card h4 {
-    margin: 0 0 4px 0;
-    font-size: 18px;
+     margin: 0;
+    font-size: 16px; /* era 18px */
     text-align: center;
 }
 
@@ -176,12 +176,11 @@ body {
 .img-container {
     position: relative;
     width: 100%;
-    aspect-ratio: 1/1;
-    margin-bottom: 14px;
-    border-radius: 18px;
+    aspect-ratio: 4/3; /* era 1/1 - agora mais retangular e menor */
+    margin-bottom: 10px; /* era 14px */
+    border-radius: 16px; /* era 18px */
     overflow: hidden;
 }
-
 .img {
     width: 100%;
     height: 100%;
