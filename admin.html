@@ -87,7 +87,7 @@
             background: #f5f3f0; overflow: hidden; position: relative; 
             margin: 0 auto 20px; border: 1px solid rgba(0,0,0,0.04);
         }
-        .img-box img { width: 100%; height: 100%; object-fit: cover; }
+        .img-box img { width: 100%; height: 100%; object-fit: cover; transition: opacity 0.3s; }
         
         .edit-icon-btn {
             position: absolute; right: 10px; bottom: 10px; 
@@ -136,7 +136,7 @@
             padding: 35px; text-align: center; animation: slideUp 0.4s ease;
         }
 
-        .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: var(--text-main); color: white; padding: 15px 35px; border-radius: 50px; z-index: 3000; display: none; font-size: 13px; }
+        .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: var(--text-main); color: white; padding: 15px 35px; border-radius: 50px; z-index: 3000; display: none; font-size: 13px; text-align: center; }
 
         @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
     </style>
@@ -235,11 +235,8 @@
             
             filtrados.forEach(d => {
                 const safeId = d.nome.replace(/\W/g, '_');
-                
-                // LÓGICA DE IMAGEM COM FALLBACK PARA GIF/ERRO 404
                 const thumbUrl = d.midia ? `https://drive.google.com/thumbnail?sz=w600&id=${d.midia}` : 'imagens/sem-foto.jpg';
                 const fallbackUrl = d.midia ? `https://docs.google.com/uc?export=view&id=${d.midia}` : 'imagens/sem-foto.jpg';
-                
                 const espArray = d.especiais ? d.especiais.split(',').map(s => s.trim()) : [];
                 
                 const card = document.createElement("div");
@@ -259,8 +256,8 @@
                         <div><label>Camadas</label><select id="cam_${safeId}" onchange="markChange('${safeId}')">${getOptions('camadas', d.camadas)}</select></div>
                     </div>
                     <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px">
-                        <div><label>Cores</label><select id="cor_${safeId}" onchange="changeSelect('${safeId}')">${getOptions('cores', d.cores)}</select></div>
-                        <div><label>Padrão</label><select id="pad_${safeId}" onchange="changeSelect('${safeId}')">${getOptions('padrao', d.padrao)}</select></div>
+                        <div><label>Cores</label><select id="cor_${safeId}" onchange="markChange('${safeId}')">${getOptions('cores', d.cores)}</select></div>
+                        <div><label>Padrão</label><select id="pad_${safeId}" onchange="markChange('${safeId}')">${getOptions('padrao', d.padrao)}</select></div>
                     </div>
                     <label>Características Especiais:</label>
                     <div class="especiais-container">
@@ -282,29 +279,52 @@
         async function handleUpload(input, nomeRosa) {
             const file = input.files[0];
             if (!file) return;
+
             const safeId = nomeRosa === 'new' ? 'new' : nomeRosa.replace(/\W/g, '_');
-            showToast("Enviando arquivo...");
+            const imgElement = (nomeRosa === 'new') ? document.getElementById("preview_new") : document.getElementById(`img_${safeId}`);
             
+            // Início do Feedback Visual
+            if (imgElement) imgElement.style.opacity = "0.3";
+            showToast("Fazendo upload... aguarde.");
+
             const reader = new FileReader();
             reader.readAsDataURL(file);
             reader.onload = async () => {
                 const base64 = reader.result.split(',')[1];
-                const res = await fetch(API, { method: "POST", body: new URLSearchParams({ action: "upload", nome: nomeRosa, data: base64, mimeType: file.type }) });
-                const result = await res.json();
-                
-                if (result.success) {
-                    const directLink = `https://docs.google.com/uc?export=view&id=${result.id}&t=${Date.now()}`;
-                    if (nomeRosa === 'new') {
-                        document.getElementById("n_midia").value = result.id;
-                        const prev = document.getElementById("preview_new");
-                        prev.src = directLink;
-                        prev.style.display = "block";
-                        document.getElementById("trigger_new").style.display = "none";
+                try {
+                    const res = await fetch(API, { 
+                        method: "POST", 
+                        body: new URLSearchParams({ 
+                            action: "upload", 
+                            nome: nomeRosa, 
+                            data: base64, 
+                            mimeType: file.type 
+                        }) 
+                    });
+                    const result = await res.json();
+                    
+                    if (result.success) {
+                        // Link direto com timestamp para ignorar cache e evitar 404 inicial
+                        const finalUrl = `https://docs.google.com/uc?export=view&id=${result.id}&t=${Date.now()}`;
+                        
+                        if (nomeRosa === 'new') {
+                            document.getElementById("n_midia").value = result.id;
+                            imgElement.src = finalUrl;
+                            imgElement.style.display = "block";
+                            imgElement.style.opacity = "1";
+                            document.getElementById("trigger_new").style.display = "none";
+                        } else {
+                            imgElement.src = finalUrl;
+                            imgElement.style.opacity = "1";
+                            markChange(safeId); // Ativa botão salvar
+                        }
+                        showToast("✅ Foto enviada! Clique em SALVAR.");
                     } else {
-                        document.getElementById(`img_${safeId}`).src = directLink;
-                        markChange(safeId); // FORÇA O BOTÃO SALVAR APARECER
+                        throw new Error("Erro no servidor");
                     }
-                    showToast("Foto processada com sucesso!");
+                } catch (e) {
+                    showToast("❌ Falha no upload.");
+                    if (imgElement) imgElement.style.opacity = "1";
                 }
             };
         }
@@ -316,9 +336,6 @@
             if(btn) btn.style.display = "block";
             if(card) card.classList.add('nao-salvo');
         }
-
-        // Helper para o evento onchange dos selects
-        function changeSelect(id) { markChange(id); }
 
         async function salvarAlteracao(nome) {
             const safeId = nome.replace(/\W/g, '_');
@@ -337,14 +354,14 @@
             document.getElementById(`save_${safeId}`).style.display = "none";
             document.getElementById(`card_${safeId}`).classList.remove('nao-salvo');
             ALTERACOES_PENDENTES = document.querySelectorAll('.nao-salvo').length > 0;
-            showToast("Atualizado!");
+            showToast("Salvo com sucesso!");
         }
 
         async function criarID() {
             const nome = document.getElementById("n_nome").value;
             if(!nome) return alert("O nome da Rosa é obrigatório!");
             const esp = [...document.querySelectorAll(`#n_especiais input:checked`)].map(i => i.value).join(', ');
-            showToast("Criando registro...");
+            showToast("Criando...");
             
             await fetch(API, { method: "POST", body: new URLSearchParams({
                 action: "create", nome,
