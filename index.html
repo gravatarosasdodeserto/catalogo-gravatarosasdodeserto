@@ -21,82 +21,102 @@
         body { background: var(--bg); color: var(--text-primary); overflow-x: hidden; }
 
         /* --- HEADER COM FAIXA FOSCA --- */
-        .header { 
-            height: 200px; 
+        header { 
+            height: 180px; 
             background: url('imagens/gravata-cabecalho.jpg') center/cover no-repeat;
             display: flex; align-items: center; justify-content: center;
         }
-        .logo-container {
-            background: rgba(255, 255, 255, 0.75);
-            backdrop-filter: blur(12px);
-            padding: 20px 40px;
+        .logo-box {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            padding: 15px 35px;
             border-radius: var(--radius);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.05);
         }
-        .logo { width: 140px; display: block; }
+        .logo { width: 130px; display: block; }
 
-        /* --- MENU LATERAL (DRAWER) --- */
+        /* --- ÁREA DE BUSCA FIXA ABAIXO DO HEADER --- */
+        .search-container {
+            padding: 20px;
+            background: var(--bg);
+            display: flex;
+            justify-content: center;
+            border-bottom: 1px solid var(--border);
+        }
+        .search-box {
+            width: 100%;
+            max-width: 600px;
+            padding: 12px 20px;
+            border-radius: 50px;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            outline: none;
+            font-size: 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+        }
+
+        /* --- MENU LATERAL (GAVETA DE FILTROS) --- */
         .sidebar { 
             position: fixed; left: -300px; top: 0; width: 300px; height: 100%;
-            background: var(--surface); z-index: 2000; padding: 30px 20px;
+            background: var(--surface); z-index: 3000; padding: 30px 20px;
             box-shadow: 10px 0 30px rgba(0,0,0,0.1); transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             overflow-y: auto;
         }
         .sidebar.active { left: 0; }
         .overlay { 
             position: fixed; inset: 0; background: rgba(0,0,0,0.3); 
-            z-index: 1999; display: none; backdrop-filter: blur(3px);
+            z-index: 2999; display: none; backdrop-filter: blur(3px);
         }
         .overlay.active { display: block; }
 
         .filter-section { margin-bottom: 25px; }
-        .filter-title { font-size: 11px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; }
+        .filter-title { font-size: 11px; font-weight: 700; color: var(--accent); text-transform: uppercase; margin-bottom: 12px; }
         .check-group { display: flex; flex-direction: column; gap: 10px; }
         .check-item { display: flex; align-items: center; gap: 10px; cursor: pointer; font-size: 13px; color: var(--text-secondary); }
         .check-item input { accent-color: var(--accent); width: 18px; height: 18px; }
 
-        /* --- BOTÕES FLUTUANTES --- */
-        .float-btns { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); display: flex; gap: 15px; z-index: 1500; width: max-content; }
-        
-        .btn-filter { 
-            background: var(--text-primary); color: white; border: none; padding: 14px 25px;
-            border-radius: 50px; font-weight: 600; cursor: pointer; box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-            display: flex; align-items: center; gap: 8px; font-size: 14px;
+        /* --- RODAPÉ FLUTUANTE (BARRA DE AÇÃO) --- */
+        .action-bar {
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+            width: 90%; max-width: 500px;
+            background: rgba(46, 42, 21, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 12px 20px;
+            border-radius: 100px;
+            display: flex; justify-content: space-between; align-items: center;
+            z-index: 2000;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+        }
+        .btn-action {
+            background: none; border: none; color: white; font-weight: 600;
+            font-size: 13px; cursor: pointer; display: flex; align-items: center; gap: 8px;
+        }
+        .btn-request {
+            background: #25d366; color: white; padding: 10px 20px;
+            border-radius: 50px; font-size: 13px; text-decoration: none;
+            display: none; /* Só aparece quando algo for selecionado */
         }
 
-        .btn-whatsapp {
-            background: #25d366; color: white; border: none; padding: 14px 25px;
-            border-radius: 50px; font-weight: 600; cursor: pointer;
-            box-shadow: 0 10px 25px rgba(37, 211, 102, 0.3); display: none; font-size: 14px;
-        }
-
-        /* --- GRID DO CATÁLOGO --- */
-        .container { max-width: 1400px; margin: auto; padding: 30px 15px 120px; }
+        /* --- GRID E CARDS --- */
+        .container { max-width: 1400px; margin: auto; padding: 20px 15px 120px; }
         #catalogo { 
             display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); 
+            grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); 
             gap: 15px; 
         }
-
-        /* --- CARDS --- */
         .card { 
             background: var(--surface); border-radius: var(--radius); overflow: hidden; 
             border: 1px solid var(--border); cursor: pointer; position: relative;
         }
-        .card.selected { border: 2px solid var(--accent); background: #fdfaf5; }
+        .card.selected { border: 2.5px solid var(--accent); }
         .img-container { width: 100%; aspect-ratio: 1/1; background: #f7f6f2; }
         .img-container img { width: 100%; height: 100%; object-fit: cover; }
         .info { padding: 12px; }
-        .info h3 { font-size: 14px; margin-bottom: 3px; font-weight: 600; }
-        .info p { font-size: 11px; color: var(--text-secondary); line-height: 1.3; }
-        .badge { 
-            position: absolute; top: 10px; right: 10px; padding: 3px 8px; border-radius: 50px;
-            font-size: 9px; font-weight: 700; background: rgba(255,255,255,0.9);
-        }
+        .info h3 { font-size: 13px; font-weight: 600; }
+        .info p { font-size: 10px; color: var(--text-secondary); }
 
         @media (max-width: 600px) {
-            #catalogo { grid-template-columns: 1fr 1fr; gap: 10px; }
-            .logo { width: 120px; }
+            #catalogo { grid-template-columns: 1fr 1fr; }
         }
     </style>
 </head>
@@ -105,46 +125,42 @@
 <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
 
 <aside class="sidebar" id="sidebar">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
-        <h2 style="font-size: 18px;">Filtros</h2>
-        <button onclick="toggleMenu()" style="background:none; border:none; font-size: 20px; cursor:pointer;">&times;</button>
-    </div>
-
-    <div class="filter-section">
-        <input type="text" id="search" placeholder="Buscar ID..." oninput="filtrar()" style="width:100%; padding:12px; border-radius:8px; border:1px solid var(--border); outline:none;">
-    </div>
-
+    <h2 style="font-size: 18px; margin-bottom: 25px;">Refinar Busca</h2>
     <div class="filter-section">
         <div class="filter-title">Cores</div>
         <div class="check-group" id="container-cores"></div>
     </div>
-
     <div class="filter-section">
         <div class="filter-title">Camadas</div>
         <div class="check-group" id="container-camadas"></div>
     </div>
-
     <div class="filter-section">
         <div class="filter-title">Padrão</div>
         <div class="check-group" id="container-padrao"></div>
     </div>
-
-    <button onclick="toggleMenu()" style="width:100%; background:var(--accent); color:white; border:none; padding:15px; border-radius:8px; font-weight:600; margin-top:20px; cursor:pointer;">VER RESULTADOS</button>
+    <button onclick="toggleMenu()" style="width:100%; background:var(--accent); color:white; border:none; padding:12px; border-radius:8px; font-weight:600; cursor:pointer;">APLICAR</button>
 </aside>
 
-<header class="header">
-    <div class="logo-container"><img src="logo.png" class="logo"></div>
+<header>
+    <div class="logo-box"><img src="logo.png" class="logo"></div>
 </header>
+
+<div class="search-container">
+    <input type="text" id="search" class="search-box" placeholder="Pesquisar por nome ou ID..." oninput="filtrar()">
+</div>
 
 <main class="container">
     <div id="catalogo"></div>
 </main>
 
-<div class="float-btns">
-    <button class="btn-filter" onclick="toggleMenu()">
-        <span>🔍</span> FILTRAR
+<div class="action-bar">
+    <button class="btn-action" onclick="toggleMenu()">
+        <span>≡</span> FILTRAR
     </button>
-    <button class="btn-whatsapp" id="btn-whats" onclick="enviarPedido()">
+    <div id="info-selecao" style="color: rgba(255,255,255,0.6); font-size: 11px;">
+        Selecione as rosas
+    </div>
+    <button class="btn-request" id="btn-whats" onclick="enviarPedido()">
         SOLICITAR (<span id="count">0</span>)
     </button>
 </div>
@@ -159,13 +175,12 @@
             const json = await r.json();
             DADOS = Object.keys(json).map(k => ({
                 nome: k, camadas: json[k].camadas, cores: json[k].cores,
-                padrao: json[k].padrao, especiais: json[k].especiais,
-                qtd: parseInt(json[k].qtd) || 0, midia: json[k].midia
+                padrao: json[k].padrao, qtd: parseInt(json[k].qtd) || 0, midia: json[k].midia
             }));
             DADOS_FILTRADOS = [...DADOS];
             popularFiltros();
             render();
-        } catch (e) { console.error("Erro ao carregar"); }
+        } catch (e) { console.error("Erro"); }
     }
 
     function popularFiltros() {
@@ -187,11 +202,10 @@
             const foto = d.midia ? `https://drive.google.com/thumbnail?sz=w600&id=${d.midia}` : 'imagens/sem-foto.jpg';
             return `
                 <div class="card ${sel ? 'selected' : ''}" onclick="toggleSelecao('${d.nome}')">
-                    <div class="badge" style="color:${d.qtd > 0 ? '#28a745' : '#a08c6b'}">${d.qtd > 0 ? 'DISPONÍVEL' : 'ENCOMENDAR'}</div>
                     <div class="img-container"><img src="${foto}" loading="lazy"></div>
                     <div class="info">
                         <h3>${d.nome}</h3>
-                        <p>${d.cores}<br>${d.camadas} • ${d.padrao}</p>
+                        <p>${d.cores} • ${d.camadas}</p>
                     </div>
                 </div>`;
         }).join('');
@@ -199,8 +213,11 @@
 
     function toggleSelecao(nome) {
         if (SELECIONADOS.has(nome)) SELECIONADOS.delete(nome); else SELECIONADOS.add(nome);
-        document.getElementById('btn-whats').style.display = SELECIONADOS.size > 0 ? 'block' : 'none';
-        document.getElementById('count').innerText = SELECIONADOS.size;
+        
+        const count = SELECIONADOS.size;
+        document.getElementById('btn-whats').style.display = count > 0 ? 'block' : 'none';
+        document.getElementById('info-selecao').style.display = count > 0 ? 'none' : 'block';
+        document.getElementById('count').innerText = count;
         render();
     }
 
@@ -224,7 +241,7 @@
     }
 
     function enviarPedido() {
-        const msg = `Olá, Gravatá RD! 👋\nGostaria de saber mais sobre estas IDs do catálogo:\n\n*${Array.from(SELECIONADOS).join(', ')}*`;
+        const msg = `Olá, Gravatá RD! 👋\nGostaria de saber mais sobre estas IDs:\n\n*${Array.from(SELECIONADOS).join(', ')}*`;
         window.open(`https://wa.me/558992665421?text=${encodeURIComponent(msg)}`, '_blank');
     }
 
