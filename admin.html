@@ -7,7 +7,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* CORES EXATAS DO SEU INDEX */
             --body-bg: #e9e4dd;
             --text-main: #2e2a15;
             --accent: #a08c6b;
@@ -20,7 +19,6 @@
         
         body {
             font-family: 'Poppins', sans-serif;
-            /* FUNDO COM O MESMO GRADIENTE DO INDEX */
             background: var(--body-bg);
             background-image:
                 radial-gradient(at 20% 20%, rgba(160, 140, 107, 0.12) 0px, transparent 50%),
@@ -30,7 +28,6 @@
             padding-bottom: 60px;
         }
 
-        /* HEADER PREMIUM */
         .topbar {
             height: 160px;
             background: url('imagens/gravata-cabecalho.jpg') center/cover;
@@ -52,7 +49,6 @@
             border-bottom: 1.5px solid rgba(255, 255, 255, 0.5);
         }
 
-        /* BOTÃO SAIR (ESTILO TAG FILTRO) */
         .btn-exit {
             background: linear-gradient(135deg, var(--text-main), var(--accent-dark));
             color: white; border-radius: 50px; padding: 10px 25px;
@@ -62,7 +58,6 @@
 
         .container { max-width: 1200px; margin: auto; padding: 25px; }
         
-        /* BOTÃO CADASTRAR (ESTILO WHATSAPP DO INDEX) */
         .btn-new {
             width: 100%; padding: 18px; border-radius: 50px; border: none;
             background: linear-gradient(135deg, var(--text-main), var(--accent-dark));
@@ -71,7 +66,6 @@
             text-transform: uppercase; transition: 0.3s;
         }
 
-        /* BUSCA (ESTILO CAMPO-BUSCA DO INDEX) */
         .search-box {
             width: 100%; padding: 16px 25px; border-radius: 50px; 
             border: 2px solid rgba(0,0,0,0.08); margin-bottom: 40px; 
@@ -79,23 +73,22 @@
             font-size: 14px; box-shadow: 0 4px 12px rgba(0,0,0,0.03);
         }
 
-        /* CARDS (ESTILO ITEM DO INDEX) */
         #lista { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; }
+        
         .card {
             background: var(--card-white); border-radius: 28px; padding: 25px;
             box-shadow: 0 8px 24px rgba(58, 54, 24, 0.08); transition: 0.4s; 
-            border: 1px solid rgba(255,255,255,0.8);
+            border: 2px solid transparent;
         }
-        .card:hover { transform: translateY(-8px); box-shadow: var(--shadow-lg); }
         .nao-salvo { border: 2px solid var(--accent) !important; background: #fffcf5; }
 
-        /* FOTO QUADRADA COM ÍCONE */
         .img-box {
             width: 140px; height: 140px; border-radius: 20px;
             background: #f5f3f0; overflow: hidden; position: relative; 
             margin: 0 auto 20px; border: 1px solid rgba(0,0,0,0.04);
         }
         .img-box img { width: 100%; height: 100%; object-fit: cover; }
+        
         .edit-icon-btn {
             position: absolute; right: 10px; bottom: 10px; 
             background: white; width: 35px; height: 35px; border-radius: 50%;
@@ -103,16 +96,15 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.15); cursor: pointer;
         }
 
-        /* FORMULÁRIO DISCRETO */
-        .card h4 { margin: 0 0 20px 0; font-size: 18px; font-weight: 700; text-align: center; letter-spacing: -0.5px; }
-        label { font-size: 10px; font-weight: 700; color: var(--accent); text-transform: uppercase; margin-bottom: 5px; margin-left: 5px; }
+        .card h4 { margin: 0 0 20px 0; font-size: 18px; font-weight: 700; text-align: center; }
+        label { font-size: 10px; font-weight: 700; color: var(--accent); text-transform: uppercase; margin-bottom: 5px; display: block; }
+        
         input, select {
             width: 100%; padding: 12px; border-radius: 15px; border: 1.5px solid #ebe7e1;
             font-size: 13px; background: #fdfdfd; outline: none; margin-bottom: 12px;
         }
 
-        /* TAGS (ESTILO TAG-ITEM DO INDEX) */
-        .especiais-container { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+        .especiais-container { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; margin-bottom: 15px; }
         .tag-check {
             font-size: 10px; background: #f5f3f0; padding: 7px 14px; border-radius: 12px;
             cursor: pointer; border: 1px solid #ebe7e1; transition: 0.2s; font-weight: 700;
@@ -123,8 +115,7 @@
         }
         .tag-check input { display: none; }
 
-        /* AÇÕES DO CARD */
-        .card-actions { display: flex; gap: 12px; margin-top: 25px; }
+        .card-actions { display: flex; gap: 12px; margin-top: 10px; }
         .btn-save { 
             flex: 2; background: #2d5a27; color: white; border: none; 
             padding: 14px; border-radius: 50px; font-weight: 700; 
@@ -136,20 +127,16 @@
             font-weight: 700; cursor: pointer; text-transform: uppercase; font-size: 10px;
         }
 
-        /* MODAIS IGUAIS AO ACESSO RESTRITO */
         .modal {
             position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px);
             display: none; align-items: center; justify-content: center; z-index: 2000; padding: 20px;
         }
         .modal-content {
-            background: white; width: 100%; max-width: 360px; border-radius: 28px;
-            padding: 35px; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            animation: slideUp 0.4s ease;
+            background: white; width: 100%; max-width: 400px; border-radius: 28px;
+            padding: 35px; text-align: center; animation: slideUp 0.4s ease;
         }
-        .modal-content h4 { font-size: 22px; font-weight: 700; margin-bottom: 10px; color: var(--text-main); }
-        .modal-content p { font-size: 14px; color: #666; margin-bottom: 30px; line-height: 1.5; }
 
-        .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: var(--text-main); color: white; padding: 15px 35px; border-radius: 50px; z-index: 3000; display: none; font-size: 13px; font-weight: 500; }
+        .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: var(--text-main); color: white; padding: 15px 35px; border-radius: 50px; z-index: 3000; display: none; font-size: 13px; }
 
         @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
     </style>
@@ -167,16 +154,15 @@
     <main class="container">
         <button class="btn-new" onclick="openModal()">+ Adicionar Nova ID ao Estoque</button>
         <input type="text" class="search-box" placeholder="Pesquisar rosa pelo nome..." oninput="filtrar(this.value)">
-        
         <div id="lista"></div>
     </main>
 
     <div id="modal" class="modal">
-        <div class="modal-content" style="max-width: 400px;">
+        <div class="modal-content">
             <h4>Novo Cadastro</h4>
             <div class="img-box" style="width:160px; height:160px">
                 <input type="file" id="file_new" hidden accept="image/*" onchange="handleUpload(this, 'new')">
-                <div class="edit-icon-btn" style="right: 50%; bottom: 50%; transform: translate(50%, 50%); width: 45px; height: 45px" onclick="document.getElementById('file_new').click()" id="trigger_new"><input type="file" id="file_new" hidden accept="image/png, image/jpeg, image/gif" onchange="handleUpload(this, 'new')">
+                <div class="edit-icon-btn" style="right: 50%; bottom: 50%; transform: translate(50%, 50%); width: 45px; height: 45px" onclick="document.getElementById('file_new').click()" id="trigger_new">
                     <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
                 </div>
                 <img id="preview_new" style="display:none">
@@ -191,9 +177,10 @@
                 <div><label>Cores</label><select id="n_cores"></select></div>
                 <div><label>Padrão</label><select id="n_padrao"></select></div>
             </div>
-            <label>Especiais</label><div class="especiais-container" id="n_especiais"></div>
+            <label>Características Especiais:</label>
+            <div class="especiais-container" id="n_especiais"></div>
             
-            <div class="card-actions" style="margin-top: 35px;">
+            <div class="card-actions" style="margin-top: 25px;">
                 <button class="btn-new" style="margin:0; flex:1" onclick="criarID()">SALVAR AGORA</button>
                 <button onclick="closeModal()" style="background:none; border:none; color:#999; font-weight:700; cursor:pointer">CANCELAR</button>
             </div>
@@ -232,15 +219,9 @@
 
         if (sessionStorage.getItem("adminLogado") !== "true") { location.href = "index.html"; }
 
-        function confirmExit() {
-            if (ALTERACOES_PENDENTES) document.getElementById("modalSair").style.display = "flex";
-            else window.location.href = 'index.html';
-        }
-        function closeModalSair() { document.getElementById("modalSair").style.display = "none"; }
-
         async function carregar() {
             showToast("Sincronizando estoque...");
-            const r = await fetch(API + "?action=get");
+            const r = await fetch(API + "?action=get&t=" + Date.now());
             const json = await r.json();
             DADOS_LOCAIS = Object.keys(json).map(k => ({ nome: k, ...json[k] }));
             render();
@@ -254,7 +235,11 @@
             
             filtrados.forEach(d => {
                 const safeId = d.nome.replace(/\W/g, '_');
-                const imgUrl = d.midia ? `https://drive.google.com/thumbnail?sz=w600&id=${d.midia}` : 'imagens/sem-foto.jpg';
+                
+                // LÓGICA DE IMAGEM COM FALLBACK PARA GIF/ERRO 404
+                const thumbUrl = d.midia ? `https://drive.google.com/thumbnail?sz=w600&id=${d.midia}` : 'imagens/sem-foto.jpg';
+                const fallbackUrl = d.midia ? `https://docs.google.com/uc?export=view&id=${d.midia}` : 'imagens/sem-foto.jpg';
+                
                 const espArray = d.especiais ? d.especiais.split(',').map(s => s.trim()) : [];
                 
                 const card = document.createElement("div");
@@ -262,8 +247,8 @@
                 card.id = `card_${safeId}`;
                 card.innerHTML = `
                     <div class="img-box">
-                        <input type="file" id="file_${safeId}" hidden onchange="handleUpload(this, '${d.nome}')">
-                        <img src="${imgUrl}" id="img_${safeId}">
+                        <input type="file" id="file_${safeId}" hidden accept="image/*" onchange="handleUpload(this, '${d.nome}')">
+                        <img src="${thumbUrl}" id="img_${safeId}" onerror="this.onerror=null; this.src='${fallbackUrl}';">
                         <div class="edit-icon-btn" onclick="document.getElementById('file_${safeId}').click()">
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
                         </div>
@@ -274,8 +259,8 @@
                         <div><label>Camadas</label><select id="cam_${safeId}" onchange="markChange('${safeId}')">${getOptions('camadas', d.camadas)}</select></div>
                     </div>
                     <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px">
-                        <div><label>Cores</label><select id="cor_${safeId}" onchange="markChange('${safeId}')">${getOptions('cores', d.cores)}</select></div>
-                        <div><label>Padrão</label><select id="pad_${safeId}" onchange="markChange('${safeId}')">${getOptions('padrao', d.padrao)}</select></div>
+                        <div><label>Cores</label><select id="cor_${safeId}" onchange="changeSelect('${safeId}')">${getOptions('cores', d.cores)}</select></div>
+                        <div><label>Padrão</label><select id="pad_${safeId}" onchange="changeSelect('${safeId}')">${getOptions('padrao', d.padrao)}</select></div>
                     </div>
                     <label>Características Especiais:</label>
                     <div class="especiais-container">
@@ -286,7 +271,7 @@
                         `).join('')}
                     </div>
                     <div class="card-actions">
-                        <button class="btn-save" id="save_${safeId}" onclick="salvarAlteracao('${d.nome}')">SALVAR</button>
+                        <button class="btn-save" id="save_${safeId}" onclick="salvarAlteracao('${d.nome}')">SALVAR ALTERAÇÕES</button>
                         <button class="btn-del" onclick="abrirModalExcluir('${d.nome}')">EXCLUIR</button>
                     </div>
                 `;
@@ -294,83 +279,52 @@
             });
         }
 
-        function getOptions(campo, selecionado) {
-            const unique = [...new Set(DADOS_LOCAIS.map(d => d[campo]))].filter(v => v && v !== "Não inf.");
-            if (selecionado && !unique.includes(selecionado)) unique.push(selecionado);
-            return `<option value="">-</option>` + unique.map(v => `<option value="${v}" ${v === selecionado ? 'selected' : ''}>${v}</option>`).join('');
+        async function handleUpload(input, nomeRosa) {
+            const file = input.files[0];
+            if (!file) return;
+            const safeId = nomeRosa === 'new' ? 'new' : nomeRosa.replace(/\W/g, '_');
+            showToast("Enviando arquivo...");
+            
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = async () => {
+                const base64 = reader.result.split(',')[1];
+                const res = await fetch(API, { method: "POST", body: new URLSearchParams({ action: "upload", nome: nomeRosa, data: base64, mimeType: file.type }) });
+                const result = await res.json();
+                
+                if (result.success) {
+                    const directLink = `https://docs.google.com/uc?export=view&id=${result.id}&t=${Date.now()}`;
+                    if (nomeRosa === 'new') {
+                        document.getElementById("n_midia").value = result.id;
+                        const prev = document.getElementById("preview_new");
+                        prev.src = directLink;
+                        prev.style.display = "block";
+                        document.getElementById("trigger_new").style.display = "none";
+                    } else {
+                        document.getElementById(`img_${safeId}`).src = directLink;
+                        markChange(safeId); // FORÇA O BOTÃO SALVAR APARECER
+                    }
+                    showToast("Foto processada com sucesso!");
+                }
+            };
         }
 
         function markChange(id) {
-    ALTERACOES_PENDENTES = true;
-    const btnSave = document.getElementById(`save_${id}`);
-    const card = document.getElementById(`card_${id}`);
-    
-    if (btnSave) btnSave.style.display = "block"; // Mostra o botão verde
-    if (card) card.classList.add('nao-salvo');    // Destaca a borda (estilo Index)
-}
-        async function handleUpload(input, nomeRosa) {
-    const file = input.files[0];
-    if (!file) return;
-
-    // Verifica se é GIF para dar um alerta de processamento (GIFs são mais pesados)
-    if (file.type === 'image/gif') {
-        showToast("Processando GIF... isso pode levar alguns segundos.");
-    }
-
-    const safeId = nomeRosa === 'new' ? 'new' : nomeRosa.replace(/\W/g, '_');
-    const overlay = document.getElementById(`load_${safeId}`);
-    if (overlay) overlay.style.display = "flex";
-
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = async () => {
-        const base64 = reader.result.split(',')[1];
-        
-        try {
-            const res = await fetch(API, { 
-                method: "POST", 
-                body: new URLSearchParams({ 
-                    action: "upload", 
-                    nome: nomeRosa, 
-                    data: base64, 
-                    mimeType: file.type // Envia o tipo real (image/gif, image/jpeg, etc)
-                }) 
-            });
-            
-            const result = await res.json();
-            
-            if (result.success) {
-                const imgThumb = `https://drive.google.com/thumbnail?sz=w600&id=${result.id}`;
-                
-                if (nomeRosa === 'new') {
-                    document.getElementById("n_midia").value = result.id;
-                    const prev = document.getElementById("preview_new");
-                    prev.src = imgThumb;
-                    prev.style.display = "block";
-                    document.getElementById("trigger_new").style.display = "none";
-                } else {
-                    // Atualiza a imagem no card
-                    const imgElement = document.getElementById(`img_${safeId}`);
-                    imgElement.src = imgThumb;
-                    
-                    // IMPORTANTE: Faz o botão SALVAR aparecer após trocar a foto
-                    markChange(safeId); 
-                }
-                showToast("Imagem/GIF carregado! Não esqueça de Salvar.");
-            } else {
-                showToast("Erro ao processar arquivo.");
-            }
-        } catch (e) {
-            showToast("Erro na conexão com o servidor.");
-        } finally {
-            if (overlay) overlay.style.display = "none";
+            ALTERACOES_PENDENTES = true;
+            const btn = document.getElementById(`save_${id}`);
+            const card = document.getElementById(`card_${id}`);
+            if(btn) btn.style.display = "block";
+            if(card) card.classList.add('nao-salvo');
         }
-    };
-}
+
+        // Helper para o evento onchange dos selects
+        function changeSelect(id) { markChange(id); }
+
         async function salvarAlteracao(nome) {
             const safeId = nome.replace(/\W/g, '_');
             const esp = [...document.querySelectorAll(`#card_${safeId} .tag-check input:checked`)].map(i => i.value).join(', ');
-            showToast("Salvando...");
+            showToast("Salvando dados...");
+            
             await fetch(API, { method: "POST", body: new URLSearchParams({
                 action: "update", nome,
                 qtd: document.getElementById(`qtd_${safeId}`).value,
@@ -379,17 +333,19 @@
                 padrao: document.getElementById(`pad_${safeId}`).value,
                 especiais: esp
             })});
+            
             document.getElementById(`save_${safeId}`).style.display = "none";
             document.getElementById(`card_${safeId}`).classList.remove('nao-salvo');
             ALTERACOES_PENDENTES = document.querySelectorAll('.nao-salvo').length > 0;
-            showToast("Salvo!");
+            showToast("Atualizado!");
         }
 
         async function criarID() {
             const nome = document.getElementById("n_nome").value;
-            if(!nome) return alert("Nome é obrigatório!");
+            if(!nome) return alert("O nome da Rosa é obrigatório!");
             const esp = [...document.querySelectorAll(`#n_especiais input:checked`)].map(i => i.value).join(', ');
-            showToast("Cadastrando...");
+            showToast("Criando registro...");
+            
             await fetch(API, { method: "POST", body: new URLSearchParams({
                 action: "create", nome,
                 qtd: document.getElementById("n_qtd").value,
@@ -401,6 +357,25 @@
             closeModal(); carregar();
         }
 
+        function getOptions(campo, selecionado) {
+            const unique = [...new Set(DADOS_LOCAIS.map(d => d[campo]))].filter(v => v && v !== "Não inf.");
+            if (selecionado && !unique.includes(selecionado)) unique.push(selecionado);
+            return `<option value="">-</option>` + unique.map(v => `<option value="${v}" ${v === selecionado ? 'selected' : ''}>${v}</option>`).join('');
+        }
+
+        function popularSelectsModal() {
+            const campos = { 'n_camadas': 'camadas', 'n_cores': 'cores', 'n_padrao': 'padrao' };
+            for (let id in campos) {
+                const unique = [...new Set(DADOS_LOCAIS.map(d => d[campos[id]]))].filter(v => v && v !== "Não inf.");
+                document.getElementById(id).innerHTML = '<option value="">-</option>' + unique.map(v => `<option value="${v}">${v}</option>`).join('');
+            }
+            document.getElementById("n_especiais").innerHTML = TAGS_ESPECIAIS.map(tag => `<label class="tag-check"><input type="checkbox" value="${tag}" onchange="this.parentElement.classList.toggle('active')"> ${tag}</label>`).join('');
+        }
+
+        function confirmExit() { if (ALTERACOES_PENDENTES) document.getElementById("modalSair").style.display = "flex"; else window.location.href = 'index.html'; }
+        function closeModalSair() { document.getElementById("modalSair").style.display = "none"; }
+        function openModal() { document.getElementById("modal").style.display = "flex"; popularSelectsModal(); }
+        function closeModal() { document.getElementById("modal").style.display = "none"; }
         function abrirModalExcluir(nome) {
             document.getElementById("nomeExcluir").innerText = nome;
             document.getElementById("modalExcluir").style.display = "flex";
@@ -411,16 +386,6 @@
             };
         }
         function closeModalExcluir() { document.getElementById("modalExcluir").style.display = "none"; }
-        function popularSelectsModal() {
-            const campos = { 'n_camadas': 'camadas', 'n_cores': 'cores', 'n_padrao': 'padrao' };
-            for (let id in campos) {
-                const unique = [...new Set(DADOS_LOCAIS.map(d => d[campos[id]]))].filter(v => v && v !== "Não inf.");
-                document.getElementById(id).innerHTML = '<option value="">-</option>' + unique.map(v => `<option value="${v}">${v}</option>`).join('');
-            }
-            document.getElementById("n_especiais").innerHTML = TAGS_ESPECIAIS.map(tag => `<label class="tag-check"><input type="checkbox" value="${tag}" onchange="this.parentElement.classList.toggle('active')"> ${tag}</label>`).join('');
-        }
-        function openModal() { document.getElementById("modal").style.display = "flex"; popularSelectsModal(); }
-        function closeModal() { document.getElementById("modal").style.display = "none"; }
         function filtrar(v) { render(v); }
         function showToast(m) { const t = document.getElementById("toast"); t.innerText = m; t.style.display = "block"; setTimeout(() => t.style.display = "none", 3000); }
 
