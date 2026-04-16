@@ -641,6 +641,8 @@ async function carregar() {
 
 async function salvar(nome) {
     const id = nome.replace(/\W/g, "_");
+    const imgEl = document.getElementById("qtd_" + id).closest('.card').querySelector('img');
+    const midiaId = imgEl.src.includes('id=')? imgEl.src.split('id=')[1] : '';
 
     await fetch(URL, {
         method: "POST",
@@ -651,7 +653,8 @@ async function salvar(nome) {
             camadas: document.getElementById("cam_" + id).value,
             cores: document.getElementById("cor_" + id).value,
             padrao: document.getElementById("pad_" + id).value,
-            especiais: document.getElementById("esp_" + id).value
+            especiais: document.getElementById("esp_" + id).value,
+            midia: midiaId // <- agora salva a foto também
         })
     });
 
@@ -659,9 +662,44 @@ async function salvar(nome) {
     carregar();
 }
 
+async function uploadFotoNova(input) {
+    const file = input.files[0];
+    if (!file) return;
+
+    document.getElementById('overlay_nova').style.display = "block";
+
+    try {
+        const base64Data = await fileToBase64(file);
+
+        const res = await fetch(URL, {
+            method: "POST",
+            body: new URLSearchParams({
+                action: "upload",
+                nome: "nova_temp",
+                data: base64Data,
+                mimeType: file.type
+            })
+        });
+
+        const result = await res.json();
+
+        if (result.success) {
+            document.getElementById('img_nova').src = `https://drive.google.com/thumbnail?sz=w600&id=${result.id}`;
+            document.getElementById('img_nova').style.display = "block";
+            document.getElementById('placeholder_nova').style.display = "none";
+            document.getElementById('n_midia').value = result.id; // <- salva o ID
+        } else {
+            toast("Erro: " + result.error);
+        }
+    } catch (e) {
+        toast("Erro de conexão");
+    }
+
+    document.getElementById('overlay_nova').style.display = "none";
+}
+
 async function criar() {
     const nome = document.getElementById("n_nome").value.trim();
-
     if (!nome) return toast("Digite o nome");
 
     await fetch(URL, {
@@ -673,7 +711,8 @@ async function criar() {
             camadas: document.getElementById("n_camadas").value,
             cores: document.getElementById("n_cores").value,
             padrao: document.getElementById("n_padrao").value,
-            especiais: plantaEditando.especiais.join(', ')
+            especiais: plantaEditando.especiais.join(', '),
+            midia: document.getElementById('n_midia').value // <- agora envia a foto
         })
     });
 
@@ -682,35 +721,13 @@ async function criar() {
     carregar();
 }
 
-// ================= UPLOAD =================
-async function uploadFoto(nome, input) {
-    const file = input.files[0];
-    if (!file) return;
-
-    const form = new FormData();
-    form.append("file", file);
-    form.append("nome", nome);
-    form.append("action", "upload");
-
-    try {
-        const res = await fetch(URL, {
-            method: "POST",
-            body: form
-        });
-
-        const txt = await res.text();
-
-        if (txt.includes("OK")) {
-            toast("Imagem atualizada!");
-            carregar();
-        } else {
-            console.error(txt);
-            toast("Erro ao enviar imagem");
-        }
-    } catch (e) {
-        console.error(e);
-        toast("Erro de conexão");
-    }
+    function fileToBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result.split(',')[1]);
+    reader.onerror = error => reject(error);
+  });
 }
 
 // ================= INIT =================
