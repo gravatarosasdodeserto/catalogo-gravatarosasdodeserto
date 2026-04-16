@@ -25,14 +25,25 @@
         header { 
             height: 150px; 
             background: url('imagens/gravata-cabecalho.jpg') center/cover no-repeat;
-            display: flex; align-items: center; justify-content: center;
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
         }
-        .logo-box {
-            background: rgba(255, 255, 255, 0.75);
-            backdrop-filter: blur(10px);
-            padding: 12px 30px;
-            border-radius: var(--radius);
+
+        /* A faixa agora ocupa toda a largura */
+        .header-stripe {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.4); /* Bem transparente */
+            backdrop-filter: blur(15px); /* Efeito fosco intenso */
+            -webkit-backdrop-filter: blur(15px);
+            padding: 20px 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
         }
+
         .logo { width: 110px; display: block; }
 
         /* --- BARRA DE AÇÃO (SUPERIOR) --- */
@@ -126,8 +137,12 @@
     <button onclick="toggleMenu()" style="width:100%; padding:12px; background:#2e2a15; color:white; border:none; border-radius:8px; cursor:pointer;">VER RESULTADOS</button>
 </aside>
 
-<header><div class="logo-box"><img src="logo.png" class="logo"></div></header>
-
+<header>
+    <div class="header-stripe">
+        <img src="logo.png" class="logo" alt="Logo Gravatá RD">
+    </div>
+</header>
+    
 <div class="top-action-bar">
     <button class="btn-top-filter" onclick="toggleMenu()"><span>≡</span> FILTRAR</button>
     <button class="btn-top-request" id="btn-whats" onclick="enviarPedido()">SOLICITAR (<span id="count">0</span>)</button>
