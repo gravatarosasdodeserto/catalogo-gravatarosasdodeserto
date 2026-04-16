@@ -2,972 +2,405 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Catálogo | Gravatá Rosas do Deserto</title>
-    <link rel="icon" type="image/png" href="favicon.png">
-    <link rel="apple-touch-icon" href="favicon.png">
-    <meta name="theme-color" content="#2e2a15">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Painel Admin | Gravatá Rosas do Deserto</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<style>
-    :root {
-        --header-bg: #fcfaf7;
-        --body-bg: #e9e4dd;
-        --card-white: #ffffff;
-        --card-selected: #d4ccc0;
-        --text-main: #2e2a15;
-        --accent: #a08c6b;
-        --accent-dark: #7d6e53;
-        --shadow-sm: 0 4px 12px rgba(58, 54, 24, 0.06);
-        --shadow-md: 0 8px 24px rgba(58, 54, 24, 0.08);
-        --shadow-lg: 0 12px 40px rgba(58, 54, 24, 0.12);
-    }
-
-    * {
-        box-sizing: border-box;
-        -webkit-tap-highlight-color: transparent;
-        scroll-behavior: smooth;
-    }
-
-    body {
-        font-family: 'Poppins', sans-serif;
-        background: var(--body-bg);
-        background-image:
-            radial-gradient(at 20% 20%, rgba(160, 140, 107, 0.08) 0px, transparent 50%),
-            radial-gradient(at 80% 80%, rgba(255, 255, 255, 0.4) 0px, transparent 50%);
-        color: var(--text-main);
-        margin: 0;
-        padding-bottom: 240px;
-        animation: fadeIn 0.6s ease-out;
-    }
-
-    @keyframes fadeIn {
-        from { opacity: 0; }
-        to { opacity: 1; }
-    }
-
-    @keyframes slideUp {
-        from { transform: translateY(20px); opacity: 0; }
-        to { transform: translateY(0); opacity: 1; }
-    }
-
-    @keyframes pulse {
-        0%, 100% { transform: scale(1); }
-        50% { transform: scale(1.05); }
-    }
-
-.topbar {
-        padding: 35px 0;
-        position: sticky;
-        top: 0;
-        z-index: 1100;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
-        background: transparent;
-        overflow: hidden;
-        min-height: 160px;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        margin-bottom: 0;
-    }
-
-.topbar::before {
-        content: "";
-        position: absolute;
-        inset: 0;
-        background-image: url('imagens/gravata-cabecalho.jpg');
-        background-size: cover;
-        background-position: top center;
-        z-index: -2;
-        transform: scale(1.05);
-        animation: slowZoom 20s ease-in-out infinite alternate;
-    }
-
-    @keyframes slowZoom {
-        from { transform: scale(1.05); }
-        to { transform: scale(1.1); }
-    }
-
-.topbar::after {
-        content: "";
-        position: absolute;
-        left: 0;
-        width: 100%;
-        height: 115px;
-        background: rgba(255, 255, 255, 0.35);
-        backdrop-filter: blur(8px) saturate(180%);
-        -webkit-backdrop-filter: blur(8px) saturate(180%);
-        z-index: -1;
-        border-top: 1px solid rgba(255, 255, 255, 0.3);
-        border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-        box-shadow: inset 0 1px 0 rgba(255,255,255,0.5);
-    }
-
-.logo {
-        position: relative;
-        z-index: 3;
-        display: flex;
-        align-items: center;
-        animation: slideUp 0.8s ease-out 0.2s both;
-    }
-
-.logo img {
-        width: 155px;
-        height: auto;
-        filter: drop-shadow(0 6px 20px rgba(0,0,0,0.35));
-        cursor: pointer;
-        transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-.logo img:hover {
-        transform: scale(1.05) rotate(-1deg);
-    }
-
-.admin-access {
-        position: absolute;
-        right: 20px;
-        top: 50%;
-        transform: translateY(-50%);
-        color: var(--text-main);
-        text-decoration: none;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 38px;
-        height: 38px;
-        border-radius: 50%;
-        background: rgba(255, 255, 255, 0.5);
-        backdrop-filter: blur(8px);
-        -webkit-backdrop-filter: blur(8px);
-        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        z-index: 1200;
-        border: 1.5px solid rgba(255, 255, 255, 0.6);
-        box-shadow: var(--shadow-sm);
-    }
-
-.admin-access:hover {
-        background: rgba(255, 255, 255, 0.95);
-        transform: translateY(-50%) rotate(90deg) scale(1.1);
-        box-shadow: var(--shadow-md);
-    }
-
-.admin-access svg {
-        width: 18px;
-        height: 18px;
-        opacity: 0.8;
-    }
-
-.secao-filtros {
-        position: sticky;
-        top: 160px;
-        z-index: 1000;
-        padding: 8px 15px;
-        background: rgba(255, 255, 255, 0.85);
-        backdrop-filter: blur(12px) saturate(180%);
-        -webkit-backdrop-filter: blur(12px) saturate(180%);
-        display: flex;
-        align-items: center;
-        border-top: 2px solid rgba(255, 255, 255, 0.8);
-        border-bottom: 1px solid rgba(0,0,0,0.04);
-        min-height: 52px;
-        box-shadow: 0 4px 16px rgba(0,0,0,0.04);
-        animation: slideUp 0.6s ease-out 0.3s both;
-        margin-top: -1px;
-    }
-
-.filtros-topo-wrapper {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        width: 100%;
-        gap: 12px;
-    }
-
-.resumo-filtros {
-        display: flex;
-        flex-wrap: nowrap;
-        overflow-x: auto;
-        gap: 8px;
-        flex-grow: 1;
-        padding-right: 10px;
-        scrollbar-width: none;
-    }
-.resumo-filtros::-webkit-scrollbar { display: none; }
-
-.tag-filtro-ativa {
-        font-size: 9px;
-        background: linear-gradient(135deg, var(--text-main), var(--accent-dark));
-        color: white;
-        padding: 4px 10px;
-        border-radius: 6px;
-        font-weight: 700;
-        text-transform: uppercase;
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        cursor: pointer;
-        white-space: nowrap;
-        box-shadow: 0 2px 8px rgba(58, 54, 24, 0.2);
-        transition: all 0.2s ease;
-        animation: slideUp 0.3s ease-out;
-    }
-
-.tag-filtro-ativa:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(58, 54, 24, 0.3);
-    }
-
-.tag-filtro-ativa span {
-        font-size: 13px;
-        font-weight: 300;
-        line-height: 1;
-    }
-
-.btn-abrir-filtros {
-        background: linear-gradient(135deg, var(--text-main), var(--accent-dark));
-        color: white;
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        padding: 0 14px;
-        border-radius: 50px;
-        border: none;
-        font-weight: 600;
-        font-size: 10px;
-        cursor: pointer;
-        height: 28px;
-        flex-shrink: 0;
-        text-transform: uppercase;
-        box-shadow: 0 3px 12px rgba(58, 54, 24, 0.25);
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-.btn-abrir-filtros:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 5px 16px rgba(58, 54, 24, 0.35);
-    }
-
-.btn-abrir-filtros:active {
-        transform: translateY(0);
-    }
-
-.btn-abrir-filtros svg { width: 11px; height: 11px; }
-
-.instrucao-texto {
-        width: calc(100% - 40px);
-        margin: 30px auto 15px;
-        padding: 18px 22px;
-        text-align: center;
-        background: rgba(255, 255, 255, 0.65);
-        border-radius: 24px;
-        backdrop-filter: blur(16px) saturate(180%);
-        -webkit-backdrop-filter: blur(16px) saturate(180%);
-        border: 1.5px solid rgba(255,255,255,0.7);
-        box-shadow: var(--shadow-md);
-        animation: slideUp 0.6s ease-out 0.4s both;
-    }
-.instrucao-texto p {
-        margin: 0;
-        font-size: 14px;
-        font-weight: 500;
-    }
-.instrucao-texto span {
-        display: block;
-        margin-top: 6px;
-        font-size: 11px;
-        color: rgba(58, 54, 24, 0.7);
-        font-weight: 400;
-    }
-
-.catalogo {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-        gap: 18px;
-        width: 100%;
-        padding: 0 20px;
-        animation: slideUp 0.6s ease-out 0.5s both;
-    }
-
-.item {
-        background: var(--card-white);
-        padding: 12px;
-        border-radius: 24px;
-        cursor: pointer;
-        box-shadow: var(--shadow-sm);
-        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        position: relative;
-        overflow: hidden;
-    }
-
-.item::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 100%;
-        background: linear-gradient(135deg, rgba(160, 140, 107, 0.1), transparent);
-        opacity: 0;
-        transition: opacity 0.4s ease;
-    }
-
-.item:hover {
-        transform: translateY(-8px) scale(1.02);
-        box-shadow: var(--shadow-lg);
-    }
-
-.item:hover::before {
-        opacity: 1;
-    }
-
-.item.selecionado {
-        background: var(--card-selected)!important;
-        transform: scale(0.96);
-        box-shadow: 0 0 0 3px var(--accent), var(--shadow-md);
-    }
-
-.item.selecionado::after {
-        content: '✓';
-        position: absolute;
-        top: 8px;
-        right: 8px;
-        width: 24px;
-        height: 24px;
-        background: var(--accent);
-        color: white;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: 700;
-        font-size: 14px;
-        animation: pulse 0.4s ease;
-    }
-
-.item img {
-        width: 100%;
-        aspect-ratio: 1/1;
-        object-fit: cover;
-        border-radius: 16px;
-        display: block;
-        transition: transform 0.4s ease;
-    }
-
-.item:hover img {
-        transform: scale(1.05);
-    }
-
-.item p {
-        text-align: center;
-        font-size: 13px;
-        font-weight: 600;
-        margin: 12px 0 4px 0;
-    }
-
-.estoque-status {
-        text-align: center;
-        font-size: 10px;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-    }
-
-.disponivel {
-        color: #2d5a27;
-    }
-
-.produzimos {
-        color: var(--accent-dark);
-        opacity: 0.95;
-        font-weight: 600;
-    }
-
-.rodape-acoes {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        background: rgba(233, 228, 221, 0.95);
-        backdrop-filter: blur(16px) saturate(180%);
-        -webkit-backdrop-filter: blur(16px) saturate(180%);
-        padding: 12px 20px 28px;
-        z-index: 1000;
-        border-top: 2px solid rgba(255, 255, 255, 0.9);
-        box-shadow: 0 -8px 32px rgba(0,0,0,0.08);
-    }
-
-.container-rodape {
-        max-width: 500px;
-        margin: 0 auto;
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-    }
-
-.caixa-selecao {
-        display: none;
-        background: #ffffff;
-        padding: 8px 12px;
-        border-radius: 18px;
-        max-height: 75px;
-        overflow-y: auto;
-        border: 1.5px solid rgba(0,0,0,0.06);
-        box-shadow: inset 0 2px 8px rgba(0,0,0,0.03);
-    }
-
-.selecao-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 8px;
-    padding-bottom: 8px;
-    border-bottom: 1px solid rgba(0,0,0,0.06);
-}
-
-.selecao-contador {
-    font-size: 10px;
-    font-weight: 600;
-    color: var(--accent-dark);
-    text-transform: uppercase;
-}
-
-.btn-limpar-tudo {
-    background: none;
-    border: none;
-    color: #8b2d2d;
-    font-size: 10px;
-    font-weight: 700;
-    text-transform: uppercase;
-    cursor: pointer;
-    padding: 4px 8px;
-    border-radius: 6px;
-    transition: all 0.2s ease;
-}
-
-.btn-limpar-tudo:hover {
-    background: rgba(139, 45, 0.1);
-    transform: scale(1.05);
-}
-
-.tag-item {
-        font-size: 10px;
-        background: linear-gradient(135deg, #f5f3f0, #ebe7e1);
-        padding: 5px 11px;
-        border-radius: 10px;
-        display: inline-flex;
-        align-items: center;
-        gap: 7px;
-        margin: 0 5px 5px 0;
-        font-weight: 600;
-        animation: slideUp 0.2s ease;
-    }
-
-.tag-item button {
-        border: none;
-        background: none;
-        color: var(--danger);
-        cursor: pointer;
-        font-weight: bold;
-        transition: transform 0.2s;
-    }
-
-.tag-item button:hover {
-        transform: scale(1.2);
-    }
-
-.campo-busca {
-        width: 100%;
-        padding: 14px 22px;
-        border-radius: 50px;
-        border: 2px solid rgba(0,0,0,0.08);
-        outline: none;
-        text-align: center;
-        font-family: inherit;
-        font-weight: 500;
-        background: white;
-        transition: all 0.3s ease;
-    }
-
-.campo-busca:focus {
-        border-color: var(--accent);
-        box-shadow: 0 0 0 4px rgba(160, 140, 107, 0.1);
-        transform: scale(1.01);
-    }
-
-.btn-whatsapp {
-        width: 100%;
-        padding: 16px;
-        background: linear-gradient(135deg, var(--text-main), var(--accent-dark));
-        color: white;
-        border: none;
-        border-radius: 50px;
-        font-weight: 600;
-        cursor: pointer;
-        font-size: 14px;
-        box-shadow: 0 6px 20px rgba(58, 54, 24, 0.3);
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        animation: slideUp 0.4s ease;
-    }
-
-.btn-whatsapp:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 10px 28px rgba(58, 54, 24, 0.4);
-    }
-
-.btn-whatsapp:active {
-        transform: translateY(-1px);
-    }
-
-.oculto { display: none!important; }
-
-.overlay {
-        position: fixed;
-        inset: 0;
-        background: rgba(0,0,0,0.6);
-        z-index: 2000;
-        display: none;
-        backdrop-filter: blur(6px);
-        animation: fadeIn 0.3s ease;
-    }
-
-.drawer-filtros {
-        position: fixed;
-        right: -320px;
-        top: 0;
-        width: 320px;
-        height: 100%;
-        background: var(--body-bg);
-        background-image:
-            radial-gradient(at 80% 20%, rgba(160, 140, 107, 0.1) 0px, transparent 50%);
-        z-index: 2001;
-        transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        padding: 35px 25px;
-        overflow-y: auto;
-        box-shadow: -12px 0 40px rgba(0,0,0,0.15);
-    }
-
-.drawer-filtros.active { right: 0; }
-
-.fechar-drawer {
-        background: rgba(255,255,255,0.6);
-        border: none;
-        font-size: 26px;
-        cursor: pointer;
-        text-align: center;
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        color: var(--text-main);
-        margin-bottom: 15px;
-        transition: all 0.3s ease;
-        backdrop-filter: blur(8px);
-    }
-
-.fechar-drawer:hover {
-        background: rgba(255,255,255,0.9);
-        transform: rotate(90deg);
-    }
-
-    @media (min-width: 768px) {
-    .topbar {
-            padding: 50px 0;
-            min-height: 230px;
+    <style>
+        :root {
+            --header-bg: #fcfaf7;
+            --body-bg: #e9e4dd;
+            --card-white: #ffffff;
+            --text-main: #2e2a15;
+            --accent: #a08c6b;
+            --accent-dark: #7d6e53;
+            --danger: #8b2d2d;
+            --shadow-md: 0 8px 24px rgba(58, 54, 24, 0.08);
+            --shadow-lg: 0 12px 40px rgba(58, 54, 24, 0.12);
         }
-    .logo img {
-            width: 260px;
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--body-bg);
+            background-image: 
+                radial-gradient(at 20% 20%, rgba(160, 140, 107, 0.08) 0px, transparent 50%),
+                radial-gradient(at 80% 80%, rgba(255, 255, 255, 0.4) 0px, transparent 50%);
+            color: var(--text-main);
+            margin: 0;
+            padding-bottom: 60px;
         }
-    .topbar::after {
-            height: 175px;
+
+        /* HEADER & TOPBAR (Baseado no Index) */
+        .topbar {
+            height: 140px;
+            background-image: url('imagens/gravata-cabecalho.jpg');
+            background-size: cover;
+            background-position: center;
+            display: flex; align-items: center; justify-content: center;
+            position: relative; overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
         }
-    .secao-filtros {
-            top: 230px;
-            margin-top: -1px;
+        .topbar::after {
+            content: ""; position: absolute; inset: 0;
+            background: rgba(255, 255, 255, 0.35);
+            backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
         }
-    .catalogo { grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); }
-    }
-</style>
+        .logo { z-index: 10; width: 150px; filter: drop-shadow(0 6px 20px rgba(0,0,0,0.3)); cursor: pointer; }
+
+        .nav-bar {
+            position: sticky; top: 0; z-index: 100;
+            background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px);
+            padding: 12px; display: flex; justify-content: center;
+            border-bottom: 1px solid rgba(0,0,0,0.04);
+        }
+        .btn-exit {
+            background: linear-gradient(135deg, var(--text-main), var(--accent-dark));
+            color: white; border-radius: 50px; padding: 8px 20px;
+            text-decoration: none; font-size: 10px; font-weight: 700;
+            text-transform: uppercase; border: none; cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        /* CONTAINER */
+        .container { max-width: 1200px; margin: auto; padding: 20px; }
+        
+        .btn-new {
+            width: 100%; padding: 18px; border-radius: 50px; border: none;
+            background: linear-gradient(135deg, var(--text-main), var(--accent-dark));
+            color: white; font-weight: 700; font-size: 14px; cursor: pointer;
+            margin-bottom: 25px; box-shadow: var(--shadow-md);
+            text-transform: uppercase; letter-spacing: 1px;
+            transition: 0.3s;
+        }
+        .btn-new:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+
+        .search-box {
+            width: 100%; padding: 14px 22px; border-radius: 50px; 
+            border: 2px solid rgba(0,0,0,0.08); margin-bottom: 30px; 
+            outline: none; font-family: inherit; text-align: center;
+            background: white; transition: 0.3s;
+        }
+        .search-box:focus { border-color: var(--accent); transform: scale(1.01); }
+
+        /* CARDS */
+        #lista { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+        
+        .card {
+            background: var(--card-white); border-radius: 24px; padding: 20px;
+            box-shadow: var(--shadow-sm); transition: 0.3s; 
+            border: 1.5px solid transparent; position: relative;
+        }
+        .card:hover { transform: translateY(-5px); box-shadow: var(--shadow-lg); }
+        .nao-salvo { border-color: var(--accent) !important; background: #fffdf9; }
+
+        /* FOTO QUADRADA */
+        .img-box {
+            width: 130px; height: 130px; border-radius: 18px;
+            background: #f0ede9; overflow: hidden; position: relative; 
+            margin: 0 auto 15px; border: 1px solid rgba(0,0,0,0.05);
+        }
+        .img-box img { width: 100%; height: 100%; object-fit: cover; }
+
+        .edit-icon-btn {
+            position: absolute; right: 8px; bottom: 8px; 
+            background: white; width: 32px; height: 32px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1); cursor: pointer;
+        }
+        .edit-icon-btn svg { width: 16px; color: var(--text-main); }
+
+        /* FORMULÁRIO */
+        .card h4 { margin: 0 0 15px 0; font-size: 16px; font-weight: 700; text-align: center; color: var(--text-main); text-transform: uppercase; }
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+        label { font-size: 10px; font-weight: 700; color: var(--accent); text-transform: uppercase; display: block; margin-bottom: 4px; }
+        input, select {
+            width: 100%; padding: 10px; border-radius: 12px; border: 1.5px solid #e5e0d8;
+            font-family: inherit; font-size: 13px; background: #fafafa; outline: none;
+        }
+
+        /* TAGS (Baseado no Index) */
+        .especiais-container { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 5px; }
+        .tag-check {
+            font-size: 10px; background: #f2f0ed; padding: 6px 12px; border-radius: 10px;
+            cursor: pointer; border: 1.5px solid #e5e0d8; transition: 0.2s; color: var(--text-main); font-weight: 600;
+        }
+        .tag-check input { display: none; }
+        .tag-check.active { 
+            background: linear-gradient(135deg, var(--text-main), var(--accent-dark)); 
+            color: white; border-color: var(--text-main); 
+        }
+
+        .card-actions { display: flex; gap: 10px; margin-top: 20px; }
+        .btn-save { 
+            flex: 2; background: #2d5a27; color: white; border: none; 
+            padding: 12px; border-radius: 14px; font-weight: 700; 
+            display: none; cursor: pointer; text-transform: uppercase; font-size: 11px;
+        }
+        .btn-del { 
+            flex: 1; background: #f8f7f5; color: var(--danger); 
+            border: 1px solid #efebeb; padding: 12px; border-radius: 14px; 
+            font-weight: 700; cursor: pointer; text-transform: uppercase; font-size: 11px;
+        }
+
+        /* MODAIS (Estilo Index) */
+        .modal {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(8px);
+            display: none; align-items: center; justify-content: center; z-index: 2000; padding: 20px;
+        }
+        .modal-content {
+            background: white; width: 100%; max-width: 380px; border-radius: 24px;
+            padding: 30px; text-align: center; box-shadow: var(--shadow-lg);
+            animation: slideUp 0.4s ease;
+        }
+        .modal-content h4 { margin: 0 0 15px 0; font-weight: 700; color: var(--text-main); font-size: 20px; }
+        .modal-content p { font-size: 14px; color: var(--accent-dark); margin-bottom: 25px; }
+
+        .loading-overlay { position: absolute; inset: 0; background: rgba(255,255,255,0.8); display: none; align-items: center; justify-content: center; font-weight: 700; font-size: 12px; z-index: 20; border-radius: 18px;}
+        .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: var(--text-main); color: white; padding: 14px 30px; border-radius: 50px; z-index: 3000; display: none; font-size: 12px; box-shadow: var(--shadow-lg); }
+
+        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    </style>
 </head>
 <body>
 
-<div class="topbar">
-    <div class="logo">
-        <img src="logo.png" onclick="location.reload()">
+    <div class="topbar">
+        <img src="logo.png" class="logo" onclick="confirmExit()">
     </div>
 
-    <a href="javascript:void(0)" onclick="acessarAdmin()" class="admin-access" title="Acesso Admin">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="22" height="22">
-    <circle cx="12" cy="12" r="3"></circle>
-    <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"></path>
-        </svg>
-    </a>
-</div>
+    <nav class="nav-bar">
+        <button onclick="confirmExit()" class="btn-exit">Sair do Painel</button>
+    </nav>
 
-<div class="secao-filtros">
-  <div class="filtros-topo-wrapper">
-    <div class="resumo-filtros" id="listaFiltrosAtivos"></div>
-    <button class="btn-abrir-filtros" onclick="toggleDrawer()">
-      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M3 4.5H21M7 12H17M10 19.5H14" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
-      </svg>
-      <span>Filtrar</span>
-    </button>
-  </div>
-</div>
+    <main class="container">
+        <button class="btn-new" onclick="openModal()">+ Cadastrar Nova ID</button>
+        <input type="text" class="search-box" placeholder="Filtrar por nome no painel..." oninput="filtrar(this.value)">
+        
+        <div id="lista"></div>
+    </main>
 
-<div class="overlay" id="overlay" onclick="toggleDrawer()"></div>
-<div class="drawer-filtros" id="drawer"></div>
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <h4>Novo Cadastro</h4>
+            <div class="img-box" style="width:150px; height:150px">
+                <input type="file" id="file_new" hidden accept="image/*" onchange="handleUpload(this, 'new')">
+                <div class="edit-icon-btn" style="right: 50%; bottom: 50%; transform: translate(50%, 50%); width: 45px; height: 45px" onclick="document.getElementById('file_new').click()" id="trigger_new">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+                </div>
+                <img id="preview_new" style="display:none">
+                <div class="loading-overlay" id="load_new">Processando...</div>
+            </div>
+            <input type="hidden" id="n_midia">
+            <div class="form-group"><label>Nome da ID</label><input id="n_nome" placeholder="Ex: TS-152"></div>
+            <div class="form-grid">
+                <div class="form-group"><label>Estoque</label><input type="number" id="n_qtd" value="0"></div>
+                <div class="form-group"><label>Camadas</label><select id="n_camadas"></select></div>
+            </div>
+            <div class="form-grid">
+                <div class="form-group"><label>Cores</label><select id="n_cores"></select></div>
+                <div class="form-group"><label>Padrão</label><select id="n_padrao"></select></div>
+            </div>
+            <div class="form-group"><label>Especiais</label><div class="especiais-container" id="n_especiais"></div></div>
+            <div class="card-actions" style="margin-top: 30px;">
+                <button class="btn-save" style="display:block; background: linear-gradient(135deg, var(--text-main), var(--accent-dark));" onclick="criarID()">SALVAR ID</button>
+                <button class="btn-del" onclick="closeModal()" style="border:none">CANCELAR</button>
+            </div>
+        </div>
+    </div>
 
-<div class="instrucao-texto">
-    <p>Selecione as ID's desejadas para solicitar informações sobre os enxertos</p>
-    <span>Sua cor favorita acabou? Produzimos uma pra você sem custo adicional</span>
-</div>
+    <div id="modalExcluir" class="modal">
+        <div class="modal-content">
+            <h4 style="color: var(--danger);">Excluir ID</h4>
+            <p>Deseja realmente remover a ID <b id="nomeExcluir"></b>? Esta ação não pode ser desfeita.</p>
+            <div class="card-actions">
+                <button class="btn-save" style="display:block; background: var(--danger);" id="btnConfirmarExcluir">EXCLUIR AGORA</button>
+                <button class="btn-del" onclick="closeModalExcluir()" style="border:none">VOLTAR</button>
+            </div>
+        </div>
+    </div>
 
-<div class="catalogo" id="gridCatalogo">
-  <p style="text-align:center; grid-column: 1/-1; padding: 50px; color: rgba(58,54,24,0.5);">Carregando catálogo...</p>
-</div>
+    <div id="modalSair" class="modal">
+        <div class="modal-content">
+            <h4 style="color: var(--accent);">Alterações Pendentes</h4>
+            <p>Você tem edições que não foram salvas. Se sair agora, elas serão perdidas.</p>
+            <div class="card-actions">
+                <button class="btn-save" style="display:block; background: var(--text-main);" onclick="window.location.href='index.html'">SAIR E PERDER</button>
+                <button class="btn-del" onclick="closeModalSair()" style="border:none">CONTINUAR AQUI</button>
+            </div>
+        </div>
+    </div>
 
-<div class="rodape-acoes">
-  <div class="container-rodape">
-    <div class="caixa-selecao" id="areaSelecao">
-      <div class="selecao-header">
-        <span class="selecao-contador" id="contadorSelecao"></span>
-        <button class="btn-limpar-tudo" onclick="limparSelecao()">Limpar tudo</button>
-      </div>
-    <div id="containerTags"></div>
-</div>
-    <input type="text" id="inputPesquisa" class="campo-busca" placeholder="Buscar ID pelo nome...">
-    <button id="btnEnviar" class="btn-whatsapp oculto" onclick="enviarPedido()"></button>
-  </div>
-</div>
+    <div class="toast" id="toast"></div>
 
-<script>
-let estoque = {};
-let selecionados = new Set();
-let filtroTexto = "";
-let filtrosAtivos = {};
-let colunasDeFiltro = ["camadas", "cores", "padrao", "especiais"];
+    <script>
+        const API = "https://script.google.com/macros/s/AKfycbxs8MmNSgkb43F1vZDCtFE6AiRvWtjlTp67QxpLMcfA9mnWInHQOBm8iZuEqpF6Ctg0hA/exec";
+        const TAGS_ESPECIAIS = ['Cristatas', 'Floração em buquê', 'Mutantes', 'Perfumadas', 'Variegatas'];
+        let DADOS_LOCAIS = [];
+        let ALTERACOES_PENDENTES = false;
 
-const urlPlanilha = "https://script.google.com/macros/s/AKfycbxs8MmNSgkb43F1vZDCtFE6AiRvWtjlTp67QxpLMcfA9mnWInHQOBm8iZuEqpF6Ctg0hA/exec";
+        if (sessionStorage.getItem("adminLogado") !== "true") {
+            location.href = "index.html"; 
+        }
 
-const grid = document.getElementById("gridCatalogo");
-const drawer = document.getElementById("drawer");
-const inputPesquisa = document.getElementById("inputPesquisa");
-const containerTags = document.getElementById("containerTags");
-const areaSelecao = document.getElementById("areaSelecao");
-const listaFiltrosAtivos = document.getElementById("listaFiltrosAtivos");
+        function confirmExit() {
+            if (ALTERACOES_PENDENTES) document.getElementById("modalSair").style.display = "flex";
+            else window.location.href = 'index.html';
+        }
+        function closeModalSair() { document.getElementById("modalSair").style.display = "none"; }
 
-function getMidiaHTML(m) {
-  if (!m || m.trim() === "" || m === "Não inf.") {
-    return `<img src="imagens/sem-foto.jpg">`;
-  }
-  const id = m.trim();
-  const imgUrl = `https://drive.google.com/thumbnail?sz=w600&id=${id}`;
-  return `<img src="${imgUrl}" onerror="this.src='imagens/sem-foto.jpg'">`;
-}
+        async function carregar() {
+            showToast("Sincronizando com a nuvem...");
+            const r = await fetch(API + "?action=get");
+            const json = await r.json();
+            DADOS_LOCAIS = Object.keys(json).map(k => ({ nome: k, ...json[k] }));
+            render();
+            popularSelectsModal();
+        }
 
-function parseCSV(text) {
-  const lines = text.split(/\r?\n/).filter(l => l.trim()!== "");
-  return lines.map(line => {
-    const cells = line.match(/(".*?"|[^",\r\n]+)(?=\s*,|\s*$)/g) || [];
-    return cells.map(c => c.replace(/^"|"$/g, '').trim());
-  });
-}
-
-function toggleDrawer() {
-  document.getElementById("drawer").classList.toggle("active");
-  document.getElementById("overlay").style.display =
-    document.getElementById("drawer").classList.contains("active")? "block" : "none";
-}
-
-async function carregarEstoque() {
-  try {
-    const resp = await fetch(urlPlanilha + "?action=get&t=" + Date.now());
-    estoque = await resp.json();
-    if (estoque.error) throw new Error(estoque.error);
-
-    gerarInterfaceFiltros();
-    montarCatalogo();
-
-    const alturaTopbar = document.querySelector('.topbar').offsetHeight;
-    document.querySelector('.secao-filtros').style.top = alturaTopbar + 'px';
-
-  } catch (e) {
-    grid.innerHTML = "<p style='text-align:center; grid-column: 1/-1; padding: 50px;'>Erro ao carregar catálogo</p>";
-  }
-}
-
-function getOpcoesUnicas(campo) {
-  const valores = new Set();
-  Object.values(estoque).forEach(item => {
-    if (item[campo] && item[campo]!== "Não inf." && item[campo].trim()) {
-      if (campo === 'especiais') {
-        item[campo].split(',').map(v => v.trim()).filter(v => v).forEach(v => valores.add(v));
-      } else {
-        valores.add(item[campo]);
-      }
-    }
-  });
-  return [...valores].sort();
-}
-
-function gerarInterfaceFiltros() {
-  drawer.innerHTML = '<button class="fechar-drawer" onclick="toggleDrawer()">&times;</button><h3 style="margin-top:0; font-size: 22px;">Filtros</h3>';
-
-  // Filtro de Disponibilidade
-  let htmlDisponivel = `<div style="margin-bottom: 20px;"><p style="font-size:11px; font-weight:700; margin-bottom:12px; text-transform: uppercase; letter-spacing: 1px; opacity: 0.6;">DISPONIBILIDADE</p>`;
-  const dispAtivo = filtrosAtivos['disponivel'] && filtrosAtivos['disponivel'].includes('sim');
-  htmlDisponivel += `<label style="display:flex; align-items:center; gap:10px; font-size:13px; font-weight:500; cursor:pointer; background:rgba(255,255,255,0.7); padding:8px 12px; border-radius:12px; border:1.5px solid ${dispAtivo? 'var(--accent)' : '#e5e0d8'};">
-    <input type="checkbox" ${dispAtivo? 'checked' : ''} onchange="aplicarFiltroCheckbox('disponivel', 'sim', this.checked)" style="width:18px; height:18px; accent-color:var(--accent); cursor:pointer;">
-    Somente disponíveis
-  </label>`;
-  htmlDisponivel += `</div>`;
-  drawer.innerHTML += htmlDisponivel;
-
-  // Filtros normais
-  colunasDeFiltro.forEach(col => {
-    const valoresUnicos = getOpcoesUnicas(col);
-    if (valoresUnicos.length === 0) return;
-
-    let html = `<div style="margin-bottom: 20px;"><p style="font-size:11px; font-weight:700; margin-bottom:12px; text-transform: uppercase; letter-spacing: 1px; opacity: 0.6;">${col}</p>`;
-    html += `<div style="display:flex; flex-direction:column; gap:8px;">`;
-
-    valoresUnicos.forEach(val => {
-      const selecionado = filtrosAtivos[col] && filtrosAtivos[col].includes(val);
-      html += `<label style="display:flex; align-items:center; gap:10px; font-size:13px; font-weight:500; cursor:pointer; background:rgba(255,255,255,0.7); padding:8px 12px; border-radius:12px; border:1.5px solid ${selecionado? 'var(--accent)' : '#e5e0d8'};">
-        <input type="checkbox" value="${val}" ${selecionado? 'checked' : ''} onchange="aplicarFiltroCheckbox('${col}', '${val}', this.checked)" style="width:18px; height:18px; accent-color:var(--accent); cursor:pointer;">
-        ${val}
-      </label>`;
-    });
-    html += `</div></div>`;
-    drawer.innerHTML += html;
-  });
-}
-
-function aplicarFiltroCheckbox(coluna, valor, checked) {
-  if (!filtrosAtivos[coluna]) filtrosAtivos[coluna] = [];
-
-  if (checked) {
-    if (!filtrosAtivos[coluna].includes(valor)) filtrosAtivos[coluna].push(valor);
-  } else {
-    filtrosAtivos[coluna] = filtrosAtivos[coluna].filter(v => v!== valor);
-    if (filtrosAtivos[coluna].length === 0) delete filtrosAtivos[coluna];
-  }
-
-  gerarInterfaceFiltros();
-  atualizarTagsFiltros();
-  montarCatalogo();
-}
-
-function atualizarTagsFiltros() {
-    listaFiltrosAtivos.innerHTML = "";
-    for (let col in filtrosAtivos) {
-        const valores = filtrosAtivos[col];
-        if (valores && valores.length > 0) {
-            valores.forEach(val => {
-                const tag = document.createElement("div");
-                tag.className = "tag-filtro-ativa";
-                const texto = col === 'disponivel' && val === 'sim'? 'DISPONÍVEIS' : val.toUpperCase();
-                tag.innerHTML = `${texto} <span>&times;</span>`;
-                tag.onclick = function() { aplicarFiltroCheckbox(col, val, false); };
-                listaFiltrosAtivos.appendChild(tag);
+        function render(filtro = "") {
+            const container = document.getElementById("lista");
+            container.innerHTML = "";
+            const filtrados = DADOS_LOCAIS.filter(d => d.nome.toLowerCase().includes(filtro.toLowerCase()));
+            
+            filtrados.forEach(d => {
+                const safeId = d.nome.replace(/\W/g, '_');
+                const imgUrl = d.midia ? `https://drive.google.com/thumbnail?sz=w600&id=${d.midia}` : 'imagens/sem-foto.jpg';
+                const espArray = d.especiais ? d.especiais.split(',').map(s => s.trim()) : [];
+                
+                const card = document.createElement("div");
+                card.className = "card";
+                card.id = `card_${safeId}`;
+                card.innerHTML = `
+                    <div class="img-box">
+                        <input type="file" id="file_${safeId}" hidden onchange="handleUpload(this, '${d.nome}')">
+                        <img src="${imgUrl}" id="img_${safeId}">
+                        <div class="edit-icon-btn" onclick="document.getElementById('file_${safeId}').click()">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                        </div>
+                        <div class="loading-overlay" id="load_${safeId}">...</div>
+                    </div>
+                    <h4>${d.nome}</h4>
+                    <div class="form-grid">
+                        <div class="form-group"><label>Estoque</label><input type="number" value="${d.qtd}" id="qtd_${safeId}" oninput="markChange('${safeId}')"></div>
+                        <div class="form-group"><label>Camadas</label><select id="cam_${safeId}" onchange="markChange('${safeId}')">${getOptions('camadas', d.camadas)}</select></div>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group"><label>Cores</label><select id="cor_${safeId}" onchange="markChange('${safeId}')">${getOptions('cores', d.cores)}</select></div>
+                        <div class="form-group"><label>Padrão</label><select id="pad_${safeId}" onchange="markChange('${safeId}')">${getOptions('padrao', d.padrao)}</select></div>
+                    </div>
+                    <label>Especiais</label>
+                    <div class="especiais-container">
+                        ${TAGS_ESPECIAIS.map(tag => `
+                            <label class="tag-check ${espArray.includes(tag) ? 'active' : ''}">
+                                <input type="checkbox" value="${tag}" ${espArray.includes(tag) ? 'checked' : ''} onchange="markChange('${safeId}'); this.parentElement.classList.toggle('active')"> ${tag}
+                            </label>
+                        `).join('')}
+                    </div>
+                    <div class="card-actions">
+                        <button class="btn-save" id="save_${safeId}" onclick="salvarAlteracao('${d.nome}')">SALVAR</button>
+                        <button class="btn-del" onclick="abrirModalExcluir('${d.nome}')">EXCLUIR</button>
+                    </div>
+                `;
+                container.appendChild(card);
             });
         }
-    }
-}
 
-function montarCatalogo() {
-  grid.innerHTML = "";
-  Object.keys(estoque).sort((a, b) => a.localeCompare(b, 'pt-BR', { sensitivity: 'base' })).forEach(nome => {
-    const d = estoque[nome];
-    if (filtroTexto &&!nome.toLowerCase().includes(filtroTexto.toLowerCase())) return;
-
-    let passa = true;
-
-    // Filtro de disponibilidade
-    if (filtrosAtivos['disponivel'] && filtrosAtivos['disponivel'].includes('sim') && d.qtd <= 0) passa = false;
-
-    // Filtros normais
-    // Filtros normais
-    for (let f in filtrosAtivos) {
-      if (f === 'disponivel') continue;
-      const valoresSelecionados = filtrosAtivos[f];
-      if (!valoresSelecionados || valoresSelecionados.length === 0) continue;
-
-      if (f === 'especiais') {
-        const especiaisArray = d.especiais.split(',').map(s => s.trim()).filter(s => s);
-        // AND: a ID precisa ter TODAS as tags selecionadas
-        if (!valoresSelecionados.every(v => especiaisArray.includes(v))) {
-          passa = false;
-          break;
+        function getOptions(campo, selecionado) {
+            const unique = [...new Set(DADOS_LOCAIS.map(d => d[campo]))].filter(v => v && v !== "Não inf.");
+            if (selecionado && !unique.includes(selecionado)) unique.push(selecionado);
+            return `<option value="">-</option>` + unique.map(v => `<option value="${v}" ${v === selecionado ? 'selected' : ''}>${v}</option>`).join('');
         }
-      } else {
-        // OR: pra campos únicos como camadas/cores/padrao, mostra se bate com QUALQUER uma marcada
-        if (!valoresSelecionados.includes(d[f])) {
-          passa = false;
-          break;
+
+        function markChange(id) {
+            ALTERACOES_PENDENTES = true;
+            document.getElementById(`save_${id}`).style.display = "block";
+            document.getElementById(`card_${id}`).classList.add('nao-salvo');
         }
-      }
-    }
-    if (!passa) return;
 
-    const card = document.createElement("div");
-    card.className = "item" + (selecionados.has(nome)? " selecionado" : "");
-    card.id = "card_" + nome.replace(/\W/g, "_");
-    card.innerHTML = `
-      ${getMidiaHTML(d.midia)}
-      <p>${nome}</p>
-      <div class="estoque-status ${d.qtd > 0? 'disponivel' : 'produzimos'}">
-      ${d.qtd > 0? `${d.qtd} ${d.qtd === 1? 'enxerto disponível' : 'enxertos disponíveis'}` : 'Produzimos pra você'}
-    </div>`;
-
-    card.onclick = () => {
-      if (inputPesquisa.value!== "") {
-        inputPesquisa.value = "";
-        filtroTexto = "";
-        if (selecionados.has(nome)) selecionados.delete(nome); else selecionados.add(nome);
-        montarCatalogo();
-      } else {
-        if (selecionados.has(nome)) {
-          selecionados.delete(nome);
-          card.classList.remove("selecionado");
-        } else {
-          selecionados.add(nome);
-          card.classList.add("selecionado");
+        async function handleUpload(input, nomeRosa) {
+            const file = input.files[0];
+            if (!file) return;
+            const safeId = nomeRosa === 'new' ? 'new' : nomeRosa.replace(/\W/g, '_');
+            const overlay = document.getElementById(`load_${safeId}`);
+            overlay.style.display = "flex";
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = async () => {
+                const base64 = reader.result.split(',')[1];
+                const res = await fetch(API, { method: "POST", body: new URLSearchParams({ action: "upload", nome: nomeRosa, data: base64, mimeType: file.type }) });
+                const result = await res.json();
+                if (result.success) {
+                    if (nomeRosa === 'new') {
+                        document.getElementById("n_midia").value = result.id;
+                        document.getElementById("preview_new").src = `https://drive.google.com/thumbnail?sz=w600&id=${result.id}`;
+                        document.getElementById("preview_new").style.display = "block";
+                        document.getElementById("trigger_new").style.display = "none";
+                    } else { document.getElementById(`img_${safeId}`).src = `https://drive.google.com/thumbnail?sz=w600&id=${result.id}`; }
+                }
+                overlay.style.display = "none";
+            };
         }
-      }
-      atualizarPainelAcoes();
-    };
-    grid.appendChild(card);
-  });
-}
 
-function atualizarPainelAcoes() {
-  const btn = document.getElementById("btnEnviar");
-  if (selecionados.size > 0) {
-    btn.classList.remove("oculto");
-    areaSelecao.style.display = "block";
-    btn.innerText = selecionados.size === 1? "Solicitar informação sobre a ID selecionada" : `Solicitar informações sobre ${selecionados.size} IDs selecionadas`;
-    atualizarTags();
-  } else {
-    btn.classList.add("oculto");
-    areaSelecao.style.display = "none";
-  }
-}
+        async function salvarAlteracao(nome) {
+            const safeId = nome.replace(/\W/g, '_');
+            const esp = [...document.querySelectorAll(`#card_${safeId} .tag-check input:checked`)].map(i => i.value).join(', ');
+            showToast("Salvando alterações...");
+            await fetch(API, { method: "POST", body: new URLSearchParams({
+                action: "update", nome: nome,
+                qtd: document.getElementById(`qtd_${safeId}`).value,
+                camadas: document.getElementById(`cam_${safeId}`).value,
+                cores: document.getElementById(`cor_${safeId}`).value,
+                padrao: document.getElementById(`pad_${safeId}`).value,
+                especiais: esp
+            })});
+            document.getElementById(`save_${safeId}`).style.display = "none";
+            document.getElementById(`card_${safeId}`).classList.remove('nao-salvo');
+            ALTERACOES_PENDENTES = document.querySelectorAll('.nao-salvo').length > 0;
+            showToast("ID atualizada com sucesso!");
+        }
 
-function atualizarTags() {
-  containerTags.innerHTML = "";
-  document.getElementById('contadorSelecao').innerText = `${selecionados.size} ${selecionados.size === 1? 'selecionada' : 'selecionadas'}`;
+        async function criarID() {
+            const nome = document.getElementById("n_nome").value;
+            if(!nome) return alert("Defina um nome!");
+            const esp = [...document.querySelectorAll(`#n_especiais input:checked`)].map(i => i.value).join(', ');
+            showToast("Cadastrando nova ID...");
+            await fetch(API, { method: "POST", body: new URLSearchParams({
+                action: "create", nome,
+                qtd: document.getElementById("n_qtd").value,
+                camadas: document.getElementById("n_camadas").value,
+                cores: document.getElementById("n_cores").value,
+                padrao: document.getElementById("n_padrao").value,
+                especiais: esp, midia: document.getElementById("n_midia").value
+            })});
+            closeModal(); carregar();
+        }
 
-  selecionados.forEach(nome => {
-    const tag = document.createElement("div");
-    tag.className = "tag-item";
-    tag.innerHTML = `${nome} <button onclick="removerSelecao('${nome}')">&times;</button>`;
-    containerTags.appendChild(tag);
-  });
-}
+        function abrirModalExcluir(nome) {
+            document.getElementById("nomeExcluir").innerText = nome;
+            document.getElementById("modalExcluir").style.display = "flex";
+            document.getElementById("btnConfirmarExcluir").onclick = async function() {
+                showToast("Excluindo...");
+                await fetch(API, { method: "POST", body: new URLSearchParams({ action: "delete", nome }) });
+                closeModalExcluir(); carregar();
+            };
+        }
+        function closeModalExcluir() { document.getElementById("modalExcluir").style.display = "none"; }
 
-function limparSelecao() {
-  selecionados.clear();
-  montarCatalogo();
-  atualizarPainelAcoes();
-}
+        function popularSelectsModal() {
+            const campos = { 'n_camadas': 'camadas', 'n_cores': 'cores', 'n_padrao': 'padrao' };
+            for (let id in campos) {
+                const unique = [...new Set(DADOS_LOCAIS.map(d => d[campos[id]]))].filter(v => v && v !== "Não inf.");
+                document.getElementById(id).innerHTML = '<option value="">-</option>' + unique.map(v => `<option value="${v}">${v}</option>`).join('');
+            }
+            document.getElementById("n_especiais").innerHTML = TAGS_ESPECIAIS.map(tag => `<label class="tag-check"><input type="checkbox" value="${tag}" onchange="this.parentElement.classList.toggle('active')"> ${tag}</label>`).join('');
+        }
 
-function removerSelecao(nome) {
-  selecionados.delete(nome);
-  montarCatalogo();
-  atualizarPainelAcoes();
-}
+        function openModal() { document.getElementById("modal").style.display = "flex"; popularSelectsModal(); }
+        function closeModal() { document.getElementById("modal").style.display = "none"; }
+        function filtrar(v) { render(v); }
+        function showToast(m) { const t = document.getElementById("toast"); t.innerText = m; t.style.display = "block"; setTimeout(() => t.style.display = "none", 3000); }
 
-function enviarPedido() {
-  const ids = Array.from(selecionados);
-  let mensagem = ids.length === 1? `Olá! Tenho interesse no enxerto da ID ${ids[0]} e queria saber mais informações e o valor.` : `Olá! Tenho interesse nos enxertos das IDs ${ids.join(", ")} e queria saber mais informações e valores.`;
-  window.open("https://wa.me/5581992665421?text=" + encodeURIComponent(mensagem), "_blank");
-}
-
-function acessarAdmin() {
-  const modalSenha = document.createElement('div');
-  modalSenha.setAttribute('style', 'position:fixed; inset:0; background:rgba(0,0,0,0.85); backdrop-filter:blur(8px); z-index:9999; display:flex; align-items:center; justify-content:center; padding:20px; animation: fadeIn 0.3s ease;');
-
-  modalSenha.innerHTML = `
-    <div style="background:#fff; padding:28px; border-radius:24px; width:100%; max-width:320px; text-align:center; position:relative; box-shadow: 0 20px 60px rgba(0,0,0,0.3); animation: slideUp 0.4s ease;">
-      <p style="margin-top:0; font-weight:700; color:#2e2a15; font-size: 20px;">Acesso Restrito</p>
-
-      <div style="position:relative; display:flex; align-items:center; margin-top: 20px;">
-        <input type="password" id="inputSenhaAdmin" placeholder="Digite a senha"
-               style="width:100%; padding:14px; padding-right:45px; border-radius:14px; border:2px solid #e5e0d8; text-align:center; font-size:18px; font-family: Poppins; transition: all 0.3s ease;">
-        <div id="toggleSenha" style="position:absolute; right:12px; cursor:pointer; display:flex; align-items:center; opacity:0.5; transition: opacity 0.2s;">
-          <svg id="olhoAberto" style="width:22px; height:22px;" viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="2">
-            <path d="M1 12s4-8 11 8 11 8-4 8-11-8-11-8z"></path>
-            <circle cx="12" cy="12" r="3"></circle>
-          </svg>
-        </div>
-      </div>
-
-      <div style="display:flex; gap:12px; margin-top:20px;">
-        <button id="btnConfirmarSenha" style="flex:1; padding:12px; background:linear-gradient(135deg, #2e2a15, #7d6e53); color:#fff; border:none; border-radius:14px; font-weight:600; cursor:pointer; font-family: Poppins; transition: transform 0.2s;">Entrar</button>
-        <button id="btnCancelarSenha" style="flex:1; padding:12px; background:#f5f3f0; color:#333; border:none; border-radius:14px; font-weight:600; cursor:pointer; font-family: Poppins; transition: transform 0.2s;">Sair</button>
-      </div>
-    </div>
-  `;
-
-  document.body.appendChild(modalSenha);
-  const input = document.getElementById('inputSenhaAdmin');
-  const toggleBtn = document.getElementById('toggleSenha');
-  input.focus();
-
-  input.onfocus = () => input.style.borderColor = '#a08c6b';
-  input.onblur = () => input.style.borderColor = '#e5e0d8';
-
-  toggleBtn.onclick = () => {
-    if (input.type === 'password') {
-      input.type = 'text';
-      toggleBtn.style.opacity = "1";
-    } else {
-      input.type = 'password';
-      toggleBtn.style.opacity = "0.5";
-    }
-  };
-
-  const validar = () => {
-    if (btoa(input.value) === "MTQwNTA4bGU=") {
-      sessionStorage.setItem("adminLogado", "true");
-      window.location.href = "admin.html";
-    } else {
-      alert("Senha incorreta!");
-      input.value = "";
-      input.style.borderColor = '#8b2d2d';
-      setTimeout(() => input.style.borderColor = '#e5e0d8', 1500);
-    }
-  };
-    
-  document.getElementById('btnConfirmarSenha').onclick = validar;
-  document.getElementById('btnCancelarSenha').onclick = () => document.body.removeChild(modalSenha);
-  input.onkeypress = (e) => { if(e.key === 'Enter') validar(); };
-}
-
-inputPesquisa.oninput = (e) => { filtroTexto = e.target.value; montarCatalogo(); };
-carregarEstoque();
-
-// Recalcula posição da barra de filtros ao redimensionar
-window.onresize = () => {
-    const altura = document.querySelector('.topbar').offsetHeight;
-    document.querySelector('.secao-filtros').style.top = altura + 'px';
-};
-
-// Efeito parallax sutil no scroll
-let lastScroll = 0;
-window.addEventListener('scroll', () => {
-    const topbar = document.querySelector('.topbar');
-    const currentScroll = window.pageYOffset;
-    
-    if (currentScroll > 50) {
-        topbar.style.boxShadow = '0 12px 40px rgba(0, 0, 0, 0.18)';
-    } else {
-        topbar.style.boxShadow = '0 8px 32px rgba(0, 0, 0, 0.12)';
-    }
-    
-    lastScroll = currentScroll;
-});
-</script>
+        carregar();
+    </script>
 </body>
 </html>
