@@ -8,683 +8,264 @@
     <link rel="apple-touch-icon" href="favicon.png">
     <meta name="theme-color" content="#2e2a15">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
 <style>
-    :root {
-        --header-bg: #fcfaf7;
-        --body-bg: #e9e4dd;
-        --text-main: #2e2a15;
-        --card-white: #ffffff;
-        --danger: #8b2d2d;
-        --ok: #2d5a27;
-        --accent: #a08c6b;
-        --accent-dark: #7d6e53;
-        --shadow-sm: 0 4px 12px rgba(58, 54, 24, 0.06);
-        --shadow-md: 0 8px 24px rgba(58, 54, 24, 0.08);
-        --shadow-lg: 0 12px 40px rgba(58, 54, 24, 0.12);
-    }
+:root {
+    --header-bg: #fcfaf7;
+    --body-bg: #e9e4dd;
+    --text-main: #2e2a15;
+    --card-white: #ffffff;
+    --danger: #8b2d2d;
+    --ok: #2d5a27;
+    --accent: #a08c6b;
+    --accent-dark: #7d6e53;
 
-    * {
-        box-sizing: border-box;
-        -webkit-tap-highlight-color: transparent;
-        scroll-behavior: smooth;
-    }
+    --shadow-sm: 0 4px 12px rgba(58, 54, 24, 0.06);
+    --shadow-md: 0 8px 24px rgba(58, 54, 24, 0.08);
+    --shadow-lg: 0 12px 40px rgba(58, 54, 24, 0.12);
+}
 
-    body {
-        font-family: 'Poppins', sans-serif;
-        background: var(--body-bg);
-        background-image:
-            radial-gradient(at 20% 20%, rgba(160, 140, 107, 0.08) 0px, transparent 50%),
-            radial-gradient(at 80% 80%, rgba(255, 255, 255, 0.4) 0px, transparent 50%);
-        color: var(--text-main);
-        margin: 0;
-        padding-bottom: 50px;
-        animation: fadeIn 0.6s ease-out;
-    }
+* {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
 
-    @keyframes fadeIn {
-        from { opacity: 0; }
-        to { opacity: 1; }
-    }
+body {
+    font-family: 'Poppins', sans-serif;
+    background: var(--body-bg);
+    color: var(--text-main);
+    margin: 0;
+    padding-bottom: 50px;
+}
 
-    @keyframes slideUp {
-        from { transform: translateY(20px); opacity: 0; }
-        to { transform: translateY(0); opacity: 1; }
-    }
-
-    @keyframes pulse {
-        0%, 100% { transform: scale(1); }
-        50% { transform: scale(1.05); }
-    }
-
+/* ===== HEADER ===== */
 .topbar {
-        padding: 35px 0;
-        position: sticky;
-        top: 0;
-        z-index: 1100;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
-        background: transparent;
-        overflow: hidden;
-        min-height: 160px;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        margin-bottom: 0;
-    }
+    padding: 40px 0;
+    position: sticky;
+    top: 0;
+    z-index: 1100;
+    display: flex;
+    justify-content: center;
+    box-shadow: var(--shadow-md);
+}
 
 .topbar::before {
-        content: "";
-        position: absolute;
-        inset: 0;
-        background-image: url('imagens/gravata-cabecalho.jpg');
-        background-size: cover;
-        background-position: top center;
-        z-index: -2;
-        transform: scale(1.05);
-        animation: slowZoom 20s ease-in-out infinite alternate;
-    }
-
-    @keyframes slowZoom {
-        from { transform: scale(1.05); }
-        to { transform: scale(1.1); }
-    }
-
-.topbar::after {
-        content: "";
-        position: absolute;
-        left: 0;
-        width: 100%;
-        height: 115px;
-        background: rgba(255, 255, 255, 0.35);
-        backdrop-filter: blur(8px) saturate(180%);
-        -webkit-backdrop-filter: blur(8px) saturate(180%);
-        z-index: -1;
-        border-top: 1px solid rgba(255, 255, 255, 0.3);
-        border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-        box-shadow: inset 0 1px 0 rgba(255,255,255,0.5);
-    }
-
-.logo {
-        position: relative;
-        z-index: 3;
-        display: flex;
-        align-items: center;
-        animation: slideUp 0.8s ease-out 0.2s both;
-    }
-
-.logo img {
-        width: 155px;
-        height: auto;
-        filter: drop-shadow(0 6px 20px rgba(0,0,0,0.35));
-        cursor: pointer;
-        transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-.logo img:hover {
-        transform: scale(1.05) rotate(-1deg);
-    }
-
-.bottom-bar {
-        position: sticky;
-        top: 160px;
-        z-index: 1050;
-        background: rgba(255, 255, 255, 0.9);
-        backdrop-filter: blur(12px) saturate(180%);
-        -webkit-backdrop-filter: blur(12px) saturate(180%);
-        height: 64px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 0 15px;
-        border-top: 2px solid rgba(255, 255, 255, 0.8);
-        border-bottom: 1px solid rgba(0,0,0,0.06);
-        box-shadow: 0 4px 16px rgba(0,0,0,0.05);
-        animation: slideUp 0.6s ease-out 0.3s both;
-        margin-top: -1px;
-    }
-
-.btn-voltar-admin {
-        background: linear-gradient(135deg, var(--text-main), var(--accent-dark));
-        color: white;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        padding: 0 28px;
-        border-radius: 50px;
-        border: none;
-        font-weight: 600;
-        font-size: 11px;
-        cursor: pointer;
-        height: 38px;
-        text-transform: uppercase;
-        text-decoration: none;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        box-shadow: 0 4px 14px rgba(58, 54, 24, 0.25);
-        letter-spacing: 0.5px;
-    }
-
-.btn-voltar-admin:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(58, 54, 24, 0.35);
-    }
-
-.btn-voltar-admin:active {
-        transform: translateY(0);
-    }
-
-.container {
-        padding: 20px;
-        max-width: 1400px;
-        margin: auto;
-        animation: slideUp 0.6s ease-out 0.4s both;
-    }
-
-.busca {
-        width: 100%;
-        padding: 14px 24px;
-        border-radius: 50px;
-        border: 2px solid rgba(0,0,0,0.08);
-        margin: 20px 0;
-        outline: none;
-        text-align: center;
-        font-family: inherit;
-        font-weight: 500;
-        background: rgba(255, 255, 255, 0.8);
-        backdrop-filter: blur(8px);
-        transition: all 0.3s ease;
-        box-shadow: var(--shadow-sm);
-    }
-
-.busca:focus {
-        border-color: var(--accent);
-        box-shadow: 0 0 0 4px rgba(160, 140, 107, 0.1), var(--shadow-md);
-        transform: scale(1.01);
-        background: white;
-    }
-
-    #lista {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
-        gap: 22px;
-    }
-
-.card {
-        background: rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(12px);
-        border-radius: 24px;
-        padding: 18px;
-        box-shadow: var(--shadow-md);
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        border: 1.5px solid rgba(255, 255, 255, 0.6);
-        animation: slideUp 0.5s ease-out both;
-        position: relative;
-    }
-
-.card:hover {
-        transform: translateY(-6px);
-        box-shadow: var(--shadow-lg);
-    }
-
-.card.nao-salvo {
-        border: 2px solid #ff9500;
-        box-shadow: 0 0 0 3px rgba(255, 149, 0, 0.2), var(--shadow-md);
-    }
-
-.badge-nao-salvo {
-        position: absolute;
-        top: 10px;
-        left: 10px;
-        background: #ff9500;
-        color: white;
-        font-size: 9px;
-        font-weight: 700;
-        padding: 4px 8px;
-        border-radius: 6px;
-        text-transform: uppercase;
-        z-index: 5;
-        animation: pulse 1.5s infinite;
-    }
-
-.img-container {
-        position: relative;
-        width: 100%;
-        aspect-ratio: 1/1;
-        margin-bottom: 14px;
-        border-radius: 18px;
-        overflow: hidden;
-    }
-
-.img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        display: block;
-        border: 2px solid rgba(255,255,255,0.8);
-        transition: transform 0.4s ease;
-    }
-
-.card:hover.img {
-        transform: scale(1.05);
-    }
-
-.edit-badge {
-        position: absolute;
-        bottom: 10px;
-        right: 10px;
-        background: linear-gradient(135deg, var(--text-main), var(--accent-dark));
-        color: white;
-        width: 42px;
-        height: 42px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        border: 3px solid white;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.25);
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-.edit-badge:hover {
-        transform: scale(1.15) rotate(15deg);
-        box-shadow: 0 6px 18px rgba(0,0,0,0.35);
-    }
-
-.file-input { display: none; }
-
-    h4 {
-        margin: 6px 0 18px;
-        text-align: center;
-        font-size: 17px;
-        color: var(--text-main);
-        font-weight: 700;
-    }
-
-    label {
-        font-size: 10px;
-        font-weight: 700;
-        color: var(--accent);
-        text-transform: uppercase;
-        margin-top: 12px;
-        display: block;
-        letter-spacing: 0.8px;
-    }
-
-    input, select {
-        width: 100%;
-        padding: 10px 14px;
-        border-radius: 10px;
-        border: 1.5px solid #e5e0d8;
-        margin-top: 4px;
-        font-family: inherit;
-        font-size: 13px;
-        background: rgba(250, 250, 0.6);
-        transition: all 0.3s ease;
-        cursor: pointer;
-    }
-
-    input:focus, select:focus {
-        border-color: var(--accent);
-        outline: none;
-        background: #fff;
-        box-shadow: 0 0 0 3px rgba(160, 140, 107, 0.1);
-    }
-
-.row {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 12px;
-    }
-
-.actions {
-        display: flex;
-        gap: 10px;
-        margin-top: 20px;
-    }
-
-    button {
-        padding: 13px;
-        border: none;
-        border-radius: 14px;
-        cursor: pointer;
-        font-weight: 600;
-        font-family: inherit;
-        font-size: 12px;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-    }
-
-.save {
-        background: linear-gradient(135deg, var(--ok), #3d7a37);
-        color: #fff;
-        flex: 2;
-        box-shadow: 0 4px 14px rgba(45, 90, 39, 0.3);
-    }
-
-.save:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(45, 90, 39, 0.4);
-    }
-
-.save:disabled {
-        opacity: 0.6;
-        cursor: not-allowed;
-        transform: none;
-    }
-
-.del {
-        background: rgba(245, 243, 240, 0.8);
-        color: var(--danger);
-        flex: 1;
-        border: 1.5px solid rgba(139, 45, 45, 0.2);
-    }
-
-.del:hover {
-        background: rgba(139, 45, 0.1);
-        transform: translateY(-2px);
-    }
-
-.new {
-        width: 100%;
-        background: linear-gradient(135deg, var(--text-main), var(--accent-dark));
-        color: #fff;
-        margin-bottom: 15px;
-        border-radius: 50px;
-        height: 52px;
-        font-size: 14px;
-        box-shadow: 0 6px 20px rgba(58, 54, 24, 0.3);
-    }
-
-.new:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 10px 28px rgba(58, 54, 24, 0.4);
-    }
-
-.toast {
-        position: fixed;
-        bottom: 25px;
-        left: 50%;
-        transform: translateX(-50%);
-        background: linear-gradient(135deg, #2e2a15, #3a3618);
-        color: #fff;
-        padding: 14px 28px;
-        border-radius: 50px;
-        display: none;
-        z-index: 3000;
-        font-size: 13px;
-        font-weight: 500;
-        box-shadow: 0 8px 24px rgba(0,0,0,0.35);
-        animation: slideUp 0.3s ease;
-    }
-
-    #modal, #modalExcluir, #modalSair {
-        display: none;
-        position: fixed;
-        inset: 0;
-        background: rgba(0,0,0,0.7);
-        align-items: center;
-        justify-content: center;
-        z-index: 2000;
-        backdrop-filter: blur(8px);
-        animation: fadeIn 0.3s ease;
-    }
-
-.modal-content {
-        background: transparent;
-        backdrop-filter: none;
-        padding: 0;
-        border: none;
-        box-shadow: none;
-        max-width: 340px;
-    }
-
-    #modal.card-modal {
-    background: rgba(255, 255, 255, 0.98);
-    backdrop-filter: blur(16px);
-    border-radius: 24px;
-    padding: 18px;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-    border: 2px solid rgba(255, 255, 255, 0.8);
-    animation: slideUp 0.4s ease;
-}
-
-    #modal.card-modal h4 {
-    margin: 6px 0 18px;
-    text-align: center;
-    font-size: 20px;
-    color: var(--text-main);
-    font-weight: 700;
-}
-
-  .img-placeholder {
-        width: 100%;
-        aspect-ratio: 1/1;
-        background: linear-gradient(135deg, #f5f3f0, #e9e4dd);
-        border: 2px dashed rgba(160, 140, 107, 0.4);
-        border-radius: 18px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        color: var(--accent);
-        font-size: 12px;
-        font-weight: 600;
-        gap: 8px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-    }
-
-  .img-placeholder:hover {
-        border-color: var(--accent);
-        background: linear-gradient(135deg, #fcfaf7, #f5f3f0);
-    }
-
-    #modalExcluir.modal-content,
-    #modalSair.modal-content {
-        background: rgba(255, 255, 255, 0.98);
-        backdrop-filter: blur(16px);
-        padding: 32px;
-        border-radius: 28px;
-        width: 90%;
-        max-width: 420px;
-        box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-        border: 2px solid rgba(255, 255, 255, 0.8);
-        animation: slideUp 0.4s ease;
-    }
-
-    #modalExcluir.modal-content h4,
-    #modalSair.modal-content h4 {
-        margin-top: 0;
-        font-size: 24px;
-        margin-bottom: 24px;
-    }
-
-    @keyframes shimmer {
-        0% { background-position: -1000px 0; }
-        100% { background-position: 1000px 0; }
-    }
-
-.skeleton {
-        background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-        background-size: 1000px 100%;
-        animation: shimmer 2s infinite;
-    }
-
-   @media (min-width: 768px) {
-.topbar { min-height: 230px; padding: 50px 0; }
-.logo img { width: 260px; }
-.topbar::after { height: 175px; }
-.bottom-bar { top: 230px; margin-top: -1px; }
-    #lista { grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); }
-}
-
-.upload-progress {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 4px;
-    background: rgba(255,255,255,0.3);
-    border-radius: 0 0 16px 16px;
-    overflow: hidden;
-    display: none;
-}
-
-.upload-progress-bar {
-    height: 100%;
-    width: 0%;
-    background: linear-gradient(90deg, var(--accent), var(--accent-dark));
-    transition: width 0.3s ease;
-    box-shadow: 0 0 10px rgba(160, 140, 107, 0.6);
-}
-
-.upload-overlay {
+    content: "";
     position: absolute;
     inset: 0;
-    background: rgba(0,0,0,0.6);
-    backdrop-filter: blur(4px);
-    display: none;
+    background: url('imagens/gravata-cabecalho.jpg') center/cover;
+    z-index: -1;
+}
+
+.logo img {
+    width: 180px;
+}
+
+/* ===== BARRA ===== */
+.bottom-bar {
+    position: sticky;
+    top: 160px;
+    z-index: 1000;
+    background: rgba(255,255,255,0.9);
+    backdrop-filter: blur(10px);
+    height: 60px;
+    display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 16px;
-    color: white;
+}
+
+.btn-voltar-admin {
+    background: var(--text-main);
+    color: #fff;
+    padding: 10px 25px;
+    border-radius: 30px;
+    font-size: 12px;
+    text-decoration: none;
+}
+
+/* ===== CONTAINER ===== */
+.container {
+    max-width: 1200px;
+    margin: auto;
+    padding: 20px;
+}
+
+/* ===== BUSCA ===== */
+.busca {
+    width: 100%;
+    padding: 12px;
+    border-radius: 30px;
+    border: 1px solid #ddd;
+    margin: 20px 0;
+    text-align: center;
+}
+
+/* ===== GRID ===== */
+#lista {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+/* ===== CARD ===== */
+.card {
+    background: white;
+    border-radius: 20px;
+    padding: 15px;
+    box-shadow: var(--shadow-md);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.card.nao-salvo {
+    border: 2px solid orange;
+}
+
+h4 {
+    text-align: center;
+    margin: 10px 0;
+}
+
+/* ===== INPUTS ===== */
+label {
     font-size: 11px;
     font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 1px;
+    color: var(--accent);
 }
 
-.especiais-wrap {
+input, select {
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+}
+
+/* ===== BOTÕES ===== */
+.actions {
     display: flex;
-    flex-wrap: wrap;
-    gap: 6px 14px;
-    padding: 10px 4px;
-    margin-top: 4px;
+    gap: 10px;
+    margin-top: 10px;
 }
 
-.especiais-wrap label {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    font-size: 11px;
-    font-weight: 500;
-    cursor: pointer;
-    margin: 0;
-    text-transform: none;
-    letter-spacing: 0;
-    color: var(--text-main);
-    background: none;
+button {
+    flex: 1;
+    padding: 12px;
+    border-radius: 12px;
     border: none;
-    padding: 0;
-}
-
-.especiais-wrap input[type="checkbox"] {
-    width: 14px;
-    height: 14px;
-    accent-color: var(--accent);
     cursor: pointer;
-    margin: 0;
-    flex-shrink: 0;
 }
 
+.save {
+    background: var(--ok);
+    color: white;
+}
 
-/* ===== CORREÇÃO MODAIS (NOVO PADRÃO) ===== */
+.del {
+    background: #f2f2f2;
+    color: var(--danger);
+}
 
+.new {
+    width: 100%;
+    margin-bottom: 10px;
+    background: var(--text-main);
+    color: white;
+    border-radius: 30px;
+    height: 45px;
+}
+
+/* ===== MODAIS (CORRIGIDO) ===== */
 #modal, #modalExcluir, #modalSair {
     display: none;
     position: fixed;
     inset: 0;
     background: rgba(0,0,0,0.65);
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(8px);
     align-items: center;
     justify-content: center;
     z-index: 2000;
 }
 
-/* estrutura do modal */
-#modal .modal-content,
-#modalExcluir .modal-content,
-#modalSair .modal-content {
-    width: 92%;
-    max-width: 420px;
-    animation: slideUp 0.35s ease;
+.modal-content {
+    width: 90%;
+    max-width: 400px;
 }
 
-/* modal principal (nova ID) */
-#modal .card-modal {
-    background: rgba(255, 255, 255, 0.98);
-    backdrop-filter: blur(18px);
-    border-radius: 26px;
-    padding: 22px;
-    box-shadow: 0 25px 70px rgba(0,0,0,0.35);
-    border: 1.5px solid rgba(255,255,255,0.7);
+/* modal principal */
+.card-modal {
+    background: white;
+    border-radius: 24px;
+    padding: 20px;
+    box-shadow: var(--shadow-lg);
 }
 
-#modal .card-modal h4 {
+.card-modal h4 {
     text-align: center;
-    font-size: 20px;
-    margin-bottom: 18px;
+    margin-bottom: 15px;
 }
 
-#modal .card-modal label {
-    margin-top: 10px;
+/* imagem upload */
+.img-container {
+    width: 100%;
+    aspect-ratio: 1/1;
+    border-radius: 16px;
+    overflow: hidden;
+    margin-bottom: 10px;
 }
 
-#modal .card-modal input,
-#modal .card-modal select {
-    margin-top: 6px;
+.img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
-#modal .card-modal .actions {
-    margin-top: 18px;
-}
-
-/* imagem */
-#modal .img-container {
-    margin-bottom: 12px;
-}
-
-#modal .img-placeholder {
-    font-size: 11px;
-    text-align: center;
-    padding: 10px;
+.img-placeholder {
+    width: 100%;
+    height: 100%;
+    border: 2px dashed var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
 }
 
 /* modais secundários */
 #modalExcluir .modal-content,
 #modalSair .modal-content {
-    background: rgba(255,255,255,0.98);
-    backdrop-filter: blur(16px);
+    background: white;
     border-radius: 24px;
-    padding: 26px;
+    padding: 25px;
     text-align: center;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.35);
-}
-
-#modalExcluir h4,
-#modalSair h4 {
-    font-size: 20px;
-    margin-bottom: 12px;
+    box-shadow: var(--shadow-lg);
 }
 
 #modalExcluir p,
 #modalSair p {
     font-size: 14px;
-    color: rgba(58,54,24,0.75);
-    line-height: 1.5;
+    margin: 15px 0;
 }
 
-/* botões dentro dos modais */
-#modalExcluir .actions,
-#modalSair .actions {
-    margin-top: 20px;
+/* ===== TOAST ===== */
+.toast {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: black;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 20px;
+    display: none;
 }
-    
+
+/* ===== RESPONSIVO ===== */
+@media (min-width: 768px) {
+    .logo img { width: 250px; }
+    #lista { grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); }
+}
 </style>
+    
 </head>
 <body>
 
@@ -793,16 +374,25 @@
 <div class="toast" id="toast"></div>
 
 <script>
-// BLOQUEIO DE ACESSO
+// ================= CONFIG =================
+const URL = "https://script.google.com/macros/s/AKfycbxs8MmNSgkb43F1vZDCtFE6AiRvWtjlTp67QxpLMcfA9mnWInHQOBm8iZuEqpF6Ctg0hA/exec";
+const todasEspeciais = ['Cristatas', 'Floração em buquê', 'Mutantes', 'Perfumadas', 'Variegatas'];
+
+// ================= ESTADO =================
+let dados = [];
+let filtro = "";
+let temAlteracoesNaoSalvas = false;
+let idParaExcluir = "";
+let plantaEditando = { especiais: [] };
+
+// ================= SEGURANÇA =================
 (function() {
-    if (sessionStorage.getItem("adminLogado") === "true") {
-        return;
-    }
+    if (sessionStorage.getItem("adminLogado") === "true") return;
 
     const senhaCorreta = "MTQwNTA4bGU=";
     const tentativa = prompt("Área restrita. Digite a senha:");
 
-    if (tentativa === null || btoa(tentativa)!== senhaCorreta) {
+    if (!tentativa || btoa(tentativa) !== senhaCorreta) {
         alert("Acesso negado!");
         window.location.href = "index.html";
         return;
@@ -811,20 +401,11 @@
     sessionStorage.setItem("adminLogado", "true");
 })();
 
-let dados = [];
-let filtro = "";
-let temAlteracoesNaoSalvas = false;
-let colunasDeFiltro = ["camadas", "cores", "padrao", "especiais"];
-let idParaExcluir = "";
-let plantaEditando = { especiais: [] };
-const URL = "https://script.google.com/macros/s/AKfycbxs8MmNSgkb43F1vZDCtFE6AiRvWtjlTp67QxpLMcfA9mnWInHQOBm8iZuEqpF6Ctg0hA/exec";
-const todasEspeciais = ['Cristatas', 'floraçao em buquê', 'Mutantes', 'Perfumadas', 'Variegatas'];
-
+// ================= EVENTOS =================
 window.addEventListener('beforeunload', (e) => {
     if (temAlteracoesNaoSalvas) {
         e.preventDefault();
-        e.returnValue = 'Você tem alterações não salvas. Deseja sair mesmo assim?';
-        return e.returnValue;
+        e.returnValue = '';
     }
 });
 
@@ -837,509 +418,259 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
+// ================= UTIL =================
 function toast(msg) {
-  const t = document.getElementById("toast");
-  t.innerText = msg;
-  t.style.display = "block";
-  setTimeout(() => t.style.display = "none", 3000);
+    const t = document.getElementById("toast");
+    t.innerText = msg;
+    t.style.display = "block";
+    setTimeout(() => t.style.display = "none", 3000);
 }
 
 function getOpcoesUnicas(campo) {
-  const valores = dados.map(d => d[campo]).filter(v => v && v!== "Não inf." && v.trim());
-  return [...new Set(valores)].sort();
+    return [...new Set(dados.map(d => d[campo]).filter(v => v && v !== "Não inf."))].sort();
 }
 
-function mostrarBotaoSalvar(idSeguro) {
-  temAlteracoesNaoSalvas = true;
-  const card = document.getElementById("qtd_" + idSeguro).closest('.card');
-  const btn = card.querySelector('.save');
+// ================= UI =================
+function mostrarBotaoSalvar(id) {
+    temAlteracoesNaoSalvas = true;
+    const card = document.getElementById("qtd_" + id).closest('.card');
+    const btn = card.querySelector('.save');
 
-  btn.style.display = "block";
-  card.classList.add('nao-salvo');
+    btn.style.display = "block";
+    card.classList.add('nao-salvo');
 
-  if (!card.querySelector('.badge-nao-salvo')) {
-    const badge = document.createElement('div');
-    badge.className = 'badge-nao-salvo';
-    badge.innerText = 'Não salvo';
-    card.querySelector('.img-container').appendChild(badge);
-  }
+    if (!card.querySelector('.badge-nao-salvo')) {
+        const badge = document.createElement('div');
+        badge.className = 'badge-nao-salvo';
+        badge.innerText = 'Não salvo';
+        card.querySelector('.img-container').appendChild(badge);
+    }
 }
 
 function criarSelect(id, valorAtual, opcoes) {
-  const idSeguro = id.replace(/^(cam_|cor_|pad_)/, '');
-  let html = `<select id="${id}" onchange="mostrarBotaoSalvar('${idSeguro}')">`;
-  html += `<option value="">Selecione...</option>`;
-  opcoes.forEach(op => {
-    html += `<option value="${op}" ${valorAtual === op? 'selected' : ''}>${op}</option>`;
-  });
-  html += `</select>`;
-  return html;
+    const idSeguro = id.replace(/^(cam_|cor_|pad_)/, '');
+    return `
+        <select id="${id}" onchange="mostrarBotaoSalvar('${idSeguro}')">
+            <option value="">Selecione...</option>
+            ${opcoes.map(op => `<option ${op === valorAtual ? 'selected' : ''}>${op}</option>`).join('')}
+        </select>
+    `;
 }
 
+// ================= ESPECIAIS =================
 function gerarCheckboxesEspeciais(selecionadas = [], prefixo = 'n') {
-  const container = document.getElementById(prefixo + '_especiais_container');
-  if (!container) return;
+    const container = document.getElementById(prefixo + '_especiais_container');
+    container.innerHTML = '';
 
-  container.innerHTML = '';
-  todasEspeciais.forEach(tag => {
-    const checked = selecionadas.includes(tag)? 'checked' : '';
-    container.className = 'especiais-wrap';
-    container.innerHTML += `
-  <label>
-    <input type="checkbox" value="${tag}" ${checked} onchange="atualizarEspeciais('${prefixo}')">
-    ${tag}
-  </label>`;
-  });
+    todasEspeciais.forEach(tag => {
+        container.innerHTML += `
+            <label>
+                <input type="checkbox" value="${tag}" ${selecionadas.includes(tag) ? 'checked' : ''} onchange="atualizarEspeciais('${prefixo}')">
+                ${tag}
+            </label>
+        `;
+    });
 }
 
 function atualizarEspeciais(prefixo) {
-  const checkboxes = document.querySelectorAll('#' + prefixo + '_especiais_container input:checked');
-  const selecionadas = Array.from(checkboxes).map(cb => cb.value);
-  if (prefixo === 'n') {
-    plantaEditando.especiais = selecionadas;
-  } else {
-    const idSeguro = prefixo;
-    mostrarBotaoSalvar(idSeguro);
-  }
+    const selecionadas = [...document.querySelectorAll(`#${prefixo}_especiais_container input:checked`)].map(cb => cb.value);
+
+    if (prefixo === 'n') {
+        plantaEditando.especiais = selecionadas;
+    } else {
+        document.getElementById(`esp_${prefixo}`).value = selecionadas.join(', ');
+        mostrarBotaoSalvar(prefixo);
+    }
 }
 
+// ================= MODAL =================
 function abrirModal() {
-  plantaEditando = { especiais: [] };
-  document.getElementById('tituloModal').innerText = 'Nova ID';
-  document.getElementById('n_nome').value = '';
-  document.getElementById('n_qtd').value = '0';
-  document.getElementById('n_midia').value = '';
-  document.getElementById('img_nova').style.display = "none";
-  document.getElementById('placeholder_nova').style.display = "flex";
-  document.getElementById('n_camadas_container').innerHTML = criarSelect('n_camadas', '', getOpcoesUnicas('camadas'));
-  document.getElementById('n_cores_container').innerHTML = criarSelect('n_cores', '', getOpcoesUnicas('cores'));
-  document.getElementById('n_padrao_container').innerHTML = criarSelect('n_padrao', '', getOpcoesUnicas('padrao'));
-  gerarCheckboxesEspeciais([], 'n');
-  document.getElementById("modal").style.display = "flex";
+    plantaEditando = { especiais: [] };
+
+    document.getElementById('n_nome').value = '';
+    document.getElementById('n_qtd').value = 0;
+    document.getElementById('n_midia').value = '';
+
+    document.getElementById('img_nova').style.display = "none";
+    document.getElementById('placeholder_nova').style.display = "flex";
+
+    document.getElementById('n_camadas_container').innerHTML = criarSelect('n_camadas', '', getOpcoesUnicas('camadas'));
+    document.getElementById('n_cores_container').innerHTML = criarSelect('n_cores', '', getOpcoesUnicas('cores'));
+    document.getElementById('n_padrao_container').innerHTML = criarSelect('n_padrao', '', getOpcoesUnicas('padrao'));
+
+    gerarCheckboxesEspeciais([], 'n');
+
+    document.getElementById("modal").style.display = "flex";
 }
 
 function fecharModal() {
-  document.getElementById("modal").style.display = "none";
+    document.getElementById("modal").style.display = "none";
 }
 
 function fecharModalExcluir() {
-  document.getElementById("modalExcluir").style.display = "none";
-  idParaExcluir = "";
+    document.getElementById("modalExcluir").style.display = "none";
+    idParaExcluir = "";
 }
 
 function fecharModalSair() {
-  document.getElementById("modalSair").style.display = "none";
+    document.getElementById("modalSair").style.display = "none";
 }
 
 function confirmarSair() {
-  temAlteracoesNaoSalvas = false;
-  window.location.href = "index.html";
-}
-
-function filtrar(v) { filtro = v; render(); }
-
-function parseCSV(text) {
-  const lines = text.split(/\r?\n/).filter(l => l.trim());
-  return lines.map(line => {
-    const cells = line.match(/(".*?"|[^",\r\n]+)(?=\s*,|\s*$)/g) || [];
-    return cells.map(c => c.replace(/^"|"$/g, '').trim());
-  });
-}
-
-function render() {
-  const el = document.getElementById("lista");
-  el.innerHTML = "";
-
-  const itensFiltrados = dados
-.filter(d => d.nome.toLowerCase().includes(filtro.toLowerCase()))
-.sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR', { sensitivity: 'base' }));
-
-  if (itensFiltrados.length === 0) {
-    el.innerHTML = "<p style='text-align:center; grid-column: 1/-1; padding: 60px; color: rgba(58,54,24,0.4);'>Nenhuma ID encontrada</p>";
-    return;
-  }
-
-  itensFiltrados.forEach((d, index) => {
-    const idSeguro = d.nome.replace(/\W/g, "_");
-    const imgUrl = (!d.midia || d.midia === "Não inf.")? "imagens/sem-foto.jpg" : `https://drive.google.com/thumbnail?sz=w600&id=${d.midia}`;
-    const especiaisArray = d.especiais? d.especiais.split(',').map(s => s.trim()).filter(s => s) : [];
-
-    const card = document.createElement('div');
-    card.className = 'card';
-    card.style.animationDelay = `${index * 0.05}s`;
-    card.innerHTML = `
-  <div>
-    <div class="img-container">
-      <img src="${imgUrl}" class="img" id="img_${idSeguro}" onerror="this.src='imagens/sem-foto.jpg'">
-      <div class="upload-overlay" id="overlay_${idSeguro}">Enviando...</div>
-      <div class="upload-progress" id="progress_${idSeguro}">
-        <div class="upload-progress-bar" id="progressBar_${idSeguro}"></div>
-      </div>
-      <label class="edit-badge" for="file_${idSeguro}">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="19" height="19"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
-      </label>
-      <input type="file" id="file_${idSeguro}" class="file-input" accept="image/*" onchange="uploadFoto(this, '${idSeguro}')">
-    </div>
-
-    <input id="midia_${idSeguro}" value="${d.midia}" type="hidden">
-    <div style="font-size:8px; color:rgba(58,54,24,0.6); text-align:center; margin:-6px 0 10px; font-weight:500; word-break:break-all; opacity:0.9;">
-      ${d.midia && d.midia!== "Não inf."?
-        `https://drive.google.com/thumbnail?sz=w600&id=${d.midia}`
-        : '<span style="color:var(--accent);font-size:9px;">📷 Aguardando foto</span>'
-      }
-    </div>
-
-    <h4>${d.nome}</h4>
-    <input id="nome_${idSeguro}" value="${d.nome}" type="hidden">
-
-    <label>Quantidade em Estoque</label>
-    <input id="qtd_${idSeguro}" value="${d.qtd}" type="number" min="0" oninput="mostrarBotaoSalvar('${idSeguro}')">
-
-    <div class="row">
-      <div>
-        <label>Camadas</label>
-        ${criarSelect(`cam_${idSeguro}`, d.camadas, getOpcoesUnicas('camadas'))}
-      </div>
-      <div>
-         <label>Cores</label>
-         ${criarSelect(`cor_${idSeguro}`, d.cores, getOpcoesUnicas('cores'))}
-      </div>
-    </div>
-
-    <label>Padrão</label>
-    ${criarSelect(`pad_${idSeguro}`, d.padrao, getOpcoesUnicas('padrao'))}
-
-    <label>Especiais</label>
-    <div id="esp_${idSeguro}_container" class="especiais-wrap">
-      ${todasEspeciais.map(tag => {
-        const checked = especiaisArray.includes(tag)? 'checked' : '';
-        return `<label>
-  <input type="checkbox" value="${tag}" ${checked} onchange="atualizarEspeciaisCard('${idSeguro}')">
-  ${tag}
-</label>`;
-      }).join('')}
-    </div>
-    <input id="esp_${idSeguro}" value="${d.especiais}" type="hidden">
-  </div>
-
-  <div class="actions">
-    <button class="save" onclick="salvar('${d.nome}')" style="display:none;">Salvar</button>
-    <button class="del" onclick="excluir('${d.nome}')">Excluir</button>
-  </div>
-`;
-    el.appendChild(card);
-  });
-}
-
-function atualizarEspeciaisCard(idSeguro) {
-  const checkboxes = document.querySelectorAll('#esp_' + idSeguro + '_container input:checked');
-  const selecionadas = Array.from(checkboxes).map(cb => cb.value);
-  document.getElementById('esp_' + idSeguro).value = selecionadas.join(', ');
-  mostrarBotaoSalvar(idSeguro);
-}
-
-async function uploadFotoNova(input) {
-  if (!input.files ||!input.files[0]) return;
-  const file = input.files[0];
-  const reader = new FileReader();
-
-  const overlay = document.getElementById("overlay_nova");
-  const progress = document.getElementById("progress_nova");
-  const progressBar = document.getElementById("progressBar_nova");
-  const img = document.getElementById("img_nova");
-  const placeholder = document.getElementById("placeholder_nova");
-
-  overlay.style.display = "flex";
-  progress.style.display = "block";
-  progressBar.style.width = "20%";
-  toast("Iniciando upload...");
-
-  reader.onload = async function(e) {
-    const base64Data = e.target.result.split(",")[1];
-    progressBar.style.width = "50%";
-
-    try {
-      const params = new URLSearchParams();
-      params.append("action", "upload");
-      params.append("nome", file.name);
-      params.append("mimeType", file.type);
-      params.append("data", base64Data);
-
-      progressBar.style.width = "75%";
-      const res = await fetch(URL, { method: "POST", body: params });
-      const json = await res.json();
-
-      if (json && json.id) {
-        progressBar.style.width = "100%";
-        document.getElementById("n_midia").value = json.id;
-
-        img.src = `https://drive.google.com/thumbnail?sz=w600&id=${json.id}`;
-        img.style.display = "block";
-        placeholder.style.display = "none";
-
-        toast("Foto enviada! Pronta pra criar.");
-        setTimeout(() => {
-          overlay.style.display = "none";
-          progress.style.display = "none";
-          progressBar.style.width = "0%";
-        }, 800);
-      } else {
-        throw new Error("ID não retornado");
-      }
-    } catch (err) {
-      toast("Erro no upload.");
-      overlay.style.display = "none";
-      progress.style.display = "none";
-      progressBar.style.width = "0%";
-    }
-  };
-  reader.readAsDataURL(file);
-}
-
-async function uploadFoto(input, idSeguro) {
-  if (!input.files ||!input.files[0]) return;
-  const file = input.files[0];
-  const reader = new FileReader();
-
-  const overlay = document.getElementById("overlay_" + idSeguro);
-  const progress = document.getElementById("progress_" + idSeguro);
-  const progressBar = document.getElementById("progressBar_" + idSeguro);
-  const textDiv = input.closest('.card').querySelector('[style*="font-size:8px"]');
-  const oldFileId = document.getElementById("midia_" + idSeguro).value;
-
-  overlay.style.display = "flex";
-  progress.style.display = "block";
-  progressBar.style.width = "20%";
-  textDiv.innerHTML = `<span style="color:var(--accent);font-size:9px;">⏳ Processando...</span>`;
-  toast("Iniciando upload...");
-
-  reader.onload = async function(e) {
-    const base64Data = e.target.result.split(",")[1];
-    progressBar.style.width = "50%";
-
-    try {
-      const params = new URLSearchParams();
-      params.append("action", "upload");
-      params.append("nome", file.name);
-      params.append("mimeType", file.type);
-      params.append("data", base64Data);
-      params.append("oldFileId", oldFileId);
-
-      progressBar.style.width = "75%";
-      const res = await fetch(URL, { method: "POST", body: params });
-      const json = await res.json();
-
-      if (json && json.id) {
-        progressBar.style.width = "100%";
-        document.getElementById("midia_" + idSeguro).value = json.id;
-        toast("Foto enviada! Aguardando Drive processar...");
-
-        const img = document.getElementById("img_" + idSeguro);
-        const novaUrl = `https://drive.google.com/thumbnail?sz=w600&id=${json.id}&t=${Date.now()}`;
-
-        img.onload = function() {
-          img.dataset.tentativas = 0;
-          textDiv.innerHTML = `https://drive.google.com/thumbnail?sz=w600&id=${json.id}`;
-          mostrarBotaoSalvar(idSeguro);
-          toast("Pronto! Clique em Salvar.");
-          setTimeout(() => {
-            overlay.style.display = "none";
-            progress.style.display = "none";
-            progressBar.style.width = "0%";
-          }, 800);
-        };
-
-        img.onerror = function() {
-          if (!img.dataset.tentativas) img.dataset.tentativas = 0;
-          img.dataset.tentativas++;
-
-          if (img.dataset.tentativas < 4) {
-            setTimeout(() => {
-              img.src = `https://drive.google.com/thumbnail?sz=w600&id=${json.id}&t=${Date.now()}`;
-            }, 2000);
-          } else {
-            textDiv.innerHTML = `https://drive.google.com/thumbnail?sz=w600&id=${json.id}`;
-            mostrarBotaoSalvar(idSeguro);
-            toast("Imagem demorou pra processar. Salve mesmo assim.");
-            overlay.style.display = "none";
-            progress.style.display = "none";
-            progressBar.style.width = "0%";
-          }
-        };
-
-        img.src = novaUrl;
-      } else {
-        throw new Error("ID não retornado");
-      }
-    } catch (err) {
-      toast("Erro no upload.");
-      textDiv.innerHTML = `<span style="color:var(--accent);font-size:9px;">📷 Aguardando foto</span>`;
-      overlay.style.display = "none";
-      progress.style.display = "none";
-      progressBar.style.width = "0%";
-    }
-  };
-  reader.readAsDataURL(file);
-}
-
-async function carregar() {
-  try {
-    const r = await fetch(URL + "?action=get&t=" + Date.now());
-    const json = await r.json();
-    if (json.error) throw new Error(json.error);
-
-    dados = Object.keys(json).map(nome => ({
-      nome: nome,
-      camadas: json[nome].camadas,
-      cores: json[nome].cores,
-      padrao: json[nome].padrao,
-      especiais: json[nome].especiais,
-      qtd: json[nome].qtd,
-      midia: json[nome].midia
-    }));
-
-    dados.sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR', { sensitivity: 'base' }));
-    render();
     temAlteracoesNaoSalvas = false;
-  } catch (e) {
-    toast("Erro ao carregar dados.");
-  }
+    window.location.href = "index.html";
 }
-async function salvar(nomeOriginal) {
-  const id = nomeOriginal.replace(/\W/g, "_");
-  const card = document.getElementById("qtd_" + id).closest('.card');
-  const btn = card.querySelector('.save');
-  const qtdInput = document.getElementById("qtd_" + id);
 
-  if (parseInt(qtdInput.value) < 0) {
-    toast("Quantidade não pode ser negativa");
-    qtdInput.value = 0;
-    return;
-  }
+// ================= FILTRO =================
+function filtrar(v) {
+    filtro = v.toLowerCase();
+    render();
+}
 
-  btn.innerText = "Salvando...";
-  btn.disabled = true;
+// ================= RENDER =================
+function render() {
+    const el = document.getElementById("lista");
+    el.innerHTML = "";
 
-  try {
-    const res = await fetch(URL, {
-      method: "POST",
-      body: new URLSearchParams({
-        action: "update",
-        nome: nomeOriginal,
-        qtd: qtdInput.value,
-        camadas: document.getElementById("cam_" + id).value,
-        cores: document.getElementById("cor_" + id).value,
-        padrao: document.getElementById("pad_" + id).value,
-        especiais: document.getElementById("esp_" + id).value,
-        midia: document.getElementById("midia_" + id).value
-      })
-    });
+    const itens = dados
+        .filter(d => d.nome.toLowerCase().includes(filtro))
+        .sort((a, b) => a.nome.localeCompare(b.nome));
 
-    const json = await res.json();
-    if (json.error) throw new Error(json.error);
-
-    toast("Salvo com sucesso!");
-    btn.style.display = "none";
-    btn.innerText = "Salvar";
-    card.classList.remove('nao-salvo');
-    card.querySelector('.badge-nao-salvo')?.remove();
-
-    if (!document.querySelector('.save[style*="display: block"]')) {
-      temAlteracoesNaoSalvas = false;
+    if (!itens.length) {
+        el.innerHTML = "<p style='text-align:center;padding:50px;'>Nenhuma ID encontrada</p>";
+        return;
     }
 
-  } catch (e) {
-    toast("Erro ao salvar: " + e.message);
-    btn.innerText = "Salvar";
-  }
-  btn.disabled = false;
+    itens.forEach(d => {
+        const id = d.nome.replace(/\W/g, "_");
+
+        el.innerHTML += `
+        <div class="card">
+            <h4>${d.nome}</h4>
+
+            <label>Quantidade</label>
+            <input id="qtd_${id}" type="number" value="${d.qtd}" oninput="mostrarBotaoSalvar('${id}')">
+
+            <label>Camadas</label>
+            ${criarSelect(`cam_${id}`, d.camadas, getOpcoesUnicas('camadas'))}
+
+            <label>Cores</label>
+            ${criarSelect(`cor_${id}`, d.cores, getOpcoesUnicas('cores'))}
+
+            <label>Padrão</label>
+            ${criarSelect(`pad_${id}`, d.padrao, getOpcoesUnicas('padrao'))}
+
+            <label>Especiais</label>
+            <div id="esp_${id}_container">
+                ${todasEspeciais.map(tag => `
+                    <label>
+                        <input type="checkbox" ${d.especiais?.includes(tag) ? 'checked' : ''} onchange="atualizarEspeciais('${id}')">
+                        ${tag}
+                    </label>
+                `).join('')}
+            </div>
+
+            <input id="esp_${id}" value="${d.especiais || ''}" type="hidden">
+
+            <div class="actions">
+                <button class="save" onclick="salvar('${d.nome}')" style="display:none;">Salvar</button>
+                <button class="del" onclick="excluir('${d.nome}')">Excluir</button>
+            </div>
+        </div>
+        `;
+    });
+}
+
+// ================= CRUD =================
+async function carregar() {
+    try {
+        const res = await fetch(URL + "?action=get");
+        const json = await res.json();
+
+        dados = Object.keys(json).map(nome => ({
+            nome,
+            ...json[nome]
+        }));
+
+        render();
+        temAlteracoesNaoSalvas = false;
+
+    } catch {
+        toast("Erro ao carregar dados");
+    }
+}
+
+async function salvar(nome) {
+    const id = nome.replace(/\W/g, "_");
+
+    try {
+        await fetch(URL, {
+            method: "POST",
+            body: new URLSearchParams({
+                action: "update",
+                nome,
+                qtd: document.getElementById("qtd_" + id).value,
+                camadas: document.getElementById("cam_" + id).value,
+                cores: document.getElementById("cor_" + id).value,
+                padrao: document.getElementById("pad_" + id).value,
+                especiais: document.getElementById("esp_" + id).value
+            })
+        });
+
+        toast("Salvo!");
+        carregar();
+
+    } catch {
+        toast("Erro ao salvar");
+    }
 }
 
 function excluir(nome) {
-  idParaExcluir = nome;
-  document.getElementById("textoExcluir").innerHTML = `Tem certeza que quer excluir <strong>${nome}</strong>?`;
-  document.getElementById("modalExcluir").style.display = "flex";
+    idParaExcluir = nome;
+    document.getElementById("textoExcluir").innerHTML = `Excluir <b>${nome}</b>?`;
+    document.getElementById("modalExcluir").style.display = "flex";
 }
 
 async function confirmarExclusao() {
-  if (!idParaExcluir) return;
-  try {
+    if (!idParaExcluir) return;
+
     await fetch(URL, {
-      method: "POST",
-      body: new URLSearchParams({ action: "delete", nome: idParaExcluir })
+        method: "POST",
+        body: new URLSearchParams({ action: "delete", nome: idParaExcluir })
     });
-    toast("Excluído!");
+
+    toast("Excluído");
     fecharModalExcluir();
     carregar();
-  } catch (e) {
-    toast("Erro ao excluir");
-  }
 }
 
 async function criar() {
-  const btn = document.querySelector("#modal .save");
-  const nome = document.getElementById("n_nome").value.trim();
-  const qtd = parseInt(document.getElementById("n_qtd").value) || 0;
+    const nome = document.getElementById("n_nome").value.trim();
 
-  if (!nome) {
-    toast("Digite o nome da ID");
-    return;
-  }
+    if (!nome) {
+        toast("Digite o nome");
+        return;
+    }
 
-  if (dados.some(d => d.nome.toLowerCase() === nome.toLowerCase())) {
-    toast("Essa ID já existe!");
-    return;
-  }
-
-  if (qtd < 0) {
-    toast("Quantidade não pode ser negativa");
-    document.getElementById("n_qtd").value = 0;
-    return;
-  }
-
-  btn.innerText = "Criando...";
-  btn.disabled = true;
-
-  try {
-    const midia = document.getElementById("n_midia").value || "Não inf.";
-    const res = await fetch(URL, {
-      method: "POST",
-      body: new URLSearchParams({
-        action: "create",
-        nome: nome,
-        qtd: qtd,
-        camadas: document.getElementById("n_camadas").value,
-        cores: document.getElementById("n_cores").value,
-        padrao: document.getElementById("n_padrao").value,
-        especiais: plantaEditando.especiais.join(', '),
-        midia: midia
-      })
+    await fetch(URL, {
+        method: "POST",
+        body: new URLSearchParams({
+            action: "create",
+            nome,
+            qtd: document.getElementById("n_qtd").value,
+            camadas: document.getElementById("n_camadas").value,
+            cores: document.getElementById("n_cores").value,
+            padrao: document.getElementById("n_padrao").value,
+            especiais: plantaEditando.especiais.join(', ')
+        })
     });
 
-    const json = await res.json();
-    if (json.error) throw new Error(json.error);
-
-    toast("Criado com sucesso!");
+    toast("Criado!");
     fecharModal();
     carregar();
-  } catch(e) {
-    toast("Erro ao criar: " + e.message);
-  }
-  btn.innerText = "Criar ID";
-  btn.disabled = false;
 }
 
-window.addEventListener('scroll', () => {
-    const topbar = document.querySelector('.topbar');
-    const currentScroll = window.pageYOffset;
-
-    if (currentScroll > 50) {
-        topbar.style.boxShadow = '0 12px 40px rgba(0, 0, 0, 0.18)';
-    } else {
-        topbar.style.boxShadow = '0 8px 32px rgba(0, 0, 0, 0.12)';
-    }
-});
-
+// ================= INIT =================
 carregar();
 </script>
 </body>
