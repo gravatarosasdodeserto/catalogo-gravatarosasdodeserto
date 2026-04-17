@@ -16,6 +16,7 @@
             --border: #eceae4;
             --radius: 12px;
             --premium-grad: linear-gradient(135deg, #a08c6b 0%, #7d6e53 100%);
+            --cta-green: #1b5e20; /* Verde esmeralda profundo para chamar atenção */
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
@@ -43,35 +44,42 @@
             position: sticky; top: 0; z-index: 1000; height: 65px;
         }
         
-        /* ESTILO PADRÃO DOS BOTÕES DA NAV */
-        .btn-nav { 
-            background: var(--premium-grad); 
-            color: white; 
-            border: none; 
-            padding: 10px 20px; 
-            border-radius: 50px; 
-            font-size: 11px; 
-            font-weight: 700; 
-            cursor: pointer; 
-            text-transform: uppercase; 
-            letter-spacing: 1px; 
-            text-decoration: none; 
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        .btn-filter { 
+            background: var(--premium-grad); color: white; border: none; 
+            padding: 10px 25px; border-radius: 50px; font-size: 11px; 
+            font-weight: 700; cursor: pointer; text-transform: uppercase; letter-spacing: 1px;
         }
 
-        /* BOTÃO WHATSAPP - COMEÇA TOTALMENTE OCULTO */
+        /* BOTÃO WHATSAPP FLUTUANTE NO RODAPÉ */
         #btn-whatsapp { 
-            display: none; 
-            opacity: 1; /* Garante que quando aparecer, não esteja apagado */
-            pointer-events: auto;
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+            background: var(--cta-green); color: white; border: 2px solid var(--accent); 
+            padding: 15px 30px; border-radius: 50px; font-size: 13px; 
+            font-weight: 700; cursor: pointer; text-decoration: none;
+            text-transform: uppercase; letter-spacing: 0.5px;
+            display: none; align-items: center; gap: 8px;
+            z-index: 3000; box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-        #btn-whatsapp:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(160, 140, 107, 0.5); }
+        #btn-whatsapp:hover { transform: translateX(-50%) translateY(-5px); background: #2e7d32; }
 
-        /* GRID E CARDS */
-        .catalog-container { max-width: 1400px; margin: auto; padding: 20px 15px 60px; flex: 1; }
+        /* AREA DE CHIPS (SELECIONADOS) */
+        .selection-panel {
+            max-width: 1400px; margin: 0 auto 20px; padding: 0 15px;
+            display: flex; flex-wrap: wrap; gap: 8px;
+        }
+        .chip {
+            background: #eeebe3; border: 1px solid var(--border);
+            padding: 4px 12px; border-radius: 20px; font-size: 11px;
+            display: flex; align-items: center; gap: 6px; color: var(--text-secondary);
+        }
+        .chip.chip-id { background: #fdf5e6; border-color: var(--accent); color: var(--text-primary); font-weight: 600; }
+        .chip span { cursor: pointer; font-weight: bold; font-size: 14px; }
+
+        /* GRID */
+        .catalog-container { max-width: 1400px; margin: auto; padding: 20px 15px 100px; flex: 1; }
         .search-area { text-align: center; margin-bottom: 25px; }
-        .search-box { width: 100%; max-width: 500px; padding: 12px 25px; border-radius: 50px; border: 1px solid var(--border); outline: none; font-size: 14px; }
+        .search-box { width: 100%; max-width: 500px; padding: 12px 25px; border-radius: 50px; border: 1px solid var(--border); outline: none; }
 
         #grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px; }
         @media (min-width: 768px) { #grid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; } }
@@ -89,26 +97,16 @@
         .status-available { color: var(--accent); }
         .status-order { color: var(--text-secondary); opacity: 0.8; }
 
-        .select-badge {
-            position: absolute; top: 10px; right: 10px; background: var(--accent);
-            color: white; width: 22px; height: 22px; border-radius: 50%;
-            display: none; align-items: center; justify-content: center; font-size: 12px;
-        }
-        .card.selected .select-badge { display: flex; }
-
         /* DRAWER */
         .drawer { position: fixed; top: 0; right: -320px; width: 300px; height: 100%; background: var(--bg); z-index: 2000; box-shadow: -10px 0 30px rgba(0,0,0,0.1); transition: 0.4s; padding: 25px; overflow-y: auto; }
         .drawer.active { right: 0; }
         .filter-section { border-bottom: 1px solid var(--border); padding-bottom: 15px; margin-bottom: 15px; }
-        .filter-section h4 { font-size: 10px; font-weight: 800; color: var(--accent); text-transform: uppercase; margin-bottom: 12px; letter-spacing: 1px; }
-        .option-item { display: flex; align-items: center; gap: 10px; font-size: 13px; margin-bottom: 10px; cursor: pointer; color: var(--text-primary); }
+        .filter-section h4 { font-size: 10px; font-weight: 800; color: var(--accent); text-transform: uppercase; margin-bottom: 12px; }
+        .option-item { display: flex; align-items: center; gap: 10px; font-size: 13px; margin-bottom: 10px; cursor: pointer; }
         .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); display: none; z-index: 1500; }
         .overlay.active { display: block; }
 
-        /* FOOTER */
         footer { padding: 40px 20px; text-align: center; border-top: 1px solid var(--border); margin-top: 40px; }
-        .admin-footer-link { color: var(--border); text-decoration: none; font-size: 20px; transition: 0.3s; }
-        .admin-footer-link:hover { color: var(--accent); }
     </style>
 </head>
 <body>
@@ -116,35 +114,34 @@
 <header><div class="header-stripe"><img src="logo.png" class="logo"></div></header>
 
 <div class="top-nav">
-    <button class="btn-nav" onclick="toggleDrawer()">Filtrar</button>
-    
-    <a id="btn-whatsapp" href="#" class="btn-nav" onclick="enviarWhatsApp(event)">Solicitar Informações</a>
+    <button class="btn-filter" onclick="toggleDrawer()">Filtrar</button>
 </div>
 
 <div class="catalog-container">
     <div class="search-area">
         <input type="text" id="search" class="search-box" placeholder="Pesquisar por ID..." oninput="filtrar()">
     </div>
+
+    <div id="selection-panel" class="selection-panel"></div>
+
     <div id="grid"></div>
 </div>
 
+<a id="btn-whatsapp" href="#" onclick="enviarWhatsApp(event)">Solicitar Informações</a>
+
 <footer>
-    <a href="admin.html" class="admin-footer-link" title="Gestão do Catálogo">⚙</a>
+    <a href="admin.html" style="color: #ddd; text-decoration: none; font-size: 20px;">⚙</a>
 </footer>
 
 <div class="overlay" onclick="toggleDrawer()"></div>
 <div class="drawer" id="drawer">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
-        <h3 style="font-size: 16px; font-weight: 600;">Refinar Busca</h3>
-        <span style="cursor:pointer; font-size: 28px; line-height: 1;" onclick="toggleDrawer()">&times;</span>
-    </div>
+    <h3 style="font-size: 16px; margin-bottom: 20px;">Refinar Busca</h3>
     <div id="filtros-container"></div>
-    <button class="btn-nav" style="width: 100%; margin-top: 20px;" onclick="toggleDrawer()">Aplicar Filtros</button>
 </div>
 
 <script>
     const API = "https://script.google.com/macros/s/AKfycbzgV_H5QLTNwJ12B-78q57qNnlaVi0vbxW3jIqdnp7YH1IKCdBdFthIHymlMM9Jusqktg/exec";
-    const WHATSAPP = "558992665421";
+    const WHATSAPP = "5581992665421"; // Telefone atualizado
     let BANCO = [];
     let SELECIONADOS = new Set();
 
@@ -159,12 +156,7 @@
     }
 
     function gerarFiltros() {
-        const cats = { 
-            cores: 'Cores', 
-            camadas: 'Número de Camadas', 
-            padrao: 'Padrão das Pétalas', 
-            especiais: 'Características Especiais' 
-        };
+        const cats = { cores: 'Cores', camadas: 'Número de Camadas', padrao: 'Padrão das Pétalas', especiais: 'Características Especiais' };
         let html = "";
         Object.keys(cats).forEach(cat => {
             let opts = [...new Set(BANCO.flatMap(i => i[cat] ? i[cat].split(',').map(s => s.trim()) : []))].sort();
@@ -172,7 +164,6 @@
                 const isSingle = (cat === 'camadas' || cat === 'padrao');
                 html += `<div class="filter-section"><h4>${cats[cat]}</h4>`;
                 if(isSingle) html += `<label class="option-item"><input type="radio" name="${cat}" class="chk-f" data-cat="${cat}" value="" onchange="filtrar()" checked> Todas</label>`;
-                
                 opts.forEach(o => {
                     const type = isSingle ? 'radio' : 'checkbox';
                     const name = isSingle ? `name="${cat}"` : '';
@@ -201,7 +192,37 @@
             });
             return bateB && bateF;
         });
+        
+        atualizarPainel(ativos);
         render(res);
+    }
+
+    function atualizarPainel(filtrosAtivos) {
+        let html = "";
+        
+        // Chips para IDs selecionadas
+        SELECIONADOS.forEach(id => {
+            html += `<div class="chip chip-id">${id} <span onclick="toggleSelect('${id}')">&times;</span></div>`;
+        });
+
+        // Chips para Filtros ativos
+        Object.keys(filtrosAtivos).forEach(cat => {
+            filtrosAtivos[cat].forEach(val => {
+                html += `<div class="chip">${val} <span onclick="removerFiltro('${cat}', '${val}')">&times;</span></div>`;
+            });
+        });
+
+        document.getElementById('selection-panel').innerHTML = html;
+        document.getElementById('btn-whatsapp').style.display = SELECIONADOS.size > 0 ? 'flex' : 'none';
+    }
+
+    function removerFiltro(cat, val) {
+        const el = document.querySelector(`.chk-f[data-cat="${cat}"][value="${val}"]`);
+        if(el) {
+            if(el.type === 'radio') document.querySelector(`.chk-f[data-cat="${cat}"][value=""]`).checked = true;
+            else el.checked = false;
+            filtrar();
+        }
     }
 
     function render(lista) {
@@ -210,7 +231,6 @@
             const isSelected = SELECIONADOS.has(item.id) ? 'selected' : '';
             return `
                 <div class="card ${isSelected}" onclick="toggleSelect('${item.id}')">
-                    <div class="select-badge">✓</div>
                     <img src="${item.midia ? 'https://drive.google.com/thumbnail?sz=w600&id='+item.midia : 'imagens/sem-foto.jpg'}" loading="lazy">
                     <div class="card-body">
                         <span class="card-id">${item.id}</span>
@@ -226,24 +246,13 @@
     function toggleSelect(id) {
         if(SELECIONADOS.has(id)) SELECIONADOS.delete(id);
         else SELECIONADOS.add(id);
-        
-        const btnWs = document.getElementById('btn-whatsapp');
-        
-        // CORREÇÃO: Força o display para block ou none e remove qualquer opacidade baixa
-        if(SELECIONADOS.size > 0) {
-            btnWs.style.display = 'block';
-        } else {
-            btnWs.style.display = 'none';
-        }
-        
-        filtrar();
+        filtrar(); // O filtrar já chama o atualizarPainel
     }
 
     function enviarWhatsApp(e) {
         e.preventDefault();
-        if(SELECIONADOS.size === 0) return;
         const listaIds = Array.from(SELECIONADOS).sort().join(', ');
-        const texto = encodeURIComponent(`Olá! Estive visitando o catálogo da Gravatá RD e gostaria de solicitar mais informações sobre estas IDs que selecionei:\n\n*IDs: ${listaIds}*\n\nComo faço para garantir estas belezuras?`);
+        const texto = encodeURIComponent(`Olá! Gostaria de informações sobre estas Rosas do Deserto:\n\n*IDs: ${listaIds}*\n\nComo faço para garantir estas plantas?`);
         window.open(`https://wa.me/${WHATSAPP}?text=${texto}`, '_blank');
     }
 
