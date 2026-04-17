@@ -151,17 +151,21 @@
 <div id="toast"></div>
 
 <script>
-    // CERTIFIQUE-SE QUE ESTA URL É A DA NOVA IMPLANTAÇÃO
+    // URL DA SUA API (MANTIDA)
     const API = "https://script.google.com/macros/s/AKfycbzgV_H5QLTNwJ12B-78q57qNnlaVi0vbxW3jIqdnp7YH1IKCdBdFthIHymlMM9Jusqktg/exec";
     
     let DADOS = [], DADOS_FILTRADOS = [], OPCOES_DINAMICAS = {};
-    let CURRENT_MIDIA_ID = "";
+    let CURRENT_MIDIA_ID = "";   // ID da mídia que está sendo manipulada agora
+    let ORIGINAL_MIDIA_ID = "";  // ID da mídia que já estava salva na planilha
 
     async function carregar() {
         try {
             const r = await fetch(`${API}?action=get&t=${Date.now()}`);
             const json = await r.json();
+            // Transforma o objeto em array e garante a ordem alfabética na exibição inicial
             DADOS = Object.keys(json).map(k => ({ id: k, ...json[k] }));
+            DADOS.sort((a, b) => a.id.localeCompare(b.id));
+            
             DADOS_FILTRADOS = [...DADOS];
             extrairOpcoesDaPlanilha();
             renderLista();
@@ -206,21 +210,22 @@
         `).join('');
     }
 
+    // FUNÇÃO DE UPLOAD COM LIMPEZA DE TEMPORÁRIOS
     async function handleFileUpload(input) {
         if (!input.files || !input.files[0]) return;
-
+        
+        const idReferencia = document.getElementById('input-id').value.trim().toUpperCase() || "NOVA_ID";
         const file = input.files[0];
         const status = document.getElementById('upload-status');
         const preview = document.getElementById('preview-foto');
         const label = document.getElementById('label-link-drive');
         
         status.style.display = 'block';
-        status.innerText = "⏳ Enviando para o Drive...";
+        status.innerText = "⏳ Salvando no Drive...";
 
         const reader = new FileReader();
         reader.onload = async function(e) {
             const base64Data = e.target.result.split(',')[1];
-            
             try {
                 const response = await fetch(API, {
                     method: "POST",
@@ -228,18 +233,22 @@
                         action: "upload",
                         fileData: base64Data,
                         fileName: file.name,
-                        mimeType: file.type
+                        mimeType: file.type,
+                        id_referencia: idReferencia
                     })
                 });
-                
                 const result = await response.json();
-                
                 if (result.id) {
+                    // Se o usuário subiu uma foto e subiu OUTRA logo em seguida sem salvar, deleta a intermediária
+                    if (CURRENT_MIDIA_ID && CURRENT_MIDIA_ID !== ORIGINAL_MIDIA_ID) {
+                        fetch(API, { method: "POST", body: JSON.stringify({ action: "deleteFile", fileId: CURRENT_MIDIA_ID })});
+                    }
+                    
                     CURRENT_MIDIA_ID = result.id;
                     preview.src = `https://drive.google.com/thumbnail?sz=w600&id=${result.id}`;
                     label.innerText = `ID Mídia: ${result.id}`;
-                    status.innerText = "✅ Foto pronta!";
-                    showToast("Imagem enviada!", "#a08c6b");
+                    status.innerText = "✅ Foto pronta para salvar!";
+                    showToast("Imagem carregada!", "#a08c6b");
                 }
             } catch (error) {
                 status.innerText = "❌ Erro no envio.";
@@ -257,6 +266,8 @@
         document.getElementById('input-qtd').value = item.qtd || 0;
         
         CURRENT_MIDIA_ID = item.midia || "";
+        ORIGINAL_MIDIA_ID = item.midia || ""; 
+        
         document.getElementById('preview-foto').src = CURRENT_MIDIA_ID ? `https://drive.google.com/thumbnail?sz=w600&id=${CURRENT_MIDIA_ID}` : 'imagens/sem-foto.jpg';
         document.getElementById('label-link-drive').innerText = CURRENT_MIDIA_ID ? `ID Mídia: ${CURRENT_MIDIA_ID}` : '';
         document.getElementById('upload-status').style.display = 'none';
@@ -275,11 +286,20 @@
         document.getElementById('input-id').readOnly = false;
         document.getElementById('input-qtd').value = "";
         CURRENT_MIDIA_ID = "";
+        ORIGINAL_MIDIA_ID = "";
         document.getElementById('preview-foto').src = 'imagens/sem-foto.jpg';
         document.getElementById('label-link-drive').innerText = '';
         document.getElementById('upload-status').style.display = 'none';
         document.querySelectorAll('.in-opt').forEach(i => i.checked = false);
         document.getElementById('modalEditor').style.display = 'flex';
+    }
+
+    function fecharModal() {
+        // Se o usuário fez upload de uma foto nova mas cancelou (não salvou), deleta do Drive
+        if (CURRENT_MIDIA_ID && CURRENT_MIDIA_ID !== ORIGINAL_MIDIA_ID) {
+            fetch(API, { method: "POST", body: JSON.stringify({ action: "deleteFile", fileId: CURRENT_MIDIA_ID })});
+        }
+        document.getElementById('modalEditor').style.display = 'none';
     }
 
     async function salvar() {
@@ -302,7 +322,9 @@
 
         try {
             await fetch(API, { method: "POST", body: JSON.stringify(payload) });
-            showToast("✅ Sucesso!", "#a08c6b");
+            // Como salvou com sucesso, resetamos a ORIGINAL_MIDIA_ID para a nova foto para o fecharModal não deletar
+            ORIGINAL_MIDIA_ID = CURRENT_MIDIA_ID;
+            showToast("✅ Salvo com sucesso!", "#a08c6b");
             fecharModal();
             carregar(); 
         } catch (e) { showToast("Erro ao salvar", "#e74c3c"); }
@@ -312,11 +334,6 @@
         const b = document.getElementById('search').value.toUpperCase();
         DADOS_FILTRADOS = DADOS.filter(d => d.id.toUpperCase().includes(b));
         renderLista();
-    }
-
-    function fecharModal() { 
-        document.getElementById('modalEditor').style.display = 'none'; 
-        document.getElementById('upload-status').innerText = "";
     }
 
     function showToast(txt, color) {
