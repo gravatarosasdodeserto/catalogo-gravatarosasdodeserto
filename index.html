@@ -21,15 +21,13 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
         body { background: var(--bg); color: var(--text-primary); overflow-x: hidden; }
 
-        /* HEADER EXPANSÍVEL ORIGINAL */
         header { 
             height: 150px; 
             background: url('imagens/gravata-cabecalho.jpg') center/cover no-repeat;
             display: flex; align-items: center; justify-content: center;
         }
         .header-stripe {
-            width: 100%;
-            background: rgba(255, 255, 255, 0.4); 
+            width: 100%; background: rgba(255, 255, 255, 0.4); 
             backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
             padding: 20px 0; border-top: 1px solid rgba(255, 255, 255, 0.2);
             border-bottom: 1px solid rgba(255, 255, 255, 0.2);
@@ -37,154 +35,166 @@
         }
         .logo { width: 110px; }
 
-        @media (min-width: 1024px) {
-            header { height: 350px; }
-            .logo { width: 180px; }
-            .header-stripe { padding: 40px 0; }
-        }
+        @media (min-width: 1024px) { header { height: 300px; } .logo { width: 160px; } }
 
-        /* BARRA DE FILTROS ESCURA */
         .filter-bar {
             background: #2e2a15; padding: 12px 20px;
             display: flex; justify-content: space-between; align-items: center;
             position: sticky; top: 0; z-index: 1000;
         }
         .filter-title { color: white; font-size: 13px; font-weight: 500; letter-spacing: 1px; }
-        .btn-filter-trigger { 
-            background: var(--premium-grad); color: white; border: none; 
-            padding: 8px 18px; border-radius: 50px; font-size: 12px; font-weight: 600; cursor: pointer;
-        }
+        .btn-filter-trigger { background: var(--premium-grad); color: white; border: none; padding: 8px 18px; border-radius: 50px; font-size: 12px; font-weight: 600; cursor: pointer; }
 
-        /* MENU LATERAL (DRAWER) */
-        .drawer {
-            position: fixed; top: 0; right: -320px; width: 300px; height: 100%;
-            background: var(--bg); z-index: 2000; box-shadow: -10px 0 30px rgba(0,0,0,0.1);
-            transition: 0.4s ease-in-out; display: flex; flex-direction: column;
-        }
-        .drawer.active { right: 0; }
-        .drawer-header { padding: 25px; background: #2e2a15; color: white; display: flex; justify-content: space-between; align-items: center; }
-        .drawer-content { padding: 20px; overflow-y: auto; flex: 1; }
-
-        .filter-section { margin-bottom: 25px; }
-        .filter-section h4 { font-size: 11px; font-weight: 700; color: var(--accent); text-transform: uppercase; margin-bottom: 12px; }
-        .options-grid { display: grid; gap: 8px; }
-        .option-item { display: flex; align-items: center; gap: 10px; font-size: 14px; cursor: pointer; color: var(--text-secondary); }
-
-        /* GRID DE PRODUTOS */
-        .catalog-container { max-width: 1400px; margin: auto; padding: 30px 15px; }
-        .search-area { text-align: center; margin-bottom: 30px; }
+        .catalog-container { max-width: 1400px; margin: auto; padding: 20px 15px 120px; }
+        .search-area { text-align: center; margin-bottom: 25px; }
         .search-box { width: 100%; max-width: 500px; padding: 12px 25px; border-radius: 50px; border: 1px solid var(--border); outline: none; }
 
-        #grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; }
-        @media (min-width: 768px) { #grid { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 25px; } }
+        #grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px; }
+        @media (min-width: 768px) { #grid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; } }
 
-        /* CARDS ORIGINAIS */
-        .card { background: var(--surface); border-radius: var(--radius); border: 1px solid var(--border); overflow: hidden; position: relative; }
+        /* CARDS */
+        .card { 
+            background: var(--surface); border-radius: var(--radius); 
+            border: 2px solid transparent; overflow: hidden; 
+            cursor: pointer; transition: 0.3s; position: relative;
+        }
+        .card.selected { border-color: var(--accent); background: #fffcf5; transform: scale(0.98); }
         .card img { width: 100%; aspect-ratio: 1/1; object-fit: cover; background: #eee; }
-        .card-body { padding: 15px; text-align: center; }
-        .card-id { font-size: 16px; font-weight: 600; }
-        .tag-esgotado { position: absolute; top: 10px; left: 10px; background: #e74c3c; color: white; padding: 4px 10px; border-radius: 40px; font-size: 10px; font-weight: 700; }
+        .card-body { padding: 12px; text-align: center; }
+        .card-id { font-size: 15px; font-weight: 600; display: block; }
+        .card-status { font-size: 11px; margin-top: 4px; display: block; font-weight: 500; }
+        .status-available { color: var(--accent); }
+        .status-order { color: var(--text-secondary); }
 
+        /* SELEÇÃO CHECKMARK */
+        .select-badge {
+            position: absolute; top: 10px; right: 10px; background: var(--accent);
+            color: white; width: 22px; height: 22px; border-radius: 50%;
+            display: none; align-items: center; justify-content: center; font-size: 12px;
+        }
+        .card.selected .select-badge { display: flex; }
+
+        /* DRAWER FILTROS */
+        .drawer { position: fixed; top: 0; right: -320px; width: 300px; height: 100%; background: var(--bg); z-index: 2000; box-shadow: -10px 0 30px rgba(0,0,0,0.1); transition: 0.4s; padding: 20px; overflow-y: auto; }
+        .drawer.active { right: 0; }
+        .filter-section h4 { font-size: 11px; font-weight: 700; color: var(--accent); text-transform: uppercase; margin-bottom: 12px; margin-top: 20px; }
+        .option-item { display: flex; align-items: center; gap: 8px; font-size: 13px; margin-bottom: 8px; cursor: pointer; }
         .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); display: none; z-index: 1500; }
         .overlay.active { display: block; }
+
+        /* BOTÃO WHATSAPP FLUTUANTE */
+        #btn-whatsapp {
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+            background: #25d366; color: white; padding: 15px 30px; border-radius: 50px;
+            font-weight: 600; text-decoration: none; display: none; z-index: 3000;
+            box-shadow: 0 10px 25px rgba(37, 211, 102, 0.3); animation: slideUp 0.3s ease;
+        }
+        @keyframes slideUp { from { bottom: -50px; } to { bottom: 30px; } }
     </style>
 </head>
 <body>
 
-<header>
-    <div class="header-stripe"><img src="logo.png" class="logo"></div>
-</header>
+<header><div class="header-stripe"><img src="logo.png" class="logo"></div></header>
 
 <div class="filter-bar">
-    <span class="filter-title">NOSSA COLEÇÃO</span>
+    <span class="filter-title">CATÁLOGO GRAVATÁ RD</span>
     <button class="btn-filter-trigger" onclick="toggleDrawer()">FILTRAR</button>
 </div>
 
 <div class="catalog-container">
-    <div class="search-area">
-        <input type="text" id="search" class="search-box" placeholder="Buscar ID..." oninput="filtrar()">
-    </div>
+    <div class="search-area"><input type="text" id="search" class="search-box" placeholder="Buscar ID..." oninput="filtrar()"></div>
     <div id="grid"></div>
 </div>
 
+<a id="btn-whatsapp" href="#" onclick="enviarWhatsApp(event)">SOLICITAR INFORMAÇÕES</a>
+
 <div class="overlay" onclick="toggleDrawer()"></div>
 <div class="drawer" id="drawer">
-    <div class="drawer-header">
-        <span>FILTROS</span>
-        <span style="cursor:pointer; font-size: 24px;" onclick="toggleDrawer()">&times;</span>
-    </div>
-    <div class="drawer-content">
-        <div class="filter-section"><h4>Cores</h4><div class="options-grid" id="f-cores"></div></div>
-        <div class="filter-section"><h4>Camadas</h4><div class="options-grid" id="f-camadas"></div></div>
-        <div class="filter-section"><h4>Padrão de Pétala</h4><div class="options-grid" id="f-padrao"></div></div>
-        <div class="filter-section"><h4>Especiais</h4><div class="options-grid" id="f-especiais"></div></div>
-        <button class="btn-filter-trigger" style="width:100%; margin-top: 20px;" onclick="toggleDrawer()">VER RESULTADOS</button>
-    </div>
+    <h3 style="font-size: 16px; margin-bottom: 10px;">Filtros</h3>
+    <div id="filtros-container"></div>
 </div>
 
 <script>
     const API = "https://script.google.com/macros/s/AKfycbzgV_H5QLTNwJ12B-78q57qNnlaVi0vbxW3jIqdnp7YH1IKCdBdFthIHymlMM9Jusqktg/exec";
+    const WHATSAPP = "558992665421";
     let BANCO = [];
+    let SELECIONADOS = new Set();
 
-    async function carregarCatalogo() {
+    async function carregar() {
         try {
             const r = await fetch(`${API}?action=get&t=${Date.now()}`);
             const json = await r.json();
             BANCO = Object.keys(json).map(id => ({ id, ...json[id] }));
-            
             gerarFiltros();
             filtrar();
-        } catch (e) { console.error("Erro ao carregar", e); }
+        } catch (e) { console.error(e); }
     }
 
     function gerarFiltros() {
-        const categorias = { cores: 'f-cores', camadas: 'f-camadas', padrao: 'f-padrao', especiais: 'f-especiais' };
-        
-        Object.keys(categorias).forEach(cat => {
-            let opcoes = [];
-            BANCO.forEach(item => {
-                if(item[cat]) item[cat].split(',').forEach(v => opcoes.push(v.trim()));
+        const cats = { cores: 'Cores', camadas: 'Camadas', padrao: 'Padrão', especiais: 'Especiais' };
+        let html = "";
+        Object.keys(cats).forEach(cat => {
+            let opts = [...new Set(BANCO.flatMap(i => i[cat] ? i[cat].split(',').map(s => s.trim()) : []))].sort();
+            html += `<div class="filter-section"><h4>${cats[cat]}</h4>`;
+            opts.forEach(o => {
+                html += `<label class="option-item"><input type="checkbox" class="chk-f" data-cat="${cat}" value="${o}" onchange="filtrar()"> ${o}</label>`;
             });
-            const unicas = [...new Set(opcoes)].filter(v => v !== "").sort();
-            
-            document.getElementById(categorias[cat]).innerHTML = unicas.map(opt => `
-                <label class="option-item">
-                    <input type="checkbox" class="chk-f" data-cat="${cat}" value="${opt}" onchange="filtrar()">
-                    ${opt}
-                </label>
-            `).join('');
+            html += `</div>`;
         });
+        document.getElementById('filtros-container').innerHTML = html;
     }
 
     function filtrar() {
         const busca = document.getElementById('search').value.toUpperCase();
         const ativos = {};
         document.querySelectorAll('.chk-f:checked').forEach(c => {
-            const cat = c.dataset.cat;
-            if(!ativos[cat]) ativos[cat] = [];
-            ativos[cat].push(c.value);
+            if(!ativos[c.dataset.cat]) ativos[c.dataset.cat] = [];
+            ativos[c.dataset.cat].push(c.value);
         });
 
-        const resultado = BANCO.filter(item => {
-            const bateBusca = item.id.toUpperCase().includes(busca);
-            const bateFiltros = Object.keys(ativos).every(cat => {
-                const valsItem = (item[cat] || "").split(',').map(v => v.trim());
-                return ativos[cat].some(a => valsItem.includes(a));
+        const res = BANCO.filter(item => {
+            const bateB = item.id.toUpperCase().includes(busca);
+            const bateF = Object.keys(ativos).every(cat => {
+                const vItem = (item[cat] || "").split(',').map(s => s.trim());
+                return ativos[cat].some(a => vItem.includes(a));
             });
-            return bateBusca && bateFiltros;
+            return bateB && bateF;
         });
-
-        renderizar(resultado);
+        render(res);
     }
 
-    function renderizar(lista) {
-        document.getElementById('grid').innerHTML = lista.map(item => `
-            <div class="card">
-                ${item.qtd <= 0 ? '<div class="tag-esgotado">ESGOTADO</div>' : ''}
-                <img src="${item.midia ? 'https://drive.google.com/thumbnail?sz=w600&id='+item.midia : 'imagens/sem-foto.jpg'}" loading="lazy">
-                <div class="card-body"><div class="card-id">${item.id}</div></div>
-            </div>
-        `).join('');
+    function render(lista) {
+        document.getElementById('grid').innerHTML = lista.map(item => {
+            const qtd = parseInt(item.qtd) || 0;
+            const isSelected = SELECIONADOS.has(item.id) ? 'selected' : '';
+            return `
+                <div class="card ${isSelected}" onclick="toggleSelect('${item.id}')">
+                    <div class="select-badge">✓</div>
+                    <img src="${item.midia ? 'https://drive.google.com/thumbnail?sz=w600&id='+item.midia : 'imagens/sem-foto.jpg'}">
+                    <div class="card-body">
+                        <span class="card-id">${item.id}</span>
+                        <span class="card-status ${qtd > 0 ? 'status-available' : 'status-order'}">
+                            ${qtd > 0 ? qtd + (qtd === 1 ? ' disponível' : ' disponíveis') : 'Encomendar sem custo'}
+                        </span>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    function toggleSelect(id) {
+        if(SELECIONADOS.has(id)) SELECIONADOS.delete(id);
+        else SELECIONADOS.add(id);
+        
+        document.getElementById('btn-whatsapp').style.display = SELECIONADOS.size > 0 ? 'block' : 'none';
+        filtrar(); // Re-renderiza para aplicar classe de seleção
+    }
+
+    function enviarWhatsApp(e) {
+        e.preventDefault();
+        const listaIds = Array.from(SELECIONADOS).join(', ');
+        const texto = encodeURIComponent(`Olá! Estive visitando o catálogo da Gravatá RD e gostaria de solicitar mais informações sobre estas IDs que selecionei:\n\n*IDs: ${listaIds}*\n\nComo faço para garantir estas belezuras?`);
+        window.open(`https://wa.me/${WHATSAPP}?text=${texto}`, '_blank');
     }
 
     function toggleDrawer() {
@@ -192,7 +202,7 @@
         document.querySelector('.overlay').classList.toggle('active');
     }
 
-    window.onload = carregarCatalogo;
+    window.onload = carregar;
 </script>
 </body>
 </html>
