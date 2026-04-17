@@ -246,7 +246,7 @@
     function removerAcentos(str) { return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase(); }
 
     function gerarFiltros() {
-    const cats = { cores: 'Cores', camadas: 'Número de Camadas', padrao: 'Padrão das Pétalas', especiais: 'Características Especiais' };
+    const cats = { cores: 'Cores Presentes', camadas: 'Número de Camadas', padrao: 'Padrão das Pétalas', especiais: 'Características Especiais' };
     let html = "";
     Object.keys(cats).forEach(cat => {
         let opts = [...new Set(BANCO.flatMap(i => i[cat] ? i[cat].split(',').map(s => s.trim()) : []))].sort();
