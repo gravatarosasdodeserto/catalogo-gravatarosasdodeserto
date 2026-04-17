@@ -21,7 +21,6 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
         body { background: var(--bg); color: var(--text-primary); }
 
-        /* --- HEADER --- */
         header { 
             height: 150px; 
             background: url('imagens/gravata-cabecalho.jpg') center/cover no-repeat;
@@ -35,43 +34,44 @@
             border-bottom: 1px solid rgba(255, 255, 255, 0.2);
         }
         .logo { width: 110px; }
-        @media (min-width: 1024px) { header { height: 350px; } .logo { width: 180px; } .header-stripe { padding: 40px 0; } }
 
-        /* --- BARRA DE GESTÃO --- */
         .top-action-bar {
             background: #2e2a15; padding: 12px 20px;
             display: flex; justify-content: space-between; align-items: center;
             position: sticky; top: 0; z-index: 1000;
         }
-        .btn-new { background: var(--premium-grad); color: white; border: none; padding: 8px 15px; border-radius: 50px; font-size: 11px; font-weight: 600; cursor: pointer; }
-        .btn-logout { background: none; border: none; color: white; font-size: 12px; text-decoration: none; }
+        .btn-top { background: var(--premium-grad); color: white; border: none; padding: 8px 20px; border-radius: 50px; font-size: 11px; font-weight: 600; cursor: pointer; text-decoration: none; text-transform: uppercase; }
 
-        /* --- BUSCA --- */
         .controls-area { padding: 20px 15px; background: var(--bg); border-bottom: 1px solid var(--border); text-align: center; }
-        .search-box { width: 100%; max-width: 500px; padding: 10px 20px; border-radius: 50px; border: 1px solid var(--border); outline: none; font-size: 14px; }
+        .search-box { width: 100%; max-width: 500px; padding: 10px 20px; border-radius: 50px; border: 1px solid var(--border); outline: none; font-size: 14px; text-align: center; }
 
-        /* --- GRID --- */
         .container { max-width: 1400px; margin: auto; padding: 20px 10px 100px; }
         #lista-admin { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; }
         .card { background: var(--surface); border-radius: var(--radius); border: 1px solid var(--border); overflow: hidden; cursor: pointer; transition: 0.2s; }
-        .card:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
         .card img { width: 100%; aspect-ratio: 1/1; object-fit: cover; background: #f0f0f0; }
         .card-info { padding: 10px; text-align: center; }
         .card-info h3 { font-size: 13px; font-weight: 600; }
         .card-info p { font-size: 11px; color: var(--text-secondary); margin-top: 4px; }
 
-        /* --- MODAL --- */
+        /* MODAL E FORMULÁRIO */
         .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.6); display: none; align-items: center; justify-content: center; z-index: 2000; padding: 20px; }
-        .modal-content { background: var(--bg); width: 100%; max-width: 550px; max-height: 90vh; overflow-y: auto; border-radius: 20px; position: relative; box-shadow: 0 20px 50px rgba(0,0,0,0.3); }
+        .modal-content { background: var(--bg); width: 100%; max-width: 550px; max-height: 90vh; overflow-y: auto; border-radius: 20px; position: relative; }
         .modal-header { padding: 20px; background: #2e2a15; color: white; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 10; }
-        .close-modal { cursor: pointer; font-size: 24px; line-height: 1; }
+        .close-modal { cursor: pointer; font-size: 24px; }
         
         .edit-form { padding: 20px; }
+        .preview-img-container { text-align: center; margin-bottom: 20px; background: white; border-radius: 12px; padding: 10px; border: 1px solid var(--border); }
+        .preview-img-container img { max-width: 100%; height: 200px; border-radius: 8px; object-fit: cover; }
+        .img-id-label { font-size: 10px; color: var(--text-secondary); margin-top: 5px; display: block; word-break: break-all; }
+
+        .form-group { margin-bottom: 15px; }
+        .form-group label { font-size: 12px; font-weight: 600; color: var(--text-primary); margin-bottom: 5px; display: block; }
+
         .form-section { margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 15px; }
-        .section-title { font-size: 11px; font-weight: 700; color: var(--accent); text-transform: uppercase; margin-bottom: 12px; display: block; }
+        .section-title { font-size: 11px; font-weight: 800; color: var(--accent); text-transform: uppercase; margin-bottom: 12px; display: block; letter-spacing: 0.5px; }
         .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
         .option-item { display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer; }
-        .input-field { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; margin-top: 5px; outline: none; font-size: 14px; background: white; }
+        .input-field { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; outline: none; font-size: 14px; background: white; }
 
         .btn-save { width: 100%; padding: 16px; background: var(--premium-grad); color: white; border: none; border-radius: 12px; font-weight: 600; cursor: pointer; margin-top: 10px; font-size: 14px; }
 
@@ -83,9 +83,8 @@
 <header><div class="header-stripe"><img src="logo.png" class="logo"></div></header>
 
 <div class="top-action-bar">
-    <button class="btn-new" onclick="novoItem()">+ NOVA ID</button>
-    <span style="color:white; font-size: 11px; font-weight: 500; letter-spacing: 1px;">PAINEL ADMINISTRATIVO</span>
-    <a href="index.html" class="btn-logout">VOLTAR</a>
+    <button class="btn-top" onclick="novoItem()">+ NOVA ID</button>
+    <a href="index.html" class="btn-top">VOLTAR</a>
 </div>
 
 <div class="controls-area">
@@ -103,17 +102,31 @@
             <span class="close-modal" onclick="fecharModal()">&times;</span>
         </div>
         <div class="edit-form">
+            
+            <div class="preview-img-container">
+                <img id="preview-foto" src="imagens/sem-foto.jpg">
+                <span id="label-link-drive" class="img-id-label"></span> </div>
+
             <div class="form-section">
                 <span class="section-title">Informações Básicas</span>
-                <input type="text" id="input-id" class="input-field" placeholder="Identificação da ID">
-                <input type="number" id="input-qtd" class="input-field" placeholder="Quantidade em estoque">
-                <input type="text" id="input-midia" class="input-field" placeholder="ID da imagem (Google Drive)">
+                <div class="form-group">
+                    <label>Identificação da ID</label>
+                    <input type="text" id="input-id" class="input-field" placeholder="Ex: AÇUCENA">
+                </div>
+                <div class="form-group">
+                    <label>Quantidade em Estoque</label>
+                    <input type="number" id="input-qtd" class="input-field" placeholder="0">
+                </div>
+                <div class="form-group">
+                    <label>ID da Imagem (Google Drive)</label>
+                    <input type="text" id="input-midia" class="input-field" placeholder="Cole aqui apenas o ID do link" oninput="atualizarPreview(this.value)">
+                </div>
             </div>
 
             <div class="form-section"><span class="section-title">Cores</span><div class="options-grid" id="form-cores"></div></div>
-            <div class="form-section"><span class="section-title">Camadas (Única)</span><div class="options-grid" id="form-camadas"></div></div>
-            <div class="form-section"><span class="section-title">Padrão de Pétala (Única)</span><div class="options-grid" id="form-padrao"></div></div>
-            <div class="form-section"><span class="section-title">Padrões Especiais</span><div class="options-grid" id="form-especiais"></div></div>
+            <div class="form-section"><span class="section-title">Número de Camadas</span><div class="options-grid" id="form-camadas"></div></div>
+            <div class="form-section"><span class="section-title">Padrão das Pétalas</span><div class="options-grid" id="form-padrao"></div></div>
+            <div class="form-section"><span class="section-title">Características Especiais</span><div class="options-grid" id="form-especiais"></div></div>
 
             <button class="btn-save" onclick="salvar()">SALVAR ALTERAÇÕES</button>
         </div>
@@ -132,27 +145,18 @@
             const json = await r.json();
             DADOS = Object.keys(json).map(k => ({ id: k, ...json[k] }));
             DADOS_FILTRADOS = [...DADOS];
-            
             extrairOpcoesDaPlanilha();
             renderLista();
         } catch (e) { showToast("Erro ao carregar dados", "#e74c3c"); }
     }
 
-    // EXTRAI AUTOMATICAMENTE AS OPÇÕES EXISTENTES NA PLANILHA
     function extrairOpcoesDaPlanilha() {
         const extrair = (chave) => {
             let vals = [];
             DADOS.forEach(d => { if(d[chave]) d[chave].split(',').forEach(v => vals.push(v.trim())); });
             return [...new Set(vals)].filter(v => v !== "").sort();
         };
-
-        OPCOES_DINAMICAS = {
-            cores: extrair('cores'),
-            camadas: extrair('camadas'),
-            padrao: extrair('padrao'),
-            especiais: extrair('especiais')
-        };
-        
+        OPCOES_DINAMICAS = { cores: extrair('cores'), camadas: extrair('camadas'), padrao: extrair('padrao'), especiais: extrair('especiais') };
         renderFiltrosNoForm();
     }
 
@@ -165,7 +169,6 @@
                 </label>
             `).join('');
         };
-
         montar('form-cores', OPCOES_DINAMICAS.cores, 'cores', false);
         montar('form-camadas', OPCOES_DINAMICAS.camadas, 'camadas', true);
         montar('form-padrao', OPCOES_DINAMICAS.padrao, 'padrao', true);
@@ -185,6 +188,18 @@
         `).join('');
     }
 
+    function atualizarPreview(idMidia) {
+        const img = document.getElementById('preview-foto');
+        const label = document.getElementById('label-link-drive');
+        if(idMidia) {
+            img.src = `https://drive.google.com/thumbnail?sz=w600&id=${idMidia}`;
+            label.innerText = `ID Midia: ${idMidia}`;
+        } else {
+            img.src = 'imagens/sem-foto.jpg';
+            label.innerText = '';
+        }
+    }
+
     function abrirEditor(id) {
         const item = DADOS.find(d => d.id === id);
         document.getElementById('modal-title').innerText = "Editar ID: " + id;
@@ -193,6 +208,8 @@
         document.getElementById('input-qtd').value = item.qtd || 0;
         document.getElementById('input-midia').value = item.midia || "";
         
+        atualizarPreview(item.midia);
+
         document.querySelectorAll('.in-opt').forEach(i => {
             const valSalvo = (item[i.dataset.type] || "").split(',').map(v => v.trim());
             i.checked = valSalvo.includes(i.value);
@@ -207,6 +224,7 @@
         document.getElementById('input-id').readOnly = false;
         document.getElementById('input-qtd').value = "";
         document.getElementById('input-midia').value = "";
+        atualizarPreview("");
         document.querySelectorAll('.in-opt').forEach(i => i.checked = false);
         document.getElementById('modalEditor').style.display = 'flex';
     }
@@ -214,15 +232,12 @@
     async function salvar() {
         const id = document.getElementById('input-id').value.trim().toUpperCase();
         if(!id) return alert("A ID é obrigatória");
-
-        showToast("⏳ Salvando alterações...", "#2e2a15");
-
+        showToast("⏳ Salvando...", "#2e2a15");
         const payload = {
             action: "upsert", id: id,
             qtd: document.getElementById('input-qtd').value,
             midia: document.getElementById('input-midia').value
         };
-
         ['cores', 'camadas', 'padrao', 'especiais'].forEach(ch => {
             const sel = [...document.querySelectorAll(`.in-opt[data-type="${ch}"]:checked`)];
             payload[ch] = sel.map(s => s.value).join(', ');
