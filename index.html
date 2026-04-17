@@ -8,31 +8,32 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
 
+/* SEÇÃO DE BOAS-VINDAS OTIMIZADA */
 .welcome-section {
-    padding: 30px 20px;
+    padding: 20px 15px; /* Reduzi o respiro lateral e vertical */
     text-align: center;
     background: white;
     border-bottom: 1px solid var(--border);
 }
 
 .welcome-section h1 {
-    font-size: 20px;
+    font-size: 18px; /* Reduzi um pouco no mobile */
     color: var(--text-primary);
-    margin-bottom: 10px;
+    margin-bottom: 8px;
     font-weight: 600;
 }
 
 .welcome-section p {
-    font-size: 14px;
+    font-size: 13px; /* Texto levemente menor */
     color: var(--text-secondary);
     max-width: 600px;
-    margin: 0 auto 25px;
+    margin: 0 auto 15px; /* Espaço menor antes dos passos */
 }
 
 .how-to-order {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 15px;
+    display: flex; /* Mudamos para flex para controlar melhor o mobile */
+    flex-direction: column; 
+    gap: 8px; /* Espaço mínimo entre os passos */
     max-width: 800px;
     margin: 0 auto;
 }
@@ -40,40 +41,44 @@
 .step {
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 10px;
     background: var(--bg);
-    padding: 12px 15px;
-    border-radius: 12px;
+    padding: 8px 12px; /* Passo mais "magrinho" */
+    border-radius: 10px;
     text-align: left;
 }
 
 .step-number {
     background: var(--premium-grad);
     color: white;
-    width: 28px;
-    height: 28px;
+    width: 22px; /* Círculo menor */
+    height: 22px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     font-weight: 700;
-    font-size: 14px;
+    font-size: 11px;
     flex-shrink: 0;
 }
 
 .step p {
     margin: 0;
-    font-size: 13px;
-    line-height: 1.4;
-    color: var(--text-primary);
+    font-size: 12px; /* Texto compacto */
+    line-height: 1.3;
 }
 
-/* Ajuste para telas maiores (PC) */
+/* Ajuste para telas maiores (PC) - Mantendo ele elegante no monitor */
 @media (min-width: 768px) {
+    .welcome-section { padding: 40px 20px; }
     .how-to-order {
+        display: grid;
         grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
     }
     .welcome-section h1 { font-size: 28px; }
+    .step { padding: 15px; flex-direction: column; text-align: center; }
+    .step-number { width: 30px; height: 30px; font-size: 14px; margin-bottom: 10px; }
 }
         
         :root {
