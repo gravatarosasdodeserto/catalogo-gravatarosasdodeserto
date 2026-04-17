@@ -7,6 +7,75 @@
     <title>Gravatá RD | Catálogo de Rosas do Deserto</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
+
+.welcome-section {
+    padding: 30px 20px;
+    text-align: center;
+    background: white;
+    border-bottom: 1px solid var(--border);
+}
+
+.welcome-section h1 {
+    font-size: 20px;
+    color: var(--text-primary);
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+.welcome-section p {
+    font-size: 14px;
+    color: var(--text-secondary);
+    max-width: 600px;
+    margin: 0 auto 25px;
+}
+
+.how-to-order {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 15px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.step {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background: var(--bg);
+    padding: 12px 15px;
+    border-radius: 12px;
+    text-align: left;
+}
+
+.step-number {
+    background: var(--premium-grad);
+    color: white;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 14px;
+    flex-shrink: 0;
+}
+
+.step p {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.4;
+    color: var(--text-primary);
+}
+
+/* Ajuste para telas maiores (PC) */
+@media (min-width: 768px) {
+    .how-to-order {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    .welcome-section h1 { font-size: 28px; }
+}
+        
         :root {
             --bg: #fcfbf7;
             --surface: #ffffff;
@@ -165,6 +234,26 @@
 
 <header><div class="header-stripe"><img src="logo.png" class="logo"></div></header>
 
+<section class="welcome-section">
+    <h1>Rosas do Deserto de Alta Linhagem</h1>
+    <p>Bem-vindo ao catálogo exclusivo da <strong>Gravatá RD</strong>. Explore nossas variedades e escolha as suas favoritas.</p>
+    
+    <div class="how-to-order">
+        <div class="step">
+            <span class="step-number">1</span>
+            <p>Toque nas fotos para <strong>selecionar</strong> as IDs que você deseja.</p>
+        </div>
+        <div class="step">
+            <span class="step-number">2</span>
+            <p>Clique no <strong>botão verde</strong> que surgirá no final da tela.</p>
+        </div>
+        <div class="step">
+            <span class="step-number">3</span>
+            <p>Enviaremos sua lista pronta para o nosso <strong>WhatsApp</strong>.</p>
+        </div>
+    </div>
+</section>
+    
 <div class="top-nav">
     <button class="btn-filter" onclick="toggleDrawer()">Filtrar por Características</button>
 </div>
