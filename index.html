@@ -262,14 +262,21 @@
     const RESULTS_COUNTER = document.getElementById('results-counter');
 
     async function carregar() {
-        try {
-            const r = await fetch(`${API}?action=get&t=${Date.now()}`);
-            const json = await r.json();
-            BANCO = Object.keys(json).map(id => ({ id, ...json[id] }));
-            gerarFiltros();
-            filtrar();
-        } catch (e) { console.error(e); }
+    try {
+        // MSTRAR SKELETON ANTES DE CARREGAR
+        renderSkeleton();
+        RESULTS_COUNTER.style.display = 'block'; // Mostra o contador
+
+        const r = await fetch(`${API}?action=get&t=${Date.now()}`);
+        const json = await r.json();
+        BANCO = Object.keys(json).map(id => ({ id, ...json[id] }));
+        gerarFiltros();
+        filtrar();
+    } catch (e) { 
+        console.error(e); 
+        RESULTS_COUNTER.innerText = "Erro ao carregar o catálogo.";
     }
+}
 
     function removerAcentos(str) {
         return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
