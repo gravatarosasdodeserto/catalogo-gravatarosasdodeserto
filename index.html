@@ -6,93 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Gravatá RD | Catálogo de Rosas do Deserto</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
-   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
     
     <style>
-        /* AJUSTE FINO PARA O TEXTO NOVO */
-        .welcome-section {
-            padding: 15px 15px;
-            text-align: center;
-            background: white;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .welcome-section h1 {
-            font-size: 17px;
-            color: var(--text-primary);
-            margin-bottom: 5px;
-            font-weight: 600;
-        }
-
-        /* Configuração do título com nome científico */
-        .mobile-only {
-            display: none;
-        }
-
-        .scientific-name {
-            font-weight: 400;
-            font-size: 0.9em;
-        }
-
-        /* Estilo dos textos e passos */
-        .welcome-section p {
-            font-size: 13px;
-            color: var(--text-secondary);
-            max-width: 650px;
-            margin: 0 auto 12px;
-            line-height: 1.4;
-        }
-
-        .how-to-order {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .step {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            background: #f9f8f3;
-            padding: 6px 12px; 
-            border-radius: 8px;
-        }
-
-        .step p {
-            font-size: 12px;
-            color: var(--text-primary);
-            margin: 0;
-        }
-
-        /* --- AJUSTES PARA CELULAR --- */
-        @media (max-width: 768px) {
-            .mobile-only {
-                display: block;
-            }
-            .scientific-name {
-                display: block;
-                margin-top: 2px;
-            }
-            .welcome-section h1 {
-                font-size: 18px;
-                line-height: 1.2;
-            }
-        }
-
-        /* --- AJUSTES PARA PC --- */
-        @media (min-width: 768px) {
-            .welcome-section { padding: 35px 20px; }
-            .how-to-order {
-                display: grid;
-                grid-template-columns: repeat(3, 1fr);
-                gap: 15px;
-            }
-            .welcome-section h1 { font-size: 26px; }
-            .step { flex-direction: column; text-align: center; padding: 15px; }
-        }
-        
         /* --- VARIÁVEIS E GERAL --- */
         :root {
             --bg: #fcfbf7;
@@ -107,7 +22,6 @@
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
         
-        /* Força o fundo e evita barras laterais */
         html, body { 
             background: var(--bg); 
             color: var(--text-primary); 
@@ -116,7 +30,7 @@
             width: 100%;
         }
 
-        /* CABEÇALHO - IMAGEM DESCIDA E CENTRALIZADA */
+        /* CABEÇALHO */
         header { 
             height: 150px; 
             background: url('imagens/gravata-cabecalho.jpg') center 15% / cover no-repeat;
@@ -125,76 +39,126 @@
         }
         .header-stripe {
             width: 100%; 
-            background: rgba(255, 255, 255, 0.3); /* Transparência da barra da logo */
+            background: rgba(255, 255, 255, 0.3);
             backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
             padding: 20px 0; border-top: 1px solid rgba(255, 255, 255, 0.2);
             border-bottom: 1px solid rgba(255, 255, 255, 0.2);
             display: flex; justify-content: center;
         }
-        .logo { width: 140px; }
+        .logo { width: 140px; transition: 0.3s; }
 
-        /* PC: ALTURA DO HEADER E LARGURA DA LOGO */
         @media (min-width: 1024px) { 
             header { height: 320px; } 
-            .logo { width: 240px; } 
+            .logo { width: 280px; } 
             .header-stripe { padding: 30px 0; }
         }
 
-        .top-nav {
-            background: #2e2a15; padding: 10px 20px;
-            display: flex; justify-content: center; align-items: center;
-            position: sticky; top: 0; z-index: 2000; height: 65px;
+        /* SEÇÃO DE BOAS-VINDAS (ROLA NORMALMENTE) */
+        .welcome-section {
+            padding: 25px 15px;
+            text-align: center;
+            background: white;
+            border-bottom: 1px solid var(--border);
         }
-        
+        .welcome-section h1 {
+            font-size: 18px;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        .scientific-name { font-weight: 400; font-size: 0.9em; }
+        .mobile-only { display: none; }
+
+        .welcome-section p {
+            font-size: 13px;
+            color: var(--text-secondary);
+            max-width: 650px;
+            margin: 0 auto 15px;
+            line-height: 1.4;
+        }
+
+        .how-to-order {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .step {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #f9f8f3;
+            padding: 8px 15px; 
+            border-radius: 8px;
+            text-align: left;
+        }
+        .step-number {
+            background: var(--premium-grad);
+            color: white;
+            width: 24px; height: 24px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700; font-size: 11px; flex-shrink: 0;
+        }
+        .step p { font-size: 12px; margin: 0; }
+
+        @media (max-width: 768px) {
+            .mobile-only { display: block; }
+            .scientific-name { display: block; margin-top: 2px; }
+        }
+
+        @media (min-width: 768px) {
+            .welcome-section { padding: 40px 20px; }
+            .how-to-order { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
+            .welcome-section h1 { font-size: 26px; }
+            .step { flex-direction: column; text-align: center; padding: 15px; }
+        }
+
+        /* BLOCO FIXO NO TOPO (STICKY) */
+        .sticky-wrapper {
+            position: -webkit-sticky;
+            position: sticky;
+            top: 0;
+            z-index: 3000;
+            background: var(--bg);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+
+        .top-nav {
+            background: #2e2a15; padding: 10px;
+            display: flex; justify-content: center; align-items: center;
+            height: 65px;
+        }
         .btn-filter { 
             background: var(--premium-grad); color: white; border: none; 
             padding: 10px 25px; border-radius: 50px; font-size: 11px; 
             font-weight: 700; cursor: pointer; text-transform: uppercase; letter-spacing: 1px;
         }
 
-        /* BOTÃO WHATSAPP - AGORA COM Z-INDEX MÁXIMO */
-        #btn-whatsapp { 
-            position: fixed; bottom: 0; left: 0; width: 100%;
-            background: var(--premium-grad); color: white; border: none; 
-            padding: 22px 10px; font-size: 12px;
-            font-weight: 700; cursor: pointer; text-decoration: none;
-            text-transform: uppercase; letter-spacing: 1px;
-            display: none; justify-content: center; align-items: center;
-            z-index: 99999 !important; /* Na frente de tudo */
-            box-shadow: 0 -8px 30px rgba(0,0,0,0.3);
-            text-align: center; gap: 10px;
-            overflow: hidden;
+        .search-area { background: white; padding: 15px 10px; text-align: center; }
+        .search-box { 
+            width: 90%; max-width: 500px; padding: 12px 25px; 
+            border-radius: 50px; border: 1px solid var(--border); 
+            outline: none; font-size: 15px; text-align: center;
         }
-        #btn-whatsapp::after {
-            content: ''; position: absolute; top: 0; left: -100%;
-            width: 100%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            animation: shine 3s infinite;
-        }
-        @keyframes shine { 0% { left: -100%; } 20% { left: 100%; } 100% { left: 100%; } }
-        #btn-whatsapp svg { width: 20px; height: 20px; fill: white; }
+        #results-counter { font-size: 11px; color: var(--text-secondary); margin-top: 8px; text-align: center; }
 
-        /* CATALOGO TELA CHEIA - REMOVIDO LIMITES DE LARGURA */
-        .catalog-container { 
-            width: 100% !important; 
-            max-width: 100% !important; 
-            padding: 20px 2% 160px; /* Margem lateral mínima para o PC encher a tela */
-            flex: 1;
-        }
-        
-        /* GRID RESPONSIVO - MÁXIMO DE CARDS POR LINHA NO PC */
+        .panel-group { background: #fdfdfb; border-bottom: 1px solid var(--border); padding: 10px 0; display: none; }
+        .panel-label { font-size: 10px; font-weight: 700; color: var(--accent); text-transform: uppercase; margin-bottom: 8px; display: block; text-align: center; }
+        .chips-container { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; padding: 0 15px; max-height: 100px; overflow-y: auto; }
+        .chip { background: #eeebe3; border: 1px solid var(--border); padding: 4px 12px; border-radius: 20px; font-size: 10px; display: flex; align-items: center; gap: 6px; }
+        .chip.chip-id { background: #fdf5e6; border-color: var(--accent); color: var(--text-primary); font-weight: 600; }
+        .chip span { cursor: pointer; font-weight: bold; font-size: 14px; color: var(--accent); }
+
+        /* GRID E CARDS */
+        .catalog-container { width: 100%; padding: 20px 2% 160px; }
         #grid { 
             display: grid; 
             grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); 
             gap: 15px; 
-            width: 100%;
         }
-        @media (min-width: 1024px) { 
-            #grid { 
-                grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); 
-                gap: 30px; 
-            } 
-        }
+        @media (min-width: 1024px) { #grid { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 30px; } }
 
         .card { 
             background: var(--surface); border-radius: var(--radius); 
@@ -202,7 +166,7 @@
             cursor: pointer; transition: 0.2s; position: relative;
             box-shadow: 0 4px 15px rgba(0,0,0,0.05);
         }
-        .card.selected { border-color: var(--accent); background: #fffcf5; transform: translateY(-3px); }
+        .card.selected { border-color: var(--accent); background: #fffcf5; transform: scale(0.98); }
         .card-img-container { width: 100%; aspect-ratio: 1/1; background: #eeebe3; overflow: hidden; }
         .card img { width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: 0.5s ease; }
         .card img.loaded { opacity: 1; }
@@ -212,37 +176,36 @@
         .status-available { color: var(--accent); }
         .status-order { color: var(--text-secondary); opacity: 0.7; }
 
-        /* BUSCA E PAINÉIS */
-        .search-area { text-align: center; margin-bottom: 25px; width: 100%; display: flex; flex-direction: column; align-items: center; }
-        .search-box { 
-            width: 90%; max-width: 500px; padding: 12px 25px; 
-            border-radius: 50px; border: 1px solid var(--border); 
-            outline: none; text-align: center; font-size: 15px; background: white;
+        /* BOTÃO WHATSAPP */
+        #btn-whatsapp { 
+            position: fixed; bottom: 0; left: 0; width: 100%;
+            background: var(--premium-grad); color: white; border: none; 
+            padding: 22px 10px; font-size: 12px; font-weight: 700;
+            display: none; justify-content: center; align-items: center;
+            z-index: 99999 !important; box-shadow: 0 -8px 30px rgba(0,0,0,0.3);
+            text-transform: uppercase; gap: 10px; text-decoration: none;
+            overflow: hidden;
         }
+        #btn-whatsapp::after {
+            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            animation: shine 3s infinite;
+        }
+        @keyframes shine { 0% { left: -100%; } 20% { left: 100%; } 100% { left: 100%; } }
+        #btn-whatsapp svg { width: 20px; fill: white; }
 
-        .panel-group { margin-bottom: 20px; display: none; width: 100%; }
-        .panel-label { font-size: 10px; font-weight: 700; color: var(--accent); text-transform: uppercase; margin-bottom: 8px; display: block; text-align: center; }
-        .chips-container { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; padding: 0 10px; }
-        .chip { background: #eeebe3; border: 1px solid var(--border); padding: 4px 12px; border-radius: 20px; font-size: 10px; display: flex; align-items: center; gap: 6px; color: var(--text-secondary); }
-        .chip.chip-id { background: #fdf5e6; border-color: var(--accent); color: var(--text-primary); font-weight: 600; }
-        .chip span { cursor: pointer; font-weight: bold; font-size: 14px; color: var(--accent); }
-
-        /* FILTROS LATERAL (DRAWER) */
-        .drawer { position: fixed; top: 0; right: -320px; width: 300px; height: 100%; background: var(--bg); z-index: 5000; box-shadow: -10px 0 30px rgba(0,0,0,0.1); transition: 0.4s; padding: 25px; overflow-y: auto; }
+        /* FOOTER E DRAWER */
+        footer { background: white; border-top: 1px solid var(--border); padding: 60px 20px 180px; margin-top: 40px; }
+        .footer-gear { display: inline-flex; align-items: center; justify-content: center; width: 42px; height: 42px; background: #f4f2eb; border-radius: 50%; color: var(--accent); transition: 0.3s; }
+        
+        .drawer { position: fixed; top: 0; right: -320px; width: 300px; height: 100%; background: var(--bg); z-index: 999999; box-shadow: -10px 0 30px rgba(0,0,0,0.1); transition: 0.4s; padding: 25px; overflow-y: auto; }
         .drawer.active { right: 0; }
         .filter-section { border-bottom: 1px solid var(--border); padding-bottom: 15px; margin-bottom: 15px; }
         .filter-section h4 { font-size: 10px; font-weight: 800; color: var(--accent); text-transform: uppercase; margin-bottom: 12px; }
         .option-item { display: flex; align-items: center; gap: 10px; font-size: 13px; margin-bottom: 10px; cursor: pointer; }
-        .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); display: none; z-index: 4000; }
+        .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); display: none; z-index: 999998; }
         .overlay.active { display: block; }
 
-        /* RODAPÉ LIMPO COM ENGENRAGEM NA COR DA PALETA */
-        footer { background: white; border-top: 1px solid var(--border); padding: 60px 20px 180px; margin-top: 40px; }
-        .footer-gear { display: inline-flex; align-items: center; justify-content: center; width: 42px; height: 42px; background: #f4f2eb; border-radius: 50%; color: var(--accent); transition: 0.3s; }
-
-        #results-counter { font-size: 11px; color: var(--text-secondary); font-weight: 500; margin-top: 10px; display: none; text-align: center; width: 100%; }
-        
-        /* ESQUELETO DE CARREGAMENTO */
         @keyframes pulse { 0% { background-color: #eeebe3; } 50% { background-color: #f6f5f0; } 100% { background-color: #eeebe3; } }
         .skeleton-card { background: white; border-radius: var(--radius); overflow: hidden; }
         .skeleton-img { width: 100%; aspect-ratio: 1/1; animation: pulse 1.5s infinite ease-in-out; }
@@ -250,7 +213,11 @@
 </head>
 <body>
 
-<header><div class="header-stripe"><img src="logo.png" class="logo"></div></header>
+<header>
+    <div class="header-stripe">
+        <img src="logo.png" class="logo">
+    </div>
+</header>
 
 <section class="welcome-section">
     <h1>Enxertos de Rosas do Deserto <br class="mobile-only"> <span class="scientific-name">(Adenium Obesum)</span></h1>
@@ -271,12 +238,12 @@
         </div>
     </div>
 </section>
-    
-<div class="top-nav">
-    <button class="btn-filter" onclick="toggleDrawer()">Filtrar por Características</button>
-</div>
 
-<div class="catalog-container">
+<div class="sticky-wrapper">
+    <div class="top-nav">
+        <button class="btn-filter" onclick="toggleDrawer()">Filtrar por Características</button>
+    </div>
+
     <div class="search-area">
         <input type="text" id="search" class="search-box" placeholder="Pesquisar ID ou nome..." oninput="filtrar()">
         <div id="results-counter">Sincronizando catálogo...</div>
@@ -291,7 +258,8 @@
         <span class="panel-label">Sua Seleção:</span>
         <div id="selection-chips" class="chips-container"></div>
     </div>
-
+</div>
+<div class="catalog-container">
     <div id="grid"></div>
 </div>
 
@@ -353,27 +321,24 @@
     function removerAcentos(str) { return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase(); }
 
     function gerarFiltros() {
-    const cats = { cores: 'Cores Presentes', camadas: 'Número de Camadas', padrao: 'Padrão das Pétalas', especiais: 'Características Especiais' };
-    let html = "";
-    Object.keys(cats).forEach(cat => {
-        let opts = [...new Set(BANCO.flatMap(i => i[cat] ? i[cat].split(',').map(s => s.trim()) : []))].sort();
-        if(opts.length > 0) {
-            // AJUSTE: Apenas 'camadas' continua sendo rádio (escolha única)
-            const isSingle = (cat === 'camadas'); 
-            
-            html += `<div class="filter-section"><h4>${cats[cat]}</h4>`;
-            if(isSingle) html += `<label class="option-item"><input type="radio" name="${cat}" class="chk-f" data-cat="${cat}" value="" onchange="filtrar()" checked> Todas</label>`;
-            
-            opts.forEach(o => {
-                const type = isSingle ? 'radio' : 'checkbox';
-                const name = isSingle ? `name="${cat}"` : '';
-                html += `<label class="option-item"><input type="${type}" ${name} class="chk-f" data-cat="${cat}" value="${o}" onchange="filtrar()"> ${o}</label>`;
-            });
-            html += `</div>`;
-        }
-    });
-    document.getElementById('filtros-container').innerHTML = html;
-}
+        const cats = { cores: 'Cores Presentes', camadas: 'Número de Camadas', padrao: 'Padrão das Pétalas', especiais: 'Características Especiais' };
+        let html = "";
+        Object.keys(cats).forEach(cat => {
+            let opts = [...new Set(BANCO.flatMap(i => i[cat] ? i[cat].split(',').map(s => s.trim()) : []))].sort();
+            if(opts.length > 0) {
+                const isSingle = (cat === 'camadas'); 
+                html += `<div class="filter-section"><h4>${cats[cat]}</h4>`;
+                if(isSingle) html += `<label class="option-item"><input type="radio" name="${cat}" class="chk-f" data-cat="${cat}" value="" onchange="filtrar()" checked> Todas</label>`;
+                opts.forEach(o => {
+                    const type = isSingle ? 'radio' : 'checkbox';
+                    const name = isSingle ? `name="${cat}"` : '';
+                    html += `<label class="option-item"><input type="${type}" ${name} class="chk-f" data-cat="${cat}" value="${o}" onchange="filtrar()"> ${o}</label>`;
+                });
+                html += `</div>`;
+            }
+        });
+        document.getElementById('filtros-container').innerHTML = html;
+    }
 
     function filtrar() {
         const busca = removerAcentos(document.getElementById('search').value);
