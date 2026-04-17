@@ -368,6 +368,21 @@
         }
     }
 
+    function renderSkeleton() {
+        const grid = document.getElementById('grid');
+        // Cria 8 cards fantasmas (Skeletons) pulsantes
+        const skeletons = Array(8).fill().map(() => `
+            <div class="skeleton-card">
+                <div class="skeleton-img"></div>
+                <div class="skeleton-body">
+                    <div class="skeleton-text" style="width: 60%;"></div>
+                    <div class="skeleton-text" style="width: 80%;"></div>
+                </div>
+            </div>
+        `).join('');
+        grid.innerHTML = skeletons;
+    }
+    
     function render(lista) {
         document.getElementById('grid').innerHTML = lista.map(item => {
             const qtd = parseInt(item.qtd) || 0;
