@@ -382,15 +382,18 @@
 
     function renderFiltrosNoForm() {
         const montar = (containerId, lista, chave, isRadio) => {
-            document.getElementById(containerId).innerHTML = lista.map(opt => `
-                <label class="option-item"><input type="${isRadio ? 'radio' : 'checkbox'}" name="f-${chave}" class="in-opt" data-type="${chave}" value="${opt}"> ${opt}</label>
-            `).join('');
-        };
-        montar('form-cores', OPCOES_DINAMICAS.cores, 'cores', false);
-        montar('form-camadas', OPCOES_DINAMICAS.camadas, 'camadas', true);
-        montar('form-padrao', OPCOES_DINAMICAS.padrao, 'padrao', true);
-        montar('form-especiais', OPCOES_DINAMICAS.especiais, 'especiais', false);
-    }
+        document.getElementById(containerId).innerHTML = lista.map(opt => `
+            <label class="option-item"><input type="${isRadio ? 'radio' : 'checkbox'}" name="f-${chave}" class="in-opt" data-type="${chave}" value="${opt}"> ${opt}</label>
+        `).join('');
+    };
+    
+    montar('form-cores', OPCOES_DINAMICAS.cores, 'cores', false);
+    montar('form-camadas', OPCOES_DINAMICAS.camadas, 'camadas', true); 
+    
+    montar('form-padrao', OPCOES_DINAMICAS.padrao, 'padrao', false); 
+    
+    montar('form-especiais', OPCOES_DINAMICAS.especiais, 'especiais', false);
+}
 
     function filtrar() {
         const termo = document.getElementById('search').value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[.,;:]/g, "");
