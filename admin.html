@@ -43,7 +43,8 @@
         .btn-top { background: var(--premium-grad); color: white; border: none; padding: 8px 20px; border-radius: 50px; font-size: 11px; font-weight: 600; cursor: pointer; text-decoration: none; text-transform: uppercase; }
 
         .controls-area { padding: 20px 15px; background: var(--bg); border-bottom: 1px solid var(--border); text-align: center; }
-        .search-box { width: 100%; max-width: 500px; padding: 10px 20px; border-radius: 50px; border: 1px solid var(--border); outline: none; font-size: 14px; text-align: center; }
+        .search-container { position: relative; max-width: 500px; margin: auto; }
+        .search-box { width: 100%; padding: 12px 20px; border-radius: 50px; border: 1px solid var(--border); outline: none; font-size: 14px; text-align: center; background: white; }
 
         .container { max-width: 1400px; margin: auto; padding: 20px 10px 100px; }
         #lista-admin { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; }
@@ -84,7 +85,7 @@
         .section-title { font-size: 11px; font-weight: 800; color: var(--accent); text-transform: uppercase; margin-bottom: 12px; display: block; letter-spacing: 0.5px; }
         .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
         .option-item { display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer; }
-        .input-field { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; outline: none; font-size: 14px; background: white; }
+        .input-field { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; outline: none; font-size: 14px; background: white; text-transform: uppercase; }
 
         .btn-save { width: 100%; padding: 16px; background: var(--premium-grad); color: white; border: none; border-radius: 12px; font-weight: 600; cursor: pointer; margin-top: 10px; font-size: 14px; }
         .btn-delete { width: 100%; padding: 10px; background: none; color: #e74c3c; border: 1px solid #e74c3c; border-radius: 12px; font-weight: 600; cursor: pointer; margin-top: 15px; font-size: 12px; }
@@ -102,7 +103,9 @@
 </div>
 
 <div class="controls-area">
-    <input type="text" id="search" class="search-box" placeholder="Pesquisar ID na lista..." oninput="filtrar()">
+    <div class="search-container">
+        <input type="text" id="search" class="search-box" placeholder="Pesquisar ID na lista..." oninput="filtrar()">
+    </div>
 </div>
 
 <main class="container">
@@ -131,7 +134,7 @@
                 <span class="section-title">Informações Básicas</span>
                 <div class="form-group">
                     <label>Identificação da ID</label>
-                    <input type="text" id="input-id" class="input-field" placeholder="Ex: AÇUCENA">
+                    <input type="text" id="input-id" class="input-field" placeholder="Ex: AÇUCENA" oninput="this.value = this.value.toUpperCase()">
                 </div>
                 <div class="form-group">
                     <label>Quantidade em Estoque</label>
@@ -164,7 +167,7 @@
             const r = await fetch(`${API}?action=get&t=${Date.now()}`);
             const json = await r.json();
             DADOS = Object.keys(json).map(k => ({ id: k, ...json[k] }));
-            DADOS.sort((a, b) => a.id.localeCompare(b.id)); // Ordem Alfabética
+            DADOS.sort((a, b) => a.id.localeCompare(b.id));
             
             DADOS_FILTRADOS = [...DADOS];
             extrairOpcoesDaPlanilha();
@@ -220,7 +223,7 @@
         const label = document.getElementById('label-link-drive');
         
         status.style.display = 'block';
-        status.innerText = "⏳ Salvando no Drive...";
+        status.innerText = "⏳ FAZENDO UPLOAD..."; 
 
         const reader = new FileReader();
         reader.onload = async function(e) {
@@ -259,7 +262,7 @@
     function abrirEditor(id) {
         const item = DADOS.find(d => d.id === id);
         document.getElementById('modal-title').innerText = "Editar ID: " + id;
-        document.getElementById('input-id').value = item.id;
+        document.getElementById('input-id').value = item.id.toUpperCase();
         document.getElementById('input-id').readOnly = true;
         document.getElementById('input-qtd').value = item.qtd || 0;
         document.getElementById('btn-excluir').style.display = 'block';
@@ -299,6 +302,7 @@
             fetch(API, { method: "POST", body: JSON.stringify({ action: "deleteFile", fileId: CURRENT_MIDIA_ID })});
         }
         document.getElementById('modalEditor').style.display = 'none';
+        limparBusca(); // Limpa a busca e restaura o catálogo completo
     }
 
     async function salvar() {
@@ -323,7 +327,7 @@
             await fetch(API, { method: "POST", body: JSON.stringify(payload) });
             ORIGINAL_MIDIA_ID = CURRENT_MIDIA_ID;
             showToast("✅ Salvo com sucesso!", "#a08c6b");
-            fecharModal();
+            fecharModal(); // Fecha e limpa a busca automaticamente
             carregar(); 
         } catch (e) { showToast("Erro ao salvar", "#e74c3c"); }
     }
@@ -343,6 +347,7 @@
                 if (result.success) {
                     ORIGINAL_MIDIA_ID = CURRENT_MIDIA_ID; 
                     document.getElementById('modalEditor').style.display = 'none';
+                    limparBusca();
                     showToast("✅ Excluído!", "#a08c6b");
                     carregar();
                 }
@@ -350,9 +355,20 @@
         }
     }
 
+    function normalizar(texto) {
+        return texto.toString().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[.,;:]/g, "");
+    }
+
     function filtrar() {
-        const b = document.getElementById('search').value.toUpperCase();
-        DADOS_FILTRADOS = DADOS.filter(d => d.id.toUpperCase().includes(b));
+        const termo = document.getElementById('search').value;
+        const buscaNormalizada = normalizar(termo);
+        DADOS_FILTRADOS = DADOS.filter(d => normalizar(d.id).includes(buscaNormalizada));
+        renderLista();
+    }
+
+    function limparBusca() {
+        document.getElementById('search').value = "";
+        DADOS_FILTRADOS = [...DADOS];
         renderLista();
     }
 
