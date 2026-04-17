@@ -37,28 +37,52 @@
 
         @media (min-width: 1024px) { header { height: 300px; } .logo { width: 160px; } }
 
-        .filter-bar {
-            background: #2e2a15; padding: 12px 20px;
+        /* BARRA FIXA SUPERIOR REESTRUTURADA */
+        .top-nav {
+            background: #2e2a15; padding: 10px 20px;
             display: flex; justify-content: space-between; align-items: center;
-            position: sticky; top: 0; z-index: 1000;
+            position: sticky; top: 0; z-index: 1000; height: 60px;
         }
-        .filter-title { color: white; font-size: 13px; font-weight: 500; letter-spacing: 1px; }
-        .btn-filter-trigger { background: var(--premium-grad); color: white; border: none; padding: 8px 18px; border-radius: 50px; font-size: 12px; font-weight: 600; cursor: pointer; }
+        
+        .nav-left { display: flex; align-items: center; gap: 15px; }
+        
+        .btn-action { 
+            background: var(--premium-grad); color: white; border: none; 
+            padding: 8px 16px; border-radius: 50px; font-size: 11px; 
+            font-weight: 600; cursor: pointer; text-decoration: none;
+            text-transform: uppercase; letter-spacing: 0.5px;
+            transition: 0.3s;
+        }
 
-        .catalog-container { max-width: 1400px; margin: auto; padding: 20px 15px 120px; }
+        /* Botão WhatsApp desativado visualmente quando nada está selecionado */
+        #btn-whatsapp { 
+            opacity: 0.3; 
+            pointer-events: none; 
+            background: #25d366; /* Cor característica do WhatsApp */
+        }
+        #btn-whatsapp.active { opacity: 1; pointer-events: auto; }
+
+        /* ENGRENAGEM DISCRETA */
+        .admin-link {
+            color: rgba(255, 255, 255, 0.3); text-decoration: none; font-size: 18px;
+            transition: 0.3s; padding: 5px;
+        }
+        .admin-link:hover { color: var(--accent); }
+
+        /* GRID E CONTEÚDO */
+        .catalog-container { max-width: 1400px; margin: auto; padding: 20px 15px 100px; }
         .search-area { text-align: center; margin-bottom: 25px; }
         .search-box { width: 100%; max-width: 500px; padding: 12px 25px; border-radius: 50px; border: 1px solid var(--border); outline: none; }
 
         #grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px; }
         @media (min-width: 768px) { #grid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; } }
 
-        /* CARDS */
         .card { 
             background: var(--surface); border-radius: var(--radius); 
             border: 2px solid transparent; overflow: hidden; 
-            cursor: pointer; transition: 0.3s; position: relative;
+            cursor: pointer; transition: 0.2s; position: relative;
         }
-        .card.selected { border-color: var(--accent); background: #fffcf5; transform: scale(0.98); }
+        .card.selected { border-color: var(--accent); background: #fffcf5; }
         .card img { width: 100%; aspect-ratio: 1/1; object-fit: cover; background: #eee; }
         .card-body { padding: 12px; text-align: center; }
         .card-id { font-size: 15px; font-weight: 600; display: block; }
@@ -66,7 +90,6 @@
         .status-available { color: var(--accent); }
         .status-order { color: var(--text-secondary); }
 
-        /* SELEÇÃO CHECKMARK */
         .select-badge {
             position: absolute; top: 10px; right: 10px; background: var(--accent);
             color: white; width: 22px; height: 22px; border-radius: 50%;
@@ -74,43 +97,41 @@
         }
         .card.selected .select-badge { display: flex; }
 
-        /* DRAWER FILTROS */
+        /* DRAWER */
         .drawer { position: fixed; top: 0; right: -320px; width: 300px; height: 100%; background: var(--bg); z-index: 2000; box-shadow: -10px 0 30px rgba(0,0,0,0.1); transition: 0.4s; padding: 20px; overflow-y: auto; }
         .drawer.active { right: 0; }
         .filter-section h4 { font-size: 11px; font-weight: 700; color: var(--accent); text-transform: uppercase; margin-bottom: 12px; margin-top: 20px; }
         .option-item { display: flex; align-items: center; gap: 8px; font-size: 13px; margin-bottom: 8px; cursor: pointer; }
         .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); display: none; z-index: 1500; }
         .overlay.active { display: block; }
-
-        /* BOTÃO WHATSAPP FLUTUANTE */
-        #btn-whatsapp {
-            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
-            background: #25d366; color: white; padding: 15px 30px; border-radius: 50px;
-            font-weight: 600; text-decoration: none; display: none; z-index: 3000;
-            box-shadow: 0 10px 25px rgba(37, 211, 102, 0.3); animation: slideUp 0.3s ease;
-        }
-        @keyframes slideUp { from { bottom: -50px; } to { bottom: 30px; } }
     </style>
 </head>
 <body>
 
 <header><div class="header-stripe"><img src="logo.png" class="logo"></div></header>
 
-<div class="filter-bar">
-    <span class="filter-title">CATÁLOGO GRAVATÁ RD</span>
-    <button class="btn-filter-trigger" onclick="toggleDrawer()">FILTRAR</button>
+<div class="top-nav">
+    <div class="nav-left">
+        <button class="btn-action" onclick="toggleDrawer()">FILTRAR</button>
+        <a id="btn-whatsapp" href="#" class="btn-action" onclick="enviarWhatsApp(event)">SOLICITAR INFORMAÇÕES</a>
+    </div>
+    
+    <a href="admin.html" class="admin-link" title="Painel Administrativo">⚙</a>
 </div>
 
 <div class="catalog-container">
-    <div class="search-area"><input type="text" id="search" class="search-box" placeholder="Buscar ID..." oninput="filtrar()"></div>
+    <div class="search-area">
+        <input type="text" id="search" class="search-box" placeholder="Pesquisar por ID..." oninput="filtrar()">
+    </div>
     <div id="grid"></div>
 </div>
 
-<a id="btn-whatsapp" href="#" onclick="enviarWhatsApp(event)">SOLICITAR INFORMAÇÕES</a>
-
 <div class="overlay" onclick="toggleDrawer()"></div>
 <div class="drawer" id="drawer">
-    <h3 style="font-size: 16px; margin-bottom: 10px;">Filtros</h3>
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h3 style="font-size: 16px;">Filtros</h3>
+        <span style="cursor:pointer; font-size: 24px;" onclick="toggleDrawer()">&times;</span>
+    </div>
     <div id="filtros-container"></div>
 </div>
 
@@ -135,11 +156,13 @@
         let html = "";
         Object.keys(cats).forEach(cat => {
             let opts = [...new Set(BANCO.flatMap(i => i[cat] ? i[cat].split(',').map(s => s.trim()) : []))].sort();
-            html += `<div class="filter-section"><h4>${cats[cat]}</h4>`;
-            opts.forEach(o => {
-                html += `<label class="option-item"><input type="checkbox" class="chk-f" data-cat="${cat}" value="${o}" onchange="filtrar()"> ${o}</label>`;
-            });
-            html += `</div>`;
+            if(opts.length > 0) {
+                html += `<div class="filter-section"><h4>${cats[cat]}</h4>`;
+                opts.forEach(o => {
+                    html += `<label class="option-item"><input type="checkbox" class="chk-f" data-cat="${cat}" value="${o}" onchange="filtrar()"> ${o}</label>`;
+                });
+                html += `</div>`;
+            }
         });
         document.getElementById('filtros-container').innerHTML = html;
     }
@@ -170,7 +193,7 @@
             return `
                 <div class="card ${isSelected}" onclick="toggleSelect('${item.id}')">
                     <div class="select-badge">✓</div>
-                    <img src="${item.midia ? 'https://drive.google.com/thumbnail?sz=w600&id='+item.midia : 'imagens/sem-foto.jpg'}">
+                    <img src="${item.midia ? 'https://drive.google.com/thumbnail?sz=w600&id='+item.midia : 'imagens/sem-foto.jpg'}" loading="lazy">
                     <div class="card-body">
                         <span class="card-id">${item.id}</span>
                         <span class="card-status ${qtd > 0 ? 'status-available' : 'status-order'}">
@@ -186,13 +209,18 @@
         if(SELECIONADOS.has(id)) SELECIONADOS.delete(id);
         else SELECIONADOS.add(id);
         
-        document.getElementById('btn-whatsapp').style.display = SELECIONADOS.size > 0 ? 'block' : 'none';
-        filtrar(); // Re-renderiza para aplicar classe de seleção
+        const btnWs = document.getElementById('btn-whatsapp');
+        if(SELECIONADOS.size > 0) btnWs.classList.add('active');
+        else btnWs.classList.remove('active');
+        
+        filtrar();
     }
 
     function enviarWhatsApp(e) {
         e.preventDefault();
-        const listaIds = Array.from(SELECIONADOS).join(', ');
+        if(SELECIONADOS.size === 0) return;
+        
+        const listaIds = Array.from(SELECIONADOS).sort().join(', ');
         const texto = encodeURIComponent(`Olá! Estive visitando o catálogo da Gravatá RD e gostaria de solicitar mais informações sobre estas IDs que selecionei:\n\n*IDs: ${listaIds}*\n\nComo faço para garantir estas belezuras?`);
         window.open(`https://wa.me/${WHATSAPP}?text=${texto}`, '_blank');
     }
