@@ -187,16 +187,11 @@
 <div class="top-nav">
     <button class="btn-filter" onclick="toggleDrawer()">Filtrar</button>
 </div>
-
-<div class="catalog-container">
-    <div class="search-area">
-        <input type="text" id="search" class="search-box" placeholder="Pesquisar por ID ou nome..." oninput="filtrar()">
-    </div>
-        <div class="search-area" style="flex-direction: column;"> <input type="text" id="search" class="search-box" placeholder="Pesquisar por ID ou nome..." oninput="filtrar()">
-    
-        <div id="results-counter">Carregando variedades...</div>
-    </div>
-
+    <div class="catalog-container">
+        <div class="search-area" style="flex-direction: column; align-items: center;">
+            <input type="text" id="search" class="search-box" placeholder="Pesquisar por ID ou nome..." oninput="filtrar()">
+            <div id="results-counter">Carregando variedades...</div>
+        </div>
     <div id="filter-panel" class="panel-group">
         <span class="panel-label">Exibindo apenas:</span>
         <div id="filter-chips" class="chips-container"></div>
