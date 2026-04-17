@@ -16,7 +16,6 @@
             --border: #eceae4;
             --radius: 12px;
             --premium-grad: linear-gradient(135deg, #a08c6b 0%, #7d6e53 100%);
-            --whatsapp: #25D366;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
@@ -42,28 +41,34 @@
             background: #2e2a15; padding: 10px 20px;
             display: flex; justify-content: space-between; align-items: center;
             position: sticky; top: 0; z-index: 1000; height: 65px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
         
-        .btn-filter { 
-            background: var(--premium-grad); color: white; border: none; 
-            padding: 10px 20px; border-radius: 50px; font-size: 11px; 
-            font-weight: 700; cursor: pointer; text-transform: uppercase; letter-spacing: 1px;
+        /* ESTILO PADRÃO DOS BOTÕES DA NAV */
+        .btn-nav { 
+            background: var(--premium-grad); 
+            color: white; 
+            border: none; 
+            padding: 10px 20px; 
+            border-radius: 50px; 
+            font-size: 11px; 
+            font-weight: 700; 
+            cursor: pointer; 
+            text-transform: uppercase; 
+            letter-spacing: 1px; 
+            text-decoration: none; 
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
 
+        /* BOTÃO WHATSAPP - COMEÇA TOTALMENTE OCULTO */
         #btn-whatsapp { 
-            background: var(--whatsapp); color: white; border: none; 
-            padding: 10px 22px; border-radius: 50px; font-size: 11px; 
-            font-weight: 700; cursor: pointer; text-decoration: none;
-            text-transform: uppercase; letter-spacing: 0.5px;
-            display: flex; align-items: center; gap: 8px;
-            transition: 0.3s; opacity: 0.2; pointer-events: none;
-            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.2);
+            display: none; 
+            opacity: 1; /* Garante que quando aparecer, não esteja apagado */
+            pointer-events: auto;
         }
-        #btn-whatsapp.active { opacity: 1; pointer-events: auto; }
-        #btn-whatsapp:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4); }
+        #btn-whatsapp:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(160, 140, 107, 0.5); }
 
-        /* GRID */
+        /* GRID E CARDS */
         .catalog-container { max-width: 1400px; margin: auto; padding: 20px 15px 60px; flex: 1; }
         .search-area { text-align: center; margin-bottom: 25px; }
         .search-box { width: 100%; max-width: 500px; padding: 12px 25px; border-radius: 50px; border: 1px solid var(--border); outline: none; font-size: 14px; }
@@ -100,7 +105,7 @@
         .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); display: none; z-index: 1500; }
         .overlay.active { display: block; }
 
-        /* FOOTER / ADMIN GESTÃO */
+        /* FOOTER */
         footer { padding: 40px 20px; text-align: center; border-top: 1px solid var(--border); margin-top: 40px; }
         .admin-footer-link { color: var(--border); text-decoration: none; font-size: 20px; transition: 0.3s; }
         .admin-footer-link:hover { color: var(--accent); }
@@ -111,8 +116,9 @@
 <header><div class="header-stripe"><img src="logo.png" class="logo"></div></header>
 
 <div class="top-nav">
-    <button class="btn-filter" onclick="toggleDrawer()">Filtrar</button>
-    <a id="btn-whatsapp" href="#" onclick="enviarWhatsApp(event)">Solicitar Informações</a>
+    <button class="btn-nav" onclick="toggleDrawer()">Filtrar</button>
+    
+    <a id="btn-whatsapp" href="#" class="btn-nav" onclick="enviarWhatsApp(event)">Solicitar Informações</a>
 </div>
 
 <div class="catalog-container">
@@ -133,7 +139,7 @@
         <span style="cursor:pointer; font-size: 28px; line-height: 1;" onclick="toggleDrawer()">&times;</span>
     </div>
     <div id="filtros-container"></div>
-    <button class="btn-filter" style="width: 100%; margin-top: 20px;" onclick="toggleDrawer()">Aplicar Filtros</button>
+    <button class="btn-nav" style="width: 100%; margin-top: 20px;" onclick="toggleDrawer()">Aplicar Filtros</button>
 </div>
 
 <script>
@@ -165,12 +171,8 @@
             if(opts.length > 0) {
                 const isSingle = (cat === 'camadas' || cat === 'padrao');
                 html += `<div class="filter-section"><h4>${cats[cat]}</h4>`;
+                if(isSingle) html += `<label class="option-item"><input type="radio" name="${cat}" class="chk-f" data-cat="${cat}" value="" onchange="filtrar()" checked> Todas</label>`;
                 
-                // Botão para limpar a categoria se for seleção única
-                if(isSingle) {
-                    html += `<label class="option-item"><input type="radio" name="${cat}" class="chk-f" data-cat="${cat}" value="" onchange="filtrar()" checked> Todas</label>`;
-                }
-
                 opts.forEach(o => {
                     const type = isSingle ? 'radio' : 'checkbox';
                     const name = isSingle ? `name="${cat}"` : '';
@@ -185,10 +187,8 @@
     function filtrar() {
         const busca = document.getElementById('search').value.toUpperCase();
         const ativos = {};
-        
-        // Coleta checkboxes e radios marcados
         document.querySelectorAll('.chk-f:checked').forEach(c => {
-            if(c.value === "") return; // Pula o "Todas" do rádio
+            if(c.value === "") return;
             if(!ativos[c.dataset.cat]) ativos[c.dataset.cat] = [];
             ativos[c.dataset.cat].push(c.value);
         });
@@ -228,8 +228,13 @@
         else SELECIONADOS.add(id);
         
         const btnWs = document.getElementById('btn-whatsapp');
-        if(SELECIONADOS.size > 0) btnWs.classList.add('active');
-        else btnWs.classList.remove('active');
+        
+        // CORREÇÃO: Força o display para block ou none e remove qualquer opacidade baixa
+        if(SELECIONADOS.size > 0) {
+            btnWs.style.display = 'block';
+        } else {
+            btnWs.style.display = 'none';
+        }
         
         filtrar();
     }
@@ -237,7 +242,6 @@
     function enviarWhatsApp(e) {
         e.preventDefault();
         if(SELECIONADOS.size === 0) return;
-        
         const listaIds = Array.from(SELECIONADOS).sort().join(', ');
         const texto = encodeURIComponent(`Olá! Estive visitando o catálogo da Gravatá RD e gostaria de solicitar mais informações sobre estas IDs que selecionei:\n\n*IDs: ${listaIds}*\n\nComo faço para garantir estas belezuras?`);
         window.open(`https://wa.me/${WHATSAPP}?text=${texto}`, '_blank');
