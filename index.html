@@ -16,10 +16,11 @@
             --border: #eceae4;
             --radius: 12px;
             --premium-grad: linear-gradient(135deg, #a08c6b 0%, #7d6e53 100%);
+            --whatsapp: #25D366;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-        body { background: var(--bg); color: var(--text-primary); overflow-x: hidden; }
+        body { background: var(--bg); color: var(--text-primary); overflow-x: hidden; min-height: 100vh; display: flex; flex-direction: column; }
 
         header { 
             height: 150px; 
@@ -34,45 +35,38 @@
             display: flex; justify-content: center;
         }
         .logo { width: 110px; }
-
         @media (min-width: 1024px) { header { height: 300px; } .logo { width: 160px; } }
 
-        /* BARRA FIXA SUPERIOR REESTRUTURADA */
+        /* BARRA SUPERIOR */
         .top-nav {
             background: #2e2a15; padding: 10px 20px;
             display: flex; justify-content: space-between; align-items: center;
-            position: sticky; top: 0; z-index: 1000; height: 60px;
+            position: sticky; top: 0; z-index: 1000; height: 65px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
         
-        .nav-left { display: flex; align-items: center; gap: 15px; }
-        
-        .btn-action { 
+        .btn-filter { 
             background: var(--premium-grad); color: white; border: none; 
-            padding: 8px 16px; border-radius: 50px; font-size: 11px; 
-            font-weight: 600; cursor: pointer; text-decoration: none;
-            text-transform: uppercase; letter-spacing: 0.5px;
-            transition: 0.3s;
+            padding: 10px 20px; border-radius: 50px; font-size: 11px; 
+            font-weight: 700; cursor: pointer; text-transform: uppercase; letter-spacing: 1px;
         }
 
-        /* Botão WhatsApp desativado visualmente quando nada está selecionado */
         #btn-whatsapp { 
-            opacity: 0.3; 
-            pointer-events: none; 
-            background: #25d366; /* Cor característica do WhatsApp */
+            background: var(--whatsapp); color: white; border: none; 
+            padding: 10px 22px; border-radius: 50px; font-size: 11px; 
+            font-weight: 700; cursor: pointer; text-decoration: none;
+            text-transform: uppercase; letter-spacing: 0.5px;
+            display: flex; align-items: center; gap: 8px;
+            transition: 0.3s; opacity: 0.2; pointer-events: none;
+            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.2);
         }
         #btn-whatsapp.active { opacity: 1; pointer-events: auto; }
+        #btn-whatsapp:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4); }
 
-        /* ENGRENAGEM DISCRETA */
-        .admin-link {
-            color: rgba(255, 255, 255, 0.3); text-decoration: none; font-size: 18px;
-            transition: 0.3s; padding: 5px;
-        }
-        .admin-link:hover { color: var(--accent); }
-
-        /* GRID E CONTEÚDO */
-        .catalog-container { max-width: 1400px; margin: auto; padding: 20px 15px 100px; }
+        /* GRID */
+        .catalog-container { max-width: 1400px; margin: auto; padding: 20px 15px 60px; flex: 1; }
         .search-area { text-align: center; margin-bottom: 25px; }
-        .search-box { width: 100%; max-width: 500px; padding: 12px 25px; border-radius: 50px; border: 1px solid var(--border); outline: none; }
+        .search-box { width: 100%; max-width: 500px; padding: 12px 25px; border-radius: 50px; border: 1px solid var(--border); outline: none; font-size: 14px; }
 
         #grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px; }
         @media (min-width: 768px) { #grid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; } }
@@ -88,7 +82,7 @@
         .card-id { font-size: 15px; font-weight: 600; display: block; }
         .card-status { font-size: 11px; margin-top: 4px; display: block; font-weight: 500; }
         .status-available { color: var(--accent); }
-        .status-order { color: var(--text-secondary); }
+        .status-order { color: var(--text-secondary); opacity: 0.8; }
 
         .select-badge {
             position: absolute; top: 10px; right: 10px; background: var(--accent);
@@ -98,12 +92,18 @@
         .card.selected .select-badge { display: flex; }
 
         /* DRAWER */
-        .drawer { position: fixed; top: 0; right: -320px; width: 300px; height: 100%; background: var(--bg); z-index: 2000; box-shadow: -10px 0 30px rgba(0,0,0,0.1); transition: 0.4s; padding: 20px; overflow-y: auto; }
+        .drawer { position: fixed; top: 0; right: -320px; width: 300px; height: 100%; background: var(--bg); z-index: 2000; box-shadow: -10px 0 30px rgba(0,0,0,0.1); transition: 0.4s; padding: 25px; overflow-y: auto; }
         .drawer.active { right: 0; }
-        .filter-section h4 { font-size: 11px; font-weight: 700; color: var(--accent); text-transform: uppercase; margin-bottom: 12px; margin-top: 20px; }
-        .option-item { display: flex; align-items: center; gap: 8px; font-size: 13px; margin-bottom: 8px; cursor: pointer; }
+        .filter-section { border-bottom: 1px solid var(--border); padding-bottom: 15px; margin-bottom: 15px; }
+        .filter-section h4 { font-size: 10px; font-weight: 800; color: var(--accent); text-transform: uppercase; margin-bottom: 12px; letter-spacing: 1px; }
+        .option-item { display: flex; align-items: center; gap: 10px; font-size: 13px; margin-bottom: 10px; cursor: pointer; color: var(--text-primary); }
         .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); display: none; z-index: 1500; }
         .overlay.active { display: block; }
+
+        /* FOOTER / ADMIN GESTÃO */
+        footer { padding: 40px 20px; text-align: center; border-top: 1px solid var(--border); margin-top: 40px; }
+        .admin-footer-link { color: var(--border); text-decoration: none; font-size: 20px; transition: 0.3s; }
+        .admin-footer-link:hover { color: var(--accent); }
     </style>
 </head>
 <body>
@@ -111,12 +111,8 @@
 <header><div class="header-stripe"><img src="logo.png" class="logo"></div></header>
 
 <div class="top-nav">
-    <div class="nav-left">
-        <button class="btn-action" onclick="toggleDrawer()">FILTRAR</button>
-        <a id="btn-whatsapp" href="#" class="btn-action" onclick="enviarWhatsApp(event)">SOLICITAR INFORMAÇÕES</a>
-    </div>
-    
-    <a href="admin.html" class="admin-link" title="Painel Administrativo">⚙</a>
+    <button class="btn-filter" onclick="toggleDrawer()">Filtrar</button>
+    <a id="btn-whatsapp" href="#" onclick="enviarWhatsApp(event)">Solicitar Informações</a>
 </div>
 
 <div class="catalog-container">
@@ -126,13 +122,18 @@
     <div id="grid"></div>
 </div>
 
+<footer>
+    <a href="admin.html" class="admin-footer-link" title="Gestão do Catálogo">⚙</a>
+</footer>
+
 <div class="overlay" onclick="toggleDrawer()"></div>
 <div class="drawer" id="drawer">
-    <div style="display: flex; justify-content: space-between; align-items: center;">
-        <h3 style="font-size: 16px;">Filtros</h3>
-        <span style="cursor:pointer; font-size: 24px;" onclick="toggleDrawer()">&times;</span>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+        <h3 style="font-size: 16px; font-weight: 600;">Refinar Busca</h3>
+        <span style="cursor:pointer; font-size: 28px; line-height: 1;" onclick="toggleDrawer()">&times;</span>
     </div>
     <div id="filtros-container"></div>
+    <button class="btn-filter" style="width: 100%; margin-top: 20px;" onclick="toggleDrawer()">Aplicar Filtros</button>
 </div>
 
 <script>
@@ -152,14 +153,28 @@
     }
 
     function gerarFiltros() {
-        const cats = { cores: 'Cores', camadas: 'Camadas', padrao: 'Padrão', especiais: 'Especiais' };
+        const cats = { 
+            cores: 'Cores', 
+            camadas: 'Número de Camadas', 
+            padrao: 'Padrão das Pétalas', 
+            especiais: 'Características Especiais' 
+        };
         let html = "";
         Object.keys(cats).forEach(cat => {
             let opts = [...new Set(BANCO.flatMap(i => i[cat] ? i[cat].split(',').map(s => s.trim()) : []))].sort();
             if(opts.length > 0) {
+                const isSingle = (cat === 'camadas' || cat === 'padrao');
                 html += `<div class="filter-section"><h4>${cats[cat]}</h4>`;
+                
+                // Botão para limpar a categoria se for seleção única
+                if(isSingle) {
+                    html += `<label class="option-item"><input type="radio" name="${cat}" class="chk-f" data-cat="${cat}" value="" onchange="filtrar()" checked> Todas</label>`;
+                }
+
                 opts.forEach(o => {
-                    html += `<label class="option-item"><input type="checkbox" class="chk-f" data-cat="${cat}" value="${o}" onchange="filtrar()"> ${o}</label>`;
+                    const type = isSingle ? 'radio' : 'checkbox';
+                    const name = isSingle ? `name="${cat}"` : '';
+                    html += `<label class="option-item"><input type="${type}" ${name} class="chk-f" data-cat="${cat}" value="${o}" onchange="filtrar()"> ${o}</label>`;
                 });
                 html += `</div>`;
             }
@@ -170,7 +185,10 @@
     function filtrar() {
         const busca = document.getElementById('search').value.toUpperCase();
         const ativos = {};
+        
+        // Coleta checkboxes e radios marcados
         document.querySelectorAll('.chk-f:checked').forEach(c => {
+            if(c.value === "") return; // Pula o "Todas" do rádio
             if(!ativos[c.dataset.cat]) ativos[c.dataset.cat] = [];
             ativos[c.dataset.cat].push(c.value);
         });
