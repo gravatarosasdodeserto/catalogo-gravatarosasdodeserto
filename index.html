@@ -246,24 +246,27 @@
     function removerAcentos(str) { return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase(); }
 
     function gerarFiltros() {
-        const cats = { cores: 'Cores', camadas: 'Número de Camadas', padrao: 'Padrão das Pétalas', especiais: 'Características Especiais' };
-        let html = "";
-        Object.keys(cats).forEach(cat => {
-            let opts = [...new Set(BANCO.flatMap(i => i[cat] ? i[cat].split(',').map(s => s.trim()) : []))].sort();
-            if(opts.length > 0) {
-                const isSingle = (cat === 'camadas' || cat === 'padrao');
-                html += `<div class="filter-section"><h4>${cats[cat]}</h4>`;
-                if(isSingle) html += `<label class="option-item"><input type="radio" name="${cat}" class="chk-f" data-cat="${cat}" value="" onchange="filtrar()" checked> Todas</label>`;
-                opts.forEach(o => {
-                    const type = isSingle ? 'radio' : 'checkbox';
-                    const name = isSingle ? `name="${cat}"` : '';
-                    html += `<label class="option-item"><input type="${type}" ${name} class="chk-f" data-cat="${cat}" value="${o}" onchange="filtrar()"> ${o}</label>`;
-                });
-                html += `</div>`;
-            }
-        });
-        document.getElementById('filtros-container').innerHTML = html;
-    }
+    const cats = { cores: 'Cores', camadas: 'Número de Camadas', padrao: 'Padrão das Pétalas', especiais: 'Características Especiais' };
+    let html = "";
+    Object.keys(cats).forEach(cat => {
+        let opts = [...new Set(BANCO.flatMap(i => i[cat] ? i[cat].split(',').map(s => s.trim()) : []))].sort();
+        if(opts.length > 0) {
+            // AJUSTE: Apenas 'camadas' continua sendo rádio (escolha única)
+            const isSingle = (cat === 'camadas'); 
+            
+            html += `<div class="filter-section"><h4>${cats[cat]}</h4>`;
+            if(isSingle) html += `<label class="option-item"><input type="radio" name="${cat}" class="chk-f" data-cat="${cat}" value="" onchange="filtrar()" checked> Todas</label>`;
+            
+            opts.forEach(o => {
+                const type = isSingle ? 'radio' : 'checkbox';
+                const name = isSingle ? `name="${cat}"` : '';
+                html += `<label class="option-item"><input type="${type}" ${name} class="chk-f" data-cat="${cat}" value="${o}" onchange="filtrar()"> ${o}</label>`;
+            });
+            html += `</div>`;
+        }
+    });
+    document.getElementById('filtros-container').innerHTML = html;
+}
 
     function filtrar() {
         const busca = removerAcentos(document.getElementById('search').value);
