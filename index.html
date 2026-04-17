@@ -382,7 +382,7 @@
         function render(lista) {
         const grid = document.getElementById('grid');
         
-        // ATUALIZAR O CONTADOR DE RESULTADOS (Sugestão 3)
+        // 1. ATUALIZAR O CONTADOR DE RESULTADOS
         const total = BANCO.length;
         const filtrados = lista.length;
         
@@ -391,19 +391,18 @@
                 ? `Exibindo todas as <strong>${total}</strong> variedades`
                 : `Encontradas <strong>${filtrados}</strong> de <strong>${total}</strong> variedades`;
         }
-    
-        // SE NÃO HOUVER RESULTADOS
+
+        // 2. SE NÃO HOUVER RESULTADOS
         if (filtrados === 0) {
             grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--text-secondary);">Nenhuma Rosa do Deserto corresponde aos filtros selecionados.</div>`;
             return;
         }
-    
-        // RENDERIZAR OS CARDS REAIS
+
+        // 3. RENDERIZAR OS CARDS REAIS COM FADE-IN
         grid.innerHTML = lista.map(item => {
             const qtd = parseInt(item.qtd) || 0;
             const isSelected = SELECIONADOS.has(item.id) ? 'selected' : '';
             
-            // Estrutura ajustada para o Fade-in (Sugestão 2)
             return `
                 <div class="card ${isSelected}" onclick="toggleSelect('${item.id}')">
                     <div class="card-img-container">
