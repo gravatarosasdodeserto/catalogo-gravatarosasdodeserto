@@ -6,91 +6,94 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Gravatá RD | Catálogo de Rosas do Deserto</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
-   <style>
-    /* AJUSTE FINO PARA O TEXTO NOVO */
-.welcome-section {
-    padding: 15px 15px;
-    text-align: center;
-    background: white;
-    border-bottom: 1px solid var(--border);
-}
+   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        /* AJUSTE FINO PARA O TEXTO NOVO */
+        .welcome-section {
+            padding: 15px 15px;
+            text-align: center;
+            background: white;
+            border-bottom: 1px solid var(--border);
+        }
 
-.welcome-section h1 {
-    font-size: 17px;
-    color: var(--text-primary);
-    margin-bottom: 5px;
-    font-weight: 600;
-}
+        .welcome-section h1 {
+            font-size: 17px;
+            color: var(--text-primary);
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
 
-/* Configuração do título com nome científico */
-.mobile-only {
-    display: none;
-}
+        /* Configuração do título com nome científico */
+        .mobile-only {
+            display: none;
+        }
 
-.scientific-name {
-    font-weight: 400;
-    font-size: 0.9em;
-}
+        .scientific-name {
+            font-weight: 400;
+            font-size: 0.9em;
+        }
 
-/* Estilo dos textos e passos */
-.welcome-section p {
-    font-size: 13px;
-    color: var(--text-secondary);
-    max-width: 650px;
-    margin: 0 auto 12px;
-    line-height: 1.4;
-}
+        /* Estilo dos textos e passos */
+        .welcome-section p {
+            font-size: 13px;
+            color: var(--text-secondary);
+            max-width: 650px;
+            margin: 0 auto 12px;
+            line-height: 1.4;
+        }
 
-.how-to-order {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    max-width: 800px;
-    margin: 0 auto;
-}
+        .how-to-order {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
 
-.step {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    background: #f9f8f3;
-    padding: 6px 12px; 
-    border-radius: 8px;
-}
+        .step {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #f9f8f3;
+            padding: 6px 12px; 
+            border-radius: 8px;
+        }
 
-.step p {
-    font-size: 12px;
-    color: var(--text-primary);
-    margin: 0;
-}
+        .step p {
+            font-size: 12px;
+            color: var(--text-primary);
+            margin: 0;
+        }
 
-/* --- AJUSTES PARA CELULAR --- */
-@media (max-width: 768px) {
-    .mobile-only {
-        display: block;
-    }
-    .scientific-name {
-        display: block;
-        margin-top: 2px;
-    }
-    .welcome-section h1 {
-        font-size: 18px;
-        line-height: 1.2;
-    }
-}
+        /* --- AJUSTES PARA CELULAR --- */
+        @media (max-width: 768px) {
+            .mobile-only {
+                display: block;
+            }
+            .scientific-name {
+                display: block;
+                margin-top: 2px;
+            }
+            .welcome-section h1 {
+                font-size: 18px;
+                line-height: 1.2;
+            }
+        }
 
-/* --- AJUSTES PARA PC --- */
-@media (min-width: 768px) {
-    .welcome-section { padding: 35px 20px; }
-    .how-to-order {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 15px;
-    }
-    .welcome-section h1 { font-size: 26px; }
-    .step { flex-direction: column; text-align: center; padding: 15px; }
-}
+        /* --- AJUSTES PARA PC --- */
+        @media (min-width: 768px) {
+            .welcome-section { padding: 35px 20px; }
+            .how-to-order {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 15px;
+            }
+            .welcome-section h1 { font-size: 26px; }
+            .step { flex-direction: column; text-align: center; padding: 15px; }
+        }
         
+        /* --- VARIÁVEIS E GERAL --- */
         :root {
             --bg: #fcfbf7;
             --surface: #ffffff;
