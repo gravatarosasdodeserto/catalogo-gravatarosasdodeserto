@@ -16,7 +16,7 @@
             --border: #eceae4;
             --radius: 12px;
             --premium-grad: linear-gradient(135deg, #a08c6b 0%, #7d6e53 100%);
-            --cta-green: #1b5e20; /* Verde esmeralda profundo para chamar atenção */
+            --gold-dark: #867556;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
@@ -37,7 +37,6 @@
         .logo { width: 110px; }
         @media (min-width: 1024px) { header { height: 300px; } .logo { width: 160px; } }
 
-        /* BARRA SUPERIOR */
         .top-nav {
             background: #2e2a15; padding: 10px 20px;
             display: flex; justify-content: space-between; align-items: center;
@@ -50,23 +49,32 @@
             font-weight: 700; cursor: pointer; text-transform: uppercase; letter-spacing: 1px;
         }
 
-        /* BOTÃO WHATSAPP FLUTUANTE NO RODAPÉ */
+        /* BOTÃO WHATSAPP REFORMULADO */
         #btn-whatsapp { 
-            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
-            background: var(--cta-green); color: white; border: 2px solid var(--accent); 
-            padding: 15px 30px; border-radius: 50px; font-size: 13px; 
+            position: fixed; bottom: 0; left: 0; width: 100%;
+            background: var(--premium-grad); color: white; border: none; 
+            padding: 18px 20px; font-size: 14px; 
             font-weight: 700; cursor: pointer; text-decoration: none;
-            text-transform: uppercase; letter-spacing: 0.5px;
-            display: none; align-items: center; gap: 8px;
-            z-index: 3000; box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            text-transform: uppercase; letter-spacing: 1px;
+            display: none; justify-content: center; align-items: center;
+            z-index: 3000; box-shadow: 0 -5px 20px rgba(0,0,0,0.15);
+            text-align: center;
         }
-        #btn-whatsapp:hover { transform: translateX(-50%) translateY(-5px); background: #2e7d32; }
+        #btn-whatsapp:hover { background: var(--gold-dark); }
 
-        /* AREA DE CHIPS (SELECIONADOS) */
+        .catalog-container { max-width: 1400px; margin: auto; padding: 20px 15px 120px; flex: 1; }
+        
+        /* PESQUISA CENTRALIZADA */
+        .search-area { text-align: center; margin-bottom: 25px; width: 100%; display: flex; justify-content: center; }
+        .search-box { 
+            width: 100%; max-width: 500px; padding: 12px 25px; 
+            border-radius: 50px; border: 1px solid var(--border); 
+            outline: none; text-align: center; font-size: 15px;
+        }
+
         .selection-panel {
             max-width: 1400px; margin: 0 auto 20px; padding: 0 15px;
-            display: flex; flex-wrap: wrap; gap: 8px;
+            display: flex; flex-wrap: wrap; gap: 8px; justify-content: center;
         }
         .chip {
             background: #eeebe3; border: 1px solid var(--border);
@@ -75,11 +83,6 @@
         }
         .chip.chip-id { background: #fdf5e6; border-color: var(--accent); color: var(--text-primary); font-weight: 600; }
         .chip span { cursor: pointer; font-weight: bold; font-size: 14px; }
-
-        /* GRID */
-        .catalog-container { max-width: 1400px; margin: auto; padding: 20px 15px 100px; flex: 1; }
-        .search-area { text-align: center; margin-bottom: 25px; }
-        .search-box { width: 100%; max-width: 500px; padding: 12px 25px; border-radius: 50px; border: 1px solid var(--border); outline: none; }
 
         #grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px; }
         @media (min-width: 768px) { #grid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; } }
@@ -97,7 +100,6 @@
         .status-available { color: var(--accent); }
         .status-order { color: var(--text-secondary); opacity: 0.8; }
 
-        /* DRAWER */
         .drawer { position: fixed; top: 0; right: -320px; width: 300px; height: 100%; background: var(--bg); z-index: 2000; box-shadow: -10px 0 30px rgba(0,0,0,0.1); transition: 0.4s; padding: 25px; overflow-y: auto; }
         .drawer.active { right: 0; }
         .filter-section { border-bottom: 1px solid var(--border); padding-bottom: 15px; margin-bottom: 15px; }
@@ -106,7 +108,7 @@
         .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); display: none; z-index: 1500; }
         .overlay.active { display: block; }
 
-        footer { padding: 40px 20px; text-align: center; border-top: 1px solid var(--border); margin-top: 40px; }
+        footer { padding: 60px 20px; text-align: center; border-top: 1px solid var(--border); margin-top: 40px; }
     </style>
 </head>
 <body>
@@ -119,7 +121,7 @@
 
 <div class="catalog-container">
     <div class="search-area">
-        <input type="text" id="search" class="search-box" placeholder="Pesquisar por ID..." oninput="filtrar()">
+        <input type="text" id="search" class="search-box" placeholder="Pesquisar por ID ou nome..." oninput="filtrar()">
     </div>
 
     <div id="selection-panel" class="selection-panel"></div>
@@ -127,7 +129,7 @@
     <div id="grid"></div>
 </div>
 
-<a id="btn-whatsapp" href="#" onclick="enviarWhatsApp(event)">Solicitar Informações</a>
+<a id="btn-whatsapp" href="#" onclick="enviarWhatsApp(event)">SOLICITAR INFORMAÇÕES</a>
 
 <footer>
     <a href="admin.html" style="color: #ddd; text-decoration: none; font-size: 20px;">⚙</a>
@@ -141,7 +143,7 @@
 
 <script>
     const API = "https://script.google.com/macros/s/AKfycbzgV_H5QLTNwJ12B-78q57qNnlaVi0vbxW3jIqdnp7YH1IKCdBdFthIHymlMM9Jusqktg/exec";
-    const WHATSAPP = "5581992665421"; // Telefone atualizado
+    const WHATSAPP = "5581992665421";
     let BANCO = [];
     let SELECIONADOS = new Set();
 
@@ -153,6 +155,10 @@
             gerarFiltros();
             filtrar();
         } catch (e) { console.error(e); }
+    }
+
+    function removerAcentos(str) {
+        return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
     }
 
     function gerarFiltros() {
@@ -176,7 +182,7 @@
     }
 
     function filtrar() {
-        const busca = document.getElementById('search').value.toUpperCase();
+        const busca = removerAcentos(document.getElementById('search').value);
         const ativos = {};
         document.querySelectorAll('.chk-f:checked').forEach(c => {
             if(c.value === "") return;
@@ -185,7 +191,8 @@
         });
 
         const res = BANCO.filter(item => {
-            const bateB = item.id.toUpperCase().includes(busca);
+            const textoItem = removerAcentos(item.id);
+            const bateB = textoItem.includes(busca);
             const bateF = Object.keys(ativos).every(cat => {
                 const vItem = (item[cat] || "").split(',').map(s => s.trim());
                 return ativos[cat].some(a => vItem.includes(a));
@@ -199,19 +206,14 @@
 
     function atualizarPainel(filtrosAtivos) {
         let html = "";
-        
-        // Chips para IDs selecionadas
         SELECIONADOS.forEach(id => {
             html += `<div class="chip chip-id">${id} <span onclick="toggleSelect('${id}')">&times;</span></div>`;
         });
-
-        // Chips para Filtros ativos
         Object.keys(filtrosAtivos).forEach(cat => {
             filtrosAtivos[cat].forEach(val => {
                 html += `<div class="chip">${val} <span onclick="removerFiltro('${cat}', '${val}')">&times;</span></div>`;
             });
         });
-
         document.getElementById('selection-panel').innerHTML = html;
         document.getElementById('btn-whatsapp').style.display = SELECIONADOS.size > 0 ? 'flex' : 'none';
     }
@@ -244,9 +246,14 @@
     }
 
     function toggleSelect(id) {
-        if(SELECIONADOS.has(id)) SELECIONADOS.delete(id);
-        else SELECIONADOS.add(id);
-        filtrar(); // O filtrar já chama o atualizarPainel
+        if(SELECIONADOS.has(id)) {
+            SELECIONADOS.delete(id);
+        } else {
+            SELECIONADOS.add(id);
+            // Limpa a busca e volta o catálogo ao normal após selecionar
+            document.getElementById('search').value = "";
+        }
+        filtrar();
     }
 
     function enviarWhatsApp(e) {
