@@ -7,7 +7,6 @@
     <title>Gravatá RD | Catálogo de Rosas do Deserto</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
-        /* MANTENDO TODO O SEU VISUAL ORIGINAL */
         :root {
             --bg: #fcfbf7;
             --surface: #ffffff;
@@ -22,12 +21,11 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
         body { background: var(--bg); color: var(--text-primary); overflow-x: hidden; }
 
-        /* HEADER PREMIUM */
+        /* HEADER EXPANSÍVEL ORIGINAL */
         header { 
             height: 150px; 
             background: url('imagens/gravata-cabecalho.jpg') center/cover no-repeat;
             display: flex; align-items: center; justify-content: center;
-            transition: height 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
         .header-stripe {
             width: 100%;
@@ -37,7 +35,7 @@
             border-bottom: 1px solid rgba(255, 255, 255, 0.2);
             display: flex; justify-content: center;
         }
-        .logo { width: 110px; transition: width 0.6s ease; }
+        .logo { width: 110px; }
 
         @media (min-width: 1024px) {
             header { height: 350px; }
@@ -45,7 +43,7 @@
             .header-stripe { padding: 40px 0; }
         }
 
-        /* BARRA DE FILTROS (ESCURA) */
+        /* BARRA DE FILTROS ESCURA */
         .filter-bar {
             background: #2e2a15; padding: 12px 20px;
             display: flex; justify-content: space-between; align-items: center;
@@ -61,35 +59,32 @@
         .drawer {
             position: fixed; top: 0; right: -320px; width: 300px; height: 100%;
             background: var(--bg); z-index: 2000; box-shadow: -10px 0 30px rgba(0,0,0,0.1);
-            transition: 0.4s; display: flex; flex-direction: column;
+            transition: 0.4s ease-in-out; display: flex; flex-direction: column;
         }
         .drawer.active { right: 0; }
-        .drawer-header { padding: 25px; background: #2e2a15; color: white; display: flex; justify-content: space-between; }
+        .drawer-header { padding: 25px; background: #2e2a15; color: white; display: flex; justify-content: space-between; align-items: center; }
         .drawer-content { padding: 20px; overflow-y: auto; flex: 1; }
 
-        /* SEÇÕES DE FILTRO DENTRO DO MENU */
         .filter-section { margin-bottom: 25px; }
-        .filter-section h4 { font-size: 11px; font-weight: 700; color: var(--accent); text-transform: uppercase; margin-bottom: 12px; letter-spacing: 1px; }
-        .options-grid { display: grid; gap: 10px; }
+        .filter-section h4 { font-size: 11px; font-weight: 700; color: var(--accent); text-transform: uppercase; margin-bottom: 12px; }
+        .options-grid { display: grid; gap: 8px; }
         .option-item { display: flex; align-items: center; gap: 10px; font-size: 14px; cursor: pointer; color: var(--text-secondary); }
 
         /* GRID DE PRODUTOS */
-        .catalog-container { max-width: 1400px; margin: auto; padding: 30px 15px 100px; }
+        .catalog-container { max-width: 1400px; margin: auto; padding: 30px 15px; }
         .search-area { text-align: center; margin-bottom: 30px; }
         .search-box { width: 100%; max-width: 500px; padding: 12px 25px; border-radius: 50px; border: 1px solid var(--border); outline: none; }
 
         #grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; }
         @media (min-width: 768px) { #grid { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 25px; } }
 
-        /* CARDS */
-        .card { background: var(--surface); border-radius: var(--radius); border: 1px solid var(--border); overflow: hidden; position: relative; transition: 0.3s; }
-        .card:hover { transform: translateY(-5px); box-shadow: 0 15px 35px rgba(0,0,0,0.05); }
-        .card img { width: 100%; aspect-ratio: 1/1; object-fit: cover; }
+        /* CARDS ORIGINAIS */
+        .card { background: var(--surface); border-radius: var(--radius); border: 1px solid var(--border); overflow: hidden; position: relative; }
+        .card img { width: 100%; aspect-ratio: 1/1; object-fit: cover; background: #eee; }
         .card-body { padding: 15px; text-align: center; }
-        .card-id { font-size: 16px; font-weight: 600; color: var(--text-primary); }
-        .tag-indisponivel { position: absolute; top: 10px; left: 10px; background: #e74c3c; color: white; padding: 4px 10px; border-radius: 40px; font-size: 10px; font-weight: 700; }
+        .card-id { font-size: 16px; font-weight: 600; }
+        .tag-esgotado { position: absolute; top: 10px; left: 10px; background: #e74c3c; color: white; padding: 4px 10px; border-radius: 40px; font-size: 10px; font-weight: 700; }
 
-        /* OVERLAY DO MENU */
         .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); display: none; z-index: 1500; }
         .overlay.active { display: block; }
     </style>
@@ -97,132 +92,97 @@
 <body>
 
 <header>
-    <div class="header-stripe">
-        <img src="logo.png" class="logo">
-    </div>
+    <div class="header-stripe"><img src="logo.png" class="logo"></div>
 </header>
 
 <div class="filter-bar">
-    <span class="filter-title">COLLECTION MANAGEMENT</span>
+    <span class="filter-title">NOSSA COLEÇÃO</span>
     <button class="btn-filter-trigger" onclick="toggleDrawer()">FILTRAR</button>
 </div>
 
 <div class="catalog-container">
     <div class="search-area">
-        <input type="text" id="search" class="search-box" placeholder="Buscar por ID..." oninput="aplicarFiltros()">
+        <input type="text" id="search" class="search-box" placeholder="Buscar ID..." oninput="filtrar()">
     </div>
-    <div id="grid">
-        </div>
+    <div id="grid"></div>
 </div>
 
 <div class="overlay" onclick="toggleDrawer()"></div>
 <div class="drawer" id="drawer">
     <div class="drawer-header">
         <span>FILTROS</span>
-        <span style="cursor:pointer" onclick="toggleDrawer()">&times;</span>
+        <span style="cursor:pointer; font-size: 24px;" onclick="toggleDrawer()">&times;</span>
     </div>
     <div class="drawer-content">
-        <div class="filter-section">
-            <h4>Cores</h4>
-            <div class="options-grid" id="filtro-cores"></div>
-        </div>
-        <div class="filter-section">
-            <h4>Camadas</h4>
-            <div class="options-grid" id="filtro-camadas"></div>
-        </div>
-        <div class="filter-section">
-            <h4>Padrão de Pétala</h4>
-            <div class="options-grid" id="filtro-padrao"></div>
-        </div>
-        <div class="filter-section">
-            <h4>Especiais</h4>
-            <div class="options-grid" id="filtro-especiais"></div>
-        </div>
+        <div class="filter-section"><h4>Cores</h4><div class="options-grid" id="f-cores"></div></div>
+        <div class="filter-section"><h4>Camadas</h4><div class="options-grid" id="f-camadas"></div></div>
+        <div class="filter-section"><h4>Padrão de Pétala</h4><div class="options-grid" id="f-padrao"></div></div>
+        <div class="filter-section"><h4>Especiais</h4><div class="options-grid" id="f-especiais"></div></div>
         <button class="btn-filter-trigger" style="width:100%; margin-top: 20px;" onclick="toggleDrawer()">VER RESULTADOS</button>
     </div>
 </div>
 
 <script>
     const API = "https://script.google.com/macros/s/AKfycbzgV_H5QLTNwJ12B-78q57qNnlaVi0vbxW3jIqdnp7YH1IKCdBdFthIHymlMM9Jusqktg/exec";
-    let DADOS_ORIGINAIS = [];
+    let BANCO = [];
 
-    async function inicializar() {
+    async function carregarCatalogo() {
         try {
             const r = await fetch(`${API}?action=get&t=${Date.now()}`);
             const json = await r.json();
-            // Converte o objeto da planilha em uma lista fácil de usar
-            DADOS_ORIGINAIS = Object.keys(json).map(id => ({ id, ...json[id] }));
+            BANCO = Object.keys(json).map(id => ({ id, ...json[id] }));
             
-            gerarFiltrosDinamicos();
-            aplicarFiltros();
-        } catch (e) { console.error("Erro ao carregar catálogo", e); }
+            gerarFiltros();
+            filtrar();
+        } catch (e) { console.error("Erro ao carregar", e); }
     }
 
-    function gerarFiltrosDinamicos() {
-        const categorias = {
-            cores: 'filtro-cores',
-            camadas: 'filtro-camadas',
-            padrao: 'filtro-padrao',
-            especiais: 'filtro-especiais'
-        };
-
+    function gerarFiltros() {
+        const categorias = { cores: 'f-cores', camadas: 'f-camadas', padrao: 'f-padrao', especiais: 'f-especiais' };
+        
         Object.keys(categorias).forEach(cat => {
-            // Varre o banco de dados e pega todas as opções únicas de cada categoria
-            let listaBruta = [];
-            DADOS_ORIGINAIS.forEach(item => {
-                if (item[cat]) {
-                    item[cat].split(',').forEach(val => listaBruta.push(val.trim()));
-                }
+            let opcoes = [];
+            BANCO.forEach(item => {
+                if(item[cat]) item[cat].split(',').forEach(v => opcoes.push(v.trim()));
             });
-
-            const listaUnica = [...new Set(listaBruta)].filter(v => v !== "").sort();
-            const container = document.getElementById(categorias[cat]);
+            const unicas = [...new Set(opcoes)].filter(v => v !== "").sort();
             
-            container.innerHTML = listaUnica.map(opcao => `
+            document.getElementById(categorias[cat]).innerHTML = unicas.map(opt => `
                 <label class="option-item">
-                    <input type="checkbox" class="chk-filtro" data-cat="${cat}" value="${opcao}" onchange="aplicarFiltros()">
-                    ${opcao}
+                    <input type="checkbox" class="chk-f" data-cat="${cat}" value="${opt}" onchange="filtrar()">
+                    ${opt}
                 </label>
             `).join('');
         });
     }
 
-    function aplicarFiltros() {
+    function filtrar() {
         const busca = document.getElementById('search').value.toUpperCase();
-        
-        // Pega quais filtros estão marcados
-        const selecionados = {};
-        document.querySelectorAll('.chk-filtro:checked').forEach(chk => {
-            const cat = chk.dataset.cat;
-            if (!selecionados[cat]) selecionados[cat] = [];
-            selecionados[cat].push(chk.value);
+        const ativos = {};
+        document.querySelectorAll('.chk-f:checked').forEach(c => {
+            const cat = c.dataset.cat;
+            if(!ativos[cat]) ativos[cat] = [];
+            ativos[cat].push(c.value);
         });
 
-        const filtrados = DADOS_ORIGINAIS.filter(item => {
-            // Filtro de Texto
+        const resultado = BANCO.filter(item => {
             const bateBusca = item.id.toUpperCase().includes(busca);
-            
-            // Filtros de Categoria (Lógica: dentro de uma categoria é "OU", entre categorias é "E")
-            const bateCategorias = Object.keys(selecionados).every(cat => {
-                const valoresDoItem = (item[cat] || "").split(',').map(v => v.trim());
-                return selecionados[cat].some(s => valoresDoItem.includes(s));
+            const bateFiltros = Object.keys(ativos).every(cat => {
+                const valsItem = (item[cat] || "").split(',').map(v => v.trim());
+                return ativos[cat].some(a => valsItem.includes(a));
             });
-
-            return bateBusca && bateCategorias;
+            return bateBusca && bateFiltros;
         });
 
-        renderizarGrid(filtrados);
+        renderizar(resultado);
     }
 
-    function renderizarGrid(lista) {
-        const grid = document.getElementById('grid');
-        grid.innerHTML = lista.map(item => `
+    function renderizar(lista) {
+        document.getElementById('grid').innerHTML = lista.map(item => `
             <div class="card">
-                ${item.qtd <= 0 ? '<div class="tag-indisponivel">ESGOTADO</div>' : ''}
-                <img src="${item.midia ? 'https://drive.google.com/thumbnail?sz=w600&id=' + item.midia : 'imagens/sem-foto.jpg'}" loading="lazy">
-                <div class="card-body">
-                    <div class="card-id">${item.id}</div>
-                </div>
+                ${item.qtd <= 0 ? '<div class="tag-esgotado">ESGOTADO</div>' : ''}
+                <img src="${item.midia ? 'https://drive.google.com/thumbnail?sz=w600&id='+item.midia : 'imagens/sem-foto.jpg'}" loading="lazy">
+                <div class="card-body"><div class="card-id">${item.id}</div></div>
             </div>
         `).join('');
     }
@@ -232,7 +192,7 @@
         document.querySelector('.overlay').classList.toggle('active');
     }
 
-    window.onload = inicializar;
+    window.onload = carregarCatalogo;
 </script>
 </body>
 </html>
