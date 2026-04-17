@@ -3,7 +3,7 @@
 <head>
     <link rel="icon" type="image/png" href="favicon.png">
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Gravatá RD | Catálogo de Rosas do Deserto</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
@@ -19,36 +19,44 @@
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-        body { background: var(--bg); color: var(--text-primary); overflow-x: hidden; min-height: 100vh; display: flex; flex-direction: column; }
+        
+        /* Força o fundo e evita barras laterais */
+        html, body { 
+            background: var(--bg); 
+            color: var(--text-primary); 
+            overflow-x: hidden; 
+            min-height: 100vh; 
+            width: 100%;
+        }
 
-        /* CABEÇALHO COM FUNDO CENTRALIZADO */
+        /* CABEÇALHO - IMAGEM DESCIDA E CENTRALIZADA */
         header { 
-    height: 150px; 
-    background: url('imagens/gravata-cabecalho.jpg') center 10% / cover no-repeat;
-    display: flex; 
-    align-items: center; 
-    justify-content: center;
-}
+            height: 150px; 
+            background: url('imagens/gravata-cabecalho.jpg') center 15% / cover no-repeat;
+            display: flex; align-items: center; justify-content: center;
+            width: 100%;
+        }
         .header-stripe {
-            width: 100%; background: rgba(255, 255, 255, 0.2); 
-            backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            width: 100%; 
+            background: rgba(255, 255, 255, 0.3); /* Transparência da barra da logo */
+            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
             padding: 20px 0; border-top: 1px solid rgba(255, 255, 255, 0.2);
             border-bottom: 1px solid rgba(255, 255, 255, 0.2);
             display: flex; justify-content: center;
         }
         .logo { width: 110px; }
 
-        /* AJUSTES PARA PC (TELA CHEIA E HEADER MAIOR) */
+        /* PC: ALTURA DO HEADER E LARGURA DA LOGO */
         @media (min-width: 1024px) { 
-            header { height: 450px; } 
-            .logo { width: 280px; } 
-            .header-stripe { padding: 40px 0; }
+            header { height: 320px; } 
+            .logo { width: 240px; } 
+            .header-stripe { padding: 30px 0; }
         }
 
         .top-nav {
             background: #2e2a15; padding: 10px 20px;
             display: flex; justify-content: center; align-items: center;
-            position: sticky; top: 0; z-index: 1000; height: 65px;
+            position: sticky; top: 0; z-index: 2000; height: 65px;
         }
         
         .btn-filter { 
@@ -57,89 +65,100 @@
             font-weight: 700; cursor: pointer; text-transform: uppercase; letter-spacing: 1px;
         }
 
+        /* BOTÃO WHATSAPP - AGORA COM Z-INDEX MÁXIMO */
         #btn-whatsapp { 
             position: fixed; bottom: 0; left: 0; width: 100%;
             background: var(--premium-grad); color: white; border: none; 
-            padding: 18px 10px; font-size: 11.5px;
+            padding: 22px 10px; font-size: 12px;
             font-weight: 700; cursor: pointer; text-decoration: none;
-            text-transform: uppercase; letter-spacing: 0.5px;
+            text-transform: uppercase; letter-spacing: 1px;
             display: none; justify-content: center; align-items: center;
-            z-index: 3000; box-shadow: 0 -5px 20px rgba(0,0,0,0.15);
-            text-align: center; gap: 8px;
+            z-index: 99999 !important; /* Na frente de tudo */
+            box-shadow: 0 -8px 30px rgba(0,0,0,0.3);
+            text-align: center; gap: 10px;
+            overflow: hidden;
         }
-        #btn-whatsapp svg { width: 18px; height: 18px; fill: white; }
+        #btn-whatsapp::after {
+            content: ''; position: absolute; top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            animation: shine 3s infinite;
+        }
+        @keyframes shine { 0% { left: -100%; } 20% { left: 100%; } 100% { left: 100%; } }
+        #btn-whatsapp svg { width: 20px; height: 20px; fill: white; }
 
-        /* CONTAINER OCUPANDO TODA A TELA */
+        /* CATALOGO TELA CHEIA - REMOVIDO LIMITES DE LARGURA */
         .catalog-container { 
-            width: 100%; 
+            width: 100% !important; 
             max-width: 100% !important; 
-            margin: 0 auto; 
-            padding: 20px 4% 120px; 
-            flex: 1; 
+            padding: 20px 2% 160px; /* Margem lateral mínima para o PC encher a tela */
+            flex: 1;
         }
         
-        .search-area { text-align: center; margin-bottom: 25px; width: 100%; display: flex; justify-content: center; }
-        .search-box { 
-            width: 100%; max-width: 500px; padding: 12px 25px; 
-            border-radius: 50px; border: 1px solid var(--border); 
-            outline: none; text-align: center; font-size: 15px;
+        /* GRID RESPONSIVO - MÁXIMO DE CARDS POR LINHA NO PC */
+        #grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); 
+            gap: 15px; 
+            width: 100%;
         }
-
-        .panel-group { margin-bottom: 20px; display: none; }
-        .panel-label { 
-            font-size: 10px; font-weight: 700; color: var(--accent); 
-            text-transform: uppercase; margin-bottom: 8px; display: block;
-            text-align: center; letter-spacing: 1px;
+        @media (min-width: 1024px) { 
+            #grid { 
+                grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); 
+                gap: 30px; 
+            } 
         }
-        .chips-container { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
-        .chip {
-            background: #eeebe3; border: 1px solid var(--border);
-            padding: 4px 12px; border-radius: 20px; font-size: 10px;
-            display: flex; align-items: center; gap: 6px; color: var(--text-secondary);
-        }
-        .chip.chip-id { background: #fdf5e6; border-color: var(--accent); color: var(--text-primary); font-weight: 600; }
-        .chip span { cursor: pointer; font-weight: bold; font-size: 14px; color: var(--accent); }
-
-        /* GRID RESPONSIVO PARA PC CABER MAIS CARDS */
-        #grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px; }
-        @media (min-width: 768px) { #grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 25px; } }
 
         .card { 
             background: var(--surface); border-radius: var(--radius); 
             border: 2px solid transparent; overflow: hidden; 
             cursor: pointer; transition: 0.2s; position: relative;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
         }
-        .card.selected { border-color: var(--accent); background: #fffcf5; }
-        .card-img-container { width: 100%; aspect-ratio: 1/1; background: #eeebe3; overflow: hidden; position: relative; }
-        .card img { width: 100%; height: 100%; object-fit: cover; opacity: 0; transform: scale(1.05); transition: 0.6s ease-out; }
-        .card img.loaded { opacity: 1; transform: scale(1); }
+        .card.selected { border-color: var(--accent); background: #fffcf5; transform: translateY(-3px); }
+        .card-img-container { width: 100%; aspect-ratio: 1/1; background: #eeebe3; overflow: hidden; }
+        .card img { width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: 0.5s ease; }
+        .card img.loaded { opacity: 1; }
         .card-body { padding: 12px; text-align: center; }
-        .card-id { font-size: 15px; font-weight: 600; display: block; }
+        .card-id { font-size: 15px; font-weight: 600; }
         .card-status { font-size: 11px; margin-top: 4px; display: block; font-weight: 500; }
         .status-available { color: var(--accent); }
-        .status-order { color: var(--text-secondary); opacity: 0.8; }
+        .status-order { color: var(--text-secondary); opacity: 0.7; }
 
-        .drawer { position: fixed; top: 0; right: -320px; width: 300px; height: 100%; background: var(--bg); z-index: 2000; box-shadow: -10px 0 30px rgba(0,0,0,0.1); transition: 0.4s; padding: 25px; overflow-y: auto; }
+        /* BUSCA E PAINÉIS */
+        .search-area { text-align: center; margin-bottom: 25px; width: 100%; display: flex; flex-direction: column; align-items: center; }
+        .search-box { 
+            width: 90%; max-width: 500px; padding: 12px 25px; 
+            border-radius: 50px; border: 1px solid var(--border); 
+            outline: none; text-align: center; font-size: 15px; background: white;
+        }
+
+        .panel-group { margin-bottom: 20px; display: none; width: 100%; }
+        .panel-label { font-size: 10px; font-weight: 700; color: var(--accent); text-transform: uppercase; margin-bottom: 8px; display: block; text-align: center; }
+        .chips-container { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; padding: 0 10px; }
+        .chip { background: #eeebe3; border: 1px solid var(--border); padding: 4px 12px; border-radius: 20px; font-size: 10px; display: flex; align-items: center; gap: 6px; color: var(--text-secondary); }
+        .chip.chip-id { background: #fdf5e6; border-color: var(--accent); color: var(--text-primary); font-weight: 600; }
+        .chip span { cursor: pointer; font-weight: bold; font-size: 14px; color: var(--accent); }
+
+        /* FILTROS LATERAL (DRAWER) */
+        .drawer { position: fixed; top: 0; right: -320px; width: 300px; height: 100%; background: var(--bg); z-index: 5000; box-shadow: -10px 0 30px rgba(0,0,0,0.1); transition: 0.4s; padding: 25px; overflow-y: auto; }
         .drawer.active { right: 0; }
         .filter-section { border-bottom: 1px solid var(--border); padding-bottom: 15px; margin-bottom: 15px; }
         .filter-section h4 { font-size: 10px; font-weight: 800; color: var(--accent); text-transform: uppercase; margin-bottom: 12px; }
         .option-item { display: flex; align-items: center; gap: 10px; font-size: 13px; margin-bottom: 10px; cursor: pointer; }
-        .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); display: none; z-index: 1500; }
+        .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); display: none; z-index: 4000; }
         .overlay.active { display: block; }
 
-        footer { background: white; border-top: 1px solid var(--border); padding: 60px 20px 140px; margin-top: 40px; }
-
-        @keyframes pulse {
-            0% { background-color: #eeebe3; }
-            50% { background-color: #f6f5f0; }
-            100% { background-color: #eeebe3; }
-        }
-        .skeleton-card { background: white; border-radius: var(--radius); overflow: hidden; }
-        .skeleton-img { width: 100%; aspect-ratio: 1/1; animation: pulse 1.5s infinite ease-in-out; }
-        .skeleton-body { padding: 12px; display: flex; flex-direction: column; align-items: center; gap: 8px; }
-        .skeleton-text { height: 14px; border-radius: 4px; animation: pulse 1.5s infinite ease-in-out; }
+        /* RODAPÉ LIMPO COM ENGENRAGEM NA COR DA PALETA */
+        footer { background: white; border-top: 1px solid var(--border); padding: 60px 20px 180px; margin-top: 40px; }
+        .footer-gear { display: inline-flex; align-items: center; justify-content: center; width: 42px; height: 42px; background: #f4f2eb; border-radius: 50%; color: var(--accent); transition: 0.3s; }
 
         #results-counter { font-size: 11px; color: var(--text-secondary); font-weight: 500; margin-top: 10px; display: none; text-align: center; width: 100%; }
+        
+        /* ESQUELETO DE CARREGAMENTO */
+        @keyframes pulse { 0% { background-color: #eeebe3; } 50% { background-color: #f6f5f0; } 100% { background-color: #eeebe3; } }
+        .skeleton-card { background: white; border-radius: var(--radius); overflow: hidden; }
+        .skeleton-img { width: 100%; aspect-ratio: 1/1; animation: pulse 1.5s infinite ease-in-out; }
     </style>
 </head>
 <body>
@@ -147,22 +166,22 @@
 <header><div class="header-stripe"><img src="logo.png" class="logo"></div></header>
 
 <div class="top-nav">
-    <button class="btn-filter" onclick="toggleDrawer()">Filtrar</button>
+    <button class="btn-filter" onclick="toggleDrawer()">Filtrar Variedades</button>
 </div>
 
 <div class="catalog-container">
-    <div class="search-area" style="flex-direction: column; align-items: center;">
-        <input type="text" id="search" class="search-box" placeholder="Pesquisar por ID ou nome..." oninput="filtrar()">
-        <div id="results-counter">Carregando variedades...</div>
+    <div class="search-area">
+        <input type="text" id="search" class="search-box" placeholder="Pesquisar ID ou nome..." oninput="filtrar()">
+        <div id="results-counter">Sincronizando catálogo...</div>
     </div>
 
     <div id="filter-panel" class="panel-group">
-        <span class="panel-label">Exibindo apenas:</span>
+        <span class="panel-label">Filtros aplicados:</span>
         <div id="filter-chips" class="chips-container"></div>
     </div>
 
     <div id="selection-panel" class="panel-group">
-        <span class="panel-label">IDs selecionadas:</span>
+        <span class="panel-label">Sua Seleção:</span>
         <div id="selection-chips" class="chips-container"></div>
     </div>
 
@@ -171,38 +190,34 @@
 
 <a id="btn-whatsapp" href="#" onclick="enviarWhatsApp(event)">
     <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.335-1.662c1.72.937 3.659 1.431 5.63 1.432h.006c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-    <span id="txt-whatsapp">SOLICITAR INFORMAÇÕES</span>
+    <span id="txt-whatsapp">QUERO GARANTIR ESTAS VARIEDADES</span>
 </a>
 
 <footer>
-    <div style="max-width: 1400px; margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 40px; text-align: left;">
+    <div style="max-width: 1400px; margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 40px;">
         <div style="flex: 1; min-width: 250px;">
             <img src="logo.png" style="width: 100px; margin-bottom: 15px; opacity: 0.8;">
-            <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.6;">
-                Colecionador especialista em Rosas do Deserto de alta linhagem. Qualidade, beleza e exclusividade direto de Gravatá para o seu jardim.
-            </p>
+            <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.6;">Especialistas em Rosas do Deserto de alta linhagem. Qualidade direto de Gravatá para o seu jardim.</p>
         </div>
         <div style="flex: 1; min-width: 200px;">
-            <h4 style="font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: var(--accent); margin-bottom: 15px;">Contato</h4>
-            <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 8px;">📍 Gravatá, Pernambuco</p>
+            <h4 style="font-size: 11px; text-transform: uppercase; color: var(--accent); margin-bottom: 15px;">Contato</h4>
+            <p style="font-size: 13px; color: var(--text-secondary);">📍 Gravatá, Pernambuco</p>
             <p style="font-size: 13px; color: var(--text-secondary);">📱 (81) 99266-5421</p>
         </div>
         <div style="flex: 1; min-width: 150px; text-align: right; display: flex; align-items: flex-end; justify-content: flex-end;">
-            <a href="admin.html" style="display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; background: #eeebe3; border-radius: 50%; color: var(--accent); text-decoration: none; transition: 0.3s;" title="Acesso Administrativo">
-                <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.488.488 0 0 0-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 0 0-.48-.41h-3.84a.483.483 0 0 0-.48.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96a.487.487 0 0 0-.59.22L3.09 8.87a.49.49 0 0 0 .12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.27.41.48.41h3.84c.24 0 .44-.17.48-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47.01.59-.22l1.92-3.32a.49.49 0 0 0-.12-.61l-2.03-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
+            <a href="admin.html" class="footer-gear" title="Administração">
+                <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.488.488 0 0 0-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 0 0-.48-.41h-3.84a.483.483 0 0 0-.48.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96a.487.487 0 0 0-.59.22L3.09 8.87a.49.49 0 0 0 .12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.27.41.48.41h3.84c.24 0 .44-.17.48-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47.01.59-.22l1.92-3.32a.49.49 0 0 0-.12-.61l-2.03-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
             </a>
         </div>
     </div>
-    <div style="max-width: 1400px; margin: 40px auto 0; padding-top: 20px; border-top: 1px solid var(--border); display: flex; justify-content: center; align-items: center; flex-direction: column; gap: 10px;">
-        <p style="font-size: 11px; color: var(--text-secondary); letter-spacing: 0.5px;">
-            &copy; <span id="year"></span> <strong>GRAVATÁ RD</strong>. TODOS OS DIREITOS RESERVADOS.
-        </p>
+    <div style="text-align: center; margin-top: 40px; border-top: 1px solid var(--border); padding-top: 20px;">
+        <p style="font-size: 11px; color: var(--text-secondary);">&copy; <span id="year"></span> GRAVATÁ RD. TODOS OS DIREITOS RESERVADOS.</p>
     </div>
 </footer>
 
 <div class="overlay" onclick="toggleDrawer()"></div>
 <div class="drawer" id="drawer">
-    <h3 style="font-size: 16px; margin-bottom: 20px;">Refinar Busca</h3>
+    <h3 style="margin-bottom: 20px;">Filtrar</h3>
     <div id="filtros-container"></div>
 </div>
 
@@ -224,7 +239,7 @@
             filtrar();
         } catch (e) { 
             console.error(e); 
-            RESULTS_COUNTER.innerText = "Erro ao carregar o catálogo.";
+            RESULTS_COUNTER.innerText = "Erro ao carregar dados.";
         }
     }
 
@@ -290,7 +305,7 @@
         const txtWs = document.getElementById('txt-whatsapp');
         if(SELECIONADOS.size > 0) {
             btnWs.style.display = 'flex';
-            txtWs.innerText = SELECIONADOS.size === 1 ? `SOLICITAR INFORMAÇÕES SOBRE A ID SELECIONADA` : `SOLICITAR INFORMAÇÕES SOBRE AS ${SELECIONADOS.size} IDs SELECIONADAS`;
+            txtWs.innerText = SELECIONADOS.size === 1 ? `SOLICITAR ESTA VARIEDADE` : `SOLICITAR ESTAS ${SELECIONADOS.size} VARIEDADES`;
         } else { btnWs.style.display = 'none'; }
     }
 
@@ -304,26 +319,19 @@
     }
 
     function renderSkeleton() {
-        const grid = document.getElementById('grid');
-        grid.innerHTML = Array(12).fill().map(() => `
-            <div class="skeleton-card">
-                <div class="skeleton-img"></div>
-                <div class="skeleton-body">
-                    <div class="skeleton-text" style="width: 60%;"></div>
-                    <div class="skeleton-text" style="width: 80%;"></div>
-                </div>
-            </div>`).join('');
+        document.getElementById('grid').innerHTML = Array(12).fill().map(() => `
+            <div class="skeleton-card"><div class="skeleton-img"></div></div>`).join('');
     }
 
     function render(lista) {
         const grid = document.getElementById('grid');
-        const total = BANCO.length;
         const filtrados = lista.length;
+        const total = BANCO.length;
         if (total > 0) {
-            RESULTS_COUNTER.innerHTML = filtrados === total ? `Exibindo todas as <strong>${total}</strong> variedades` : `Encontradas <strong>${filtrados}</strong> de <strong>${total}</strong> variedades`;
+            RESULTS_COUNTER.innerHTML = filtrados === total ? `Catálogo completo: <strong>${total}</strong> itens` : `Encontrados: <strong>${filtrados}</strong> de <strong>${total}</strong>`;
         }
         if (filtrados === 0) {
-            grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--text-secondary);">Nenhuma Rosa do Deserto corresponde aos filtros selecionados.</div>`;
+            grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 40px;">Nenhum resultado encontrado.</div>`;
             return;
         }
         grid.innerHTML = lista.map(item => {
@@ -336,7 +344,7 @@
                     </div>
                     <div class="card-body">
                         <span class="card-id">${item.id}</span>
-                        <span class="card-status ${qtd > 0 ? 'status-available' : 'status-order'}">${qtd > 0 ? qtd + (qtd === 1 ? ' disponível' : ' disponíveis') : 'Encomendar sem custo'}</span>
+                        <span class="card-status ${qtd > 0 ? 'status-available' : 'status-order'}">${qtd > 0 ? qtd + ' disponível' : 'Sob Encomenda'}</span>
                     </div>
                 </div>`;
         }).join('');
@@ -344,14 +352,14 @@
 
     function toggleSelect(id) {
         if(SELECIONADOS.has(id)) SELECIONADOS.delete(id);
-        else { SELECIONADOS.add(id); document.getElementById('search').value = ""; }
+        else { SELECIONADOS.add(id); }
         filtrar();
     }
 
     function enviarWhatsApp(e) {
         e.preventDefault();
         const listaIds = Array.from(SELECIONADOS).sort().join(', ');
-        const texto = encodeURIComponent(`Olá! Gostaria de informações sobre estas Rosas do Deserto:\n\n*IDs: ${listaIds}*\n\nComo faço para garantir estas plantas?`);
+        const texto = encodeURIComponent(`Olá! Tenho interesse nestas Rosas do Deserto:\n\n*IDs: ${listaIds}*\n\nComo faço para garantir?`);
         window.open(`https://wa.me/${WHATSAPP}?text=${texto}`, '_blank');
     }
 
