@@ -60,9 +60,24 @@
         .close-modal { cursor: pointer; font-size: 24px; }
         
         .edit-form { padding: 20px; }
-        .preview-img-container { text-align: center; margin-bottom: 20px; background: white; border-radius: 12px; padding: 10px; border: 1px solid var(--border); }
-        .preview-img-container img { max-width: 100%; height: 200px; border-radius: 8px; object-fit: cover; }
-        .img-id-label { font-size: 10px; color: var(--text-secondary); margin-top: 5px; display: block; word-break: break-all; }
+        
+        /* AREA DA FOTO */
+        .preview-img-container { 
+            text-align: center; 
+            margin-bottom: 25px; 
+            background: white; 
+            border-radius: 12px; 
+            padding: 15px; 
+            border: 1px solid var(--border); 
+        }
+        .preview-img-container img { max-width: 100%; height: 220px; border-radius: 8px; object-fit: cover; margin-bottom: 10px; display: block; margin-inline: auto; }
+        
+        .upload-wrapper { position: relative; display: inline-block; }
+        .btn-upload-custom { background: var(--premium-grad); color: white; border: none; padding: 8px 20px; border-radius: 50px; font-size: 10px; font-weight: 600; cursor: pointer; text-transform: uppercase; }
+        #file-input { position: absolute; left: 0; top: 0; opacity: 0; width: 100%; height: 100%; cursor: pointer; }
+        
+        .img-id-label { font-size: 9px; color: var(--text-secondary); margin-top: 8px; display: block; font-family: monospace; word-break: break-all; }
+        .upload-status { font-size: 11px; color: var(--accent); margin-top: 5px; font-weight: 500; display: none; }
 
         .form-group { margin-bottom: 15px; }
         .form-group label { font-size: 12px; font-weight: 600; color: var(--text-primary); margin-bottom: 5px; display: block; }
@@ -105,7 +120,13 @@
             
             <div class="preview-img-container">
                 <img id="preview-foto" src="imagens/sem-foto.jpg">
-                <span id="label-link-drive" class="img-id-label"></span> </div>
+                <div class="upload-wrapper">
+                    <button type="button" class="btn-upload-custom">Trocar Foto</button>
+                    <input type="file" id="file-input" accept="image/*" onchange="handleFileUpload(this)">
+                </div>
+                <div id="upload-status" class="upload-status">Processando...</div>
+                <span id="label-link-drive" class="img-id-label"></span>
+            </div>
 
             <div class="form-section">
                 <span class="section-title">Informações Básicas</span>
@@ -116,10 +137,6 @@
                 <div class="form-group">
                     <label>Quantidade em Estoque</label>
                     <input type="number" id="input-qtd" class="input-field" placeholder="0">
-                </div>
-                <div class="form-group">
-                    <label>ID da Imagem (Google Drive)</label>
-                    <input type="text" id="input-midia" class="input-field" placeholder="Cole aqui apenas o ID do link" oninput="atualizarPreview(this.value)">
                 </div>
             </div>
 
@@ -138,6 +155,7 @@
 <script>
     const API = "https://script.google.com/macros/s/AKfycbzgV_H5QLTNwJ12B-78q57qNnlaVi0vbxW3jIqdnp7YH1IKCdBdFthIHymlMM9Jusqktg/exec";
     let DADOS = [], DADOS_FILTRADOS = [], OPCOES_DINAMICAS = {};
+    let CURRENT_MIDIA_ID = ""; // Variável para controlar a ID da foto atual
 
     async function carregar() {
         try {
@@ -188,16 +206,48 @@
         `).join('');
     }
 
-    function atualizarPreview(idMidia) {
-        const img = document.getElementById('preview-foto');
+    // FUNÇÃO DE UPLOAD PARA O DRIVE
+    async function handleFileUpload(input) {
+        if (!input.files || !input.files[0]) return;
+
+        const file = input.files[0];
+        const status = document.getElementById('upload-status');
+        const preview = document.getElementById('preview-foto');
         const label = document.getElementById('label-link-drive');
-        if(idMidia) {
-            img.src = `https://drive.google.com/thumbnail?sz=w600&id=${idMidia}`;
-            label.innerText = `ID Midia: ${idMidia}`;
-        } else {
-            img.src = 'imagens/sem-foto.jpg';
-            label.innerText = '';
-        }
+        
+        status.style.display = 'block';
+        status.innerText = "⏳ Enviando para o Drive...";
+
+        const reader = new FileReader();
+        reader.onload = async function(e) {
+            const base64Data = e.target.result.split(',')[1];
+            
+            try {
+                const response = await fetch(API, {
+                    method: "POST",
+                    body: JSON.stringify({
+                        action: "upload",
+                        fileData: base64Data,
+                        fileName: file.name,
+                        mimeType: file.type
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.id) {
+                    CURRENT_MIDIA_ID = result.id;
+                    preview.src = `https://drive.google.com/thumbnail?sz=w600&id=${result.id}`;
+                    label.innerText = `ID Mídia: ${result.id}`;
+                    status.innerText = "✅ Foto carregada!";
+                    showToast("Foto pronta!", "#a08c6b");
+                }
+            } catch (error) {
+                status.innerText = "❌ Erro no envio.";
+                showToast("Erro no upload", "#e74c3c");
+            }
+        };
+        reader.readAsDataURL(file);
     }
 
     function abrirEditor(id) {
@@ -206,9 +256,12 @@
         document.getElementById('input-id').value = item.id;
         document.getElementById('input-id').readOnly = true;
         document.getElementById('input-qtd').value = item.qtd || 0;
-        document.getElementById('input-midia').value = item.midia || "";
         
-        atualizarPreview(item.midia);
+        // Configura foto atual
+        CURRENT_MIDIA_ID = item.midia || "";
+        document.getElementById('preview-foto').src = CURRENT_MIDIA_ID ? `https://drive.google.com/thumbnail?sz=w600&id=${CURRENT_MIDIA_ID}` : 'imagens/sem-foto.jpg';
+        document.getElementById('label-link-drive').innerText = CURRENT_MIDIA_ID ? `ID Mídia: ${CURRENT_MIDIA_ID}` : '';
+        document.getElementById('upload-status').style.display = 'none';
 
         document.querySelectorAll('.in-opt').forEach(i => {
             const valSalvo = (item[i.dataset.type] || "").split(',').map(v => v.trim());
@@ -223,8 +276,10 @@
         document.getElementById('input-id').value = "";
         document.getElementById('input-id').readOnly = false;
         document.getElementById('input-qtd').value = "";
-        document.getElementById('input-midia').value = "";
-        atualizarPreview("");
+        CURRENT_MIDIA_ID = "";
+        document.getElementById('preview-foto').src = 'imagens/sem-foto.jpg';
+        document.getElementById('label-link-drive').innerText = '';
+        document.getElementById('upload-status').style.display = 'none';
         document.querySelectorAll('.in-opt').forEach(i => i.checked = false);
         document.getElementById('modalEditor').style.display = 'flex';
     }
@@ -232,12 +287,15 @@
     async function salvar() {
         const id = document.getElementById('input-id').value.trim().toUpperCase();
         if(!id) return alert("A ID é obrigatória");
-        showToast("⏳ Salvando...", "#2e2a15");
+
+        showToast("⏳ Salvando alterações...", "#2e2a15");
+
         const payload = {
             action: "upsert", id: id,
             qtd: document.getElementById('input-qtd').value,
-            midia: document.getElementById('input-midia').value
+            midia: CURRENT_MIDIA_ID // Salva a ID da foto (seja nova ou antiga)
         };
+
         ['cores', 'camadas', 'padrao', 'especiais'].forEach(ch => {
             const sel = [...document.querySelectorAll(`.in-opt[data-type="${ch}"]:checked`)];
             payload[ch] = sel.map(s => s.value).join(', ');
