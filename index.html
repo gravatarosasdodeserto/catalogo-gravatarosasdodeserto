@@ -21,9 +21,10 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
         body { background: var(--bg); color: var(--text-primary); overflow-x: hidden; min-height: 100vh; display: flex; flex-direction: column; }
 
+        /* CABEÇALHO COM FUNDO CENTRALIZADO */
         header { 
             height: 150px; 
-            background: url('imagens/gravata-cabecalho.jpg') center/cover no-repeat;
+            background: url('imagens/gravata-cabecalho.jpg') center center / cover no-repeat;
             display: flex; align-items: center; justify-content: center;
         }
         .header-stripe {
@@ -34,23 +35,19 @@
             display: flex; justify-content: center;
         }
         .logo { width: 110px; }
+
+        /* AJUSTES PARA PC (TELA CHEIA E HEADER MAIOR) */
         @media (min-width: 1024px) { 
-        header { 
-            height: 450px; /* Aumentamos de 300px para 450px para dar imponência */
-        } 
-        .logo { 
-            width: 280px; /* Aumentamos de 160px para 280px */
-        } 
-        .header-stripe {
-            padding: 40px 0; /* Aumenta o respiro da faixa branca onde fica a logo */
+            header { height: 450px; } 
+            .logo { width: 280px; } 
+            .header-stripe { padding: 40px 0; }
         }
-}
 
         .top-nav {
-    background: #2e2a15; padding: 10px 20px;
-    display: flex; justify-content: center; align-items: center;
-    position: sticky; top: 0; z-index: 1000; height: 65px;
-}
+            background: #2e2a15; padding: 10px 20px;
+            display: flex; justify-content: center; align-items: center;
+            position: sticky; top: 0; z-index: 1000; height: 65px;
+        }
         
         .btn-filter { 
             background: var(--premium-grad); color: white; border: none; 
@@ -58,11 +55,10 @@
             font-weight: 700; cursor: pointer; text-transform: uppercase; letter-spacing: 1px;
         }
 
-        /* BOTÃO WHATSAPP AJUSTADO */
         #btn-whatsapp { 
             position: fixed; bottom: 0; left: 0; width: 100%;
             background: var(--premium-grad); color: white; border: none; 
-            padding: 18px 10px; font-size: 11.5px; /* Fonte levemente menor para não quebrar */
+            padding: 18px 10px; font-size: 11.5px;
             font-weight: 700; cursor: pointer; text-decoration: none;
             text-transform: uppercase; letter-spacing: 0.5px;
             display: none; justify-content: center; align-items: center;
@@ -71,7 +67,14 @@
         }
         #btn-whatsapp svg { width: 18px; height: 18px; fill: white; }
 
-        .catalog-container { max-width: 100%; margin: auto; padding: 20px 30px 120px; flex: 1; }
+        /* CONTAINER OCUPANDO TODA A TELA */
+        .catalog-container { 
+            width: 100%; 
+            max-width: 100% !important; 
+            margin: 0 auto; 
+            padding: 20px 4% 120px; 
+            flex: 1; 
+        }
         
         .search-area { text-align: center; margin-bottom: 25px; width: 100%; display: flex; justify-content: center; }
         .search-box { 
@@ -86,9 +89,7 @@
             text-transform: uppercase; margin-bottom: 8px; display: block;
             text-align: center; letter-spacing: 1px;
         }
-        .chips-container {
-            display: flex; flex-wrap: wrap; gap: 8px; justify-content: center;
-        }
+        .chips-container { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
         .chip {
             background: #eeebe3; border: 1px solid var(--border);
             padding: 4px 12px; border-radius: 20px; font-size: 10px;
@@ -97,16 +98,19 @@
         .chip.chip-id { background: #fdf5e6; border-color: var(--accent); color: var(--text-primary); font-weight: 600; }
         .chip span { cursor: pointer; font-weight: bold; font-size: 14px; color: var(--accent); }
 
+        /* GRID RESPONSIVO PARA PC CABER MAIS CARDS */
         #grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px; }
-        @media (min-width: 768px) { #grid { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 20px; } }
-        
+        @media (min-width: 768px) { #grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 25px; } }
+
         .card { 
             background: var(--surface); border-radius: var(--radius); 
             border: 2px solid transparent; overflow: hidden; 
             cursor: pointer; transition: 0.2s; position: relative;
         }
         .card.selected { border-color: var(--accent); background: #fffcf5; }
-        .card img { width: 100%; aspect-ratio: 1/1; object-fit: cover; background: #eee; }
+        .card-img-container { width: 100%; aspect-ratio: 1/1; background: #eeebe3; overflow: hidden; position: relative; }
+        .card img { width: 100%; height: 100%; object-fit: cover; opacity: 0; transform: scale(1.05); transition: 0.6s ease-out; }
+        .card img.loaded { opacity: 1; transform: scale(1); }
         .card-body { padding: 12px; text-align: center; }
         .card-id { font-size: 15px; font-weight: 600; display: block; }
         .card-status { font-size: 11px; margin-top: 4px; display: block; font-weight: 500; }
@@ -121,73 +125,19 @@
         .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); display: none; z-index: 1500; }
         .overlay.active { display: block; }
 
-        footer { padding: 60px 20px; text-align: center; border-top: 1px solid var(--border); margin-top: 40px; }
-    
-@keyframes pulse {
-    0% { background-color: #eeebe3; }
-    50% { background-color: #f6f5f0; }
-    100% { background-color: #eeebe3; }
-}
+        footer { background: white; border-top: 1px solid var(--border); padding: 60px 20px 140px; margin-top: 40px; }
 
-.skeleton-card {
-    background: white;
-    border-radius: var(--radius);
-    overflow: hidden;
-    border: 2px solid transparent;
-}
+        @keyframes pulse {
+            0% { background-color: #eeebe3; }
+            50% { background-color: #f6f5f0; }
+            100% { background-color: #eeebe3; }
+        }
+        .skeleton-card { background: white; border-radius: var(--radius); overflow: hidden; }
+        .skeleton-img { width: 100%; aspect-ratio: 1/1; animation: pulse 1.5s infinite ease-in-out; }
+        .skeleton-body { padding: 12px; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+        .skeleton-text { height: 14px; border-radius: 4px; animation: pulse 1.5s infinite ease-in-out; }
 
-.skeleton-img {
-    width: 100%;
-    aspect-ratio: 1/1;
-    animation: pulse 1.5s infinite ease-in-out;
-}
-
-.skeleton-body {
-    padding: 12px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
-}
-
-.skeleton-text {
-    height: 14px;
-    border-radius: 4px;
-    animation: pulse 1.5s infinite ease-in-out;
-}
-
-.card-img-container {
-    width: 100%;
-    aspect-ratio: 1/1;
-    background: #eeebe3; /* Cor de fundo enquanto carrega */
-    overflow: hidden;
-    position: relative;
-}
-
-.card img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    /* Começa invisível e com escala menor */
-    opacity: 0;
-    transform: scale(1.05);
-    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-}
-
-.card img.loaded {
-    opacity: 1;
-    transform: scale(1);
-}
-
-#results-counter {
-    font-size: 11px;
-    color: var(--text-secondary);
-    font-weight: 500;
-    margin-top: 10px;
-    display: none; /* Começa escondido */
-    text-align: center;
-    width: 100%;
-}
+        #results-counter { font-size: 11px; color: var(--text-secondary); font-weight: 500; margin-top: 10px; display: none; text-align: center; width: 100%; }
     </style>
 </head>
 <body>
@@ -197,7 +147,8 @@
 <div class="top-nav">
     <button class="btn-filter" onclick="toggleDrawer()">Filtrar</button>
 </div>
-    <div class="catalog-container">
+
+<div class="catalog-container">
     <div class="search-area" style="flex-direction: column; align-items: center;">
         <input type="text" id="search" class="search-box" placeholder="Pesquisar por ID ou nome..." oninput="filtrar()">
         <div id="results-counter">Carregando variedades...</div>
@@ -215,41 +166,35 @@
 
     <div id="grid"></div>
 </div>
-    
+
 <a id="btn-whatsapp" href="#" onclick="enviarWhatsApp(event)">
     <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.335-1.662c1.72.937 3.659 1.431 5.63 1.432h.006c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
     <span id="txt-whatsapp">SOLICITAR INFORMAÇÕES</span>
 </a>
 
-<footer style="background: white; border-top: 1px solid var(--border); padding: 60px 20px 140px; margin-top: 40px;">
-    <div style="max-width: 1200px; margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 40px; text-align: left;">
-        
+<footer>
+    <div style="max-width: 1400px; margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 40px; text-align: left;">
         <div style="flex: 1; min-width: 250px;">
             <img src="logo.png" style="width: 100px; margin-bottom: 15px; opacity: 0.8;">
             <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.6;">
                 Especialistas em Rosas do Deserto de alta linhagem. Qualidade, beleza e exclusividade direto de Gravatá para o seu jardim.
             </p>
         </div>
-
         <div style="flex: 1; min-width: 200px;">
             <h4 style="font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: var(--accent); margin-bottom: 15px;">Contato</h4>
             <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 8px;">📍 Gravatá, Pernambuco</p>
             <p style="font-size: 13px; color: var(--text-secondary);">📱 (81) 99266-5421</p>
         </div>
-
-        <div style="flex: 1; min-width: 150px; text-align: right;">
-            <h4 style="font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: var(--accent); margin-bottom: 15px;">Restrito</h4>
-            <a href="admin.html" style="display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; background: var(--bg); border: 1px solid var(--border); border-radius: 50%; color: var(--text-secondary); text-decoration: none; transition: 0.3s;" title="Painel Administrativo">
-                ⚙️
+        <div style="flex: 1; min-width: 150px; text-align: right; display: flex; align-items: flex-end; justify-content: flex-end;">
+            <a href="admin.html" style="display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; background: #eeebe3; border-radius: 50%; color: var(--accent); text-decoration: none; transition: 0.3s;" title="Acesso Administrativo">
+                <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.488.488 0 0 0-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 0 0-.48-.41h-3.84a.483.483 0 0 0-.48.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96a.487.487 0 0 0-.59.22L3.09 8.87a.49.49 0 0 0 .12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.27.41.48.41h3.84c.24 0 .44-.17.48-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47.01.59-.22l1.92-3.32a.49.49 0 0 0-.12-.61l-2.03-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
             </a>
         </div>
     </div>
-
-    <div style="max-width: 1200px; margin: 40px auto 0; padding-top: 20px; border-top: 1px solid var(--border); display: flex; justify-content: center; align-items: center; flex-direction: column; gap: 10px;">
+    <div style="max-width: 1400px; margin: 40px auto 0; padding-top: 20px; border-top: 1px solid var(--border); display: flex; justify-content: center; align-items: center; flex-direction: column; gap: 10px;">
         <p style="font-size: 11px; color: var(--text-secondary); letter-spacing: 0.5px;">
             &copy; <span id="year"></span> <strong>GRAVATÁ RD</strong>. TODOS OS DIREITOS RESERVADOS.
         </p>
-        <p style="font-size: 9px; color: #ccc;">Desenvolvido com excelência para colecionadores.</p>
     </div>
 </footer>
 
@@ -264,29 +209,24 @@
     const WHATSAPP = "5581992665421";
     let BANCO = [];
     let SELECIONADOS = new Set();
-    
     const RESULTS_COUNTER = document.getElementById('results-counter');
 
     async function carregar() {
-    try {
-        // MSTRAR SKELETON ANTES DE CARREGAR
-        renderSkeleton();
-        RESULTS_COUNTER.style.display = 'block'; // Mostra o contador
-
-        const r = await fetch(`${API}?action=get&t=${Date.now()}`);
-        const json = await r.json();
-        BANCO = Object.keys(json).map(id => ({ id, ...json[id] }));
-        gerarFiltros();
-        filtrar();
-    } catch (e) { 
-        console.error(e); 
-        RESULTS_COUNTER.innerText = "Erro ao carregar o catálogo.";
+        try {
+            renderSkeleton();
+            RESULTS_COUNTER.style.display = 'block';
+            const r = await fetch(`${API}?action=get&t=${Date.now()}`);
+            const json = await r.json();
+            BANCO = Object.keys(json).map(id => ({ id, ...json[id] }));
+            gerarFiltros();
+            filtrar();
+        } catch (e) { 
+            console.error(e); 
+            RESULTS_COUNTER.innerText = "Erro ao carregar o catálogo.";
+        }
     }
-}
 
-    function removerAcentos(str) {
-        return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
-    }
+    function removerAcentos(str) { return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase(); }
 
     function gerarFiltros() {
         const cats = { cores: 'Cores', camadas: 'Número de Camadas', padrao: 'Padrão das Pétalas', especiais: 'Características Especiais' };
@@ -316,17 +256,13 @@
             if(!ativos[c.dataset.cat]) ativos[c.dataset.cat] = [];
             ativos[c.dataset.cat].push(c.value);
         });
-
         const res = BANCO.filter(item => {
             const textoItem = removerAcentos(item.id);
-            const bateB = textoItem.includes(busca);
-            const bateF = Object.keys(ativos).every(cat => {
+            return textoItem.includes(busca) && Object.keys(ativos).every(cat => {
                 const vItem = (item[cat] || "").split(',').map(s => s.trim());
                 return ativos[cat].some(a => vItem.includes(a));
             });
-            return bateB && bateF;
         });
-        
         atualizarPaineis(ativos);
         render(res);
     }
@@ -335,9 +271,7 @@
         const selectionPanel = document.getElementById('selection-panel');
         const selectionChips = document.getElementById('selection-chips');
         let htmlIds = "";
-        SELECIONADOS.forEach(id => {
-            htmlIds += `<div class="chip chip-id">${id} <span onclick="toggleSelect('${id}')">&times;</span></div>`;
-        });
+        SELECIONADOS.forEach(id => { htmlIds += `<div class="chip chip-id">${id} <span onclick="toggleSelect('${id}')">&times;</span></div>`; });
         selectionChips.innerHTML = htmlIds;
         selectionPanel.style.display = SELECIONADOS.size > 0 ? 'block' : 'none';
 
@@ -345,24 +279,17 @@
         const filterChips = document.getElementById('filter-chips');
         let htmlFilters = "";
         Object.keys(filtrosAtivos).forEach(cat => {
-            filtrosAtivos[cat].forEach(val => {
-                htmlFilters += `<div class="chip">${val} <span onclick="removerFiltro('${cat}', '${val}')">&times;</span></div>`;
-            });
+            filtrosAtivos[cat].forEach(val => { htmlFilters += `<div class="chip">${val} <span onclick="removerFiltro('${cat}', '${val}')">&times;</span></div>`; });
         });
         filterChips.innerHTML = htmlFilters;
         filterPanel.style.display = htmlFilters !== "" ? 'block' : 'none';
 
         const btnWs = document.getElementById('btn-whatsapp');
         const txtWs = document.getElementById('txt-whatsapp');
-        const qtd = SELECIONADOS.size;
-        if(qtd > 0) {
+        if(SELECIONADOS.size > 0) {
             btnWs.style.display = 'flex';
-            txtWs.innerText = qtd === 1 
-                ? `SOLICITAR INFORMAÇÕES SOBRE A ID SELECIONADA` 
-                : `SOLICITAR INFORMAÇÕES SOBRE AS ${qtd} IDs SELECIONADAS`;
-        } else {
-            btnWs.style.display = 'none';
-        }
+            txtWs.innerText = SELECIONADOS.size === 1 ? `SOLICITAR INFORMAÇÕES SOBRE A ID SELECIONADA` : `SOLICITAR INFORMAÇÕES SOBRE AS ${SELECIONADOS.size} IDs SELECIONADAS`;
+        } else { btnWs.style.display = 'none'; }
     }
 
     function removerFiltro(cat, val) {
@@ -376,71 +303,46 @@
 
     function renderSkeleton() {
         const grid = document.getElementById('grid');
-        // Cria 8 cards fantasmas (Skeletons) pulsantes
-        const skeletons = Array(8).fill().map(() => `
+        grid.innerHTML = Array(12).fill().map(() => `
             <div class="skeleton-card">
                 <div class="skeleton-img"></div>
                 <div class="skeleton-body">
                     <div class="skeleton-text" style="width: 60%;"></div>
                     <div class="skeleton-text" style="width: 80%;"></div>
                 </div>
-            </div>
-        `).join('');
-        grid.innerHTML = skeletons;
+            </div>`).join('');
     }
-    
-        function render(lista) {
+
+    function render(lista) {
         const grid = document.getElementById('grid');
-        
-        // 1. ATUALIZAR O CONTADOR DE RESULTADOS
         const total = BANCO.length;
         const filtrados = lista.length;
-        
         if (total > 0) {
-            RESULTS_COUNTER.innerHTML = filtrados === total 
-                ? `Exibindo todas as <strong>${total}</strong> variedades`
-                : `Encontradas <strong>${filtrados}</strong> de <strong>${total}</strong> variedades`;
+            RESULTS_COUNTER.innerHTML = filtrados === total ? `Exibindo todas as <strong>${total}</strong> variedades` : `Encontradas <strong>${filtrados}</strong> de <strong>${total}</strong> variedades`;
         }
-
-        // 2. SE NÃO HOUVER RESULTADOS
         if (filtrados === 0) {
             grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--text-secondary);">Nenhuma Rosa do Deserto corresponde aos filtros selecionados.</div>`;
             return;
         }
-
-        // 3. RENDERIZAR OS CARDS REAIS COM FADE-IN
         grid.innerHTML = lista.map(item => {
             const qtd = parseInt(item.qtd) || 0;
             const isSelected = SELECIONADOS.has(item.id) ? 'selected' : '';
-            
             return `
                 <div class="card ${isSelected}" onclick="toggleSelect('${item.id}')">
                     <div class="card-img-container">
-                        <img 
-                            src="${item.midia ? 'https://drive.google.com/thumbnail?sz=w600&id='+item.midia : 'imagens/sem-foto.jpg'}" 
-                            loading="lazy"
-                            onload="this.classList.add('loaded')"
-                            onerror="this.src='imagens/sem-foto.jpg'; this.classList.add('loaded')"
-                        >
+                        <img src="${item.midia ? 'https://drive.google.com/thumbnail?sz=w600&id='+item.midia : 'imagens/sem-foto.jpg'}" loading="lazy" onload="this.classList.add('loaded')" onerror="this.src='imagens/sem-foto.jpg'; this.classList.add('loaded')">
                     </div>
                     <div class="card-body">
                         <span class="card-id">${item.id}</span>
-                        <span class="card-status ${qtd > 0 ? 'status-available' : 'status-order'}">
-                            ${qtd > 0 ? qtd + (qtd === 1 ? ' disponível' : ' disponíveis') : 'Encomendar sem custo'}
-                        </span>
+                        <span class="card-status ${qtd > 0 ? 'status-available' : 'status-order'}">${qtd > 0 ? qtd + (qtd === 1 ? ' disponível' : ' disponíveis') : 'Encomendar sem custo'}</span>
                     </div>
-                </div>
-            `;
+                </div>`;
         }).join('');
     }
 
     function toggleSelect(id) {
-        if(SELECIONADOS.has(id)) {
-            SELECIONADOS.delete(id);
-        } else {
-            SELECIONADOS.add(id);
-            document.getElementById('search').value = "";
-        }
+        if(SELECIONADOS.has(id)) SELECIONADOS.delete(id);
+        else { SELECIONADOS.add(id); document.getElementById('search').value = ""; }
         filtrar();
     }
 
@@ -457,7 +359,6 @@
     }
 
     window.onload = carregar;
-    // Atualiza o ano no rodapé automaticamente
     document.getElementById("year").textContent = new Date().getFullYear();
 </script>
 </body>
