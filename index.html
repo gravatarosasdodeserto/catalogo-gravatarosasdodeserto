@@ -16,7 +16,6 @@
             --border: #eceae4;
             --radius: 12px;
             --premium-grad: linear-gradient(135deg, #a08c6b 0%, #7d6e53 100%);
-            --gold-dark: #867556;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
@@ -49,22 +48,19 @@
             font-weight: 700; cursor: pointer; text-transform: uppercase; letter-spacing: 1px;
         }
 
-        /* BOTÃO WHATSAPP REFORMULADO */
         #btn-whatsapp { 
             position: fixed; bottom: 0; left: 0; width: 100%;
             background: var(--premium-grad); color: white; border: none; 
-            padding: 18px 20px; font-size: 14px; 
+            padding: 20px; font-size: 13px; 
             font-weight: 700; cursor: pointer; text-decoration: none;
             text-transform: uppercase; letter-spacing: 1px;
             display: none; justify-content: center; align-items: center;
             z-index: 3000; box-shadow: 0 -5px 20px rgba(0,0,0,0.15);
             text-align: center;
         }
-        #btn-whatsapp:hover { background: var(--gold-dark); }
 
         .catalog-container { max-width: 1400px; margin: auto; padding: 20px 15px 120px; flex: 1; }
         
-        /* PESQUISA CENTRALIZADA */
         .search-area { text-align: center; margin-bottom: 25px; width: 100%; display: flex; justify-content: center; }
         .search-box { 
             width: 100%; max-width: 500px; padding: 12px 25px; 
@@ -72,8 +68,14 @@
             outline: none; text-align: center; font-size: 15px;
         }
 
-        .selection-panel {
-            max-width: 1400px; margin: 0 auto 20px; padding: 0 15px;
+        /* PAINÉIS DE SELEÇÃO SEPARADOS */
+        .panel-group { margin-bottom: 20px; display: none; }
+        .panel-label { 
+            font-size: 11px; font-weight: 700; color: var(--accent); 
+            text-transform: uppercase; margin-bottom: 8px; display: block;
+            text-align: center; letter-spacing: 1px;
+        }
+        .chips-container {
             display: flex; flex-wrap: wrap; gap: 8px; justify-content: center;
         }
         .chip {
@@ -82,7 +84,7 @@
             display: flex; align-items: center; gap: 6px; color: var(--text-secondary);
         }
         .chip.chip-id { background: #fdf5e6; border-color: var(--accent); color: var(--text-primary); font-weight: 600; }
-        .chip span { cursor: pointer; font-weight: bold; font-size: 14px; }
+        .chip span { cursor: pointer; font-weight: bold; font-size: 14px; color: var(--accent); }
 
         #grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px; }
         @media (min-width: 768px) { #grid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; } }
@@ -124,12 +126,20 @@
         <input type="text" id="search" class="search-box" placeholder="Pesquisar por ID ou nome..." oninput="filtrar()">
     </div>
 
-    <div id="selection-panel" class="selection-panel"></div>
+    <div id="filter-panel" class="panel-group">
+        <span class="panel-label">Exibindo apenas:</span>
+        <div id="filter-chips" class="chips-container"></div>
+    </div>
+
+    <div id="selection-panel" class="panel-group">
+        <span class="panel-label">IDs selecionadas:</span>
+        <div id="selection-chips" class="chips-container"></div>
+    </div>
 
     <div id="grid"></div>
 </div>
 
-<a id="btn-whatsapp" href="#" onclick="enviarWhatsApp(event)">SOLICITAR INFORMAÇÕES</a>
+<a id="btn-whatsapp" href="#" onclick="enviarWhatsApp(event)"></a>
 
 <footer>
     <a href="admin.html" style="color: #ddd; text-decoration: none; font-size: 20px;">⚙</a>
@@ -200,22 +210,44 @@
             return bateB && bateF;
         });
         
-        atualizarPainel(ativos);
+        atualizarPaineis(ativos);
         render(res);
     }
 
-    function atualizarPainel(filtrosAtivos) {
-        let html = "";
+    function atualizarPaineis(filtrosAtivos) {
+        // Painel de IDs
+        const selectionPanel = document.getElementById('selection-panel');
+        const selectionChips = document.getElementById('selection-chips');
+        let htmlIds = "";
         SELECIONADOS.forEach(id => {
-            html += `<div class="chip chip-id">${id} <span onclick="toggleSelect('${id}')">&times;</span></div>`;
+            htmlIds += `<div class="chip chip-id">${id} <span onclick="toggleSelect('${id}')">&times;</span></div>`;
         });
+        selectionChips.innerHTML = htmlIds;
+        selectionPanel.style.display = SELECIONADOS.size > 0 ? 'block' : 'none';
+
+        // Painel de Filtros
+        const filterPanel = document.getElementById('filter-panel');
+        const filterChips = document.getElementById('filter-chips');
+        let htmlFilters = "";
         Object.keys(filtrosAtivos).forEach(cat => {
             filtrosAtivos[cat].forEach(val => {
-                html += `<div class="chip">${val} <span onclick="removerFiltro('${cat}', '${val}')">&times;</span></div>`;
+                htmlFilters += `<div class="chip">${val} <span onclick="removerFiltro('${cat}', '${val}')">&times;</span></div>`;
             });
         });
-        document.getElementById('selection-panel').innerHTML = html;
-        document.getElementById('btn-whatsapp').style.display = SELECIONADOS.size > 0 ? 'flex' : 'none';
+        filterChips.innerHTML = htmlFilters;
+        filterPanel.style.display = htmlFilters !== "" ? 'block' : 'none';
+
+        // Atualizar Botão WhatsApp
+        const btnWs = document.getElementById('btn-whatsapp');
+        const qtd = SELECIONADOS.size;
+        if(qtd > 0) {
+            btnWs.style.display = 'flex';
+            btnWs.innerText = qtd === 1 
+                ? `SOLICITAR INFORMAÇÕES SOBRE A ID SELECIONADA` 
+                : `SOLICITAR INFORMAÇÕES SOBRE AS ${qtd} IDs SELECIONADAS`;
+        } else {
+            btnWs.style.display = 'none';
+        }
     }
 
     function removerFiltro(cat, val) {
@@ -250,7 +282,6 @@
             SELECIONADOS.delete(id);
         } else {
             SELECIONADOS.add(id);
-            // Limpa a busca e volta o catálogo ao normal após selecionar
             document.getElementById('search').value = "";
         }
         filtrar();
