@@ -87,6 +87,7 @@
         .input-field { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; outline: none; font-size: 14px; background: white; }
 
         .btn-save { width: 100%; padding: 16px; background: var(--premium-grad); color: white; border: none; border-radius: 12px; font-weight: 600; cursor: pointer; margin-top: 10px; font-size: 14px; }
+        .btn-delete { width: 100%; padding: 10px; background: none; color: #e74c3c; border: 1px solid #e74c3c; border-radius: 12px; font-weight: 600; cursor: pointer; margin-top: 15px; font-size: 12px; }
 
         #toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); padding: 12px 30px; border-radius: 50px; color: white; font-weight: 500; font-size: 13px; display: none; z-index: 4000; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
     </style>
@@ -119,7 +120,7 @@
             <div class="preview-img-container">
                 <img id="preview-foto" src="imagens/sem-foto.jpg">
                 <div class="upload-wrapper">
-                    <button type="button" class="btn-upload-custom">Trocar Foto</button>
+                    <button type="button" class="btn-upload-custom">FAZER UPLOAD DA FOTO</button>
                     <input type="file" id="file-input" accept="image/*" onchange="handleFileUpload(this)">
                 </div>
                 <div id="upload-status" class="upload-status"></div>
@@ -144,6 +145,7 @@
             <div class="form-section"><span class="section-title">Características Especiais</span><div class="options-grid" id="form-especiais"></div></div>
 
             <button class="btn-save" onclick="salvar()">SALVAR ALTERAÇÕES</button>
+            <button class="btn-delete" id="btn-excluir" onclick="excluirID()">EXCLUIR ESTA ID</button>
         </div>
     </div>
 </div>
@@ -151,20 +153,18 @@
 <div id="toast"></div>
 
 <script>
-    // URL DA SUA API (MANTIDA)
     const API = "https://script.google.com/macros/s/AKfycbzgV_H5QLTNwJ12B-78q57qNnlaVi0vbxW3jIqdnp7YH1IKCdBdFthIHymlMM9Jusqktg/exec";
     
     let DADOS = [], DADOS_FILTRADOS = [], OPCOES_DINAMICAS = {};
-    let CURRENT_MIDIA_ID = "";   // ID da mídia que está sendo manipulada agora
-    let ORIGINAL_MIDIA_ID = "";  // ID da mídia que já estava salva na planilha
+    let CURRENT_MIDIA_ID = "";   
+    let ORIGINAL_MIDIA_ID = "";  
 
     async function carregar() {
         try {
             const r = await fetch(`${API}?action=get&t=${Date.now()}`);
             const json = await r.json();
-            // Transforma o objeto em array e garante a ordem alfabética na exibição inicial
             DADOS = Object.keys(json).map(k => ({ id: k, ...json[k] }));
-            DADOS.sort((a, b) => a.id.localeCompare(b.id));
+            DADOS.sort((a, b) => a.id.localeCompare(b.id)); // Ordem Alfabética
             
             DADOS_FILTRADOS = [...DADOS];
             extrairOpcoesDaPlanilha();
@@ -210,7 +210,6 @@
         `).join('');
     }
 
-    // FUNÇÃO DE UPLOAD COM LIMPEZA DE TEMPORÁRIOS
     async function handleFileUpload(input) {
         if (!input.files || !input.files[0]) return;
         
@@ -239,7 +238,6 @@
                 });
                 const result = await response.json();
                 if (result.id) {
-                    // Se o usuário subiu uma foto e subiu OUTRA logo em seguida sem salvar, deleta a intermediária
                     if (CURRENT_MIDIA_ID && CURRENT_MIDIA_ID !== ORIGINAL_MIDIA_ID) {
                         fetch(API, { method: "POST", body: JSON.stringify({ action: "deleteFile", fileId: CURRENT_MIDIA_ID })});
                     }
@@ -264,6 +262,7 @@
         document.getElementById('input-id').value = item.id;
         document.getElementById('input-id').readOnly = true;
         document.getElementById('input-qtd').value = item.qtd || 0;
+        document.getElementById('btn-excluir').style.display = 'block';
         
         CURRENT_MIDIA_ID = item.midia || "";
         ORIGINAL_MIDIA_ID = item.midia || ""; 
@@ -285,6 +284,7 @@
         document.getElementById('input-id').value = "";
         document.getElementById('input-id').readOnly = false;
         document.getElementById('input-qtd').value = "";
+        document.getElementById('btn-excluir').style.display = 'none';
         CURRENT_MIDIA_ID = "";
         ORIGINAL_MIDIA_ID = "";
         document.getElementById('preview-foto').src = 'imagens/sem-foto.jpg';
@@ -295,7 +295,6 @@
     }
 
     function fecharModal() {
-        // Se o usuário fez upload de uma foto nova mas cancelou (não salvou), deleta do Drive
         if (CURRENT_MIDIA_ID && CURRENT_MIDIA_ID !== ORIGINAL_MIDIA_ID) {
             fetch(API, { method: "POST", body: JSON.stringify({ action: "deleteFile", fileId: CURRENT_MIDIA_ID })});
         }
@@ -322,12 +321,33 @@
 
         try {
             await fetch(API, { method: "POST", body: JSON.stringify(payload) });
-            // Como salvou com sucesso, resetamos a ORIGINAL_MIDIA_ID para a nova foto para o fecharModal não deletar
             ORIGINAL_MIDIA_ID = CURRENT_MIDIA_ID;
             showToast("✅ Salvo com sucesso!", "#a08c6b");
             fecharModal();
             carregar(); 
         } catch (e) { showToast("Erro ao salvar", "#e74c3c"); }
+    }
+
+    async function excluirID() {
+        const id = document.getElementById('input-id').value;
+        if (!id) return;
+
+        if (confirm(`Tem certeza que deseja excluir permanentemente a ID "${id}" e a foto associada?`)) {
+            showToast("⏳ Excluindo...", "#2e2a15");
+            try {
+                const response = await fetch(API, {
+                    method: "POST",
+                    body: JSON.stringify({ action: "delete", id: id })
+                });
+                const result = await response.json();
+                if (result.success) {
+                    ORIGINAL_MIDIA_ID = CURRENT_MIDIA_ID; 
+                    document.getElementById('modalEditor').style.display = 'none';
+                    showToast("✅ Excluído!", "#a08c6b");
+                    carregar();
+                }
+            } catch (e) { showToast("Erro ao excluir", "#e74c3c"); }
+        }
     }
 
     function filtrar() {
