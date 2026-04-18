@@ -185,7 +185,7 @@
                 <div class="form-section"><span class="section-title">Padrão das Pétalas</span><div class="options-grid" id="form-padrao" onclick="markChanged()"></div></div>
                 <div class="form-section"><span class="section-title">Características Especiais</span><div class="options-grid" id="form-especiais" onclick="markChanged()"></div></div>
 
-                <button class="btn-save" onclick="salvar()">SALVAR ALTERAÇÕES</button>
+                <button class="btn-save" id="btn-salvar-modal" onclick="salvar()">SALVAR ALTERAÇÕES</button>
                 <button class="btn-delete" id="btn-excluir" onclick="confirmExcluir()">EXCLUIR ESTA ID</button>
             </div>
         </div>
@@ -369,6 +369,7 @@
 
     function abrirEditor(id) {
         const item = DADOS.find(d => d.id === id);
+        document.getElementById('btn-salvar-modal').innerText = "SALVAR ALTERAÇÕES";
         document.getElementById('modal-title').innerText = "Editar ID: " + id;
         document.getElementById('input-id').value = item.id;
         document.getElementById('input-id').readOnly = true;
