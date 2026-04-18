@@ -4,19 +4,18 @@
     <link rel="icon" type="image/png" href="favicon.png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel Gestor | Gravatá RD</title>
+    <title>Painel Admin | Gravatá RD</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #f8f7f2;
+            --bg: #fcfbf7;
             --surface: #ffffff;
-            --text-primary: #1a1810;
-            --text-secondary: #6b634d;
-            --accent: #8e735b;
-            --border: #e9e6dd;
-            --radius: 16px;
-            --premium-grad: linear-gradient(135deg, #8e735b 0%, #5d4a3a 100%);
-            --danger: #d9534f;
+            --text-primary: #2e2a15;
+            --text-secondary: #7d6e53;
+            --accent: #a08c6b;
+            --border: #eceae4;
+            --radius: 12px;
+            --premium-grad: linear-gradient(135deg, #a08c6b 0%, #7d6e53 100%);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
@@ -24,71 +23,82 @@
 
         /* LOGIN OVERLAY */
         #login-overlay { position: fixed; inset: 0; background: var(--bg); z-index: 9999; display: flex; align-items: center; justify-content: center; padding: 20px; }
-        .login-box { background: white; padding: 40px; border-radius: 24px; width: 100%; max-width: 380px; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.05); }
-        .login-box img { width: 100px; margin-bottom: 15px; }
-        .password-container { position: relative; margin: 25px 0; }
-        .password-container input { width: 100%; padding: 15px; border-radius: 12px; border: 1px solid var(--border); outline: none; text-align: center; font-size: 16px; background: #fdfdfb; }
-        .toggle-password { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); cursor: pointer; opacity: 0.5; }
-
+        .login-box { background: white; padding: 30px; border-radius: 20px; border: 1px solid var(--border); width: 100%; max-width: 350px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+        .login-box img { width: 80px; margin-bottom: 20px; }
+        .password-container { position: relative; margin: 20px 0; }
+        .password-container input { width: 100%; padding: 12px 40px 12px 15px; border-radius: 8px; border: 1px solid var(--border); outline: none; text-align: center; }
+        .toggle-password { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); cursor: pointer; color: var(--text-secondary); font-size: 18px; }
+        
+        /* CONTEÚDO ADMIN (OCULTO INICIALMENTE) */
         #admin-content { display: none; }
 
-        /* HEADER & NAV */
-        header { height: 120px; background: url('imagens/gravata-cabecalho.jpg') center center / cover; display: flex; align-items: center; justify-content: center; }
-        .header-stripe { width: 100%; background: rgba(255,255,255,0.7); backdrop-filter: blur(10px); padding: 15px; display: flex; justify-content: center; }
+        header { 
+    height: 150px; 
+    background: url('imagens/gravata-cabecalho.jpg') center 10% / cover no-repeat;
+    display: flex; 
+    align-items: center; 
+    justify-content: center;
+}
+        .header-stripe {
+            width: 100%; background: rgba(255, 255, 255, 0.2); 
+            backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            padding: 20px 0; display: flex; justify-content: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
         .logo { width: 110px; }
 
         .top-action-bar {
-            background: #1a1810; padding: 15px 20px;
+            background: #2e2a15; padding: 12px 20px;
             display: flex; justify-content: space-between; align-items: center;
             position: sticky; top: 0; z-index: 1000;
         }
-        .btn-top { background: var(--premium-grad); color: white; border: none; padding: 10px 20px; border-radius: 50px; font-size: 11px; font-weight: 600; cursor: pointer; text-decoration: none; text-transform: uppercase; letter-spacing: 1px; }
+        .btn-top { background: var(--premium-grad); color: white; border: none; padding: 8px 20px; border-radius: 50px; font-size: 11px; font-weight: 600; cursor: pointer; text-decoration: none; text-transform: uppercase; }
 
-        .controls-area { padding: 25px 20px; text-align: center; }
-        .search-box { width: 100%; max-width: 500px; padding: 15px 25px; border-radius: 50px; border: 1px solid var(--border); outline: none; background: white; box-shadow: 0 2px 10px rgba(0,0,0,0.02); text-align: center; }
+        .controls-area { padding: 20px 15px; background: var(--bg); border-bottom: 1px solid var(--border); text-align: center; }
+        .search-container { position: relative; max-width: 500px; margin: auto; }
+        .search-box { width: 100%; padding: 12px 20px; border-radius: 50px; border: 1px solid var(--border); outline: none; font-size: 14px; text-align: center; background: white; }
 
-        /* LISTA */
-        .container { max-width: 1200px; margin: auto; padding: 0 15px 100px; }
-        #lista-admin { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px; }
-        .card { background: white; border-radius: var(--radius); border: 1px solid var(--border); overflow: hidden; cursor: pointer; transition: 0.3s; }
-        .card img { width: 100%; aspect-ratio: 1/1; object-fit: cover; background: #eee; }
-        .card-info { padding: 12px; text-align: center; }
-        .card-info h3 { font-size: 14px; font-weight: 600; }
+        .container { max-width: 1400px; margin: auto; padding: 20px 10px 100px; }
+        #lista-admin { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; }
+        .card { background: var(--surface); border-radius: var(--radius); border: 1px solid var(--border); overflow: hidden; cursor: pointer; transition: 0.2s; }
+        .card img { width: 100%; aspect-ratio: 1/1; object-fit: cover; background: #f0f0f0; }
+        .card-info { padding: 10px; text-align: center; }
+        .card-info h3 { font-size: 13px; font-weight: 600; }
         .card-info p { font-size: 11px; color: var(--text-secondary); margin-top: 4px; }
 
-        /* MODAL EDITOR */
-        .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.7); display: none; align-items: center; justify-content: center; z-index: 2000; padding: 15px; backdrop-filter: blur(6px); }
-        .modal-content { background: var(--bg); width: 100%; max-width: 500px; max-height: 90vh; overflow-y: auto; border-radius: 24px; position: relative; }
-        .modal-header { padding: 20px; background: #1a1810; color: white; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 10; }
-        .close-modal { cursor: pointer; font-size: 28px; line-height: 1; }
+        /* MODAL PRINCIPAL */
+        .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.6); display: none; align-items: center; justify-content: center; z-index: 2000; padding: 20px; backdrop-filter: blur(4px); }
+        .modal-content { background: var(--bg); width: 100%; max-width: 550px; max-height: 90vh; overflow-y: auto; border-radius: 20px; position: relative; }
+        .modal-header { padding: 20px; background: #2e2a15; color: white; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 10; }
+        .close-modal { cursor: pointer; font-size: 24px; }
+        .edit-form { padding: 20px; }
 
-        .edit-form { padding: 25px; }
-        .preview-img-container { background: white; border-radius: 20px; padding: 15px; border: 1px solid var(--border); margin-bottom: 25px; text-align: center; }
-        .preview-img-container img { width: 100%; height: 250px; border-radius: 12px; object-fit: cover; margin-bottom: 15px; display: block; margin-inline: auto; }
-        
-        .btn-upload-custom { background: var(--premium-grad); color: white; border: none; padding: 10px 20px; border-radius: 50px; font-size: 10px; font-weight: 600; cursor: pointer; text-transform: uppercase; }
-        .upload-status { font-size: 11px; color: var(--accent); margin-top: 8px; font-weight: 500; display: none; }
-
-        .form-section { background: white; padding: 20px; border-radius: 16px; margin-bottom: 20px; border: 1px solid var(--border); }
-        .section-title { font-size: 11px; font-weight: 700; color: var(--accent); text-transform: uppercase; margin-bottom: 15px; display: block; letter-spacing: 1px; }
-        .input-field { width: 100%; padding: 14px; border: 1px solid var(--border); border-radius: 12px; margin-top: 5px; outline: none; background: #fdfdfb; text-transform: uppercase; }
-        
-        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .option-item { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--text-secondary); cursor: pointer; }
-        .option-item input { accent-color: var(--accent); width: 16px; height: 16px; }
-
-        .btn-save { width: 100%; padding: 18px; background: var(--premium-grad); color: white; border: none; border-radius: 15px; font-weight: 600; cursor: pointer; margin-top: 10px; font-size: 14px; }
-        .btn-delete { width: 100%; background: transparent; color: var(--danger); border: 1px solid var(--danger); padding: 12px; border-radius: 15px; margin-top: 20px; cursor: pointer; font-size: 12px; font-weight: 600; }
-
-        /* CONFIRM MODAL */
+        /* MODAL DE CONFIRMAÇÃO PERSONALIZADO */
         .confirm-modal { z-index: 3000; display: none; }
-        .confirm-box { background: white; padding: 35px; border-radius: 24px; width: 100%; max-width: 350px; text-align: center; }
-        .confirm-btns { display: flex; gap: 12px; margin-top: 25px; }
-        .btn-confirm { flex: 1; padding: 14px; border-radius: 12px; border: none; cursor: pointer; font-weight: 600; }
-        .btn-yes { background: var(--danger); color: white; }
-        .btn-no { background: #eee; color: var(--text-primary); }
+        .confirm-box { background: white; padding: 30px; border-radius: 20px; width: 100%; max-width: 400px; text-align: center; }
+        .confirm-box h4 { margin-bottom: 15px; color: var(--text-primary); }
+        .confirm-box p { font-size: 14px; color: var(--text-secondary); margin-bottom: 25px; }
+        .confirm-btns { display: flex; gap: 10px; }
+        .btn-confirm { flex: 1; padding: 12px; border-radius: 10px; border: none; cursor: pointer; font-weight: 600; font-size: 13px; }
+        .btn-yes { background: #e74c3c; color: white; }
+        .btn-no { background: var(--border); color: var(--text-primary); }
 
-        #toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); padding: 15px 35px; border-radius: 50px; color: white; z-index: 5000; display: none; font-size: 13px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+        .preview-img-container { text-align: center; margin-bottom: 25px; background: white; border-radius: 12px; padding: 15px; border: 1px solid var(--border); }
+        .preview-img-container img { max-width: 100%; height: 220px; border-radius: 8px; object-fit: cover; margin-bottom: 10px; display: block; margin-inline: auto; }
+        .btn-upload-custom { background: var(--premium-grad); color: white; border: none; padding: 8px 20px; border-radius: 50px; font-size: 10px; font-weight: 600; cursor: pointer; text-transform: uppercase; }
+        #file-input { position: absolute; left: 0; top: 0; opacity: 0; width: 100%; height: 100%; cursor: pointer; }
+        .upload-status { font-size: 11px; color: var(--accent); margin-top: 5px; font-weight: 500; display: none; }
+
+        .form-section { margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 15px; }
+        .section-title { font-size: 11px; font-weight: 800; color: var(--accent); text-transform: uppercase; margin-bottom: 12px; display: block; letter-spacing: 0.5px; }
+        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .option-item { display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer; }
+        .input-field { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; outline: none; font-size: 14px; background: white; text-transform: uppercase; }
+
+        .btn-save { width: 100%; padding: 16px; background: var(--premium-grad); color: white; border: none; border-radius: 12px; font-weight: 600; cursor: pointer; margin-top: 10px; font-size: 14px; }
+        .btn-delete { width: 100%; padding: 10px; background: none; color: #e74c3c; border: 1px solid #e74c3c; border-radius: 12px; font-weight: 600; cursor: pointer; margin-top: 15px; font-size: 12px; }
+
+        #toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); padding: 12px 30px; border-radius: 50px; color: white; font-weight: 500; font-size: 13px; display: none; z-index: 4000; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
     </style>
 </head>
 <body>
@@ -96,12 +106,12 @@
 <div id="login-overlay">
     <div class="login-box">
         <img src="logo.png">
-        <p style="font-size: 11px; color: var(--accent); font-weight: 600; letter-spacing: 1px;">ACESSO ADMINISTRATIVO</p>
+        <p style="font-size: 12px; color: var(--text-secondary); margin-bottom: 10px;">ACESSO RESTRITO</p>
         <div class="password-container">
-            <input type="password" id="pass-field" placeholder="Senha do Painel">
+            <input type="password" id="pass-field" placeholder="Digite a senha admin">
             <span class="toggle-password" onclick="togglePass()">👁️</span>
         </div>
-        <button class="btn-save" onclick="checkLogin()">Entrar</button>
+        <button class="btn-save" onclick="checkLogin()">ENTRAR NO PAINEL</button>
     </div>
 </div>
 
@@ -109,12 +119,14 @@
     <header><div class="header-stripe"><img src="logo.png" class="logo"></div></header>
 
     <div class="top-action-bar">
-        <button class="btn-top" onclick="novoItem()">+ Nova ID</button>
-        <a href="index.html" class="btn-top">Catálogo</a>
+        <button class="btn-top" onclick="novoItem()">+ NOVA ID</button>
+        <a href="index.html" class="btn-top">VOLTAR</a>
     </div>
 
     <div class="controls-area">
-        <input type="text" id="search" class="search-box" placeholder="Pesquisar ID na lista..." oninput="filtrar()">
+        <div class="search-container">
+            <input type="text" id="search" class="search-box" placeholder="Pesquisar ID na lista..." oninput="filtrar()">
+        </div>
     </div>
 
     <main class="container">
@@ -124,35 +136,38 @@
     <div class="modal" id="modalEditor">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 id="modal-title" style="font-size: 16px; font-weight: 500;">Editar Registro</h3>
+                <h3 id="modal-title">Editar ID</h3>
                 <span class="close-modal" onclick="requestFecharModal()">&times;</span>
             </div>
             <div class="edit-form">
                 <div class="preview-img-container">
                     <img id="preview-foto" src="imagens/sem-foto.jpg">
-                    <div style="position:relative; display:inline-block;">
-                        <button type="button" class="btn-upload-custom">Trocar Imagem</button>
-                        <input type="file" id="file-input" style="position:absolute; inset:0; opacity:0; cursor:pointer;" accept="image/*" onchange="handleFileUpload(this)">
+                    <div class="upload-wrapper" style="position:relative; display:inline-block;">
+                        <button type="button" class="btn-upload-custom">FAZER UPLOAD DA FOTO</button>
+                        <input type="file" id="file-input" accept="image/*" onchange="handleFileUpload(this)">
                     </div>
-                    <div id="upload-status" class="upload-status">Enviando para o Drive...</div>
+                    <div id="upload-status" class="upload-status"></div>
                 </div>
 
                 <div class="form-section">
-                    <span class="section-title">Dados Gerais</span>
-                    <label style="font-size: 12px; color: var(--text-secondary);">Nome da ID</label>
-                    <input type="text" id="input-id" class="input-field" oninput="markChanged(); this.value = this.value.toUpperCase()">
-                    <br><br>
-                    <label style="font-size: 12px; color: var(--text-secondary);">Quantidade Disponível</label>
-                    <input type="number" id="input-qtd" class="input-field" oninput="markChanged()">
+                    <span class="section-title">Informações Básicas</span>
+                    <div class="form-group">
+                        <label>Identificação da ID</label>
+                        <input type="text" id="input-id" class="input-field" oninput="markChanged(); this.value = this.value.toUpperCase()">
+                    </div>
+                    <div class="form-group">
+                        <label>Quantidade em Estoque</label>
+                        <input type="number" id="input-qtd" class="input-field" oninput="markChanged()">
+                    </div>
                 </div>
 
-                <div class="form-section"><span class="section-title">Cores</span><div class="options-grid" id="form-cores" onclick="markChanged()"></div></div>
-                <div class="form-section"><span class="section-title">Camadas</span><div class="options-grid" id="form-camadas" onclick="markChanged()"></div></div>
-                <div class="form-section"><span class="section-title">Padrão</span><div class="options-grid" id="form-padrao" onclick="markChanged()"></div></div>
-                <div class="form-section"><span class="section-title">Especiais</span><div class="options-grid" id="form-especiais" onclick="markChanged()"></div></div>
+                <div class="form-section"><span class="section-title">Cores Presentes</span><div class="options-grid" id="form-cores" onclick="markChanged()"></div></div>
+                <div class="form-section"><span class="section-title">Número de Camadas</span><div class="options-grid" id="form-camadas" onclick="markChanged()"></div></div>
+                <div class="form-section"><span class="section-title">Padrão das Pétalas</span><div class="options-grid" id="form-padrao" onclick="markChanged()"></div></div>
+                <div class="form-section"><span class="section-title">Características Especiais</span><div class="options-grid" id="form-especiais" onclick="markChanged()"></div></div>
 
-                <button class="btn-save" onclick="salvar()">Salvar Alterações</button>
-                <button class="btn-delete" id="btn-excluir" onclick="confirmExcluir()">Excluir Permanentemente</button>
+                <button class="btn-save" onclick="salvar()">SALVAR ALTERAÇÕES</button>
+                <button class="btn-delete" id="btn-excluir" onclick="confirmExcluir()">EXCLUIR ESTA ID</button>
             </div>
         </div>
     </div>
@@ -160,11 +175,11 @@
 
 <div class="modal confirm-modal" id="modalConfirm">
     <div class="confirm-box">
-        <h4 id="confirm-title" style="margin-bottom:10px;">Confirmar?</h4>
-        <p id="confirm-text" style="font-size:14px; color:var(--text-secondary);">Tem certeza?</p>
+        <h4 id="confirm-title">Confirmar ação?</h4>
+        <p id="confirm-text">Deseja realmente prosseguir?</p>
         <div class="confirm-btns">
-            <button class="btn-confirm btn-no" onclick="closeConfirm()">Não</button>
-            <button class="btn-confirm btn-yes" id="confirm-action-btn">Sim, Confirmar</button>
+            <button class="btn-confirm btn-no" onclick="closeConfirm()">NÃO</button>
+            <button class="btn-confirm btn-yes" id="confirm-action-btn">SIM</button>
         </div>
     </div>
 </div>
@@ -173,17 +188,17 @@
 
 <script>
     const API = "https://script.google.com/macros/s/AKfycbzgV_H5QLTNwJ12B-78q57qNnlaVi0vbxW3jIqdnp7YH1IKCdBdFthIHymlMM9Jusqktg/exec";
-    const KEY = "MTQwNTA4bGU="; 
+    const KEY = "MTQwNTA4bGU="; // Senha em Base64
     
     let DADOS = [], DADOS_FILTRADOS = [], OPCOES_DINAMICAS = {};
     let CURRENT_MIDIA_ID = "", ORIGINAL_MIDIA_ID = "";  
     let HAS_CHANGES = false;
 
+    // LOGIN
     function togglePass() {
         const f = document.getElementById('pass-field');
         f.type = f.type === 'password' ? 'text' : 'password';
     }
-
     function checkLogin() {
         const pass = document.getElementById('pass-field').value;
         if (btoa(pass) === KEY) {
@@ -191,10 +206,11 @@
             document.getElementById('admin-content').style.display = 'block';
             carregar();
         } else {
-            showToast("Senha incorreta!", "#d9534f");
+            alert("Senha incorreta!");
         }
     }
 
+    // MONITOR DE ALTERAÇÕES
     function markChanged() { HAS_CHANGES = true; }
 
     async function carregar() {
@@ -206,17 +222,7 @@
             DADOS_FILTRADOS = [...DADOS];
             extrairOpcoesDaPlanilha();
             renderLista();
-        } catch (e) { showToast("Erro de conexão", "#d9534f"); }
-    }
-
-    function extrairOpcoesDaPlanilha() {
-        const cats = { cores: [], camadas: [], padrao: [], especiais: [] };
-        DADOS.forEach(item => {
-            Object.keys(cats).forEach(cat => {
-                if (item[cat]) item[cat].split(',').forEach(v => cats[cat].push(v.trim()));
-            });
-        });
-        Object.keys(cats).forEach(k => OPCOES_DINAMICAS[k] = [...new Set(cats[k])].sort());
+        } catch (e) { showToast("Erro ao carregar dados", "#e74c3c"); }
     }
 
     function renderLista() {
@@ -224,112 +230,29 @@
         cont.innerHTML = DADOS_FILTRADOS.map(d => `
             <div class="card" onclick="abrirEditor('${d.id}')">
                 <img src="${d.midia ? 'https://drive.google.com/thumbnail?sz=w600&id='+d.midia : 'imagens/sem-foto.jpg'}" loading="lazy">
-                <div class="card-info"><h3>${d.id}</h3><p>${d.qtd} unidades</p></div>
+                <div class="card-info"><h3>${d.id}</h3><p>${d.qtd} em estoque</p></div>
             </div>
         `).join('');
     }
 
-    function filtrar() {
-        const busca = document.getElementById('search').value.toUpperCase();
-        DADOS_FILTRADOS = DADOS.filter(d => d.id.includes(busca));
-        renderLista();
-    }
-
-    function abrirEditor(id) {
-        const item = DADOS.find(d => d.id === id) || { id: "", qtd: 0, midia: "" };
-        document.getElementById('modal-title').innerText = id ? `Editando ${id}` : "Nova ID";
-        document.getElementById('input-id').value = item.id;
-        document.getElementById('input-id').disabled = !!id;
-        document.getElementById('input-qtd').value = item.qtd || 0;
-        document.getElementById('btn-excluir').style.display = id ? 'block' : 'none';
-        
-        ORIGINAL_MIDIA_ID = item.midia || "";
-        CURRENT_MIDIA_ID = item.midia || "";
-        document.getElementById('preview-foto').src = item.midia ? 'https://drive.google.com/thumbnail?sz=w600&id='+item.midia : 'imagens/sem-foto.jpg';
-
-        const cats = { cores: 'Cores', camadas: 'Camadas', padrao: 'Padrão', especiais: 'Especiais' };
-        Object.keys(cats).forEach(cat => {
-            let html = "";
-            let selecionados = item[cat] ? item[cat].split(',').map(s => s.trim()) : [];
-            OPCOES_DINAMICAS[cat].forEach(opt => {
-                const checked = selecionados.includes(opt) ? 'checked' : '';
-                html += `<label class="option-item"><input type="checkbox" class="chk-edit" data-cat="${cat}" value="${opt}" ${checked}> ${opt}</label>`;
-            });
-            document.getElementById(`form-${cat}`).innerHTML = html;
-        });
-
-        document.getElementById('modalEditor').style.display = 'flex';
-        HAS_CHANGES = false;
-    }
-
-    function novoItem() { abrirEditor(""); }
-
-    async function handleFileUpload(input) {
-        if (!input.files || !input.files[0]) return;
-        const status = document.getElementById('upload-status');
-        status.style.display = "block";
-        
-        const reader = new FileReader();
-        reader.onload = async (e) => {
-            const base64 = e.target.result.split(',')[1];
-            try {
-                const resp = await fetch(API, {
-                    method: "POST",
-                    body: JSON.stringify({ action: "upload", file: base64, filename: input.files[0].name })
-                });
-                const res = await resp.json();
-                if (res.fileId) {
-                    CURRENT_MIDIA_ID = res.fileId;
-                    document.getElementById('preview-foto').src = 'https://drive.google.com/thumbnail?sz=w600&id=' + res.fileId;
-                    markChanged();
-                    status.innerText = "✓ Pronto";
-                }
-            } catch (err) { status.innerText = "Erro no upload"; }
-        };
-        reader.readAsDataURL(input.files[0]);
-    }
-
-    async function salvar() {
-        const id = document.getElementById('input-id').value.trim();
-        if (!id) return showToast("Digite a ID", "#d9534f");
-
-        const data = { id, qtd: document.getElementById('input-qtd').value, midia: CURRENT_MIDIA_ID };
-        document.querySelectorAll('.chk-edit:checked').forEach(c => {
-            if (!data[c.dataset.cat]) data[c.dataset.cat] = [];
-            data[c.dataset.cat].push(c.value);
-        });
-        
-        Object.keys(data).forEach(k => { if(Array.isArray(data[k])) data[k] = data[k].join(', '); });
-
-        showToast("Salvando...");
-        try {
-            await fetch(API, { method: "POST", body: JSON.stringify({ action: "upsert", data }) });
-            HAS_CHANGES = false;
-            fecharModal();
-            carregar();
-            showToast("✓ Salvo com sucesso!", "#8e735b");
-        } catch (e) { showToast("Erro ao salvar", "#d9534f"); }
-    }
-
-    async function excluirID() {
-        const id = document.getElementById('input-id').value;
-        showToast("Excluindo...");
-        try {
-            await fetch(API, { method: "POST", body: JSON.stringify({ action: "delete", id, fileId: CURRENT_MIDIA_ID }) });
-            fecharModal();
-            carregar();
-            showToast("Excluído com sucesso");
-        } catch (e) { showToast("Erro ao excluir"); }
-    }
-
     function requestFecharModal() {
         if (HAS_CHANGES) {
-            openConfirm("Sair sem salvar?", "Existem alterações não salvas. Deseja descartá-las?", fecharModal);
-        } else { fecharModal(); }
+            openConfirm(
+                "Sair sem salvar?", 
+                "Existem alterações não salvas. Deseja realmente descartá-las?", 
+                () => fecharModal()
+            );
+        } else {
+            fecharModal();
+        }
     }
 
     function confirmExcluir() {
-        openConfirm("Excluir?", "Isso apagará a ID e a foto permanentemente.", excluirID);
+        openConfirm(
+            "Excluir ID?", 
+            "Isso apagará permanentemente a ID da planilha e a foto do Drive. Esta ação não pode ser desfeita.", 
+            () => excluirID()
+        );
     }
 
     function openConfirm(title, text, action) {
@@ -343,15 +266,147 @@
     function closeConfirm() { document.getElementById('modalConfirm').style.display = 'none'; }
 
     function fecharModal() {
+        if (CURRENT_MIDIA_ID && CURRENT_MIDIA_ID !== ORIGINAL_MIDIA_ID) {
+            fetch(API, { method: "POST", body: JSON.stringify({ action: "deleteFile", fileId: CURRENT_MIDIA_ID })});
+        }
         document.getElementById('modalEditor').style.display = 'none';
-        document.getElementById('upload-status').style.display = "none";
-        document.getElementById('upload-status').innerText = "Enviando para o Drive...";
+        limparBusca();
+        HAS_CHANGES = false;
     }
 
-    function showToast(msg, bg = "#333") {
+    async function handleFileUpload(input) {
+        if (!input.files || !input.files[0]) return;
+        const idReferencia = document.getElementById('input-id').value.trim().toUpperCase() || "NOVA_ID";
+        const file = input.files[0];
+        const status = document.getElementById('upload-status');
+        const preview = document.getElementById('preview-foto');
+        
+        status.style.display = 'block';
+        status.innerText = "⏳ FAZENDO UPLOAD..."; 
+
+        const reader = new FileReader();
+        reader.onload = async function(e) {
+            const base64Data = e.target.result.split(',')[1];
+            try {
+                const response = await fetch(API, {
+                    method: "POST",
+                    body: JSON.stringify({ action: "upload", fileData: base64Data, fileName: file.name, mimeType: file.type, id_referencia: idReferencia })
+                });
+                const result = await response.json();
+                if (result.id) {
+                    if (CURRENT_MIDIA_ID && CURRENT_MIDIA_ID !== ORIGINAL_MIDIA_ID) {
+                        fetch(API, { method: "POST", body: JSON.stringify({ action: "deleteFile", fileId: CURRENT_MIDIA_ID })});
+                    }
+                    CURRENT_MIDIA_ID = result.id;
+                    preview.src = `https://drive.google.com/thumbnail?sz=w600&id=${result.id}`;
+                    status.innerText = "✅ Foto pronta!";
+                    markChanged();
+                }
+            } catch (error) { status.innerText = "❌ Erro no envio."; }
+        };
+        reader.readAsDataURL(file);
+    }
+
+    async function salvar() {
+        const id = document.getElementById('input-id').value.trim().toUpperCase();
+        if(!id) return alert("A ID é obrigatória");
+        showToast("⏳ Gravando dados...", "#2e2a15");
+        const payload = { action: "upsert", id: id, qtd: document.getElementById('input-qtd').value, midia: CURRENT_MIDIA_ID };
+        ['cores', 'camadas', 'padrao', 'especiais'].forEach(ch => {
+            const sel = [...document.querySelectorAll(`.in-opt[data-type="${ch}"]:checked`)];
+            payload[ch] = sel.map(s => s.value).join(', ');
+        });
+        try {
+            await fetch(API, { method: "POST", body: JSON.stringify(payload) });
+            ORIGINAL_MIDIA_ID = CURRENT_MIDIA_ID;
+            HAS_CHANGES = false;
+            showToast("✅ Salvo!", "#a08c6b");
+            fecharModal();
+            carregar(); 
+        } catch (e) { showToast("Erro ao salvar", "#e74c3c"); }
+    }
+
+    async function excluirID() {
+        const id = document.getElementById('input-id').value;
+        showToast("⏳ Excluindo...", "#2e2a15");
+        try {
+            await fetch(API, { method: "POST", body: JSON.stringify({ action: "delete", id: id }) });
+            ORIGINAL_MIDIA_ID = CURRENT_MIDIA_ID;
+            HAS_CHANGES = false;
+            document.getElementById('modalEditor').style.display = 'none';
+            carregar();
+            showToast("✅ Excluído!", "#a08c6b");
+        } catch (e) { showToast("Erro ao excluir", "#e74c3c"); }
+    }
+
+    function abrirEditor(id) {
+        const item = DADOS.find(d => d.id === id);
+        document.getElementById('modal-title').innerText = "Editar ID: " + id;
+        document.getElementById('input-id').value = item.id;
+        document.getElementById('input-id').readOnly = true;
+        document.getElementById('input-qtd').value = item.qtd || 0;
+        document.getElementById('btn-excluir').style.display = 'block';
+        CURRENT_MIDIA_ID = item.midia || "";
+        ORIGINAL_MIDIA_ID = item.midia || ""; 
+        document.getElementById('preview-foto').src = CURRENT_MIDIA_ID ? `https://drive.google.com/thumbnail?sz=w600&id=${CURRENT_MIDIA_ID}` : 'imagens/sem-foto.jpg';
+        document.querySelectorAll('.in-opt').forEach(i => {
+            const valSalvo = (item[i.dataset.type] || "").split(',').map(v => v.trim());
+            i.checked = valSalvo.includes(i.value);
+        });
+        HAS_CHANGES = false;
+        document.getElementById('modalEditor').style.display = 'flex';
+    }
+
+    function novoItem() {
+        document.getElementById('modal-title').innerText = "Cadastrar Nova ID";
+        document.getElementById('input-id').value = "";
+        document.getElementById('input-id').readOnly = false;
+        document.getElementById('input-qtd').value = "";
+        document.getElementById('btn-excluir').style.display = 'none';
+        CURRENT_MIDIA_ID = ""; ORIGINAL_MIDIA_ID = "";
+        document.getElementById('preview-foto').src = 'imagens/sem-foto.jpg';
+        document.querySelectorAll('.in-opt').forEach(i => i.checked = false);
+        HAS_CHANGES = false;
+        document.getElementById('modalEditor').style.display = 'flex';
+    }
+
+    function extrairOpcoesDaPlanilha() {
+        const extrair = (chave) => {
+            let vals = [];
+            DADOS.forEach(d => { if(d[chave]) d[chave].split(',').forEach(v => vals.push(v.trim())); });
+            return [...new Set(vals)].filter(v => v !== "").sort();
+        };
+        OPCOES_DINAMICAS = { cores: extrair('cores'), camadas: extrair('camadas'), padrao: extrair('padrao'), especiais: extrair('especiais') };
+        renderFiltrosNoForm();
+    }
+
+    function renderFiltrosNoForm() {
+        const montar = (containerId, lista, chave, isRadio) => {
+        document.getElementById(containerId).innerHTML = lista.map(opt => `
+            <label class="option-item"><input type="${isRadio ? 'radio' : 'checkbox'}" name="f-${chave}" class="in-opt" data-type="${chave}" value="${opt}"> ${opt}</label>
+        `).join('');
+    };
+    
+    montar('form-cores', OPCOES_DINAMICAS.cores, 'cores', false);
+    montar('form-camadas', OPCOES_DINAMICAS.camadas, 'camadas', true); 
+    
+    montar('form-padrao', OPCOES_DINAMICAS.padrao, 'padrao', false); 
+    
+    montar('form-especiais', OPCOES_DINAMICAS.especiais, 'especiais', false);
+}
+
+    function filtrar() {
+        const termo = document.getElementById('search').value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[.,;:]/g, "");
+        DADOS_FILTRADOS = DADOS.filter(d => d.id.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[.,;:]/g, "").includes(termo));
+        renderLista();
+    }
+
+    function limparBusca() { document.getElementById('search').value = ""; DADOS_FILTRADOS = [...DADOS]; renderLista(); }
+
+    function showToast(txt, color) {
         const t = document.getElementById('toast');
-        t.innerText = msg; t.style.background = bg; t.style.display = "block";
-        setTimeout(() => t.style.display = "none", 3000);
+        t.innerText = txt; t.style.background = color; t.style.display = 'block';
+        setTimeout(() => t.style.display = 'none', 3000);
     }
 </script>
 </body>
