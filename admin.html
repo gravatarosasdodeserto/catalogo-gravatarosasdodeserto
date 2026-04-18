@@ -29,14 +29,25 @@
         .password-container input { width: 100%; padding: 12px 40px 12px 15px; border-radius: 8px; border: 1px solid var(--border); outline: none; text-align: center; }
         .toggle-password { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); cursor: pointer; color: var(--text-secondary); font-size: 18px; }
         
-        /* CONTEÚDO ADMIN (OCULTO INICIALMENTE) */
         #admin-content { display: none; }
-
 
         .top-action-bar {
             background: #2e2a15; padding: 12px 20px;
             display: flex; justify-content: space-between; align-items: center;
             position: sticky; top: 0; z-index: 1000;
+        }
+        
+        .btn-new-id {
+        /* Um gradiente mais vibrante para chamar a atenção */
+        background: linear-gradient(135deg, #d4af37 0%, #a08c6b 100%) !important;
+        color: white !important;
+        box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        }
+        
+        .btn-new-id:hover {
+            filter: brightness(1.1);
+            transform: translateY(-1px);
         }
         .btn-top { background: var(--premium-grad); color: white; border: none; padding: 8px 20px; border-radius: 50px; font-size: 11px; font-weight: 600; cursor: pointer; text-decoration: none; text-transform: uppercase; }
 
