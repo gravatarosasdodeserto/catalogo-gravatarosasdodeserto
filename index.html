@@ -364,7 +364,7 @@ function obterFiltrosAtivos() {
 
     function enviarWhatsApp(e) {
         e.preventDefault();
-        const texto = encodeURIComponent(`Olá! Gostaria de consultar a disponibilidade: ${Array.from(SELECIONADOS).join(', ')}`);
+        const texto = encodeURIComponent(`Olá! Gostaria de saber sobre disponibilidade e preços das ID's: ${Array.from(SELECIONADOS).join(', ')}`);
         window.open(`https://wa.me/${WHATSAPP}?text=${texto}`, '_blank');
     }
 
