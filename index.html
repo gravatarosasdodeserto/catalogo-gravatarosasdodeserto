@@ -299,7 +299,7 @@
         render(res);
     }
 
-    function atualizarPaineis(ativos) {
+function atualizarPaineis(ativos) {
         let hSel = "";
         SELECIONADOS.forEach(id => hSel += `<div class="chip chip-id">${id} <span onclick="toggleSelect('${id}')">&times;</span></div>`);
         document.getElementById('selection-chips').innerHTML = hSel;
@@ -310,9 +310,23 @@
         document.getElementById('filter-chips').innerHTML = hFil;
         document.getElementById('filter-panel').style.display = hFil ? 'block' : 'none';
 
+        // AJUSTE DO BOTÃO WHATSAPP COM TEXTO DINÂMICO
         const btn = document.getElementById('btn-whatsapp');
-        btn.style.display = SELECIONADOS.size > 0 ? 'flex' : 'none';
-        if(SELECIONADOS.size > 0) document.getElementById('txt-whatsapp').innerText = `Consultar ${SELECIONADOS.size} selecionadas`;
+        const txtBtn = document.getElementById('txt-whatsapp');
+        
+        if (SELECIONADOS.size > 0) {
+            btn.style.display = 'flex';
+            if (SELECIONADOS.size === 1) {
+                // Texto para apenas 1 item (pega o primeiro item do Set)
+                const idUnica = Array.from(SELECIONADOS)[0];
+                txtBtn.innerText = `CONVERSAR SOBRE A ID ${idUnica}`;
+            } else {
+                // Texto para múltiplos itens
+                txtBtn.innerText = `CONVERSAR SOBRE AS ${SELECIONADOS.size} ID'S SELECIONADAS`;
+            }
+        } else {
+            btn.style.display = 'none';
+        }
     }
 
     function removerFiltro(cat, val) {
