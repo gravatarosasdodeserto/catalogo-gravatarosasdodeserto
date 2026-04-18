@@ -28,21 +28,21 @@
             background: url('imagens/gravata-cabecalho.jpg') center 15% / cover no-repeat;
             display: flex; align-items: center; justify-content: center;
         }
-        .header-stripe {
+    .header-stripe {
     width: 100%; 
-    background: rgba(255, 255, 255, 0.1); /* Cor branca com 10% de opacidade */
-    backdrop-filter: blur(12px); 
-    -webkit-backdrop-filter: blur(12px);
+    background: rgba(255, 255, 255, 0.6); /* 60% de branco */
+    backdrop-filter: blur(8px); /* Blur menor para não "sujar" tanto o branco */
+    -webkit-backdrop-filter: blur(8px);
     padding: 20px 0; 
     display: flex; 
     justify-content: center;
 }
-        .logo { width: 140px; }
+    .logo { width: 140px; }
 
-        @media (min-width: 1024px) { 
-            header { height: 320px; } 
-            .logo { width: 240px; } 
-        }
+    @media (min-width: 1024px) { 
+        header { height: 320px; } 
+        .logo { width: 240px; } 
+    }
 
        .welcome-section {
     padding: 30px 20px; 
