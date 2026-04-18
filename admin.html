@@ -245,14 +245,23 @@
     }
 
     function renderLista() {
-        const cont = document.getElementById('lista-admin');
-        cont.innerHTML = DADOS_FILTRADOS.map(d => `
-            <div class="card" onclick="abrirEditor('${d.id}')">
-                <img src="${d.midia ? 'https://drive.google.com/thumbnail?sz=w600&id='+d.midia : 'imagens/sem-foto.jpg'}" loading="lazy">
-                <div class="card-info"><h3>${d.id}</h3><p>${d.qtd} em estoque</p></div>
+    const cont = document.getElementById('lista-admin');
+    cont.innerHTML = DADOS_FILTRADOS.map(d => `
+        <div class="card" onclick="abrirEditor('${d.id}')">
+            <div class="edit-badge">
+                <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c0.39-0.39 0.39-1.02 0-1.41l-2.34-2.34c-0.39-0.39-1.02-0.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
+                </svg>
             </div>
-        `).join('');
-    }
+            
+            <img src="${d.midia ? 'https://drive.google.com/thumbnail?sz=w600&id='+d.midia : 'imagens/sem-foto.jpg'}" loading="lazy">
+            <div class="card-info">
+                <h3>${d.id}</h3>
+                <p>${d.qtd} em estoque</p>
+            </div>
+        </div>
+    `).join('');
+}
 
     function requestFecharModal() {
         if (HAS_CHANGES) {
