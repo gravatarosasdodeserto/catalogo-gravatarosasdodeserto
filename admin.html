@@ -32,20 +32,6 @@
         /* CONTEÚDO ADMIN (OCULTO INICIALMENTE) */
         #admin-content { display: none; }
 
-        header { 
-    height: 150px; 
-    background: url('imagens/gravata-cabecalho.jpg') center 10% / cover no-repeat;
-    display: flex; 
-    align-items: center; 
-    justify-content: center;
-}
-        .header-stripe {
-            width: 100%; background: rgba(255, 255, 255, 0.2); 
-            backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
-            padding: 20px 0; display: flex; justify-content: center;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        .logo { width: 110px; }
 
         .top-action-bar {
             background: #2e2a15; padding: 12px 20px;
@@ -116,7 +102,6 @@
 </div>
 
 <div id="admin-content">
-    <header><div class="header-stripe"><img src="logo.png" class="logo"></div></header>
 
     <div class="top-action-bar">
         <button class="btn-top" onclick="novoItem()">+ NOVA ID</button>
