@@ -120,8 +120,44 @@
     .footer-gear { margin-top: 15px; display: inline-block; transition: 0.3s; color: var(--accent); }
     .footer-gear:hover { transform: rotate(45deg); }
 
-    .drawer { position: fixed; top: 0; right: -320px; width: 300px; height: 100%; background: var(--bg); z-index: 6000; transition: 0.4s; padding: 25px; overflow-y: auto; }
+/* --- MENU LATERAL (DRAWER) REESTILIZADO --- */
+    .drawer { 
+        position: fixed; top: 0; right: -320px; width: 300px; height: 100%; 
+        background: var(--bg); z-index: 6000; transition: 0.4s; padding: 20px; 
+        overflow-y: auto; box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+    }
     .drawer.active { right: 0; }
+    
+    .drawer h3 { 
+        font-size: 18px; color: var(--text-primary); margin-bottom: 20px; 
+        border-bottom: 2px solid var(--accent); padding-bottom: 10px; 
+    }
+
+    .filter-section { margin-bottom: 25px; border: none; padding-bottom: 0; }
+    .filter-section h4 { 
+        font-size: 11px; text-transform: uppercase; color: var(--accent); 
+        margin-bottom: 12px; letter-spacing: 1px;
+    }
+
+    /* Grid de duas colunas para os filtros */
+    .options-grid { 
+        display: grid; grid-template-columns: 1fr 1fr; gap: 8px; 
+    }
+
+    .option-item { 
+        display: flex; align-items: center; gap: 6px; font-size: 12px; 
+        background: white; padding: 10px 8px; border-radius: 8px;
+        border: 1px solid var(--border); cursor: pointer; transition: 0.2s;
+        margin-bottom: 0; /* Remove a margem antiga */
+    }
+
+    /* Estilo quando o checkbox está marcado */
+    .option-item:has(input:checked) { 
+        border-color: var(--accent); background: #fdf5e6; font-weight: 500;
+    }
+
+    .option-item input { cursor: pointer; accent-color: var(--accent); }
+
     .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); display: none; z-index: 5500; }
     .overlay.active { display: block; }
 </style>
@@ -211,17 +247,22 @@
 
     function removerAcentos(str) { return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase(); }
 
-    function gerarFiltros() {
+        function gerarFiltros() {
         const cats = { cores: 'Cores Presentes', camadas: 'Número de Camadas', padrao: 'Padrão das Pétalas' };
         let html = "";
         Object.keys(cats).forEach(cat => {
             let opts = [...new Set(BANCO.flatMap(i => i[cat] ? i[cat].split(',').map(s => s.trim()) : []))].sort();
             if(opts.length > 0) {
                 html += `<div class="filter-section"><h4>${cats[cat]}</h4>`;
+                html += `<div class="options-grid">`; // Adiciona o grid de colunas
                 opts.forEach(o => {
-                    html += `<label class="option-item"><input type="checkbox" class="chk-f" data-cat="${cat}" value="${o}" onchange="filtrar()"> ${o}</label>`;
+                    html += `
+                        <label class="option-item">
+                            <input type="checkbox" class="chk-f" data-cat="${cat}" value="${o}" onchange="filtrar()"> 
+                            ${o}
+                        </label>`;
                 });
-                html += `</div>`;
+                html += `</div></div>`;
             }
         });
         document.getElementById('filtros-container').innerHTML = html;
