@@ -113,13 +113,37 @@
     }
 
     /* --- RODAPÉ CENTRALIZADO --- */
-    footer { background: #2e2a15; color: white; padding: 40px 20px; text-align: center; }
-    .footer-content { display: flex; flex-direction: column; align-items: center; gap: 15px; }
-    .footer-logo { width: 100px; margin-bottom: 10px; }
+        /* --- RODAPÉ COM FAIXA BRANCA --- */
+    footer { 
+        background: #2e2a15; 
+        color: white; 
+        padding: 0; /* Tiramos o padding para a faixa encostar nas bordas */
+        text-align: center; 
+    }
+    /* A Faixa Branca */
+    .footer-stripe-white {
+        background: rgba(255, 255, 255, 0.95);
+        width: 100%;
+        padding: 20px 0;
+        margin-bottom: 20px;
+        display: flex;
+        justify-content: center;
+        border-bottom: 2px solid var(--accent); /* Um detalhe para dar acabamento */
+    }
+    .footer-content { 
+        display: flex; 
+        flex-direction: column; 
+        align-items: center; 
+        gap: 15px; 
+        padding-bottom: 40px; /* Padding apenas no conteúdo debaixo */
+    }
+    .footer-logo { 
+        width: 120px; /* Aumentei um pouco para destacar na faixa */
+    }
     .footer-info p { font-size: 12px; opacity: 0.8; }
     .footer-gear { margin-top: 15px; display: inline-block; transition: 0.3s; color: var(--accent); }
     .footer-gear:hover { transform: rotate(45deg); }
-
+    
 /* --- MENU LATERAL (DRAWER) REESTILIZADO --- */
     .drawer { 
         position: fixed; top: 0; right: -320px; width: 300px; height: 100%; 
@@ -214,18 +238,22 @@
     <span class="seta-animada inverter">»</span>
 </a>
 <footer>
-    <div class="footer-content">
+    <div class="footer-stripe-white">
         <img src="logo.png" class="footer-logo">
+    </div>
+
+    <div class="footer-content">
         <div class="footer-info">
             <p><strong>Gravatá RD</strong> - Rosas do Deserto</p>
             <p>Gravatá, Pernambuco</p>
             <p style="margin-top: 10px; font-size: 10px; opacity: 0.6;">&copy; <span id="year"></span> TODOS OS DIREITOS RESERVADOS.</p>
         </div>
+        
         <a href="admin.html" class="footer-gear">
-    <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
-        <path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.13,5.91,7.62,6.29L5.23,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.72,8.87 c-0.11,0.21-0.06,0.47,0.12,0.61l2.03,1.58C4.84,11.36,4.81,11.68,4.81,12c0,0.32,0.02,0.64,0.07,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.11-0.21,0.06-0.47-0.12-0.61L19.14,12.94z M12,15.5c-1.93,0-3.5-1.57-3.5-3.5 s1.57-3.5,3.5-3.5s3.5,1.57,3.5,3.5S13.93,15.5,12,15.5z"/>
-    </svg>
-</a>
+            <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.13,5.91,7.62,6.29L5.23,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.72,8.87 c-0.11,0.21-0.06,0.47,0.12,0.61l2.03,1.58C4.84,11.36,4.81,11.68,4.81,12c0,0.32,0.02,0.64,0.07,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.11-0.21,0.06-0.47-0.12-0.61L19.14,12.94z M12,15.5c-1.93,0-3.5-1.57-3.5-3.5 s1.57-3.5,3.5-3.5s3.5,1.57,3.5,3.5S13.93,15.5,12,15.5z"/>
+            </svg>
+        </a>
     </div>
 </footer>
 
