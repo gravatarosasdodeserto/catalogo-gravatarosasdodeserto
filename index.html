@@ -142,16 +142,16 @@
     .footer-gear { 
     display: inline-flex; align-items: center; justify-content: center; 
     width: 38px; height: 38px; 
-    background: var(--premium-grad); /* Mesma cor/gradiente da barra de filtrar */
+    background: var(--premium-grad); 
     border-radius: 50%; 
-    color: white; /* Cor da engrenagem branca para contrastar */
+    color: white; 
     margin-top: 10px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     transition: transform 0.2s;
 }
 
 .footer-gear:hover {
-    transform: rotate(45deg); /* Pequeno efeito de giro ao passar o mouse */
+    transform: rotate(45deg); 
 }
 
     .drawer { position: fixed; top: 0; right: -320px; width: 300px; height: 100%; background: var(--bg); z-index: 6000; transition: 0.4s; padding: 25px; overflow-y: auto; }
@@ -162,7 +162,6 @@
     .filter-section h4 { font-size: 11px; text-transform: uppercase; color: var(--accent); margin-bottom: 10px; }
     .option-item { display: flex; align-items: center; gap: 8px; font-size: 13px; margin-bottom: 8px; cursor: pointer; }
     
-    /* ESTILO PARA MENSAGEM DE NÃO ENCONTRADO */
     .no-results { grid-column: 1 / -1; text-align: center; padding: 50px 20px; color: var(--text-secondary); font-size: 16px; }
 </style>
 </head>
@@ -281,13 +280,10 @@
             return matchBusca && matchFiltros;
         });
 
-        // MODIFICAÇÃO: Se houver texto na busca ou filtros ativos, volta o scroll para o topo do catálogo
+        // MODIFICAÇÃO: Subir a tela imediatamente se houver busca ou filtros
         if(busca.length > 0 || Object.keys(ativos).length > 0) {
-            const anchor = document.getElementById('anchor-controls');
-            if(anchor) {
-                const offset = window.innerWidth >= 1024 ? 320 : 150;
-                window.scrollTo({ top: anchor.offsetTop - offset, behavior: 'smooth' });
-            }
+            document.documentElement.scrollTop = 0; // Força para o topo real da página
+            document.body.scrollTop = 0; // Para navegadores Safari
         }
 
         atualizarPaineis(ativos);
@@ -305,7 +301,6 @@ function atualizarPaineis(ativos) {
         document.getElementById('filter-chips').innerHTML = hFil;
         document.getElementById('filter-panel').style.display = hFil ? 'block' : 'none';
 
-        // AJUSTE DO BOTÃO WHATSAPP COM TEXTO DINÂMICO
         const btn = document.getElementById('btn-whatsapp');
         const txtBtn = document.getElementById('txt-whatsapp');
         
@@ -323,7 +318,8 @@ function atualizarPaineis(ativos) {
     }
 
     function removerFiltro(cat, val) {
-        document.querySelector(`.chk-f[data-cat="${cat}"][value="${val}"]`).checked = false;
+        const chk = document.querySelector(`.chk-f[data-cat="${cat}"][value="${val}"]`);
+        if(chk) chk.checked = false;
         filtrar();
     }
 
@@ -334,7 +330,6 @@ function atualizarPaineis(ativos) {
     function render(lista) {
         const grid = document.getElementById('grid');
         
-        // MODIFICAÇÃO: Tratamento para quando não encontrar nenhuma ID
         if (lista.length === 0) {
             RESULTS_COUNTER.innerHTML = `Nenhuma ID encontrada`;
             grid.innerHTML = `<div class="no-results">Desculpe, nenhuma ID corresponde à sua pesquisa.</div>`;
