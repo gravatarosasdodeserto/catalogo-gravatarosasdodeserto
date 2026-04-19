@@ -130,24 +130,44 @@
     bottom: 0; 
     left: 0; 
     width: 100%;
-    background: var(--premium-grad); 
+    /* Gradiente com um leve brilho para chamar atenção sem ser "cheguei" */
+    background: linear-gradient(135deg, #a08c6b 0%, #7d6e53 50%, #63563d 100%);
     color: white; 
     border: none; 
-    padding: 20px; 
-    font-size: 12px; 
+    padding: 22px 15px; /* Aumentei um pouco a altura para dar mais presença */
+    font-size: 13px; /* Aumentei levemente a fonte */
     font-weight: 700;
+    letter-spacing: 0.5px; /* Espaçamento entre letras para ar premium */
     
-    /* Centralização Mágica */
-    display: none; /* O JS mudará para 'flex' quando houver seleção */
-    justify-content: center; /* Centraliza horizontalmente */
-    align-items: center;     /* Centraliza verticalmente */
-    text-align: center;      /* Garante o centro se o texto quebrar linha */
+    /* Correção da Centralização */
+    display: none; 
+    justify-content: center; 
+    align-items: center;
+    text-align: center;
     
     z-index: 5000; 
-    box-shadow: 0 -5px 20px rgba(0,0,0,0.2);
+    /* Sombra mais profunda para o botão parecer "flutuar" sobre o catálogo */
+    box-shadow: 0 -8px 25px rgba(0,0,0,0.3);
     text-decoration: none; 
-    gap: 10px; /* Espaço entre o ícone SVG e o texto */
+    gap: 12px;
+    
+    /* Animação suave para atrair o olhar */
+    transition: all 0.3s ease;
 }
+
+/* Efeito sutil ao tocar/passar o mouse */
+#btn-whatsapp:active {
+    filter: brightness(1.2);
+    padding: 25px 15px; /* Ele cresce levemente ao ser clicado */
+}
+
+#btn-whatsapp svg { 
+    width: 22px; /* Ícone um pouco maior para equilibrar com o texto longo */
+    height: 22px;
+    fill: white;
+    flex-shrink: 0; /* Impede o ícone de ser esmagado pelo texto */
+}
+
 
     #btn-whatsapp svg { width: 18px; fill: white; }
 
