@@ -22,68 +22,37 @@
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
     body { background: var(--bg); color: var(--text-primary); min-height: 100vh; }
 
-    /* CABEÇALHO FIXO */
     header { 
         height: 150px; 
         background: url('imagens/gravata-cabecalho.webp') center 15% / cover no-repeat;
         display: flex; align-items: center; justify-content: center;
-        position: sticky;
-        top: 0;
-        z-index: 3000; /* Fica acima de tudo */
+        position: sticky; top: 0; z-index: 3000;
     }
 
     .header-stripe {
-        width: 100%; 
-        background: rgba(255, 255, 255, 0.4); 
-        padding: 10px 0; 
-        display: flex; 
-        justify-content: center;
-        position: relative;
-    }
-
-    .header-stripe::before {
-        content: ""; position: absolute; left: 0; right: 0;
-        top: -8px; height: 2px; background: white;
-    }
-
-    .header-stripe::after {
-        content: ""; position: absolute; left: 0; right: 0;
-        bottom: -8px; height: 2px; background: white;
+        width: 100%; background: rgba(255, 255, 255, 0.4); 
+        padding: 10px 0; display: flex; justify-content: center; position: relative;
     }
     
     .logo { width: 140px; }
 
-    /* BARRA DE CONTROLES FIXA LOGO ABAIXO DO HEADER */
     .sticky-controls {
-        position: sticky;
-        top: 150px; /* Gruda exatamente onde o header termina */
-        z-index: 2000;
-        background: var(--bg);
-        width: 100%;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        position: sticky; top: 150px; z-index: 2000;
+        background: var(--bg); width: 100%; box-shadow: 0 4px 10px rgba(0,0,0,0.05);
     }
 
-    /* AJUSTES PARA TELAS GRANDES */
     @media (min-width: 1024px) { 
         header { height: 320px; } 
         .logo { width: 240px; } 
-        .sticky-controls { top: 320px; } /* Ajusta para o header maior */
+        .sticky-controls { top: 320px; }
     }
 
-    /* RESTANTE DO LAYOUT */
-    .welcome-section {
-        padding: 30px 20px; 
-        text-align: center; 
-        background: white;
-        border-bottom: 1px solid var(--border);
-    }
-
-    .welcome-section h1 { font-size: 20px; margin-bottom: 12px; color: var(--text-primary); }
+    .welcome-section { padding: 30px 20px; text-align: center; background: white; border-bottom: 1px solid var(--border); }
+    .welcome-section h1 { font-size: 20px; margin-bottom: 12px; }
     .scientific-name { font-weight: 400; font-size: 0.8em; font-style: italic; color: var(--text-secondary); }
     .welcome-section p { font-size: 14px; color: var(--text-secondary); max-width: 750px; margin: 0 auto; line-height: 1.6; }
-    .welcome-section p strong { color: var(--accent); }
 
-    .top-nav { background: #2e2a15; padding: 10px; display: flex; justify-content: center; align-items: center; }
+    .top-nav { background: #2e2a15; padding: 10px; display: flex; justify-content: center; }
     .btn-filter { 
         background: var(--premium-grad); color: white; border: none; 
         padding: 10px 25px; border-radius: 50px; font-size: 11px; font-weight: 700;
@@ -91,162 +60,75 @@
     }
 
     .search-area { padding: 15px 10px; text-align: center; background: var(--bg);}
-    .search-box { 
-        width: 90%; max-width: 450px; padding: 10px 20px; 
-        border-radius: 50px; border: 1px solid var(--border); outline: none; text-align: center;
-    }
+    .search-box { width: 90%; max-width: 450px; padding: 10px 20px; border-radius: 50px; border: 1px solid var(--border); outline: none; text-align: center; }
     #results-counter { font-size: 11px; color: var(--text-secondary); margin-top: 8px; }
 
     .panel-group { padding: 8px 0; background: var(--bg); border-bottom: 1px solid var(--border); display: none; }
     .panel-label { font-size: 9px; font-weight: 700; color: var(--accent); text-transform: uppercase; display: block; text-align: center; margin-bottom: 5px; }
     .chips-container { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; padding: 5px; }
     .chip { background: #eeebe3; border: 1px solid var(--border); padding: 3px 10px; border-radius: 20px; font-size: 10px; display: flex; align-items: center; gap: 5px; }
-    .chip.chip-id { background: #fdf5e6; border-color: var(--accent); font-weight: 600; }
     .chip span { cursor: pointer; font-weight: bold; color: var(--accent); }
 
     .catalog-container { padding: 20px 2% 160px; }
     #grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px; }
-    @media (min-width: 1024px) { #grid { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 25px; } }
 
-    .card { 
-        background: white; border-radius: var(--radius); overflow: hidden; 
-        cursor: pointer; border: 1px solid var(--border);
-        box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-        transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
-    }
-    .card:hover { transform: translateY(-5px); }
-    .card.selected { 
-        border-color: var(--accent); background: #fffcf5;
-        transform: scale(0.95); box-shadow: 0 0 15px rgba(160, 140, 107, 0.4);
-    }
+    .card { background: white; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border); transition: 0.3s; }
+    .card.selected { border-color: var(--accent); background: #fffcf5; transform: scale(0.95); }
     .card-img-container { width: 100%; aspect-ratio: 1/1; background: #eeebe3; }
     .card img { width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: 0.5s; }
     .card img.loaded { opacity: 1; }
     .card-body { padding: 10px; text-align: center; }
-    .card-id { font-size: 14px; font-weight: 600; }
 
-#btn-whatsapp { 
-    position: fixed; 
-    bottom: 0; 
-    left: 0; 
-    width: 100%;
-    background: linear-gradient(135deg, #a08c6b 0%, #7d6e53 50%, #63563d 100%);
-    color: white; 
-    border: none; 
-    padding: 18px 10px; /* Ajuste leve na altura */
-    font-size: 13px; 
-    font-weight: 700;
-    text-decoration: none;
-    z-index: 5000; 
-    box-shadow: 0 -8px 25px rgba(0,0,0,0.3);
+    /* --- BOTÃO WHATSAPP CORRIGIDO --- */
+    #btn-whatsapp { 
+        position: fixed; bottom: 0; left: 0; width: 100%;
+        background: linear-gradient(135deg, #a08c6b 0%, #7d6e53 50%, #63563d 100%);
+        color: white; border: none; padding: 18px 10px; font-size: 12px; font-weight: 700;
+        text-decoration: none; z-index: 5000; box-shadow: 0 -8px 25px rgba(0,0,0,0.3);
+        display: none; justify-content: space-between; align-items: center;
+    }
 
-    /* Alinhamento e Centralização */
-    display: none; /* O JavaScript mudará para flex quando necessário */
-    justify-content: space-between; /* Empurra as setas para as pontas e o texto para o centro */
-    align-items: center; /* Centraliza tudo verticalmente */
-}
+    #btn-whatsapp div { flex: 1; display: flex; justify-content: center; align-items: center; gap: 8px; text-align: center; }
+    #btn-whatsapp svg { width: 20px; height: 20px; fill: white; flex-shrink: 0; }
 
-/* Garante que o bloco do meio (Ícone + Texto) esteja sempre centralizado */
-#btn-whatsapp div {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    text-align: center;
-}
+    .seta-animada {
+        font-size: 22px; padding: 0 15px;
+        animation: pulsarSeta 1.5s infinite ease-in-out;
+    }
 
-#btn-whatsapp svg { 
-    width: 20px; 
-    height: 20px; 
-    fill: white; 
-    flex-shrink: 0; 
-}
+    .seta-animada.inverter {
+        display: inline-block;
+        transform: scaleX(-1);
+        animation: pulsarSetaInvertida 1.5s infinite ease-in-out;
+    }
 
+    @keyframes pulsarSeta {
+        0%, 100% { transform: scale(1); opacity: 0.4; }
+        50% { transform: scale(1.3); opacity: 1; text-shadow: 0 0 10px white; }
+    }
 
-.footer-gear:hover {
-    transform: rotate(45deg); 
-}
+    @keyframes pulsarSetaInvertida {
+        0%, 100% { transform: scaleX(-1) scale(1); opacity: 0.4; }
+        50% { transform: scaleX(-1) scale(1.3); opacity: 1; text-shadow: 0 0 10px white; }
+    }
+
+    /* --- RODAPÉ CENTRALIZADO --- */
+    footer { background: #2e2a15; color: white; padding: 40px 20px; text-align: center; }
+    .footer-content { display: flex; flex-direction: column; align-items: center; gap: 15px; }
+    .footer-logo { width: 100px; margin-bottom: 10px; }
+    .footer-info p { font-size: 12px; opacity: 0.8; }
+    .footer-gear { margin-top: 15px; display: inline-block; transition: 0.3s; color: var(--accent); }
+    .footer-gear:hover { transform: rotate(45deg); }
 
     .drawer { position: fixed; top: 0; right: -320px; width: 300px; height: 100%; background: var(--bg); z-index: 6000; transition: 0.4s; padding: 25px; overflow-y: auto; }
     .drawer.active { right: 0; }
     .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); display: none; z-index: 5500; }
     .overlay.active { display: block; }
-    .filter-section { margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 15px; }
-    .filter-section h4 { font-size: 11px; text-transform: uppercase; color: var(--accent); margin-bottom: 10px; }
-    .option-item { display: flex; align-items: center; gap: 8px; font-size: 13px; margin-bottom: 8px; cursor: pointer; }
-    
-    .no-results { grid-column: 1 / -1; text-align: center; padding: 50px 20px; color: var(--text-secondary); font-size: 16px; }
 </style>
-</head>
-<body>
 
-<header><div class="header-stripe"><img src="logo.png" class="logo"></div></header>
-
-<section class="welcome-section">
-    <h1>Enxertos de Rosas do Deserto <span class="scientific-name">(Adenium Obesum)</span></h1>
-    <p>
-        Explore o catálogo exclusivo da <strong>Gravatá RD</strong>. 
-        Para fazer seu pedido, é simples: <strong>(1)</strong> toque nas fotos para selecionar suas favoritas, 
-        <strong>(2)</strong> clique no botão de consulta ao final da tela e 
-        <strong>(3)</strong> envie sua lista automaticamente pelo nosso WhatsApp para verificar a disponibilidade.
-    </p>
-</section>
-
-<div class="sticky-controls" id="anchor-controls">
-    <div class="top-nav">
-        <button class="btn-filter" onclick="toggleDrawer()">Filtrar id's por Características</button>
-    </div>
-    <div class="search-area">
-        <input type="text" id="search" class="search-box" placeholder="Pesquisar por ID..." oninput="filtrar()">
-        <div id="results-counter">Sincronizando...</div>
-    </div>
-    <div id="filter-panel" class="panel-group">
-        <span class="panel-label">Exibindo ID's que tenham:</span>
-        <div id="filter-chips" class="chips-container"></div>
-    </div>
-    <div id="selection-panel" class="panel-group">
-        <span class="panel-label">ID's Selecionadas:</span>
-        <div id="selection-chips" class="chips-container"></div>
-    </div>
-</div>
-
-<div class="catalog-container">
-    <div id="grid"></div>
-</div>
-
-<a id="btn-whatsapp" href="#" onclick="enviarWhatsApp(event)">
-    <span class="seta-animada">»</span>
-    <div style="display: flex; align-items: center; gap: 10px; justify-content: center;">
-        <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.335-1.662c1.72.937 3.659 1.431 5.63 1.432h.006c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-        <span id="txt-whatsapp">CONSULTAR DISPONIBILIDADE</span>
-    </div>
-    <span class="seta-animada inverter">»</span>
-</a>
-
-<footer>
-    <div class="footer-content">
-        <img src="logo.png" class="footer-logo">
-        <div class="footer-info">
-            <p><strong>Gravatá RD</strong> - Rosas do Deserto</p>
-            <p>Gravatá, Pernambuco</p>
-            <p style="margin-top: 10px; font-size: 10px; opacity: 0.6;">&copy; <span id="year"></span> TODOS OS DIREITOS RESERVADOS.</p>
-        </div>
-        <a href="admin.html" class="footer-gear">
-    <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
-        <path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.13,5.91,7.62,6.29L5.23,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.72,8.87 c-0.11,0.21-0.06,0.47,0.12,0.61l2.03,1.58C4.84,11.36,4.81,11.68,4.81,12c0,0.32,0.02,0.64,0.07,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.11-0.21,0.06-0.47-0.12-0.61L19.14,12.94z M12,15.5c-1.93,0-3.5-1.57-3.5-3.5 s1.57-3.5,3.5-3.5s3.5,1.57,3.5,3.5S13.93,15.5,12,15.5z"/>
-    </svg>
-</a>
-    </div>
-</footer>
-
-<div class="overlay" onclick="toggleDrawer()"></div>
-<div class="drawer" id="drawer">
-    <h3 style="margin-bottom: 20px;">Filtrar</h3>
-    <div id="filtros-container"></div>
-</div>
-
-<script>
+    
+                 
+            
     const API = "https://script.google.com/macros/s/AKfycbzgV_H5QLTNwJ12B-78q57qNnlaVi0vbxW3jIqdnp7YH1IKCdBdFthIHymlMM9Jusqktg/exec";
     const WHATSAPP = "5581992665421";
     let BANCO = [];
