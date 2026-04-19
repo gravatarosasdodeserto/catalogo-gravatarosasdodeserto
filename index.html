@@ -372,11 +372,26 @@ function atualizarPaineis(ativos) {
         return ativos;
     }
 
-    function enviarWhatsApp(e) {
+        function enviarWhatsApp(e) {
         e.preventDefault();
-        const texto = encodeURIComponent(`Olá! Gostaria de saber sobre disponibilidade e preços das ID's: ${Array.from(SELECIONADOS).join(', ')}`);
-        window.open(`https://wa.me/${WHATSAPP}?text=${texto}`, '_blank');
+        
+        const idsArray = Array.from(SELECIONADOS);
+        const total = idsArray.length;
+        let textoFinal = "";
+
+        if (total === 1) {
+            // Texto para apenas uma ID
+            textoFinal = `Oi, Pedro, tudo bem? Tenho interesse na ${idsArray[0]}, gostaria de ter mais informações sobre valor e disponibilidade.`;
+        } else {
+            // Texto para múltiplas IDs
+            const listaIds = idsArray.join(', ');
+            textoFinal = `Oi, Pedro, tudo bem? Tenho interesse nas ${listaIds}, gostaria de ter mais informações sobre valores e disponibilidade.`;
+        }
+
+        const link = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(textoFinal)}`;
+        window.open(link, '_blank');
     }
+
 
     function toggleDrawer() {
         document.getElementById('drawer').classList.toggle('active');
