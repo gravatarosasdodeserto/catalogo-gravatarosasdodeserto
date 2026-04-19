@@ -379,13 +379,17 @@ function atualizarPaineis(ativos) {
 
 // função para montar a lista com "e"
 function formatarLista(lista) {
-  if (lista.length === 1) return `na ${lista[0]}`;
-  if (lista.length === 2) return `na ${lista[0]} e na ${lista[1]}`;
+  if (lista.length === 1) return `na *${lista[0]}*`;
+  if (lista.length === 2) return `na *${lista[0]}* e na *${lista[1]}*`;
   
-  const inicio = lista.slice(0, -1).map(item => `na ${item}`).join(', ');
+  const inicio = lista
+    .slice(0, -1)
+    .map(item => `na *${item}*`)
+    .join(', ');
+    
   const ultimo = lista[lista.length - 1];
   
-  return `${inicio} e na ${ultimo}`;
+  return `${inicio} e na *${ultimo}*`;
 }
 
 const listaFormatada = formatarLista(ids);
