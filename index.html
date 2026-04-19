@@ -161,6 +161,9 @@
     .filter-section { margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 15px; }
     .filter-section h4 { font-size: 11px; text-transform: uppercase; color: var(--accent); margin-bottom: 10px; }
     .option-item { display: flex; align-items: center; gap: 8px; font-size: 13px; margin-bottom: 8px; cursor: pointer; }
+    
+    /* ESTILO PARA MENSAGEM DE NÃO ENCONTRADO */
+    .no-results { grid-column: 1 / -1; text-align: center; padding: 50px 20px; color: var(--text-secondary); font-size: 16px; }
 </style>
 </head>
 <body>
@@ -177,7 +180,7 @@
     </p>
 </section>
 
-<div class="sticky-controls">
+<div class="sticky-controls" id="anchor-controls">
     <div class="top-nav">
         <button class="btn-filter" onclick="toggleDrawer()">Filtrar id's por Características</button>
     </div>
@@ -277,6 +280,16 @@
             });
             return matchBusca && matchFiltros;
         });
+
+        // MODIFICAÇÃO: Se houver texto na busca ou filtros ativos, volta o scroll para o topo do catálogo
+        if(busca.length > 0 || Object.keys(ativos).length > 0) {
+            const anchor = document.getElementById('anchor-controls');
+            if(anchor) {
+                const offset = window.innerWidth >= 1024 ? 320 : 150;
+                window.scrollTo({ top: anchor.offsetTop - offset, behavior: 'smooth' });
+            }
+        }
+
         atualizarPaineis(ativos);
         render(res);
     }
@@ -299,11 +312,9 @@ function atualizarPaineis(ativos) {
         if (SELECIONADOS.size > 0) {
             btn.style.display = 'flex';
             if (SELECIONADOS.size === 1) {
-                // Texto para apenas 1 item (pega o primeiro item do Set)
                 const idUnica = Array.from(SELECIONADOS)[0];
                 txtBtn.innerText = `CONVERSAR SOBRE A ID ${idUnica}`;
             } else {
-                // Texto para múltiplos itens
                 txtBtn.innerText = `CONVERSAR SOBRE AS ${SELECIONADOS.size} ID'S SELECIONADAS`;
             }
         } else {
@@ -321,46 +332,50 @@ function atualizarPaineis(ativos) {
     }
 
     function render(lista) {
-    const grid = document.getElementById('grid');
-    RESULTS_COUNTER.innerHTML = `Mostrando <strong>${lista.length}</strong> rosas`;
-    grid.innerHTML = lista.map(item => {
-        const isSel = SELECIONADOS.has(item.id) ? 'selected' : '';
-        return `
-            <div id="card-${item.id}" class="card ${isSel}" onclick="toggleSelect('${item.id}')">
-                <div class="card-img-container">
-                    <img src="${item.midia ? 'https://drive.google.com/thumbnail?sz=w600&id='+item.midia : 'imagens/sem-foto.jpg'}" onload="this.classList.add('loaded')">
-                </div>
-                <div class="card-body">
-                    <span class="card-id">${item.id}</span>
-                </div>
-            </div>`;
-    }).join('');
-}
+        const grid = document.getElementById('grid');
+        
+        // MODIFICAÇÃO: Tratamento para quando não encontrar nenhuma ID
+        if (lista.length === 0) {
+            RESULTS_COUNTER.innerHTML = `Nenhuma ID encontrada`;
+            grid.innerHTML = `<div class="no-results">Desculpe, nenhuma ID corresponde à sua pesquisa.</div>`;
+            return;
+        }
+
+        RESULTS_COUNTER.innerHTML = `Mostrando <strong>${lista.length}</strong> rosas`;
+        grid.innerHTML = lista.map(item => {
+            const isSel = SELECIONADOS.has(item.id) ? 'selected' : '';
+            return `
+                <div id="card-${item.id}" class="card ${isSel}" onclick="toggleSelect('${item.id}')">
+                    <div class="card-img-container">
+                        <img src="${item.midia ? 'https://drive.google.com/thumbnail?sz=w600&id='+item.midia : 'imagens/sem-foto.jpg'}" onload="this.classList.add('loaded')">
+                    </div>
+                    <div class="card-body">
+                        <span class="card-id">${item.id}</span>
+                    </div>
+                </div>`;
+        }).join('');
+    }
 
     function toggleSelect(id) {
-    const cardElement = document.getElementById(`card-${id}`);
-    
-    if(SELECIONADOS.has(id)) {
-        SELECIONADOS.delete(id);
-        if (cardElement) cardElement.classList.remove('selected');
-    } else {
-        SELECIONADOS.add(id);
-        if (cardElement) cardElement.classList.add('selected');
+        const cardElement = document.getElementById(`card-${id}`);
+        if(SELECIONADOS.has(id)) {
+            SELECIONADOS.delete(id);
+            if (cardElement) cardElement.classList.remove('selected');
+        } else {
+            SELECIONADOS.add(id);
+            if (cardElement) cardElement.classList.add('selected');
+        }
+        atualizarPaineis(obterFiltrosAtivos()); 
     }
-    
-    // Atualiza apenas os painéis de texto/botão, sem renderizar a grade de novo
-    atualizarPaineis(obterFiltrosAtivos()); 
-}
 
-// Função auxiliar para pegar os filtros sem disparar o render
-function obterFiltrosAtivos() {
-    const ativos = {};
-    document.querySelectorAll('.chk-f:checked').forEach(c => {
-        if(!ativos[c.dataset.cat]) ativos[c.dataset.cat] = [];
-        ativos[c.dataset.cat].push(c.value);
-    });
-    return ativos;
-}
+    function obterFiltrosAtivos() {
+        const ativos = {};
+        document.querySelectorAll('.chk-f:checked').forEach(c => {
+            if(!ativos[c.dataset.cat]) ativos[c.dataset.cat] = [];
+            ativos[c.dataset.cat].push(c.value);
+        });
+        return ativos;
+    }
 
     function enviarWhatsApp(e) {
         e.preventDefault();
