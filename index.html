@@ -375,18 +375,26 @@ function atualizarPaineis(ativos) {
         function enviarWhatsApp(e) {
         e.preventDefault();
         
-        const idsArray = Array.from(SELECIONADOS);
-        const total = idsArray.length;
-        let textoFinal = "";
+        const ids = Array.from(SELECIONADOS);
 
-        if (total === 1) {
-            // Texto para apenas uma ID
-            textoFinal = `Oi, Pedro, tudo bem? Tenho interesse na ${idsArray[0]}, gostaria de ter mais informações sobre valor e disponibilidade.`;
-        } else {
-            // Texto para múltiplas IDs
-            const listaIds = idsArray.join(', ');
-            textoFinal = `Oi, Pedro, tudo bem? Tenho interesse nas ${listaIds}, gostaria de ter mais informações sobre valores e disponibilidade.`;
-        }
+// função para montar a lista com "e"
+function formatarLista(lista) {
+  if (lista.length === 1) return `na ${lista[0]}`;
+  if (lista.length === 2) return `na ${lista[0]} e na ${lista[1]}`;
+  
+  const inicio = lista.slice(0, -1).map(item => `na ${item}`).join(', ');
+  const ultimo = lista[lista.length - 1];
+  
+  return `${inicio} e na ${ultimo}`;
+}
+
+const listaFormatada = formatarLista(ids);
+
+const texto = encodeURIComponent(
+  `Oi, Pedro, tudo bem? Tenho interesse ${listaFormatada}, gostaria de ter mais informações sobre valores e disponibilidade.`
+);
+
+window.open(`https://wa.me/${WHATSAPP}?text=${texto}`, '_blank');
 
         const link = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(textoFinal)}`;
         window.open(link, '_blank');
