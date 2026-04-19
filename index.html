@@ -125,14 +125,30 @@
     .card-body { padding: 10px; text-align: center; }
     .card-id { font-size: 14px; font-weight: 600; }
 
-    #btn-whatsapp { 
-        position: fixed; bottom: 0; left: 0; width: 100%;
-        background: var(--premium-grad); color: white; border: none; 
-        padding: 20px; font-size: 12px; font-weight: 700;
-        display: none; justify-content: center; align-items: center;
-        z-index: 5000; box-shadow: 0 -5px 20px rgba(0,0,0,0.2);
-        text-decoration: none; gap: 10px;
-    }
+#btn-whatsapp { 
+    position: fixed; 
+    bottom: 0; 
+    left: 0; 
+    width: 100%;
+    background: var(--premium-grad); 
+    color: white; 
+    border: none; 
+    padding: 20px; 
+    font-size: 12px; 
+    font-weight: 700;
+    
+    /* Centralização Mágica */
+    display: none; /* O JS mudará para 'flex' quando houver seleção */
+    justify-content: center; /* Centraliza horizontalmente */
+    align-items: center;     /* Centraliza verticalmente */
+    text-align: center;      /* Garante o centro se o texto quebrar linha */
+    
+    z-index: 5000; 
+    box-shadow: 0 -5px 20px rgba(0,0,0,0.2);
+    text-decoration: none; 
+    gap: 10px; /* Espaço entre o ícone SVG e o texto */
+}
+
     #btn-whatsapp svg { width: 18px; fill: white; }
 
     footer { background: white; padding: 40px 20px 160px; text-align: center; border-top: 1px solid var(--border); }
