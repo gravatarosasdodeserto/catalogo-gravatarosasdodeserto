@@ -403,48 +403,30 @@ function atualizarPaineis(ativos) {
         return ativos;
     }
 
-    function enviarWhatsApp(e) {
-    e.preventDefault();
-    const ids = Array.from(SELECIONADOS);
-    if (ids.length === 0) return;
+        function enviarWhatsApp(e) {
+        e.preventDefault();
+        const ids = Array.from(SELECIONADOS);
+        if (ids.length === 0) return;
 
-    let textoFinal = "";
-    if (ids.length === 1) {
-        textoFinal = `Oi, Pedro, tudo bem? Tenho interesse na *${ids[0]}*, gostaria de ter mais informações sobre valor e disponibilidade.`;
-    } else {
-        textoFinal = `Oi, Pedro, tudo bem? Tenho interesse nas *${ids.join(', ')}*, gostaria de ter mais informações sobre valores e disponibilidade.`;
-    }
-    
-    window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(textoFinal)}`, '_blank');
-}
+        // Função interna para formatar a lista elegantemente com "e"
+        function formatarLista(lista) {
+            if (lista.length === 1) return `na *${lista[0]}*`;
+            if (lista.length === 2) return `na *${lista[0]}* e na *${lista[1]}*`;
+            
+            const inicio = lista
+                .slice(0, -1)
+                .map(item => `na *${item}*`)
+                .join(', ');
+            const ultimo = lista[lista.length - 1];
+            return `${inicio} e na *${ultimo}*`;
+        }
 
-// função para montar a lista com "e"
-function formatarLista(lista) {
-  if (lista.length === 1) return `na *${lista[0]}*`;
-  if (lista.length === 2) return `na *${lista[0]}* e na *${lista[1]}*`;
-  
-  const inicio = lista
-    .slice(0, -1)
-    .map(item => `na *${item}*`)
-    .join(', ');
-    
-  const ultimo = lista[lista.length - 1];
-  
-  return `${inicio} e na *${ultimo}*`;
-}
-
-const listaFormatada = formatarLista(ids);
-
-const texto = encodeURIComponent(
-  `Oi, Pedro, tudo bem? Tenho interesse ${listaFormatada}, gostaria de ter mais informações sobre valores e disponibilidade.`
-);
-
-window.open(`https://wa.me/${WHATSAPP}?text=${texto}`, '_blank');
-
-        const link = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(textoFinal)}`;
+        const listaFormatada = formatarLista(ids);
+        const mensagem = `Oi, Pedro, tudo bem? Tenho interesse ${listaFormatada}, gostaria de ter mais informações sobre valores e disponibilidade.`;
+        
+        const link = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(mensagem)}`;
         window.open(link, '_blank');
     }
-
 
     function toggleDrawer() {
         document.getElementById('drawer').classList.toggle('active');
