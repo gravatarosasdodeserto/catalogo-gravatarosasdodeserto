@@ -308,9 +308,9 @@ function atualizarPaineis(ativos) {
             btn.style.display = 'flex';
             if (SELECIONADOS.size === 1) {
                 const idUnica = Array.from(SELECIONADOS)[0];
-                txtBtn.innerText = `CONVERSAR SOBRE A ID ${idUnica}`;
+                txtBtn.innerText = `CONSULTAR DISPONIBILIDADE E PREÇO DA ${idUnica}`;
             } else {
-                txtBtn.innerText = `CONVERSAR SOBRE AS ${SELECIONADOS.size} ID'S SELECIONADAS`;
+                txtBtn.innerText = `CONSULTAR DISPONIBILIDADE E PREÇOS DAS ${SELECIONADOS.size} ID'S SELECIONADAS`;
             }
         } else {
             btn.style.display = 'none';
