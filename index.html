@@ -144,13 +144,21 @@
         display: grid; grid-template-columns: 1fr 1fr; gap: 8px; 
     }
 
-    .option-item { 
-        display: flex; align-items: center; gap: 6px; font-size: 12px; 
-        background: white; padding: 10px 8px; border-radius: 8px;
-        border: 1px solid var(--border); cursor: pointer; transition: 0.2s;
-        margin-bottom: 0; /* Remove a margem antiga */
+        .option-item { 
+        display: flex; 
+        align-items: center; 
+        gap: 6px; 
+        font-size: 11px; /* Diminuído levemente para caber nomes longos */
+        background: white; 
+        padding: 8px; 
+        border-radius: 8px;
+        border: 1px solid var(--border); 
+        cursor: pointer; 
+        transition: 0.2s;
+        word-break: break-word; /* Evita que o texto saia da caixa */
+        min-height: 45px; /* Mantém um padrão visual */
     }
-
+        
     /* Estilo quando o checkbox está marcado */
     .option-item:has(input:checked) { 
         border-color: var(--accent); background: #fdf5e6; font-weight: 500;
@@ -247,19 +255,30 @@
 
     function removerAcentos(str) { return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase(); }
 
-        function gerarFiltros() {
-        const cats = { cores: 'Cores Presentes', camadas: 'Número de Camadas', padrao: 'Padrão das Pétalas' };
+            function gerarFiltros() {
+        // Adicionado 'especiais' aqui para aparecer no menu
+        const cats = { 
+            cores: 'Cores Presentes', 
+            camadas: 'Número de Camadas', 
+            padrao: 'Padrão das Pétalas',
+            especiais: 'Categorias Especiais' 
+        };
+        
         let html = "";
         Object.keys(cats).forEach(cat => {
-            let opts = [...new Set(BANCO.flatMap(i => i[cat] ? i[cat].split(',').map(s => s.trim()) : []))].sort();
+            // Coleta os valores únicos de cada coluna
+            let opts = [...new Set(BANCO.flatMap(i => i[cat] ? i[cat].split(',').map(s => s.trim()) : []))]
+                .filter(o => o !== "" && o !== null) // Remove valores vazios
+                .sort();
+
             if(opts.length > 0) {
                 html += `<div class="filter-section"><h4>${cats[cat]}</h4>`;
-                html += `<div class="options-grid">`; // Adiciona o grid de colunas
+                html += `<div class="options-grid">`; 
                 opts.forEach(o => {
                     html += `
                         <label class="option-item">
                             <input type="checkbox" class="chk-f" data-cat="${cat}" value="${o}" onchange="filtrar()"> 
-                            ${o}
+                            <span>${o}</span>
                         </label>`;
                 });
                 html += `</div></div>`;
@@ -267,6 +286,7 @@
         });
         document.getElementById('filtros-container').innerHTML = html;
     }
+
 
     function filtrar() {
         const busca = removerAcentos(document.getElementById('search').value);
