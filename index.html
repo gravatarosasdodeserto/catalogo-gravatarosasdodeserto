@@ -270,15 +270,20 @@
     const RESULTS_COUNTER = document.getElementById('results-counter');
 
     async function carregar() {
-        try {
-            renderSkeleton();
-            const r = await fetch(`${API}?action=get&t=${Date.now()}`);
-            const json = await r.json();
-            BANCO = Object.keys(json).map(id => ({ id, ...json[id] }));
-            gerarFiltros();
-            filtrar();
-        } catch (e) { console.error(e); }
-    }
+    try {
+        renderSkeleton();
+        const r = await fetch(`${API}?action=get&t=${Date.now()}`);
+        const json = await r.json();
+        BANCO = Object.keys(json).map(id => ({ id, ...json[id] }));
+        gerarFiltros();
+        filtrar();
+        
+        // --- ADICIONE ESTA LINHA ABAIXO ---
+        verificarParametroURL();
+        
+    } catch (e) { console.error(e); }
+}
+
 
     function removerAcentos(str) { return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase(); }
 
@@ -452,7 +457,29 @@ function atualizarPaineis(ativos) {
         document.getElementById('drawer').classList.toggle('active');
         document.querySelector('.overlay').classList.toggle('active');
     }
+function verificarParametroURL() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const idParaSelecionar = urlParams.get('id');
 
+    if (idParaSelecionar) {
+        // Busca a ID ignorando maiúsculas/minúsculas
+        const existe = BANCO.find(item => item.id.toLowerCase() === idParaSelecionar.toLowerCase());
+        
+        if (existe) {
+            // Seleciona a ID usando a função que você já tem
+            toggleSelect(existe.id);
+            
+            // Rola a página até o card dela com um pequeno atraso para dar tempo das fotos carregarem
+            setTimeout(() => {
+                const elemento = document.getElementById(`card-${existe.id}`);
+                if (elemento) {
+                    elemento.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }, 800);
+        }
+    }
+}
+    
     window.onload = carregar;
     document.getElementById("year").textContent = new Date().getFullYear();
 </script>
