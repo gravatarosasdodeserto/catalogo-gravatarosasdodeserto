@@ -494,12 +494,38 @@ function atualizarPaineis(ativos) {
         return ativos;
     }
 
-        function enviarWhatsApp(e) {
+            function enviarWhatsApp(e) {
         e.preventDefault();
         const ids = Array.from(SELECIONADOS);
         if (ids.length === 0) return;
 
-        // Função interna para formatar a lista elegantemente com "e"
-        function formatarLista(lista) {
-            if (lista.length === 1) return `na *${lista[0]}*`;
-            if (lista.length === 2) return `na *${lista[0]}* e na *${lis
+        const listaFormatada = ids.map(id => `*${id}*`).join(', ').replace(/, ([^,]*)$/, ' e $1');
+        const saudacao = "Olá Pedro! Vi seu catálogo e tenho interesse ";
+        const mensagem = encodeURIComponent(`${saudacao} ${ids.length === 1 ? 'na' : 'nas'} ID's: ${listaFormatada}. Estão disponíveis?`);
+        
+        window.open(`https://wa.me/${WHATSAPP}?text=${mensagem}`, '_blank');
+    }
+
+    function toggleDrawer() {
+        document.getElementById('drawer').classList.toggle('active');
+        document.querySelector('.overlay').classList.toggle('active');
+    }
+
+    function verificarParametroURL() {
+        const params = new URLSearchParams(window.location.search);
+        const idParaAbrir = params.get('id');
+        if (idParaAbrir) {
+            setTimeout(() => {
+                const card = document.getElementById(`card-${idParaAbrir}`);
+                if (card) {
+                    card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    toggleSelect(idParaAbrir);
+                }
+            }, 800);
+        }
+    }
+
+    // Inicialização
+    document.getElementById('year').textContent = new Date().getFullYear();
+    carregar();
+</script>
