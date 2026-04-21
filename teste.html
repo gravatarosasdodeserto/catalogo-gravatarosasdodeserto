@@ -529,7 +529,14 @@ function verificarParametroURL() {
         }
     }
 }
-    
+    function toggleMenu() {
+    var x = document.getElementById("navLinks");
+    if (x.className === "nav-links") {
+      x.className += " active";
+    } else {
+      x.className = "nav-links";
+    }
+  }
     window.onload = carregar;
     document.getElementById("year").textContent = new Date().getFullYear();
 </script>
