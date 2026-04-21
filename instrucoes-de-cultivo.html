@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <link rel="icon" type="image/png" href="favicon.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Dicas de Cultivo | Gravatá RD</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+    :root {
+        --bg: #fcfbf7;
+        --surface: #ffffff;
+        --text-primary: #2e2a15;
+        --text-secondary: #7d6e53;
+        --accent: #a08c6b;
+        --border: #eceae4;
+        --radius: 15px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+    
+    body { background: var(--bg); color: var(--text-primary); line-height: 1.6; padding-top: 80px; }
+
+    /* MENU SUPERIOR (Igual ao Index) */
+    .site-nav {
+        background: #ffffff;
+        width: 100%; height: 60px;
+        position: fixed; top: 0; left: 0;
+        z-index: 9999;
+        display: flex; align-items: center; justify-content: center;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    .nav-inner { width: 92%; display: flex; justify-content: space-between; align-items: center; }
+    .nav-brand-container { display: flex; align-items: center; gap: 8px; text-decoration: none; }
+    .mini-logo { height: 32px; width: 32px; object-fit: contain; border-radius: 6px; }
+    .nav-brand { font-weight: 600; font-size: 16px; color: var(--text-primary); letter-spacing: 1px; }
+    .nav-links { display: flex; list-style: none; gap: 20px; }
+    .nav-links a { text-decoration: none; color: var(--text-primary); font-size: 13px; font-weight: 500; }
+
+    /* CONTEÚDO */
+    .container { width: 92%; max-width: 800px; margin: 0 auto; padding-bottom: 60px; }
+
+    .page-header { text-align: center; margin-bottom: 40px; }
+    .page-header h1 { font-size: 28px; color: var(--text-primary); margin-bottom: 10px; }
+    .page-header p { color: var(--text-secondary); font-style: italic; }
+
+    .tip-card { 
+        background: var(--surface); 
+        padding: 30px; 
+        border-radius: var(--radius); 
+        border: 1px solid var(--border); 
+        margin-bottom: 25px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+    }
+
+    .tip-card h2 { 
+        display: flex; 
+        align-items: center; 
+        gap: 12px; 
+        font-size: 18px; 
+        color: var(--accent); 
+        margin-bottom: 15px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .tip-card h2 svg { fill: var(--accent); }
+
+    .tip-card p { font-size: 15px; color: #4a4530; margin-bottom: 15px; }
+    
+    .tip-card ul { padding-left: 20px; color: #4a4530; }
+    .tip-card li { margin-bottom: 8px; font-size: 14px; }
+
+    footer { background: #2e2a15; color: white; text-align: center; padding: 40px 0; margin-top: 40px; }
+    .footer-logo { width: 120px; margin-bottom: 20px; filter: brightness(0) invert(1); opacity: 0.1; }
+
+    @media (max-width: 768px) {
+        .nav-links { display: none; } /* Simplificado para focar no conteúdo */
+        .page-header h1 { font-size: 22px; }
+        .tip-card { padding: 20px; }
+    }
+    </style>
+</head>
+<body>
+
+<nav class="site-nav">
+    <div class="nav-inner">
+        <a href="index.html" class="nav-brand-container">
+            <img src="favicon.png" alt="Logo" class="mini-logo">
+            <span class="nav-brand">GRAVATÁ RD</span>
+        </a>
+        <ul class="nav-links">
+            <li><a href="index.html">Catálogo</a></li>
+            <li><a href="instrucoes-de-cultivo.html" style="color: var(--accent);">Dicas de Cultivo</a></li>
+        </ul>
+    </div>
+</nav>
+
+<div class="container">
+    <header class="page-header">
+        <h1>Dicas de Cultivo</h1>
+        <p>Aprenda a cuidar da sua Rosa do Deserto (Adenium Obesum)</p>
+    </header>
+
+    <div class="tip-card">
+        <h2>
+            <svg width="24" height="24" viewBox="0 0 24 24"><path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zm0-5C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>
+            1. Luz Solar
+        </h2>
+        <p>As Rosas do Deserto são plantas de sol pleno. Para florescerem com saúde, elas precisam de pelo menos 6 horas diárias de luz solar direta.</p>
+        <ul>
+            <li>Se a planta ficar na sombra, ela pode esticar (estiolamento) e parar de florir.</li>
+            <li>Em regiões muito quentes, o sol do meio-dia pode queimar as flores, mas o caudex (caule) adora o calor.</li>
+        </ul>
+    </div>
+
+    <div class="tip-card">
+        <h2>
+            <svg width="24" height="24" viewBox="0 0 24 24"><path d="M12 2c-5.33 4.55-8 8.48-8 11.8 0 4.98 3.8 8.2 8 8.2s8-3.22 8-8.2c0-3.32-2.67-7.25-8-11.8z"/></svg>
+            2. Rega Consciente
+        </h2>
+        <p>O segredo está no equilíbrio. Elas gostam de água, mas detestam solo encharcado (que apodrece as raízes).</p>
+        <ul>
+            <li>Regue sempre que o substrato estiver completamente seco ao toque.</li>
+            <li>Nunca deixe pratinhos com água embaixo do vaso.</li>
+            <li>Ao regar, evite molhar as flores para que elas durem mais tempo.</li>
+        </ul>
+    </div>
+
+    <div class="tip-card">
+        <h2>
+            <svg width="24" height="24" viewBox="0 0 24 24"><path d="M23 12l-2.44-2.78.34-3.68-3.61-.82-1.89-3.18L12 3 8.6 1.54 6.71 4.72l-3.61.81.34 3.68L1 12l2.44 2.78-.34 3.69 3.61.82 1.89 3.18L12 21l3.39 1.46 1.89-3.18 3.61-.82-.34-3.68L23 12zm-9.29 4.71L12 14.41l-1.71 1.71-1.42-1.42L10.59 13 8.88 11.29l1.42-1.42L12 11.59l1.71-1.71 1.42 1.42L13.41 13l1.71 1.71-1.42 1.42z"/></svg>
+            3. Substrato e Vaso
+        </h2>
+        <p>A drenagem é o fator mais importante para o sucesso do cultivo.</p>
+        <ul>
+            <li>Use um substrato bem poroso (mistura de areia grossa, carvão triturado e matéria orgânica).</li>
+            <li>O vaso deve ter muitos furos no fundo.</li>
+            <li>Uma camada de brita ou argila expandida no fundo do vaso ajuda muito na drenagem.</li>
+        </ul>
+    </div>
+
+</div>
+
+<footer>
+    <img src="logo.png" class="footer-logo" onerror="this.style.display='none'">
+    <p><strong>Gravatá RD</strong> - Paixão por Rosas do Deserto</p>
+    <p style="font-size: 11px; margin-top: 10px;">&copy; 2026 Todos os direitos reservados.</p>
+</footer>
+
+</body>
+</html>
