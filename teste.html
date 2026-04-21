@@ -21,10 +21,9 @@
 
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
     
-    /* Ajuste para o conteúdo não ficar por baixo da barra fixa */
     body { background: var(--bg); color: var(--text-primary); min-height: 100vh; padding-top: 60px; }
 
-    /* BARRA DE TAREFAS SUPERIOR FIXA */
+    /* BARRA SUPERIOR FIXA */
     .site-nav {
         background: #ffffff;
         width: 100%; height: 60px;
@@ -33,55 +32,59 @@
         display: flex; align-items: center; justify-content: center;
         box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     }
-    .nav-inner { 
-        width: 92%; display: flex; justify-content: space-between; align-items: center; 
-    }
+    .nav-inner { width: 92%; display: flex; justify-content: space-between; align-items: center; }
     .nav-brand { font-weight: 600; font-size: 16px; color: var(--text-primary); letter-spacing: 1px; }
     .nav-links { display: flex; list-style: none; gap: 20px; }
     .nav-links a { text-decoration: none; color: var(--text-primary); font-size: 13px; font-weight: 500; }
     .menu-toggle { display: none; font-size: 24px; cursor: pointer; }
 
-    /* HEADER STICKY (Abaixo da Nav) */
+    /* HEADER COM TRANSIÇÃO PARA SUMIR */
     header { 
         height: 150px; 
         background: url('imagens/gravata-cabecalho.webp') center 15% / cover no-repeat;
         display: flex; align-items: center; justify-content: center;
         position: sticky; top: 60px; z-index: 3000;
+        transition: all 0.3s ease;
+        overflow: hidden;
     }
-    .header-stripe {
-        width: 100%; background: rgba(255, 255, 255, 0.4); 
-        padding: 10px 0; display: flex; justify-content: center; position: relative;
-    }
+    /* Classe para esconder o cabeçalho */
+    header.hidden { height: 0; opacity: 0; pointer-events: none; }
+
+    .header-stripe { width: 100%; background: rgba(255, 255, 255, 0.4); padding: 10px 0; display: flex; justify-content: center; }
     .logo { width: 140px; }
 
-    /* CONTROLES STICKY (Abaixo do Header) */
+    /* CONTROLES STICKY AJUSTÁVEIS */
     .sticky-controls {
-        position: sticky; top: calc(150px + 60px); z-index: 2000;
+        position: sticky; top: 60px; z-index: 2000;
         background: var(--bg); width: 100%; box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        transition: top 0.3s ease;
     }
+    /* Quando o header está visível, os controles ficam abaixo dele */
+    header:not(.hidden) + .welcome-section + .sticky-controls { top: calc(150px + 60px); }
 
     @media (min-width: 1024px) { 
         header { height: 320px; } 
         .logo { width: 240px; } 
-        .sticky-controls { top: calc(320px + 60px); }
+        header:not(.hidden) + .welcome-section + .sticky-controls { top: calc(320px + 60px); }
     }
 
-    /* Restante do Estilo permanece igual ao seu original */
-    .welcome-section { padding: 30px 20px; text-align: center; background: white; border-bottom: 1px solid var(--border); }
-    .welcome-section h1 { font-size: 20px; margin-bottom: 12px; }
-    .scientific-name { font-weight: 400; font-size: 0.8em; font-style: italic; color: var(--text-secondary); }
-    .welcome-section p { font-size: 14px; color: var(--text-secondary); max-width: 750px; margin: 0 auto; line-height: 1.6; }
+    /* Outros estilos */
+    .welcome-section { padding: 30px 20px; text-align: center; background: white; border-bottom: 1px solid var(--border); transition: 0.3s; }
+    .welcome-section.hidden { display: none; } /* Opcional: esconder o texto de boas-vindas também */
+    
     .top-nav { background: #2e2a15; padding: 10px; display: flex; justify-content: center; }
     .btn-filter { background: var(--premium-grad); color: white; border: none; padding: 10px 25px; border-radius: 50px; font-size: 11px; font-weight: 700; text-transform: uppercase; cursor: pointer; }
     .search-area { padding: 15px 10px; text-align: center; background: var(--bg);}
     .search-box-container { width: 90%; max-width: 450px; margin: 0 auto; }
     .search-box { width: 100%; padding: 10px 20px; border-radius: 50px; border: 1px solid var(--border); outline: none; text-align: center; }
     #results-counter { font-size: 11px; color: var(--text-secondary); margin-top: 8px; }
+    
     .panel-group { padding: 8px 0; background: var(--bg); border-bottom: 1px solid var(--border); display: none; }
     .panel-label { font-size: 9px; font-weight: 700; color: var(--accent); text-transform: uppercase; display: block; text-align: center; margin-bottom: 5px; }
-    .chips-container { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; padding: 5px; }
+    .chips-container { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; padding: 5px; max-height: 120px; overflow-y: auto; }
     .chip { background: #eeebe3; border: 1px solid var(--border); padding: 3px 10px; border-radius: 20px; font-size: 10px; display: flex; align-items: center; gap: 5px; }
     .chip span { cursor: pointer; font-weight: bold; color: var(--accent); }
+
     .catalog-container { padding: 20px 2% 160px; }
     #grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px; }
     .card { background: white; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border); transition: 0.3s; cursor: pointer; }
@@ -90,16 +93,18 @@
     .card img { width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: 0.5s; }
     .card img.loaded { opacity: 1; }
     .card-body { padding: 10px; text-align: center; }
+
     #btn-whatsapp { position: fixed; bottom: 0; left: 0; width: 100%; background: linear-gradient(135deg, #a08c6b 0%, #7d6e53 50%, #63563d 100%); color: white; border: none; padding: 18px 10px; font-size: 12px; font-weight: 700; text-decoration: none; z-index: 5000; box-shadow: 0 -8px 25px rgba(0,0,0,0.3); display: none; justify-content: space-between; align-items: center; }
     .seta-animada { font-size: 22px; padding: 0 15px; animation: pulsarSeta 1.5s infinite ease-in-out; }
     .seta-animada.inverter { display: inline-block; transform: scaleX(-1); animation: pulsarSetaInvertida 1.5s infinite ease-in-out; }
     @keyframes pulsarSeta { 0%, 100% { transform: scale(1); opacity: 0.4; } 50% { transform: scale(1.3); opacity: 1; text-shadow: 0 0 10px white; } }
     @keyframes pulsarSetaInvertida { 0%, 100% { transform: scaleX(-1) scale(1); opacity: 0.4; } 50% { transform: scaleX(-1) scale(1.3); opacity: 1; text-shadow: 0 0 10px white; } }
+    
     footer { background: #2e2a15; color: white; text-align: center; }
     .footer-stripe-white { background: rgba(255, 255, 255, 0.95); width: 100%; padding: 20px 0; margin-bottom: 20px; display: flex; justify-content: center; border-bottom: 2px solid var(--accent); }
     .footer-content { display: flex; flex-direction: column; align-items: center; gap: 15px; padding-bottom: 40px; }
     .footer-logo { width: 120px; }
-    .footer-info p { font-size: 12px; opacity: 0.8; }
+
     .drawer { position: fixed; top: 0; right: -320px; width: 300px; height: 100%; background: var(--bg); z-index: 10000; transition: 0.4s; padding: 20px; overflow-y: auto; box-shadow: -5px 0 15px rgba(0,0,0,0.1); }
     .drawer.active { right: 0; }
     .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
@@ -128,12 +133,12 @@
     </div>
 </nav>
 
-<header><div class="header-stripe"><img src="logo.png" class="logo"></div></header>
+<header id="site-header"><div class="header-stripe"><img src="logo.png" class="logo"></div></header>
 
-<section class="welcome-section">
-    <h1>Enxertos de Rosas do Deserto <span class="scientific-name">(Adenium Obesum)</span></h1>
-    <p>
-        Explore o catálogo exclusivo da <strong>Gravatá RD</strong>. Toque nas fotos para selecionar suas favoritas e consulte a disponibilidade pelo WhatsApp.
+<section class="welcome-section" id="welcome-text">
+    <h1 style="font-size: 20px;">Enxertos de Rosas do Deserto <span style="font-weight: 400; font-size: 0.8em; font-style: italic; color: var(--text-secondary);">(Adenium Obesum)</span></h1>
+    <p style="font-size: 14px; color: var(--text-secondary); max-width: 750px; margin: 0 auto; line-height: 1.6;">
+        Explore o catálogo exclusivo da <strong>Gravatá RD</strong>. Toque nas fotos para selecionar suas favoritas.
     </p>
 </section>
 
@@ -177,9 +182,7 @@
             <p><strong>Gravatá RD</strong> - Rosas do Deserto</p>
             <p style="margin-top: 10px; font-size: 10px; opacity: 0.6;">&copy; <span id="year"></span> TODOS OS DIREITOS RESERVADOS.</p>
         </div>
-        <a href="admin.html" style="color: var(--accent);">
-            <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.13,5.91,7.62,6.29L5.23,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.72,8.87 c-0.11,0.21-0.06,0.47,0.12,0.61l2.03,1.58C4.84,11.36,4.81,11.68,4.81,12c0,0.32,0.02,0.64,0.07,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.11-0.21,0.06-0.47-0.12-0.61L19.14,12.94z M12,15.5c-1.93,0-3.5-1.57-3.5-3.5 s1.57-3.5,3.5-3.5s3.5,1.57,3.5,3.5S13.93,15.5,12,15.5z"/></svg>
-        </a>
+        <a href="admin.html" style="color: var(--accent);"><svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.13,5.91,7.62,6.29L5.23,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.72,8.87 c-0.11,0.21-0.06,0.47,0.12,0.61l2.03,1.58C4.84,11.36,4.81,11.68,4.81,12c0,0.32,0.02,0.64,0.07,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.11-0.21,0.06-0.47-0.12-0.61L19.14,12.94z M12,15.5c-1.93,0-3.5-1.57-3.5-3.5 s1.57-3.5,3.5-3.5s3.5,1.57,3.5,3.5S13.93,15.5,12,15.5z"/></svg></a>
     </div>
 </footer>
 
@@ -229,6 +232,22 @@
     function filtrar() {
         const busca = removerAcentos(document.getElementById('search').value);
         const ativos = obterFiltrosAtivos();
+        
+        // --- NOVA LÓGICA PARA SUMIR O CABEÇALHO ---
+        const temFiltroAtivo = Object.keys(ativos).length > 0 || busca.length > 0;
+        const temSelecao = SELECIONADOS.size > 0;
+        const header = document.getElementById('site-header');
+        const welcome = document.getElementById('welcome-text');
+
+        if (temFiltroAtivo || temSelecao) {
+            header.classList.add('hidden');
+            welcome.classList.add('hidden');
+        } else {
+            header.classList.remove('hidden');
+            welcome.classList.remove('hidden');
+        }
+        // ------------------------------------------
+
         const res = BANCO.filter(item => {
             const matchBusca = removerAcentos(item.id).includes(busca);
             const matchFiltros = Object.keys(ativos).every(cat => {
@@ -254,17 +273,19 @@
 
         const btn = document.getElementById('btn-whatsapp');
         const txtBtn = document.getElementById('txt-whatsapp');
-        btn.style.display = SELECIONADOS.size > 0 ? 'flex' : 'none';
-        if (SELECIONADOS.size > 0) {
+        btn.style.display = temSelecao() ? 'flex' : 'none';
+        if (temSelecao()) {
             txtBtn.innerText = SELECIONADOS.size === 1 ? `CONSULTAR ID ${Array.from(SELECIONADOS)[0]}` : `CONSULTAR ${SELECIONADOS.size} ID'S`;
         }
     }
+
+    function temSelecao() { return SELECIONADOS.size > 0; }
 
     function toggleSelect(id) {
         SELECIONADOS.has(id) ? SELECIONADOS.delete(id) : SELECIONADOS.add(id);
         const card = document.getElementById(`card-${id}`);
         if(card) card.classList.toggle('selected');
-        atualizarPaineis(obterFiltrosAtivos());
+        filtrar(); // Chama o filtrar para atualizar o estado do header
     }
 
     function removerFiltro(cat, val) {
@@ -282,15 +303,8 @@
         return ativos;
     }
 
-    function toggleMenu() {
-        document.getElementById("navLinks").classList.toggle("active");
-    }
-
-    function toggleDrawer() {
-        document.getElementById('drawer').classList.toggle('active');
-        document.querySelector('.overlay').classList.toggle('active');
-    }
-
+    function toggleMenu() { document.getElementById("navLinks").classList.toggle("active"); }
+    function toggleDrawer() { document.getElementById('drawer').classList.toggle('active'); document.querySelector('.overlay').classList.toggle('active'); }
     function renderSkeleton() { document.getElementById('grid').innerHTML = Array(8).fill('<div style="height:180px; background:#eee; border-radius:12px"></div>').join(''); }
 
     function render(lista) {
