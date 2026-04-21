@@ -15,14 +15,14 @@
         --text-secondary: #7d6e53;
         --accent: #a08c6b;
         --border: #eceae4;
-        --radius: 15px;
+        --radius: 12px;
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
     
-    body { background: var(--bg); color: var(--text-primary); line-height: 1.6; padding-top: 80px; }
+    body { background: var(--bg); color: var(--text-primary); min-height: 100vh; padding-top: 60px; }
 
-    /* MENU SUPERIOR (Igual ao Index) */
+    /* BARRA SUPERIOR FIXA (IGUAL AO INDEX) */
     .site-nav {
         background: #ffffff;
         width: 100%; height: 60px;
@@ -35,50 +35,54 @@
     .nav-brand-container { display: flex; align-items: center; gap: 8px; text-decoration: none; }
     .mini-logo { height: 32px; width: 32px; object-fit: contain; border-radius: 6px; }
     .nav-brand { font-weight: 600; font-size: 16px; color: var(--text-primary); letter-spacing: 1px; }
+
     .nav-links { display: flex; list-style: none; gap: 20px; }
     .nav-links a { text-decoration: none; color: var(--text-primary); font-size: 13px; font-weight: 500; }
+    .menu-toggle { display: none; font-size: 24px; cursor: pointer; }
 
-    /* CONTEÚDO */
-    .container { width: 92%; max-width: 800px; margin: 0 auto; padding-bottom: 60px; }
+    /* HEADER (IGUAL AO INDEX) */
+    header { 
+        height: 150px; 
+        background: url('imagens/gravata-cabecalho.webp') center 15% / cover no-repeat;
+        display: flex; align-items: center; justify-content: center;
+        position: relative;
+        overflow: hidden;
+    }
+    .header-stripe { width: 100%; background: rgba(255, 255, 255, 0.4); padding: 10px 0; display: flex; justify-content: center; }
+    .logo { width: 140px; }
 
-    .page-header { text-align: center; margin-bottom: 40px; }
-    .page-header h1 { font-size: 28px; color: var(--text-primary); margin-bottom: 10px; }
-    .page-header p { color: var(--text-secondary); font-style: italic; }
+    @media (min-width: 1024px) { 
+        header { height: 320px; } 
+        .logo { width: 240px; } 
+    }
+
+    /* CONTEÚDO DAS DICAS */
+    .content-container { padding: 40px 5%; max-width: 900px; margin: 0 auto; }
+    .page-title { text-align: center; margin-bottom: 40px; }
+    .page-title h1 { font-size: 24px; color: var(--text-primary); }
+    .page-title p { color: var(--text-secondary); font-size: 14px; margin-top: 10px; }
 
     .tip-card { 
-        background: var(--surface); 
-        padding: 30px; 
+        background: white; 
         border-radius: var(--radius); 
-        border: 1px solid var(--border); 
-        margin-bottom: 25px;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+        padding: 25px; 
+        margin-bottom: 20px; 
+        border: 1px solid var(--border);
+        box-shadow: 0 4px 10px rgba(0,0,0,0.02);
     }
+    .tip-card h2 { color: var(--accent); font-size: 18px; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+    .tip-card p { font-size: 14px; line-height: 1.6; color: #4a4530; }
 
-    .tip-card h2 { 
-        display: flex; 
-        align-items: center; 
-        gap: 12px; 
-        font-size: 18px; 
-        color: var(--accent); 
-        margin-bottom: 15px;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-    }
-
-    .tip-card h2 svg { fill: var(--accent); }
-
-    .tip-card p { font-size: 15px; color: #4a4530; margin-bottom: 15px; }
-    
-    .tip-card ul { padding-left: 20px; color: #4a4530; }
-    .tip-card li { margin-bottom: 8px; font-size: 14px; }
-
-    footer { background: #2e2a15; color: white; text-align: center; padding: 40px 0; margin-top: 40px; }
-    .footer-logo { width: 120px; margin-bottom: 20px; filter: brightness(0) invert(1); opacity: 0.1; }
+    /* FOOTER (IGUAL AO INDEX) */
+    footer { background: #2e2a15; color: white; text-align: center; margin-top: 60px; }
+    .footer-stripe-white { background: rgba(255, 255, 255, 0.95); width: 100%; padding: 20px 0; margin-bottom: 20px; display: flex; justify-content: center; border-bottom: 2px solid var(--accent); }
+    .footer-content { display: flex; flex-direction: column; align-items: center; gap: 15px; padding-bottom: 40px; }
+    .footer-logo { width: 120px; }
 
     @media (max-width: 768px) {
-        .nav-links { display: none; } /* Simplificado para focar no conteúdo */
-        .page-header h1 { font-size: 22px; }
-        .tip-card { padding: 20px; }
+        .menu-toggle { display: block; }
+        .nav-links { display: none; position: absolute; top: 60px; left: 0; width: 100%; background: white; flex-direction: column; padding: 20px; box-shadow: 0 5px 10px rgba(0,0,0,0.1); }
+        .nav-links.active { display: flex; }
     }
     </style>
 </head>
@@ -87,67 +91,59 @@
 <nav class="site-nav">
     <div class="nav-inner">
         <a href="index.html" class="nav-brand-container">
-            <img src="favicon.png" alt="Logo" class="mini-logo">
+            <img src="favicon.png" alt="Logo" class="mini-logo" onerror="this.style.display='none'">
             <span class="nav-brand">GRAVATÁ RD</span>
         </a>
-        <ul class="nav-links">
-            <li><a href="index.html">Catálogo</a></li>
-            <li><a href="instrucoes-de-cultivo.html" style="color: var(--accent);">Dicas de Cultivo</a></li>
+        <div class="menu-toggle" onclick="toggleMenu()">&#9776;</div>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="index.html">Início</a></li>
+            <li><a href="instrucoes-de-cultivo.html" style="color: var(--accent);">Cultivo</a></li>
         </ul>
     </div>
 </nav>
 
-<div class="container">
-    <header class="page-header">
+<header id="site-header">
+    <div class="header-stripe">
+        <img src="logo.png" class="logo">
+    </div>
+</header>
+
+<div class="content-container">
+    <div class="page-title">
         <h1>Dicas de Cultivo</h1>
-        <p>Aprenda a cuidar da sua Rosa do Deserto (Adenium Obesum)</p>
-    </header>
-
-    <div class="tip-card">
-        <h2>
-            <svg width="24" height="24" viewBox="0 0 24 24"><path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zm0-5C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>
-            1. Luz Solar
-        </h2>
-        <p>As Rosas do Deserto são plantas de sol pleno. Para florescerem com saúde, elas precisam de pelo menos 6 horas diárias de luz solar direta.</p>
-        <ul>
-            <li>Se a planta ficar na sombra, ela pode esticar (estiolamento) e parar de florir.</li>
-            <li>Em regiões muito quentes, o sol do meio-dia pode queimar as flores, mas o caudex (caule) adora o calor.</li>
-        </ul>
+        <p>Aprenda os segredos para manter suas Rosas do Deserto sempre saudáveis.</p>
     </div>
 
     <div class="tip-card">
-        <h2>
-            <svg width="24" height="24" viewBox="0 0 24 24"><path d="M12 2c-5.33 4.55-8 8.48-8 11.8 0 4.98 3.8 8.2 8 8.2s8-3.22 8-8.2c0-3.32-2.67-7.25-8-11.8z"/></svg>
-            2. Rega Consciente
-        </h2>
-        <p>O segredo está no equilíbrio. Elas gostam de água, mas detestam solo encharcado (que apodrece as raízes).</p>
-        <ul>
-            <li>Regue sempre que o substrato estiver completamente seco ao toque.</li>
-            <li>Nunca deixe pratinhos com água embaixo do vaso.</li>
-            <li>Ao regar, evite molhar as flores para que elas durem mais tempo.</li>
-        </ul>
+        <h2>☀️ Luz Solar</h2>
+        <p>A Rosa do Deserto precisa de pelo menos 6 horas de sol direto por dia. Sem sol, ela não floresce e o caule pode ficar fraco.</p>
     </div>
 
     <div class="tip-card">
-        <h2>
-            <svg width="24" height="24" viewBox="0 0 24 24"><path d="M23 12l-2.44-2.78.34-3.68-3.61-.82-1.89-3.18L12 3 8.6 1.54 6.71 4.72l-3.61.81.34 3.68L1 12l2.44 2.78-.34 3.69 3.61.82 1.89 3.18L12 21l3.39 1.46 1.89-3.18 3.61-.82-.34-3.68L23 12zm-9.29 4.71L12 14.41l-1.71 1.71-1.42-1.42L10.59 13 8.88 11.29l1.42-1.42L12 11.59l1.71-1.71 1.42 1.42L13.41 13l1.71 1.71-1.42 1.42z"/></svg>
-            3. Substrato e Vaso
-        </h2>
-        <p>A drenagem é o fator mais importante para o sucesso do cultivo.</p>
-        <ul>
-            <li>Use um substrato bem poroso (mistura de areia grossa, carvão triturado e matéria orgânica).</li>
-            <li>O vaso deve ter muitos furos no fundo.</li>
-            <li>Uma camada de brita ou argila expandida no fundo do vaso ajuda muito na drenagem.</li>
-        </ul>
+        <h2>💧 Regas</h2>
+        <p>O substrato deve ser bem drenado. Regue apenas quando a terra estiver seca. O acúmulo de água no fundo pode apodrecer as raízes.</p>
     </div>
 
+    <div class="tip-card">
+        <h2>🌱 Substrato</h2>
+        <p>Use uma mistura leve e porosa. Areia grossa e carvão triturado são ótimos aliados para garantir que a água passe rápido pelas raízes.</p>
+    </div>
 </div>
 
 <footer>
-    <img src="logo.png" class="footer-logo" onerror="this.style.display='none'">
-    <p><strong>Gravatá RD</strong> - Paixão por Rosas do Deserto</p>
-    <p style="font-size: 11px; margin-top: 10px;">&copy; 2026 Todos os direitos reservados.</p>
+    <div class="footer-stripe-white"><img src="logo.png" class="footer-logo"></div>
+    <div class="footer-content">
+        <div class="footer-info">
+            <p><strong>Gravatá RD</strong> - Rosas do Deserto</p>
+            <p style="margin-top: 10px; font-size: 10px; opacity: 0.6;">&copy; <span id="year"></span> TODOS OS DIREITOS RESERVADOS.</p>
+        </div>
+    </div>
 </footer>
+
+<script>
+    function toggleMenu() { document.getElementById("navLinks").classList.toggle("active"); }
+    document.getElementById('year').textContent = new Date().getFullYear();
+</script>
 
 </body>
 </html>
