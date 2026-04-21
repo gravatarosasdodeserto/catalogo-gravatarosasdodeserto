@@ -246,6 +246,42 @@
         .sticky-controls { top: calc(320px + 55px) !important; }
     }
         
+    /* Ajustes da barra superior */
+    .site-nav {
+        background: #ffffff;
+        width: 100%; height: 55px;
+        position: fixed; top: 0; left: 0;
+        z-index: 9000;
+        display: flex; align-items: center; justify-content: center;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .nav-inner { width: 92%; display: flex; justify-content: space-between; align-items: center; }
+    .nav-brand { font-weight: 600; font-size: 14px; color: #2e2a15; letter-spacing: 1px; }
+
+    /* Botão Sanduíche */
+    .menu-btn { background: none; border: none; cursor: pointer; display: flex; flex-direction: column; gap: 4px; }
+    .bar { width: 22px; height: 2px; background: #2e2a15; border-radius: 2px; }
+
+    /* Menu Lateral (Drawer) */
+    .side-menu {
+        position: fixed; top: 0; right: -280px; /* Começa fora da tela */
+        width: 280px; height: 100%;
+        background: #2e2a15; /* Cor escura premium */
+        z-index: 10000;
+        transition: 0.3s ease;
+        padding: 20px;
+    }
+    .side-menu.active { right: 0; }
+    .side-menu-header { display: flex; justify-content: space-between; align-items: center; color: white; font-size: 12px; margin-bottom: 30px; border-bottom: 1px solid #444; padding-bottom: 10px; }
+    .side-links { display: flex; flex-direction: column; gap: 20px; }
+    .side-links a { color: white; text-decoration: none; font-size: 14px; font-weight: 400; }
+
+    /* Fundo escurecido ao abrir o menu */
+    .menu-overlay {
+        position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+        display: none; z-index: 9500;
+    }
+    .menu-overlay.active { display: block; }
     
     </style>
     
@@ -443,7 +479,13 @@
         if(chk) chk.checked = false;
         filtrar();
     }
+    
+    function toggleMenu() {
+    document.getElementById('sideMenu').classList.toggle('active');
+    document.getElementById('menuOverlay').classList.toggle('active');
+    }
 
+    
     function renderSkeleton() { document.getElementById('grid').innerHTML = Array(8).fill('<div style="height:180px; background:#eee; border-radius:12px"></div>').join(''); }
 
     function render(lista) {
