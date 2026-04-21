@@ -20,9 +20,11 @@
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+    
+    /* CORREÇÃO: O padding-top compensa a altura da barra fixa */
     body { background: var(--bg); color: var(--text-primary); min-height: 100vh; padding-top: 55px; }
 
-    /* Menu Superior Fixo */
+    /* NOVA BARRA DE TAREFAS SUPERIOR */
     .site-nav {
         background: #ffffff;
         width: 100%; height: 55px;
@@ -39,7 +41,7 @@
         font-weight: 700; display: flex; align-items: center; gap: 6px;
     }
 
-    /* Header e Banner */
+    /* Header e Banner - AJUSTADO PARA FICAR ABAIXO DA NAV */
     header { 
         height: 150px; 
         background: url('imagens/gravata-cabecalho.webp') center 15% / cover no-repeat;
@@ -52,7 +54,7 @@
     }
     .logo { width: 140px; }
 
-    /* Controles e Filtros */
+    /* Controles e Filtros - AJUSTADO PARA FICAR ABAIXO DO HEADER */
     .sticky-controls {
         position: sticky; top: calc(150px + 55px) !important; z-index: 2000;
         background: var(--bg); width: 100%; box-shadow: 0 4px 10px rgba(0,0,0,0.05);
@@ -66,7 +68,6 @@
     .search-area { padding: 15px 10px; text-align: center; background: var(--bg); }
     .search-box { width: 90%; max-width: 450px; padding: 10px 20px; border-radius: 50px; border: 1px solid var(--border); outline: none; text-align: center; }
     
-    /* Grid e Cards */
     .catalog-container { padding: 20px 2% 160px; }
     #grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px; }
     .card { background: white; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border); transition: 0.3s; cursor: pointer; }
@@ -76,7 +77,6 @@
     .card img.loaded { opacity: 1; }
     .card-body { padding: 10px; text-align: center; }
 
-    /* WhatsApp Flutuante */
     #btn-whatsapp { 
         position: fixed; bottom: 0; left: 0; width: 100%;
         background: linear-gradient(135deg, #a08c6b 0%, #7d6e53 50%, #63563d 100%);
@@ -96,12 +96,10 @@
         50% { transform: scaleX(-1) scale(1.3); opacity: 1; text-shadow: 0 0 10px white; }
     }
 
-    /* Rodapé */
     footer { background: #2e2a15; color: white; text-align: center; }
     .footer-stripe-white { background: rgba(255, 255, 255, 0.95); width: 100%; padding: 20px 0; margin-bottom: 20px; border-bottom: 2px solid var(--accent); display: flex; justify-content: center; }
     .footer-logo { width: 120px; }
 
-    /* Drawer (Menu Lateral de Filtros) */
     .drawer { 
         position: fixed; top: 0; right: -320px; width: 300px; height: 100%; 
         background: var(--bg); z-index: 10000; transition: 0.4s; padding: 20px; 
