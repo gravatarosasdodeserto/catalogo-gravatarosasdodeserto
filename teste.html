@@ -192,6 +192,42 @@
 
     .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); display: none; z-index: 5500; }
     .overlay.active { display: block; }
+
+  /* Barra de Pesquisa */
+  .search-box {
+    display: flex;
+    align-items: center;
+    background: #f1f1f1;
+    padding: 5px 10px;
+    border-radius: 20px;
+    margin: 10px;
+  }
+  .search-box input {
+    border: none;
+    background: transparent;
+    outline: none;
+    padding: 5px;
+    width: 100%;
+  }
+
+  /* Menu Hamburguer para Celular */
+  .menu-toggle {
+    display: none;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 10px;
+  }
+
+  @media (max-width: 768px) {
+    .menu-toggle { display: block; }
+    .nav-links {
+      display: none; /* Esconde por padrão no mobile */
+      flex-direction: column;
+      width: 100%;
+    }
+    .nav-links.active { display: flex; }
+  }
+
 </style>
     
 </head>
