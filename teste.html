@@ -311,12 +311,22 @@
             btn.style.display = 'none';
         }
     }
-    function toggleSelect(id) {
+        function toggleSelect(id) {
+        // 1. Marca ou desmarca a ID
         SELECIONADOS.has(id) ? SELECIONADOS.delete(id) : SELECIONADOS.add(id);
+        
         const card = document.getElementById(`card-${id}`);
         if(card) card.classList.toggle('selected');
+
+        // 2. A MÁGICA: Se ele acabou de selecionar (adicionar), limpamos a busca
+        if (SELECIONADOS.has(id)) {
+            document.getElementById('search').value = ""; // Apaga o texto digitado
+        }
+
+        // 3. Atualiza a tela (isso fará a lista completa reaparecer se a busca foi limpa)
         filtrar();
     }
+
 
     function removerFiltro(cat, val) {
         const chk = document.querySelector(`.chk-f[data-cat="${cat}"][value="${val}"]`);
