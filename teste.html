@@ -269,7 +269,7 @@
 
     function atualizarPaineis(ativos) {
         let hSel = "";
-        SELECIONADOS.forEach(id => hSel += `<div class="chip">${id} <span onclick="toggleSelect('${id}')">&times;</span></div>`);
+        SELECIONADOS.forEach(id => hSel += `<div class="chip chip-id">${id} <span onclick="toggleSelect('${id}')">&times;</span></div>`);
         document.getElementById('selection-chips').innerHTML = hSel;
         document.getElementById('selection-panel').style.display = SELECIONADOS.size > 0 ? 'block' : 'none';
 
@@ -280,12 +280,19 @@
 
         const btn = document.getElementById('btn-whatsapp');
         const txtBtn = document.getElementById('txt-whatsapp');
-        btn.style.display = SELECIONADOS.size > 0 ? 'flex' : 'none';
+        
         if (SELECIONADOS.size > 0) {
-            txtBtn.innerText = SELECIONADOS.size === 1 ? `CONSULTAR ID ${Array.from(SELECIONADOS)[0]}` : `CONSULTAR ${SELECIONADOS.size} ID'S`;
+            btn.style.display = 'flex';
+            if (SELECIONADOS.size === 1) {
+                const idUnica = Array.from(SELECIONADOS)[0];
+                txtBtn.innerText = `CONSULTAR DISPONIBILIDADE E PREÇO DA ${idUnica}`;
+            } else {
+                txtBtn.innerText = `CONSULTAR DISPONIBILIDADE E PREÇOS DAS ${SELECIONADOS.size} ID'S SELECIONADAS`;
+            }
+        } else {
+            btn.style.display = 'none';
         }
     }
-
     function toggleSelect(id) {
         SELECIONADOS.has(id) ? SELECIONADOS.delete(id) : SELECIONADOS.add(id);
         const card = document.getElementById(`card-${id}`);
