@@ -33,12 +33,22 @@
         box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     }
     .nav-inner { width: 92%; display: flex; justify-content: space-between; align-items: center; }
+    
+    /* Ajuste para o Mini Logo ao lado do texto */
+    .nav-brand-container { display: flex; align-items: center; gap: 8px; text-decoration: none; }
+    .mini-logo {
+    height: 32px;
+    width: 32px; /* Força o formato quadrado */
+    object-fit: contain;
+    border-radius: 6px; /* Dá um toque de acabamento suave nos cantos */
+}
     .nav-brand { font-weight: 600; font-size: 16px; color: var(--text-primary); letter-spacing: 1px; }
+
     .nav-links { display: flex; list-style: none; gap: 20px; }
     .nav-links a { text-decoration: none; color: var(--text-primary); font-size: 13px; font-weight: 500; }
     .menu-toggle { display: none; font-size: 24px; cursor: pointer; }
 
-    /* HEADER COM TRANSIÇÃO PARA SUMIR */
+    /* HEADER COM TRANSIÇÃO */
     header { 
         height: 150px; 
         background: url('imagens/gravata-cabecalho.webp') center 15% / cover no-repeat;
@@ -47,19 +57,16 @@
         transition: all 0.3s ease;
         overflow: hidden;
     }
-    /* Classe para esconder o cabeçalho */
     header.hidden { height: 0; opacity: 0; pointer-events: none; }
-
     .header-stripe { width: 100%; background: rgba(255, 255, 255, 0.4); padding: 10px 0; display: flex; justify-content: center; }
     .logo { width: 140px; }
 
-    /* CONTROLES STICKY AJUSTÁVEIS */
+    /* CONTROLES STICKY */
     .sticky-controls {
         position: sticky; top: 60px; z-index: 2000;
         background: var(--bg); width: 100%; box-shadow: 0 4px 10px rgba(0,0,0,0.05);
         transition: top 0.3s ease;
     }
-    /* Quando o header está visível, os controles ficam abaixo dele */
     header:not(.hidden) + .welcome-section + .sticky-controls { top: calc(150px + 60px); }
 
     @media (min-width: 1024px) { 
@@ -68,9 +75,8 @@
         header:not(.hidden) + .welcome-section + .sticky-controls { top: calc(320px + 60px); }
     }
 
-    /* Outros estilos */
     .welcome-section { padding: 30px 20px; text-align: center; background: white; border-bottom: 1px solid var(--border); transition: 0.3s; }
-    .welcome-section.hidden { display: none; } /* Opcional: esconder o texto de boas-vindas também */
+    .welcome-section.hidden { display: none; } 
     
     .top-nav { background: #2e2a15; padding: 10px; display: flex; justify-content: center; }
     .btn-filter { background: var(--premium-grad); color: white; border: none; padding: 10px 25px; border-radius: 50px; font-size: 11px; font-weight: 700; text-transform: uppercase; cursor: pointer; }
@@ -124,7 +130,10 @@
 
 <nav class="site-nav">
     <div class="nav-inner">
-        <span class="nav-brand">GRAVATÁ RD</span>
+        <a href="index.html" class="nav-brand-container">
+    <img src="favicon.png" alt="Logo" class="mini-logo" onerror="this.style.display='none'">
+    <span class="nav-brand">GRAVATÁ RD</span>
+</a>
         <div class="menu-toggle" onclick="toggleMenu()">&#9776;</div>
         <ul class="nav-links" id="navLinks">
             <li><a href="index.html">Início</a></li>
@@ -233,7 +242,6 @@
         const busca = removerAcentos(document.getElementById('search').value);
         const ativos = obterFiltrosAtivos();
         
-        // --- NOVA LÓGICA PARA SUMIR O CABEÇALHO ---
         const temFiltroAtivo = Object.keys(ativos).length > 0 || busca.length > 0;
         const temSelecao = SELECIONADOS.size > 0;
         const header = document.getElementById('site-header');
@@ -246,7 +254,6 @@
             header.classList.remove('hidden');
             welcome.classList.remove('hidden');
         }
-        // ------------------------------------------
 
         const res = BANCO.filter(item => {
             const matchBusca = removerAcentos(item.id).includes(busca);
@@ -273,19 +280,17 @@
 
         const btn = document.getElementById('btn-whatsapp');
         const txtBtn = document.getElementById('txt-whatsapp');
-        btn.style.display = temSelecao() ? 'flex' : 'none';
-        if (temSelecao()) {
+        btn.style.display = SELECIONADOS.size > 0 ? 'flex' : 'none';
+        if (SELECIONADOS.size > 0) {
             txtBtn.innerText = SELECIONADOS.size === 1 ? `CONSULTAR ID ${Array.from(SELECIONADOS)[0]}` : `CONSULTAR ${SELECIONADOS.size} ID'S`;
         }
     }
-
-    function temSelecao() { return SELECIONADOS.size > 0; }
 
     function toggleSelect(id) {
         SELECIONADOS.has(id) ? SELECIONADOS.delete(id) : SELECIONADOS.add(id);
         const card = document.getElementById(`card-${id}`);
         if(card) card.classList.toggle('selected');
-        filtrar(); // Chama o filtrar para atualizar o estado do header
+        filtrar();
     }
 
     function removerFiltro(cat, val) {
