@@ -202,6 +202,7 @@
     <span class="seta-animada inverter">»</span>
 </a>
 
+
 <footer>
     <div class="footer-stripe-white"><img src="logo.png" class="footer-logo"></div>
     <div class="footer-content">
@@ -285,7 +286,7 @@
         render(res);
     }
 
-    function atualizarPaineis(ativos) {
+        function atualizarPaineis(ativos) {
         let hSel = "";
         SELECIONADOS.forEach(id => hSel += `<div class="chip chip-id">${id} <span onclick="toggleSelect('${id}')">&times;</span></div>`);
         document.getElementById('selection-chips').innerHTML = hSel;
@@ -303,14 +304,17 @@
             btn.style.display = 'flex';
             if (SELECIONADOS.size === 1) {
                 const idUnica = Array.from(SELECIONADOS)[0];
+                // MANTIDO SEU TEXTO ORIGINAL
                 txtBtn.innerText = `CONSULTAR DISPONIBILIDADE E PREÇO DA ${idUnica}`;
             } else {
+                // MANTIDO SEU TEXTO ORIGINAL
                 txtBtn.innerText = `CONSULTAR DISPONIBILIDADE E PREÇOS DAS ${SELECIONADOS.size} ID'S SELECIONADAS`;
             }
         } else {
             btn.style.display = 'none';
         }
     }
+
         function toggleSelect(id) {
         // 1. Marca ou desmarca a ID
         SELECIONADOS.has(id) ? SELECIONADOS.delete(id) : SELECIONADOS.add(id);
