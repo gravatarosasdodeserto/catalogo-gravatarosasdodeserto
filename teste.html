@@ -336,48 +336,28 @@
     const RESULTS_COUNTER = document.getElementById('results-counter');
 
     async function carregar() {
-    try {
-        renderSkeleton();
-        const r = await fetch(`${API}?action=get&t=${Date.now()}`);
-        const json = await r.json();
-        BANCO = Object.keys(json).map(id => ({ id, ...json[id] }));
-        gerarFiltros();
-        filtrar();
-        
-        // --- ADICIONE ESTA LINHA ABAIXO ---
-        verificarParametroURL();
-        
-    } catch (e) { console.error(e); }
-}
-
+        try {
+            renderSkeleton();
+            const r = await fetch(`${API}?action=get&t=${Date.now()}`);
+            const json = await r.json();
+            BANCO = Object.keys(json).map(id => ({ id, ...json[id] }));
+            gerarFiltros();
+            filtrar();
+            verificarParametroURL();
+        } catch (e) { console.error(e); }
+    }
 
     function removerAcentos(str) { return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase(); }
 
-            function gerarFiltros() {
-        // Adicionado 'especiais' aqui para aparecer no menu
-        const cats = { 
-            cores: 'Cores Presentes', 
-            camadas: 'Número de Camadas', 
-            padrao: 'Padrão das Pétalas',
-            especiais: 'Categorias Especiais' 
-        };
-        
+    function gerarFiltros() {
+        const cats = { cores: 'Cores Presentes', camadas: 'Número de Camadas', padrao: 'Padrão das Pétalas', especiais: 'Categorias Especiais' };
         let html = "";
         Object.keys(cats).forEach(cat => {
-            // Coleta os valores únicos de cada coluna
-            let opts = [...new Set(BANCO.flatMap(i => i[cat] ? i[cat].split(',').map(s => s.trim()) : []))]
-                .filter(o => o !== "" && o !== null) // Remove valores vazios
-                .sort();
-
+            let opts = [...new Set(BANCO.flatMap(i => i[cat] ? i[cat].split(',').map(s => s.trim()) : []))].filter(o => o).sort();
             if(opts.length > 0) {
-                html += `<div class="filter-section"><h4>${cats[cat]}</h4>`;
-                html += `<div class="options-grid">`; 
+                html += `<div class="filter-section"><h4>${cats[cat]}</h4><div class="options-grid">`;
                 opts.forEach(o => {
-                    html += `
-                        <label class="option-item">
-                            <input type="checkbox" class="chk-f" data-cat="${cat}" value="${o}" onchange="filtrar()"> 
-                            <span>${o}</span>
-                        </label>`;
+                    html += `<label class="option-item"><input type="checkbox" class="chk-f" data-cat="${cat}" value="${o}" onchange="filtrar()"><span>${o}</span></label>`;
                 });
                 html += `</div></div>`;
             }
@@ -385,14 +365,9 @@
         document.getElementById('filtros-container').innerHTML = html;
     }
 
-
     function filtrar() {
         const busca = removerAcentos(document.getElementById('search').value);
-        const ativos = {};
-        document.querySelectorAll('.chk-f:checked').forEach(c => {
-            if(!ativos[c.dataset.cat]) ativos[c.dataset.cat] = [];
-            ativos[c.dataset.cat].push(c.value);
-        });
+        const ativos = obterFiltrosAtivos();
         const res = BANCO.filter(item => {
             const matchBusca = removerAcentos(item.id).includes(busca);
             const matchFiltros = Object.keys(ativos).every(cat => {
@@ -401,18 +376,12 @@
             });
             return matchBusca && matchFiltros;
         });
-
-        // MODIFICAÇÃO: Subir a tela imediatamente se houver busca ou filtros
-        if(busca.length > 0 || Object.keys(ativos).length > 0) {
-            document.documentElement.scrollTop = 0; // Força para o topo real da página
-            document.body.scrollTop = 0; // Para navegadores Safari
-        }
-
+        if(busca.length > 0 || Object.keys(ativos).length > 0) window.scrollTo(0, 0);
         atualizarPaineis(ativos);
         render(res);
     }
 
-function atualizarPaineis(ativos) {
+    function atualizarPaineis(ativos) {
         let hSel = "";
         SELECIONADOS.forEach(id => hSel += `<div class="chip chip-id">${id} <span onclick="toggleSelect('${id}')">&times;</span></div>`);
         document.getElementById('selection-chips').innerHTML = hSel;
@@ -425,64 +394,34 @@ function atualizarPaineis(ativos) {
 
         const btn = document.getElementById('btn-whatsapp');
         const txtBtn = document.getElementById('txt-whatsapp');
-        
         if (SELECIONADOS.size > 0) {
             btn.style.display = 'flex';
-            if (SELECIONADOS.size === 1) {
-                const idUnica = Array.from(SELECIONADOS)[0];
-                txtBtn.innerText = `CONSULTAR DISPONIBILIDADE E PREÇO DA ${idUnica}`;
-            } else {
-                txtBtn.innerText = `CONSULTAR DISPONIBILIDADE E PREÇOS DAS ${SELECIONADOS.size} ID'S SELECIONADAS`;
-            }
-        } else {
-            btn.style.display = 'none';
-        }
-    }
-
-    function removerFiltro(cat, val) {
-        const chk = document.querySelector(`.chk-f[data-cat="${cat}"][value="${val}"]`);
-        if(chk) chk.checked = false;
-        filtrar();
-    }
-
-    function renderSkeleton() {
-        document.getElementById('grid').innerHTML = Array(8).fill('<div style="height:180px; background:#eee; border-radius:12px"></div>').join('');
-    }
-
-    function render(lista) {
-        const grid = document.getElementById('grid');
-        
-        if (lista.length === 0) {
-            RESULTS_COUNTER.innerHTML = `Nenhuma ID encontrada`;
-            grid.innerHTML = `<div class="no-results">Desculpe, nenhuma ID corresponde à sua pesquisa.</div>`;
-            return;
-        }
-
-        RESULTS_COUNTER.innerHTML = `Mostrando <strong>${lista.length}</strong> rosas`;
-        grid.innerHTML = lista.map(item => {
-            const isSel = SELECIONADOS.has(item.id) ? 'selected' : '';
-            return `
-                <div id="card-${item.id}" class="card ${isSel}" onclick="toggleSelect('${item.id}')">
-                    <div class="card-img-container">
-                        <img src="${item.midia ? 'https://drive.google.com/thumbnail?sz=w600&id='+item.midia : 'imagens/sem-foto.jpg'}" onload="this.classList.add('loaded')">
-                    </div>
-                    <div class="card-body">
-                        <span class="card-id">${item.id}</span>
-                    </div>
-                </div>`;
-        }).join('');
+            txtBtn.innerText = SELECIONADOS.size === 1 ? `CONSULTAR DISPONIBILIDADE DA ${Array.from(SELECIONADOS)[0]}` : `CONSULTAR ${SELECIONADOS.size} ID'S SELECIONADAS`;
+        } else { btn.style.display = 'none'; }
     }
 
     function toggleSelect(id) {
-        const cardElement = document.getElementById(`card-${id}`);
-        if(SELECIONADOS.has(id)) {
-            SELECIONADOS.delete(id);
-            if (cardElement) cardElement.classList.remove('selected');
-        } else {
-            SELECIONADOS.add(id);
-            if (cardElement) cardElement.classList.add('selected');
-        }
-        atualizarPaineis(obterFiltrosAtivos()); 
+        SELECIONADOS.has(id) ? SELECIONADOS.delete(id) : SELECIONADOS.add(id);
+        const card = document.getElementById(`card-${id}`);
+        if(card) card.classList.toggle('selected');
+        atualizarPaineis(obterFiltrosAtivos());
+    }
+
+    function enviarWhatsApp(e) {
+        e.preventDefault();
+        const ids = Array.from(SELECIONADOS);
+        if (ids.length === 0) return;
+        const lista = ids.map(id => `*${id}*`).join(', ').replace(/, ([^,]*)$/, ' e $1');
+        const msg = encodeURIComponent(`Olá Pedro! Tenho interesse ${ids.length === 1 ? 'na' : 'nas'} ID's: ${lista}. Estão disponíveis?`);
+        window.open(`https://wa.me/${WHATSAPP}?text=${msg}`, '_blank');
+    }
+
+    function verificarParametroURL() {
+        const id = new URLSearchParams(window.location.search).get('id');
+        if (id) setTimeout(() => {
+            const el = document.getElementById(`card-${id}`);
+            if (el) { el.scrollIntoView({ behavior: 'smooth', block: 'center' }); toggleSelect(id); }
+        }, 800);
     }
 
     function obterFiltrosAtivos() {
@@ -494,38 +433,36 @@ function atualizarPaineis(ativos) {
         return ativos;
     }
 
-            function enviarWhatsApp(e) {
-        e.preventDefault();
-        const ids = Array.from(SELECIONADOS);
-        if (ids.length === 0) return;
-
-        const listaFormatada = ids.map(id => `*${id}*`).join(', ').replace(/, ([^,]*)$/, ' e $1');
-        const saudacao = "Olá Pedro! Vi seu catálogo e tenho interesse ";
-        const mensagem = encodeURIComponent(`${saudacao} ${ids.length === 1 ? 'na' : 'nas'} ID's: ${listaFormatada}. Estão disponíveis?`);
-        
-        window.open(`https://wa.me/${WHATSAPP}?text=${mensagem}`, '_blank');
-    }
-
-    function toggleDrawer() {
+    function toggleDrawer() { 
         document.getElementById('drawer').classList.toggle('active');
         document.querySelector('.overlay').classList.toggle('active');
     }
 
-    function verificarParametroURL() {
-        const params = new URLSearchParams(window.location.search);
-        const idParaAbrir = params.get('id');
-        if (idParaAbrir) {
-            setTimeout(() => {
-                const card = document.getElementById(`card-${idParaAbrir}`);
-                if (card) {
-                    card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    toggleSelect(idParaAbrir);
-                }
-            }, 800);
-        }
+    function removerFiltro(cat, val) {
+        const chk = document.querySelector(`.chk-f[data-cat="${cat}"][value="${val}"]`);
+        if(chk) chk.checked = false;
+        filtrar();
     }
 
-    // Inicialização
+    function renderSkeleton() { document.getElementById('grid').innerHTML = Array(8).fill('<div style="height:180px; background:#eee; border-radius:12px"></div>').join(''); }
+
+    function render(lista) {
+        const grid = document.getElementById('grid');
+        if (lista.length === 0) {
+            RESULTS_COUNTER.innerHTML = `Nenhuma ID encontrada`;
+            grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 50px; color: #7d6e53;">Nenhuma ID corresponde aos filtros.</div>`;
+            return;
+        }
+        RESULTS_COUNTER.innerHTML = `Mostrando <strong>${lista.length}</strong> rosas`;
+        grid.innerHTML = lista.map(item => `
+            <div id="card-${item.id}" class="card ${SELECIONADOS.has(item.id) ? 'selected' : ''}" onclick="toggleSelect('${item.id}')">
+                <div class="card-img-container">
+                    <img src="${item.midia ? 'https://drive.google.com/thumbnail?sz=w600&id='+item.midia : 'imagens/sem-foto.jpg'}" onload="this.classList.add('loaded')">
+                </div>
+                <div class="card-body"><span class="card-id">${item.id}</span></div>
+            </div>`).join('');
+    }
+
     document.getElementById('year').textContent = new Date().getFullYear();
     carregar();
 </script>
