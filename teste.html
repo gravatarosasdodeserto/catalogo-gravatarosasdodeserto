@@ -327,8 +327,7 @@
     function enviarWhatsApp(e) {
         e.preventDefault();
         const ids = Array.from(SELECIONADOS);
-        const msg = encodeURIComponent(`Olá Pedro! Tenho interesse nas ID's: ${ids.join(', ')}. Estão disponíveis?`);
-        window.open(`https://wa.me/${WHATSAPP}?text=${msg}`, '_blank');
+        const msg = encodeURIComponent(`Olá Pedro! Tenho interesse nas ID's: ${ids.join(', ')}. Estão disponíveis?`);        window.open(`https://wa.me/${WHATSAPP}?text=${msg}`, '_blank');
     }
 
     function verificarParametroURL() {
