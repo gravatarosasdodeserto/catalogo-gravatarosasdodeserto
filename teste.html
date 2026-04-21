@@ -21,15 +21,15 @@
 
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
     
-    /* CORREÇÃO: O padding-top compensa a altura da barra fixa */
+    /* Ajuste no body para a barra fixa não cobrir o conteúdo */
     body { background: var(--bg); color: var(--text-primary); min-height: 100vh; padding-top: 55px; }
 
-    /* NOVA BARRA DE TAREFAS SUPERIOR */
+    /* BARRA SUPERIOR FIXA */
     .site-nav {
         background: #ffffff;
         width: 100%; height: 55px;
         position: fixed; top: 0; left: 0;
-        z-index: 9000;
+        z-index: 9999; /* Camada mais alta de todas */
         display: flex; align-items: center; justify-content: center;
         box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
@@ -41,22 +41,25 @@
         font-weight: 700; display: flex; align-items: center; gap: 6px;
     }
 
-    /* Header e Banner - AJUSTADO PARA FICAR ABAIXO DA NAV */
+    /* Header Sticky ajustado para a nova altura */
     header { 
         height: 150px; 
         background: url('imagens/gravata-cabecalho.webp') center 15% / cover no-repeat;
         display: flex; align-items: center; justify-content: center;
-        position: sticky; top: 55px !important; z-index: 3000;
+        position: sticky; top: 55px; /* Gruda logo abaixo da nav */
+        z-index: 3000;
     }
     .header-stripe {
         width: 100%; background: rgba(255, 255, 255, 0.4); 
-        padding: 10px 0; display: flex; justify-content: center; position: relative;
+        padding: 10px 0; display: flex; justify-content: center;
     }
     .logo { width: 140px; }
 
-    /* Controles e Filtros - AJUSTADO PARA FICAR ABAIXO DO HEADER */
+    /* Controles de busca e filtro Sticky */
     .sticky-controls {
-        position: sticky; top: calc(150px + 55px) !important; z-index: 2000;
+        position: sticky; 
+        top: calc(150px + 55px); /* Altura do header + altura da nav */
+        z-index: 2000;
         background: var(--bg); width: 100%; box-shadow: 0 4px 10px rgba(0,0,0,0.05);
     }
     .top-nav { background: #2e2a15; padding: 10px; display: flex; justify-content: center; }
@@ -68,6 +71,7 @@
     .search-area { padding: 15px 10px; text-align: center; background: var(--bg); }
     .search-box { width: 90%; max-width: 450px; padding: 10px 20px; border-radius: 50px; border: 1px solid var(--border); outline: none; text-align: center; }
     
+    /* Grid e Cards */
     .catalog-container { padding: 20px 2% 160px; }
     #grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px; }
     .card { background: white; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border); transition: 0.3s; cursor: pointer; }
@@ -77,11 +81,12 @@
     .card img.loaded { opacity: 1; }
     .card-body { padding: 10px; text-align: center; }
 
+    /* Botão WhatsApp Inferior */
     #btn-whatsapp { 
         position: fixed; bottom: 0; left: 0; width: 100%;
         background: linear-gradient(135deg, #a08c6b 0%, #7d6e53 50%, #63563d 100%);
         color: white; border: none; padding: 18px 10px; font-size: 12px; font-weight: 700;
-        text-decoration: none; z-index: 5000; box-shadow: 0 -8px 25px rgba(0,0,0,0.3);
+        text-decoration: none; z-index: 8000; box-shadow: 0 -8px 25px rgba(0,0,0,0.3);
         display: none; justify-content: space-between; align-items: center;
     }
     .seta-animada { font-size: 22px; padding: 0 15px; animation: pulsarSeta 1.5s infinite ease-in-out; }
@@ -96,10 +101,12 @@
         50% { transform: scaleX(-1) scale(1.3); opacity: 1; text-shadow: 0 0 10px white; }
     }
 
+    /* Rodapé */
     footer { background: #2e2a15; color: white; text-align: center; }
     .footer-stripe-white { background: rgba(255, 255, 255, 0.95); width: 100%; padding: 20px 0; margin-bottom: 20px; border-bottom: 2px solid var(--accent); display: flex; justify-content: center; }
     .footer-logo { width: 120px; }
 
+    /* Menu Lateral de Filtros */
     .drawer { 
         position: fixed; top: 0; right: -320px; width: 300px; height: 100%; 
         background: var(--bg); z-index: 10000; transition: 0.4s; padding: 20px; 
@@ -117,7 +124,7 @@
     @media (min-width: 1024px) { 
         header { height: 320px; } 
         .logo { width: 240px; } 
-        .sticky-controls { top: calc(320px + 55px) !important; }
+        .sticky-controls { top: calc(320px + 55px); }
     }
 </style>
     
@@ -150,12 +157,6 @@
         <div class="search-area">
             <input type="text" id="search" class="search-box" placeholder="Pesquisar por ID..." oninput="filtrar()">
             <div id="results-counter" style="font-size: 11px; color: var(--text-secondary); margin-top: 8px;">Sincronizando...</div>
-        </div>
-        <div id="filter-panel" style="display:none; padding: 8px 0; background: var(--bg); border-bottom: 1px solid var(--border);">
-            <div id="filter-chips" style="display: flex; flex-wrap: wrap; gap: 6px; justify-content: center;"></div>
-        </div>
-        <div id="selection-panel" style="display:none; padding: 8px 0; background: var(--bg); border-bottom: 1px solid var(--border);">
-            <div id="selection-chips" style="display: flex; flex-wrap: wrap; gap: 6px; justify-content: center;"></div>
         </div>
     </div>
 
@@ -244,8 +245,6 @@
         if (SELECIONADOS.size > 0) {
             txtBtn.innerText = SELECIONADOS.size === 1 ? `CONSULTAR ID ${Array.from(SELECIONADOS)[0]}` : `CONSULTAR ${SELECIONADOS.size} ID'S SELECIONADAS`;
         }
-        document.getElementById('selection-panel').style.display = SELECIONADOS.size > 0 ? 'block' : 'none';
-        document.getElementById('filter-panel').style.display = Object.keys(ativos).length > 0 ? 'block' : 'none';
     }
 
     function toggleSelect(id) {
@@ -293,5 +292,5 @@
     document.getElementById('year').textContent = new Date().getFullYear();
     carregar();
 </script>
-    </body>
+</body>
 </html>
