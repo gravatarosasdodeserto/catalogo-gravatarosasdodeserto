@@ -259,33 +259,32 @@
     }
 
     function filtrar() {
-        const busca = removerAcentos(document.getElementById('search').value);
-        const ativos = obterFiltrosAtivos();
-        
-        const temFiltroAtivo = Object.keys(ativos).length > 0 || busca.length > 0;
-        const temSelecao = SELECIONADOS.size > 0;
-        const header = document.getElementById('site-header');
-        const welcome = document.getElementById('welcome-text');
+    const busca = removerAcentos(document.getElementById('search').value);
+    const ativos = obterFiltrosAtivos();
+    
+    const header = document.getElementById('site-header');
+    const welcome = document.getElementById('welcome-text');
 
-        if (temFiltroAtivo || temSelecao) {
-            header.classList.add('hidden');
-            welcome.classList.add('hidden');
-        } else {
-            header.classList.remove('hidden');
-            welcome.classList.remove('hidden');
-        }
-
-        const res = BANCO.filter(item => {
-            const matchBusca = removerAcentos(item.id).includes(busca);
-            const matchFiltros = Object.keys(ativos).every(cat => {
-                const vItem = (item[cat] || "").split(',').map(s => s.trim());
-                return ativos[cat].some(a => vItem.includes(a));
-            });
-            return matchBusca && matchFiltros;
-        });
-        atualizarPaineis(ativos);
-        render(res);
+    if (Object.keys(ativos).length > 0 || busca.length > 0 || SELECIONADOS.size > 0) {
+        header.classList.add('hidden');
+        welcome.classList.add('hidden');
+    } else {
+        header.classList.remove('hidden');
+        welcome.classList.remove('hidden');
     }
+
+    const res = BANCO.filter(item => {
+        const matchBusca = removerAcentos(item.id).includes(busca);
+        const matchFiltros = Object.keys(ativos).every(cat => {
+            const vItem = (item[cat] || "").split(',').map(s => s.trim());
+            return ativos[cat].some(a => vItem.includes(a));
+        });
+        return matchBusca && matchFiltros;
+    });
+
+    atualizarPaineis(ativos);
+    render(res); // O render só acontece aqui (na busca ou filtro)
+}
 
         function atualizarPaineis(ativos) {
     let hSel = "";
@@ -316,21 +315,35 @@
 
 
         function toggleSelect(id) {
-        // 1. Marca ou desmarca a ID
-        SELECIONADOS.has(id) ? SELECIONADOS.delete(id) : SELECIONADOS.add(id);
-        
-        const card = document.getElementById(`card-${id}`);
-        if(card) card.classList.toggle('selected');
-
-        // 2. A MÁGICA: Se ele acabou de selecionar (adicionar), limpamos a busca
-        if (SELECIONADOS.has(id)) {
-            document.getElementById('search').value = ""; // Apaga o texto digitado
-        }
-
-        // 3. Atualiza a tela (isso fará a lista completa reaparecer se a busca foi limpa)
-        filtrar();
+    // 1. Marca ou desmarca a ID no conjunto de selecionados
+    SELECIONADOS.has(id) ? SELECIONADOS.delete(id) : SELECIONADOS.add(id);
+    
+    // 2. Atualiza visualmente APENAS o card clicado, sem recarregar o grid
+    const card = document.getElementById(`card-${id}`);
+    if(card) {
+        card.classList.toggle('selected');
     }
 
+    // 3. Se selecionou, limpa o campo de busca (opcional, conforme sua lógica anterior)
+    if (SELECIONADOS.has(id)) {
+        document.getElementById('search').value = "";
+    }
+
+    // 4. Atualiza apenas os textos e filtros, sem redesenhar as imagens
+    const ativos = obterFiltrosAtivos();
+    atualizarPaineis(ativos);
+    
+    // Mostra/Esconde o header conforme a necessidade
+    const header = document.getElementById('site-header');
+    const welcome = document.getElementById('welcome-text');
+    if (SELECIONADOS.size > 0 || document.getElementById('search').value.length > 0 || Object.keys(ativos).length > 0) {
+        header.classList.add('hidden');
+        welcome.classList.add('hidden');
+    } else {
+        header.classList.remove('hidden');
+        welcome.classList.remove('hidden');
+    }
+}
 
     function removerFiltro(cat, val) {
         const chk = document.querySelector(`.chk-f[data-cat="${cat}"][value="${val}"]`);
