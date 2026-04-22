@@ -111,26 +111,68 @@
 
 <div class="content-container">
 
-    <div class="fase-indicador">Fase 01: Do Pólen à Muda</div>
+    <div class="fase-indicador">🌱 Para quem está começando</div>
+    <div class="guia-grid">
+        <div class="categoria-bloco">
+            <div class="categoria-titulo">
+                <svg viewBox="0 0 24 24"><path d="M12,3L1,9L12,15L21,10.09V17H23V9M5,13.18V17.18L12,21L19,17.18V13.18L12,17L5,13.18Z" /></svg>
+                Primeiros Passos
+            </div>
+            <div class="lista-temas">
+                <div class="tema-item">
+                    <button class="tema-pergunta" onclick="toggleTema(this)">Ganhei uma RD, e agora? <span>+</span></button>
+                    <div class="tema-conteudo">
+                        <div class="video-container">Vídeo em breve</div>
+                        <div class="texto-dica">Onde colocar, quanto de sol ela precisa e o segredo da rega perfeita para não errar logo de cara.</div>
+                    </div>
+                </div>
+                <div class="tema-item">
+                    <button class="tema-pergunta" onclick="toggleTema(this)">O "Sol é Vida" <span>+</span></button>
+                    <div class="tema-conteudo">
+                        <div class="video-container">Vídeo em breve</div>
+                        <div class="texto-dica">Entenda por que a Rosa do Deserto ama o sol e como evitar que as folhas queimem na mudança de lugar.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="categoria-bloco">
+            <div class="categoria-titulo">
+                <svg viewBox="0 0 24 24"><path d="M2,21H22V19H2V21M12,3L4,11H9V17H15V11H20L12,3Z" /></svg>
+                Água e Comida
+            </div>
+            <div class="lista-temas">
+                <div class="tema-item">
+                    <button class="tema-pergunta" onclick="toggleTema(this)">O Substrato Mágico <span>+</span></button>
+                    <div class="tema-conteudo">
+                        <div class="video-container">Vídeo em breve</div>
+                        <div class="texto-dica">A terra ideal não pode ser "barrenta". Aprenda a mistura que faz a água passar direto e as raízes respirarem.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="fase-indicador">🔬 Para os Curiosos e Aventureiros</div>
     <div class="guia-grid">
         <div class="categoria-bloco">
             <div class="categoria-titulo">
                 <svg viewBox="0 0 24 24"><path d="M12,2L4.5,20.29L5.21,21L12,18L18.79,21L19.5,20.29L12,2Z" /></svg>
-                Polinização e Genética
+                Criando Novas Cores
             </div>
             <div class="lista-temas">
                 <div class="tema-item">
-                    <button class="tema-pergunta" onclick="toggleTema(this)">Técnica de Polinização <span>+</span></button>
+                    <button class="tema-pergunta" onclick="toggleTema(this)">Brincando de Abelha <span>+</span></button>
                     <div class="tema-conteudo">
                         <div class="video-container">Vídeo em breve</div>
-                        <div class="texto-dica">Como realizar o cruzamento manual e garantir a formação de vagens.</div>
+                        <div class="texto-dica">Aprenda a fazer a polinização manual. É mágico ver o nascimento de uma vagem que você mesmo criou!</div>
                     </div>
                 </div>
                 <div class="tema-item">
-                    <button class="tema-pergunta" onclick="toggleTema(this)">Manejo de Vagens <span>+</span></button>
+                    <button class="tema-pergunta" onclick="toggleTema(this)">O Mistério das Sementes <span>+</span></button>
                     <div class="tema-conteudo">
                         <div class="video-container">Vídeo em breve</div>
-                        <div class="texto-dica">Proteção e colheita das sementes no tempo certo.</div>
+                        <div class="texto-dica">Como colher as sementes antes que elas voem e o jeito certo de plantar para ver o "palitinho" brotar.</div>
                     </div>
                 </div>
             </div>
@@ -138,83 +180,34 @@
 
         <div class="categoria-bloco">
             <div class="categoria-titulo">
-                <svg viewBox="0 0 24 24"><path d="M12,6.5A5.5,5.5 0 0,1 17.5,12C17.5,15.04 15.04,17.5 12,17.5C8.96,17.5 6.5,15.04 6.5,12C6.5,8.96 8.96,6.5 12,6.5M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" /></svg>
-                Germinação e Berçário
+                <svg viewBox="0 0 24 24"><path d="M19,3H5C3.89,3 3,3.9 3,5V19C3,20.1 3.89,21 5,21H19C20.11,21 21,20.1 21,19V5C21,3.9 20.11,3 19,3M19,19H5V5H19V19M17,11H13V7H11V11H7V13H11V17H13V13H17V11Z" /></svg>
+                Cirurgias e Curativos
             </div>
             <div class="lista-temas">
                 <div class="tema-item">
-                    <button class="tema-pergunta" onclick="toggleTema(this)">Semeio de Excelência <span>+</span></button>
+                    <button class="tema-pergunta" onclick="toggleTema(this)">Socorro! Meu Caudex murchou <span>+</span></button>
                     <div class="tema-conteudo">
                         <div class="video-container">Vídeo em breve</div>
-                        <div class="texto-dica">Preparo das sementes e o substrato ideal para os primeiros dias.</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="fase-indicador">Fase 02: Manutenção e Saúde</div>
-    <div class="guia-grid">
-        <div class="categoria-bloco">
-            <div class="categoria-titulo">
-                <svg viewBox="0 0 24 24"><path d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" /></svg>
-                Nutrição e Solo
-            </div>
-            <div class="lista-temas">
-                <div class="tema-item">
-                    <button class="tema-pergunta" onclick="toggleTema(this)">Substrato de Performance <span>+</span></button>
-                    <div class="tema-conteudo">
-                        <div class="video-container">Vídeo em breve</div>
-                        <div class="texto-dica">A mistura ideal para drenagem e desenvolvimento radicular.</div>
-                    </div>
-                </div>
-                <div class="tema-item">
-                    <button class="tema-pergunta" onclick="toggleTema(this)">Protocolo de Adubação <span>+</span></button>
-                    <div class="tema-conteudo">
-                        <div class="video-container">Vídeo em breve</div>
-                        <div class="texto-dica">Uso de NPK, Osmocote e adubos orgânicos.</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="categoria-bloco">
-            <div class="categoria-titulo">
-                <svg viewBox="0 0 24 24"><path d="M12,2L1,21H23L12,2M12,6L19.53,19H4.47L12,6M11,10V14H13V10H11M11,16V18H13V16H11Z" /></svg>
-                Saúde e Defesa
-            </div>
-            <div class="lista-temas">
-                <div class="tema-item">
-                    <button class="tema-pergunta" onclick="toggleTema(this)">Controle de Pragas <span>+</span></button>
-                    <div class="tema-conteudo">
-                        <div class="video-container">Vídeo em breve</div>
-                        <div class="texto-dica">Combate a ácaros, pulgões e cochonilhas de raiz.</div>
+                        <div class="texto-dica">Não entre em pânico. Aprenda a identificar se é sede ou podridão e como salvar sua planta a tempo.</div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="fase-indicador">Fase 03: Estética e Valorização</div>
+    <div class="fase-indicador">🏆 Nível Especialista</div>
     <div class="guia-grid">
         <div class="categoria-bloco">
             <div class="categoria-titulo">
-                <svg viewBox="0 0 24 24"><path d="M17,8H15V6H13V8H11V6H9V8H7V6H5V18H19V8M19,6A2,2 0 0,1 21,8V18A2,2 0 0,1 19,20H5C3.89,20 3,19.1 3,18V6C3,4.89 3.89,4 5,4H19A2,2 0 0,1 19,6M7,14V12H9V14H7M11,14V12H13V14H11M15,14V12H17V14H15Z" /></svg>
-                Estética e Formação
+                <svg viewBox="0 0 24 24"><path d="M12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4M12,12.5A1.5,1.5 0 0,1 10.5,11A1.5,1.5 0 0,1 12,9.5A1.5,1.5 0 0,1 13.5,11A1.5,1.5 0 0,1 12,12.5Z" /></svg>
+                A Arte da Enxertia
             </div>
             <div class="lista-temas">
                 <div class="tema-item">
-                    <button class="tema-pergunta" onclick="toggleTema(this)">Levantamento de Caudex <span>+</span></button>
+                    <button class="tema-pergunta" onclick="toggleTema(this)">Multiplicando ID's raras <span>+</span></button>
                     <div class="tema-conteudo">
                         <div class="video-container">Vídeo em breve</div>
-                        <div class="texto-dica">Como elevar a planta e expor a beleza do tronco.</div>
-                    </div>
-                </div>
-                <div class="tema-item">
-                    <button class="tema-pergunta" onclick="toggleTema(this)">Poda de Floração <span>+</span></button>
-                    <div class="tema-conteudo">
-                        <div class="video-container">Vídeo em breve</div>
-                        <div class="texto-dica">Técnicas de poda para estimular novos galhos e flores.</div>
+                        <div class="texto-dica">O passo a passo do enxerto de pressão: como fazer uma planta comum carregar flores de cores luxuosas.</div>
                     </div>
                 </div>
             </div>
@@ -222,15 +215,15 @@
 
         <div class="categoria-bloco">
             <div class="categoria-titulo">
-                <svg viewBox="0 0 24 24"><path d="M12,2L13,5H11L12,2M12,19V22H11V19H12M5,12L2,11V13L5,12M22,12L19,13V11L22,12M12,8A4,4 0 0,0 8,12A4,4 0 0,0 12,16A4,4 0 0,0 16,12A4,4 0 0,0 12,8Z" /></svg>
-                Técnicas de Enxertia
+                <svg viewBox="0 0 24 24"><path d="M12,18L13.13,15.54L15.63,14.4L13.13,13.27L12,10.77L10.88,13.27L8.38,14.4L10.88,15.54L12,18M21,11.39V12.5C21,17.46 17.58,22 12.5,22C7.42,22 4,17.46 4,12.5V6.3L12.5,3.15L21,6.3V8.21C20.37,8.08 19.69,8 19,8C15.13,8 12,11.13 12,15C12,16.03 12.23,17 12.63,17.87C11,18.62 9,18.06 9,15.5" /></svg>
+                Escultura Viva
             </div>
             <div class="lista-temas">
                 <div class="tema-item">
-                    <button class="tema-pergunta" onclick="toggleTema(this)">Enxerto de Pressão <span>+</span></button>
+                    <button class="tema-pergunta" onclick="toggleTema(this)">Modelando o Caudex <span>+</span></button>
                     <div class="tema-conteudo">
                         <div class="video-container">Vídeo em breve</div>
-                        <div class="texto-dica">A técnica mais rápida e eficiente para clonar IDs.</div>
+                        <div class="texto-dica">Dicas de levantamento e podas para transformar sua Rosa do Deserto em uma verdadeira obra de arte.</div>
                     </div>
                 </div>
             </div>
@@ -238,7 +231,6 @@
     </div>
 
 </div>
-
 <footer>
     <div class="footer-stripe-white"><img src="logo.png" class="footer-logo"></div>
     <div class="footer-content">
