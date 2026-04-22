@@ -22,7 +22,7 @@
     
     body { background: var(--bg); color: var(--text-primary); min-height: 100vh; padding-top: 60px; }
 
-    /* MENU SUPERIOR (IGUAL AO INDEX) */
+    /* MENU SUPERIOR FIXO (IGUAL AO INDEX) */
     .site-nav {
         background: #ffffff;
         width: 100%; height: 60px;
@@ -38,7 +38,7 @@
     .nav-links { display: flex; list-style: none; gap: 20px; }
     .nav-links a { text-decoration: none; color: var(--text-primary); font-size: 13px; font-weight: 500; }
 
-    /* HEADER (IGUAL AO INDEX) */
+    /* HEADER PRINCIPAL (COM A IMAGEM DO CATÁLOGO) */
     header { 
         height: 150px; 
         background: url('imagens/gravata-cabecalho.webp') center 15% / cover no-repeat;
@@ -53,15 +53,29 @@
         .logo { width: 220px; } 
     }
 
-    /* ESTRUTURA DO GUIA */
-    .content-container { padding: 40px 5%; max-width: 1000px; margin: 0 auto; }
-    .page-title { text-align: center; margin-bottom: 40px; }
-    .page-title h1 { font-size: 26px; color: var(--text-primary); margin-bottom: 10px; }
-    .page-title p { color: var(--text-secondary); font-size: 14px; }
+    /* BARRA ESCURA (IGUAL AO INDEX, MAS SEM FILTROS) */
+    .barra-escura {
+        background: #2e2a15;
+        padding: 15px 0;
+        color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+    }
+    .barra-escura h2 {
+        font-size: 14px;
+        font-weight: 400;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+    }
 
+    /* CONTEÚDO DO GUIA */
+    .content-container { padding: 40px 5%; max-width: 1100px; margin: 0 auto; }
+    
     .guia-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
         gap: 25px;
     }
 
@@ -78,7 +92,7 @@
         color: white;
         padding: 18px;
         font-weight: 600;
-        font-size: 15px;
+        font-size: 14px;
         display: flex;
         align-items: center;
         gap: 12px;
@@ -114,16 +128,15 @@
 
     .video-container {
         margin: 15px;
-        background: #2e2a15;
+        background: #000;
         aspect-ratio: 16/9;
         border-radius: 8px;
         display: flex; align-items: center; justify-content: center;
         color: rgba(255,255,255,0.5);
         font-size: 12px;
-        position: relative;
     }
 
-    .texto-dica { padding: 0 18px 20px 18px; font-size: 13px; color: #555; line-height: 1.5; }
+    .texto-dica { padding: 0 18px 20px 18px; font-size: 13px; color: #555; line-height: 1.6; }
     .texto-dica strong { color: var(--accent); display: block; margin-top: 10px; }
 
     /* FOOTER (IGUAL AO INDEX) */
@@ -159,12 +172,11 @@
     </div>
 </header>
 
-<div class="content-container">
-    <div class="page-title">
-        <h1>Guia de Cultivo Especializado</h1>
-        <p>Tudo o que você precisa saber para ter Rosas do Deserto espetaculares.</p>
-    </div>
+<div class="barra-escura">
+    <h2>Guia de Cultivo Especializado</h2>
+</div>
 
+<div class="content-container">
     <div class="guia-grid">
         
         <div class="categoria-bloco">
@@ -174,21 +186,21 @@
                     <button class="tema-pergunta" onclick="toggleTema(this)">🌱 Crescimento Acelerado <span>+</span></button>
                     <div class="tema-conteudo">
                         <div class="video-container">Espaço para o Vídeo</div>
-                        <div class="texto-dica"><strong>Objetivo:</strong> Estimular crescimento saudável.<br>Mantenha em sol pleno, use substrato drenante e adubação equilibrada.</div>
+                        <div class="texto-dica"><strong>Objetivo:</strong> Estimular crescimento saudável.<br>Dicas sobre NPK 10-10-10, substrato leve e exposição solar máxima para mudas.</div>
                     </div>
                 </div>
                 <div class="tema-item">
                     <button class="tema-pergunta" onclick="toggleTema(this)">🏗️ Levantamento de Caudex <span>+</span></button>
                     <div class="tema-conteudo">
                         <div class="video-container">Espaço para o Vídeo</div>
-                        <div class="texto-dica"><strong>Objetivo:</strong> Expor a base da planta.<br>Suba a planta gradualmente (2 a 4 cm) em cada replante para revelar novas formas.</div>
+                        <div class="texto-dica"><strong>Técnica:</strong> Replantio estético.<br>Como elevar a planta com segurança e proteger o caudex novo do sol forte.</div>
                     </div>
                 </div>
                 <div class="tema-item">
-                    <button class="tema-pergunta" onclick="toggleTema(this)">✂️ Poda de Formação <span>+</span></button>
+                    <button class="tema-pergunta" onclick="toggleTema(this)">✂️ Poda e Copa <span>+</span></button>
                     <div class="tema-conteudo">
                         <div class="video-container">Espaço para o Vídeo</div>
-                        <div class="texto-dica"><strong>Objetivo:</strong> Criar copa cheia.<br>Sempre use ferramentas esterilizadas e sele com cola instantânea ou canela.</div>
+                        <div class="texto-dica"><strong>Poda:</strong> Como e quando cortar para ter uma copa redonda e cheia de flores.</div>
                     </div>
                 </div>
             </div>
@@ -201,14 +213,7 @@
                     <button class="tema-pergunta" onclick="toggleTema(this)">🌸 Floração Explosiva <span>+</span></button>
                     <div class="tema-conteudo">
                         <div class="video-container">Espaço para o Vídeo</div>
-                        <div class="texto-dica"><strong>Dica:</strong> Aumente o Fósforo na adubação e garanta no mínimo 6h de sol direto por dia.</div>
-                    </div>
-                </div>
-                <div class="tema-item">
-                    <button class="tema-pergunta" onclick="toggleTema(this)">🧪 Manual de Adubação <span>+</span></button>
-                    <div class="tema-conteudo">
-                        <div class="video-container">Espaço para o Vídeo</div>
-                        <div class="texto-dica">Saiba quando usar NPK 10-10-10 ou fórmulas específicas para flores (como 04-14-08).</div>
+                        <div class="texto-dica"><strong>Dica:</strong> O uso de fertilizantes ricos em fósforo e o manejo correto da rega.</div>
                     </div>
                 </div>
             </div>
@@ -221,34 +226,7 @@
                     <button class="tema-pergunta" onclick="toggleTema(this)">💉 Enxerto de Pressão <span>+</span></button>
                     <div class="tema-conteudo">
                         <div class="video-container">Espaço para o Vídeo</div>
-                        <div class="texto-dica">A técnica mais prática usando saquinhos plásticos para clonagem de cores especiais.</div>
-                    </div>
-                </div>
-                <div class="tema-item">
-                    <button class="tema-pergunta" onclick="toggleTema(this)">🐝 Polinização Manual <span>+</span></button>
-                    <div class="tema-conteudo">
-                        <div class="video-container">Espaço para o Vídeo</div>
-                        <div class="texto-dica">Como cruzar suas melhores plantas para produzir sementes exclusivas.</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="categoria-bloco">
-            <div class="categoria-titulo">🩹 Hospital e Proteção</div>
-            <div class="lista-temas">
-                <div class="tema-item">
-                    <button class="tema-pergunta" onclick="toggleTema(this)">🐛 Controle de Pragas <span>+</span></button>
-                    <div class="tema-conteudo">
-                        <div class="video-container">Espaço para o Vídeo</div>
-                        <div class="texto-dica">Como eliminar cochonilhas, ácaros e pulgões sem prejudicar a planta.</div>
-                    </div>
-                </div>
-                <div class="tema-item">
-                    <button class="tema-pergunta" onclick="toggleTema(this)">🩹 Cirurgia de Emergência <span>+</span></button>
-                    <div class="tema-conteudo">
-                        <div class="video-container">Espaço para o Vídeo</div>
-                        <div class="texto-dica">Salvando um caudex com início de apodrecimento através da limpeza radical.</div>
+                        <div class="texto-dica">Passo a passo da técnica de pressão para clonar suas melhores cores.</div>
                     </div>
                 </div>
             </div>
@@ -270,7 +248,7 @@ function toggleTema(btn) {
     const conteudo = btn.nextElementSibling;
     const span = btn.querySelector('span');
     
-    // Fecha todos os outros abertos para ficar organizado
+    // Fecha todos os outros abertos para foco total
     const todosConteudos = document.querySelectorAll('.tema-conteudo');
     const todosSpans = document.querySelectorAll('.tema-pergunta span');
     
@@ -281,7 +259,6 @@ function toggleTema(btn) {
         }
     });
 
-    // Abre ou fecha o atual
     if (conteudo.style.maxHeight && conteudo.style.maxHeight !== "0px") {
         conteudo.style.maxHeight = "0px";
         span.textContent = "+";
