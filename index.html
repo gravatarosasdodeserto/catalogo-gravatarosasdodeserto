@@ -138,10 +138,22 @@
     .overlay.active { display: block; }
 
     @media (max-width: 768px) {
-        .menu-toggle { display: block; }
-        .nav-links { display: none; position: absolute; top: 60px; left: 0; width: 100%; background: white; flex-direction: column; padding: 20px; box-shadow: 0 5px 10px rgba(0,0,0,0.1); }
-        .nav-links.active { display: flex; }
+    .menu-toggle { display: block; z-index: 10001; } /* Garante que o ícone fique visível */
+    .nav-links { 
+        display: none; 
+        position: absolute; 
+        top: 60px; 
+        left: 0; 
+        width: 100%; 
+        background: white; 
+        flex-direction: column; 
+        padding: 20px; 
+        box-shadow: 0 5px 10px rgba(0,0,0,0.1); 
+        z-index: 10000; /* Fica abaixo apenas do toggle se necessário */
     }
+    .nav-links.active { display: flex; }
+}
+
 </style>
 </head>
 <body>
@@ -359,7 +371,12 @@
         return ativos;
     }
 
-    function toggleMenu() { document.getElementById("navLinks").classList.toggle("active"); }
+    function toggleMenu() { 
+    // Captura o elemento com o ID exato que está no HTML
+    const nav = document.getElementById("nav-links"); 
+    nav.classList.toggle("active"); 
+}
+
     function toggleDrawer() { document.getElementById('drawer').classList.toggle('active'); document.querySelector('.overlay').classList.toggle('active'); }
     function renderSkeleton() { document.getElementById('grid').innerHTML = Array(8).fill('<div style="height:180px; background:#eee; border-radius:12px"></div>').join(''); }
 
