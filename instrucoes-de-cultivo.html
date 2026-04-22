@@ -13,7 +13,8 @@
         --surface: #ffffff;
         --text-primary: #2e2a15;
         --text-secondary: #7d6e53;
-        --accent: #a08c6b;
+        --accent: #a08c6b; /* Dourado/Areia para interações */
+        --dark-bar: #2e2a15; /* Tom escuro de seriedade */
         --border: #eceae4;
         --radius: 12px;
     }
@@ -35,27 +36,26 @@
     .nav-brand-container { display: flex; align-items: center; gap: 8px; text-decoration: none; }
     .mini-logo { height: 32px; width: 32px; object-fit: contain; border-radius: 6px; }
     .nav-brand { font-weight: 600; font-size: 16px; color: var(--text-primary); letter-spacing: 1px; }
+
+    .menu-toggle { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 10px; }
+    .menu-toggle div { width: 25px; height: 3px; background-color: var(--text-primary); transition: 0.3s; }
     .nav-links { display: flex; list-style: none; gap: 20px; }
     .nav-links a { text-decoration: none; color: var(--text-primary); font-size: 13px; font-weight: 500; }
 
-    /* HEADER PRINCIPAL (COM A IMAGEM DO CATÁLOGO) */
+    /* HEADER */
     header { 
         height: 150px; 
         background: url('imagens/gravata-cabecalho.webp') center 15% / cover no-repeat;
         display: flex; align-items: center; justify-content: center;
-        position: relative;
     }
     .header-stripe { width: 100%; background: rgba(255, 255, 255, 0.4); padding: 10px 0; display: flex; justify-content: center; }
     .logo { width: 140px; }
 
-    @media (min-width: 1024px) { 
-        header { height: 300px; } 
-        .logo { width: 220px; } 
-    }
+    @media (min-width: 1024px) { header { height: 300px; } .logo { width: 220px; } }
 
-    /* BARRA ESCURA (IGUAL AO INDEX, MAS SEM FILTROS) */
+    /* BARRA ESCURA */
     .barra-escura {
-        background: #2e2a15;
+        background: var(--dark-bar);
         padding: 15px 0;
         color: white;
         display: flex;
@@ -63,90 +63,54 @@
         align-items: center;
         text-align: center;
     }
-    .barra-escura h2 {
-        font-size: 14px;
-        font-weight: 400;
-        letter-spacing: 2px;
-        text-transform: uppercase;
-    }
+    .barra-escura h2 { font-size: 13px; font-weight: 400; letter-spacing: 2px; text-transform: uppercase; }
 
-    /* CONTEÚDO DO GUIA */
+    /* CONTEÚDO */
     .content-container { padding: 40px 5%; max-width: 1100px; margin: 0 auto; }
+    .guia-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 25px; }
+
+    .categoria-bloco { background: #fff; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
     
-    .guia-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-        gap: 25px;
+    .categoria-titulo { 
+        background: var(--dark-bar); 
+        color: white; 
+        padding: 18px; 
+        font-weight: 600; 
+        font-size: 13px; 
+        display: flex; 
+        align-items: center; 
+        gap: 12px; 
+        text-transform: uppercase; 
+        letter-spacing: 1.5px; 
     }
 
-    .categoria-bloco {
-        background: #fff;
-        border: 1px solid var(--border);
-        border-radius: var(--radius);
-        overflow: hidden;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.03);
-    }
-
-    .categoria-titulo {
-        background: var(--accent);
-        color: white;
-        padding: 18px;
-        font-weight: 600;
-        font-size: 14px;
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        text-transform: uppercase;
-        letter-spacing: 1px;
+    /* ESTILO DOS ÍCONES SVG (SUBSTITUINDO EMOJIS) */
+    .categoria-titulo svg {
+        width: 18px;
+        height: 18px;
+        fill: rgba(255,255,255,0.8); /* Branco suave */
     }
 
     .tema-item { border-bottom: 1px solid var(--border); }
-    .tema-item:last-child { border-bottom: none; }
+    .tema-pergunta { width: 100%; text-align: left; padding: 15px 18px; background: none; border: none; font-size: 14px; font-weight: 500; color: var(--text-primary); cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+    
+    /* DETALHE DO "+" EM DOURADO PARA DAR RELEVÂNCIA À AÇÃO */
+    .tema-pergunta span { background: #f0ede6; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-size: 18px; color: var(--accent); font-weight: 600;}
 
-    .tema-pergunta {
-        width: 100%; text-align: left;
-        padding: 15px 18px;
-        background: none; border: none;
-        font-size: 14px; font-weight: 500;
-        color: var(--text-primary);
-        cursor: pointer;
-        display: flex; justify-content: space-between; align-items: center;
-    }
-
-    .tema-pergunta span { 
-        background: #f0ede6; width: 24px; height: 24px; 
-        display: flex; align-items: center; justify-content: center; 
-        border-radius: 50%; font-size: 18px; color: var(--accent);
-    }
-
-    .tema-conteudo {
-        max-height: 0;
-        overflow: hidden;
-        transition: all 0.3s ease-in-out;
-        background: #fdfaf5;
-    }
-
-    .video-container {
-        margin: 15px;
-        background: #000;
-        aspect-ratio: 16/9;
-        border-radius: 8px;
-        display: flex; align-items: center; justify-content: center;
-        color: rgba(255,255,255,0.5);
-        font-size: 12px;
-    }
-
+    .tema-conteudo { max-height: 0; overflow: hidden; transition: all 0.3s ease-in-out; background: #fdfaf5; }
+    .video-container { margin: 15px; background: #000; aspect-ratio: 16/9; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.4); font-size: 11px; letter-spacing: 1px; text-transform: uppercase;}
     .texto-dica { padding: 0 18px 20px 18px; font-size: 13px; color: #555; line-height: 1.6; }
-    .texto-dica strong { color: var(--accent); display: block; margin-top: 10px; }
 
-    /* FOOTER (IGUAL AO INDEX) */
-    footer { background: #2e2a15; color: white; text-align: center; margin-top: 80px; }
+    /* FOOTER */
+    footer { background: var(--dark-bar); color: white; text-align: center; margin-top: 80px; }
     .footer-stripe-white { background: rgba(255, 255, 255, 0.95); width: 100%; padding: 25px 0; display: flex; justify-content: center; border-bottom: 2px solid var(--accent); }
     .footer-logo { width: 140px; }
     .footer-content { padding: 40px 20px; }
     
     @media (max-width: 768px) {
-        .nav-links { display: none; }
+        .menu-toggle { display: flex; }
+        .nav-links { display: none; position: absolute; top: 60px; left: 0; width: 100%; background: white; flex-direction: column; padding: 20px; box-shadow: 0 5px 10px rgba(0,0,0,0.1); text-align: center; }
+        .nav-links.active { display: flex; }
         .guia-grid { grid-template-columns: 1fr; }
     }
     </style>
@@ -159,9 +123,14 @@
             <img src="favicon.png" class="mini-logo">
             <span class="nav-brand">GRAVATÁ RD</span>
         </a>
-        <ul class="nav-links">
+        
+        <div class="menu-toggle" onclick="toggleMenu()">
+            <div></div><div></div><div></div>
+        </div>
+
+        <ul class="nav-links" id="nav-links">
             <li><a href="index.html">Catálogo</a></li>
-            <li><a href="#" style="color: var(--accent);">Guia de Cultivo</a></li>
+            <li><a href="instrucoes-de-cultivo.html" style="color: var(--accent);">Guia de Cultivo</a></li>
         </ul>
     </div>
 </nav>
@@ -180,53 +149,55 @@
     <div class="guia-grid">
         
         <div class="categoria-bloco">
-            <div class="categoria-titulo">🏗️ Estética e Formação</div>
+            <div class="categoria-titulo">
+                <svg viewBox="0 0 24 24"><path d="M17,8H15V6H13V8H11V6H9V8H7V6H5V18H19V8M19,6A2,2 0 0,1 21,8V18A2,2 0 0,1 19,20H5C3.89,20 3,19.1 3,18V6C3,4.89 3.89,4 5,4H19A2,2 0 0,1 19,6M7,14V12H9V14H7M11,14V12H13V14H11M15,14V12H17V14H15Z" /></svg>
+                Estética e Formação
+            </div>
             <div class="lista-temas">
                 <div class="tema-item">
-                    <button class="tema-pergunta" onclick="toggleTema(this)">🌱 Crescimento Acelerado <span>+</span></button>
+                    <button class="tema-pergunta" onclick="toggleTema(this)">Crescimento Acelerado <span>+</span></button>
                     <div class="tema-conteudo">
-                        <div class="video-container">Espaço para o Vídeo</div>
-                        <div class="texto-dica"><strong>Objetivo:</strong> Estimular crescimento saudável.<br>Dicas sobre NPK 10-10-10, substrato leve e exposição solar máxima para mudas.</div>
+                        <div class="video-container">Vídeo em breve</div>
+                        <div class="texto-dica">Dicas para otimizar o crescimento vegetativo da sua RD.</div>
                     </div>
                 </div>
                 <div class="tema-item">
-                    <button class="tema-pergunta" onclick="toggleTema(this)">🏗️ Levantamento de Caudex <span>+</span></button>
+                    <button class="tema-pergunta" onclick="toggleTema(this)">Levantamento de Caudex <span>+</span></button>
                     <div class="tema-conteudo">
-                        <div class="video-container">Espaço para o Vídeo</div>
-                        <div class="texto-dica"><strong>Técnica:</strong> Replantio estético.<br>Como elevar a planta com segurança e proteger o caudex novo do sol forte.</div>
-                    </div>
-                </div>
-                <div class="tema-item">
-                    <button class="tema-pergunta" onclick="toggleTema(this)">✂️ Poda e Copa <span>+</span></button>
-                    <div class="tema-conteudo">
-                        <div class="video-container">Espaço para o Vídeo</div>
-                        <div class="texto-dica"><strong>Poda:</strong> Como e quando cortar para ter uma copa redonda e cheia de flores.</div>
+                        <div class="video-container">Vídeo em breve</div>
+                        <div class="texto-dica">Aprenda a elevar a planta com segurança e estética.</div>
                     </div>
                 </div>
             </div>
         </div>
 
         <div class="categoria-bloco">
-            <div class="categoria-titulo">🌸 Flores e Nutrição</div>
+            <div class="categoria-titulo">
+                <svg viewBox="0 0 24 24"><path d="M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4M12,6A6,6 0 0,1 18,12A6,6 0 0,1 12,18A6,6 0 0,1 6,12A6,6 0 0,1 12,6M12,8A4,4 0 0,0 8,12A4,4 0 0,0 12,16A4,4 0 0,0 16,12A4,4 0 0,0 12,8Z" /></svg>
+                Flores e Nutrição
+            </div>
             <div class="lista-temas">
                 <div class="tema-item">
-                    <button class="tema-pergunta" onclick="toggleTema(this)">🌸 Floração Explosiva <span>+</span></button>
+                    <button class="tema-pergunta" onclick="toggleTema(this)">Floração Explosiva <span>+</span></button>
                     <div class="tema-conteudo">
-                        <div class="video-container">Espaço para o Vídeo</div>
-                        <div class="texto-dica"><strong>Dica:</strong> O uso de fertilizantes ricos em fósforo e o manejo correto da rega.</div>
+                        <div class="video-container">Vídeo em breve</div>
+                        <div class="texto-dica">Técnicas de adubação e manejo para florações constantes.</div>
                     </div>
                 </div>
             </div>
         </div>
 
         <div class="categoria-bloco">
-            <div class="categoria-titulo">💉 Enxertia e Reprodução</div>
+            <div class="categoria-titulo">
+                <svg viewBox="0 0 24 24"><path d="M10.19,4L12,5.81L13.81,4L15.22,5.41L13.41,7.22L15.22,9.03L13.81,10.44L12,8.63L10.19,10.44L8.78,9.03L10.59,7.22L8.78,5.41L10.19,4M4,6.5L6.5,4L9.03,6.53L6.5,9.06L4,6.5M15.22,13.41L17.03,15.22L15.22,17.03L13.81,15.62L15.62,13.81L13.81,12L15.22,10.59L17.03,12.4L18.84,10.59L20.25,12L18.44,13.81L20.25,15.62L18.84,17.03L17.03,15.22L15.22,13.41Z" /></svg>
+                Enxertia e Reprodução
+            </div>
             <div class="lista-temas">
                 <div class="tema-item">
-                    <button class="tema-pergunta" onclick="toggleTema(this)">💉 Enxerto de Pressão <span>+</span></button>
+                    <button class="tema-pergunta" onclick="toggleTema(this)">Enxerto de Pressão <span>+</span></button>
                     <div class="tema-conteudo">
-                        <div class="video-container">Espaço para o Vídeo</div>
-                        <div class="texto-dica">Passo a passo da técnica de pressão para clonar suas melhores cores.</div>
+                        <div class="video-container">Vídeo em breve</div>
+                        <div class="texto-dica">Técnica rápida para clonar suas melhores IDs.</div>
                     </div>
                 </div>
             </div>
@@ -238,17 +209,19 @@
 <footer>
     <div class="footer-stripe-white"><img src="logo.png" class="footer-logo"></div>
     <div class="footer-content">
-        <p><strong>Gravatá RD</strong> - Paixão em cada detalhe.</p>
+        <p><strong>Gravatá RD</strong></p>
         <p style="margin-top: 15px; font-size: 10px; opacity: 0.5;">&copy; 2026 TODOS OS DIREITOS RESERVADOS.</p>
     </div>
 </footer>
 
 <script>
+function toggleMenu() {
+    document.getElementById('nav-links').classList.toggle('active');
+}
+
 function toggleTema(btn) {
     const conteudo = btn.nextElementSibling;
     const span = btn.querySelector('span');
-    
-    // Fecha todos os outros abertos para foco total
     const todosConteudos = document.querySelectorAll('.tema-conteudo');
     const todosSpans = document.querySelectorAll('.tema-pergunta span');
     
