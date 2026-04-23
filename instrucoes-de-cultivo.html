@@ -40,7 +40,7 @@
     .menu-toggle div { width: 25px; height: 3px; background-color: var(--text-primary); }
     
     .nav-links { display: flex; list-style: none; }
-    .nav-links a { text-decoration: none; color: var(--text-primary); font-size: 13px; font-weight: 500; padding: 0 15px; }
+    .nav-links a { text-decoration: none; color: var(--text-primary); font-size: 13px; font-weight: 500; }
 
     /* HEADER */
     header { height: 150px; background: url('imagens/gravata-cabecalho.webp') center 15% / cover no-repeat; display: flex; align-items: center; justify-content: center; }
@@ -53,31 +53,30 @@
 
     /* CONTEÚDO */
     .content-container { padding: 40px 5%; max-width: 1100px; margin: 0 auto; }
-    .fase-indicador { font-size: 10px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 2px; margin-top: 40px; margin-bottom: 20px; border-left: 3px solid var(--accent); padding-left: 10px; }
-    .guia-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 25px; margin-bottom: 30px; }
+    .fase-indicador { font-size: 10px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 20px; border-left: 3px solid var(--accent); padding-left: 10px; }
+    .guia-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 25px; margin-bottom: 50px; }
     
-    .categoria-bloco { background: #fff; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.03); height: fit-content; }
+    .categoria-bloco { background: #fff; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
     .categoria-titulo { background: var(--dark-bar); color: white; padding: 18px; font-weight: 600; font-size: 13px; display: flex; align-items: center; gap: 12px; text-transform: uppercase; letter-spacing: 1.5px; }
     .categoria-titulo svg { width: 18px; height: 18px; fill: rgba(255,255,255,0.8); }
 
     .tema-item { border-bottom: 1px solid var(--border); }
     .tema-pergunta { width: 100%; text-align: left; padding: 15px 18px; background: none; border: none; font-size: 14px; font-weight: 500; color: var(--text-primary); cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
-    .tema-pergunta span { background: #f0ede6; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-size: 18px; color: var(--accent); transition: transform 0.3s; }
+    .tema-pergunta span { background: #f0ede6; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-size: 18px; color: var(--accent); }
 
     .tema-conteudo { max-height: 0; overflow: hidden; transition: all 0.3s ease-in-out; background: #fdfaf5; }
-    .imagem-guia { padding: 15px 18px 0 18px; }
-    .imagem-guia img { width: 100%; border-radius: 8px; display: block; }
-    .texto-dica { padding: 15px 18px 20px 18px; font-size: 13px; color: #555; line-height: 1.6; }
+    .video-container { margin: 15px; background: #000; aspect-ratio: 16/9; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.4); font-size: 11px; text-transform: uppercase;}
+    .texto-dica { padding: 0 18px 20px 18px; font-size: 13px; color: #555; line-height: 1.6; }
 
     /* FOOTER */
     footer { background: var(--dark-bar); color: white; text-align: center; margin-top: 80px; }
     .footer-stripe-white { background: rgba(255, 255, 255, 0.95); width: 100%; padding: 25px 0; display: flex; justify-content: center; border-bottom: 2px solid var(--accent); }
     .footer-logo { width: 140px; }
-    .footer-content { padding: 40px 20px; font-size: 12px; opacity: 0.8; }
+    .footer-content { padding: 40px 20px; }
     
     @media (max-width: 768px) {
         .menu-toggle { display: flex; }
-        .nav-links { display: none; position: absolute; top: 60px; left: 0; width: 100%; background: white; flex-direction: column; padding: 20px; box-shadow: 0 5px 10px rgba(0,0,0,0.1); }
+        .nav-links { display: none; position: absolute; top: 60px; left: 0; width: 100%; background: white; flex-direction: column; padding: 20px; box-shadow: 0 5px 10px rgba(0,0,0,0.1); z-index: 10000; }
         .nav-links.active { display: flex; }
         .guia-grid { grid-template-columns: 1fr; }
     }
@@ -110,79 +109,310 @@
     <h2>Guia de Cultivo Especializado</h2>
 </div>
 
-<div class="content-container">
-    
-    <div class="fase-indicador">🌱 Para quem está começando</div>
-    
-    <div class="guia-grid">
-        <div class="categoria-bloco">
-            <div class="categoria-titulo">
-                <svg viewBox="0 0 24 24"><path d="M12,3L1,9L12,15L21,10.09V17H23V9M5,13.18V17.18L12,21L19,17.18V13.18L12,17L5,13.18Z" /></svg>
-                Chegada e Adaptação
-            </div>
+<div class="tema-item">
+    <button class="tema-pergunta" onclick="toggleTema(this)">Recebi a RD via transportadora, e agora? <span>+</span></button>
+    <div class="tema-conteudo">
+        <div class="video-container">Vídeo: Protocolo de Chegada</div>
+        <div class="texto-dica">
             
-            <div class="lista-temas">
-                <div class="tema-item">
-                    <button class="tema-pergunta" onclick="toggleTema(this)">Recebi a RD via transportadora <span>+</span></button>
-                    <div class="tema-conteudo">
-                        <div class="imagem-guia"><img src="imagens/chegada.jpg" alt="Chegada RD"></div>
-                        <div class="texto-dica">
-                            <p style="margin-bottom:10px"><strong>1. Check-up:</strong> Inspecione raízes e galhos. Se houver partes moles, pode e sele com cola.</p>
-                            <p style="margin-bottom:10px"><strong>2. Banho:</strong> 1L de água + 1 colher de água sanitária por 20 min.</p>
-                            <p><strong>3. Descanso:</strong> Deixe à sombra por 24h antes de plantar em substrato seco.</p>
-                        </div>
-                    </div>
-                </div>
+            <p style="margin-bottom: 12px; background-color: #f0f7ff; padding: 10px; border-radius: 5px; border-left: 5px solid #007bff;">
+                <strong>📦 1. O "Check-up" de Chegada:</strong> Abra a caixa e inspecione tudo. Se notar algum galho com a ponta murcha ou escura ("melado"), faça uma poda imediata até a parte saudável e sele com cola instantânea ou canela. Isso evita que a podridão se espalhe.
+            </p>
 
-                <div class="tema-item">
-                    <button class="tema-pergunta" onclick="toggleTema(this)">Ganhei uma RD já plantada <span>+</span></button>
-                    <div class="tema-conteudo">
-                        <div class="imagem-guia"><img src="imagens/quarentena.jpg" alt="Adaptação"></div>
-                        <div class="texto-dica">
-                            <p>Mantenha em quarentena por 15 dias para observar pragas antes de juntar com sua coleção. Adapte ao sol gradualmente.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <p style="margin-bottom: 12px;"><strong>🚿 2. Banho de Desinfecção e Hidratação:</strong> Em vez de apenas água, use uma solução de 1 litro de água com 1 colher de sopa de <strong>água sanitária</strong>. Mergulhe as raízes e o caudex por 20 a 30 minutos. Isso hidrata a planta e mata fungos que viajaram na caixa.</p>
+            
+            <p style="margin-bottom: 12px; background-color: #fff4e5; padding: 10px; border-radius: 5px; border-left: 5px solid #ff9800;">
+                <strong>⏳ 3. O Pulo do Gato (Descanso):</strong> Após o banho, deixe a planta "descansar" à sombra por 1 dia antes de plantar. Esse descanso é vital para que qualquer micro-ferimento nas raízes, causado pelo transporte, possa cicatrizar fora da umidade.
+            </p>
+
+            <p style="margin-bottom: 12px;"><strong>🧪 4. Reenvase e Estímulo:</strong> Use um <a href="#topico-substrato" style="color: var(--accent); text-decoration: underline;">substrato</a> 100% seco. <strong>Dica de mestre:</strong> Adicione uma colher de <em>Superfosfato Simples</em> no fundo do vaso para estimular raízes novas. Não enterre demais o caudex; mantenha a marca de cultivo anterior.</p>
+            
+            <p style="margin-bottom: 12px;"><strong>☀️ 5. Aclimatização Gradual:</strong> Como a planta ficou no escuro, coloque-a em local com muita claridade, mas <strong>sem sol direto</strong> nos primeiros 3 dias. Depois, vá aumentando 1h de sol por dia. <strong>Evite chuva</strong> e sacos plásticos nos primeiros 15 dias.</p>
+            
+            <p><strong>💧 6. Rega:</strong> Só realize a primeira rega no vaso após 2 dias do plantio. Lembre-se: a Rosa do Deserto aguenta sede, mas morre com excesso de água após o transporte.</p>
+
         </div>
+    </div>
+</div>
+        
+        <div class="tema-item">
+    <button id="topico-vaso" class="tema-pergunta" onclick="toggleTema(this)">Qual o melhor tipo de vaso? <span>+</span></button>
+    <div class="tema-conteudo">
+        <div class="video-container">Vídeo: Escolhendo o Vaso Ideal</div>
+        <div class="texto-dica">
+            <p style="margin-bottom: 12px;"><strong>1. O Tamanho Certo:</strong> O vaso deve acompanhar o crescimento da planta. Comece com sementeiras, passe para vasos de mudas e só aumente o tamanho quando as raízes ocuparem todo o espaço disponível.</p>
+            
+            <p style="margin-bottom: 12px;"><strong>2. O Perigo de Vasos Grandes:</strong> Evite vasos muito maiores ou profundos que a planta. O excesso de <a href="#topico-substrato" style="color: var(--accent); text-decoration: underline;">substrato</a> retém umidade demais, o que é um convite perigoso para a podridão das raízes.</p>
+            
+            <p style="margin-bottom: 12px;"><strong>3. O Mito da Bacia:</strong> O vaso tipo bacia não é para todas! Ele é ideal apenas para plantas adultas (2 a 3 anos) que já passaram por levantamentos de caudex e precisam destacar sua estrutura de raízes.</p>
+            
+            <p style="margin-bottom: 12px;"><strong>4. Profundidade e Raízes:</strong> A raiz precisa de espaço para descer. Vasos muito rasos usados antes da hora forçam as raízes a sair pelos furos de drenagem ou desviarem para as laterais de forma inadequada.</p>
+            
+            <p style="margin-bottom: 12px;"><strong>5. Plástico vs. Cimento:</strong> Vasos de plástico são práticos e baratos para mudas em fase de crescimento. Já os de cimento são recomendados para plantas matrizes que ficarão em local fixo por longo tempo.</p>
+            
+            <p style="margin-bottom: 12px;"><strong>6. Drenagem e Plantio:</strong> O vaso deve ser muito bem perfurado. Ao plantar, certifique-se de cobrir todas as raízes finas (raízes de alimentação) com o substrato para garantir a nutrição da planta.</p>
+
+            <p><strong>Dica de Ouro:</strong> O sucesso vem da simplicidade. Observe a raiz: se ela "pedir" espaço, é hora de trocar de vaso. Se sobrar espaço demais, você corre o risco de perder a planta por umidade.</p>
+        </div>
+    </div>
+</div>
+
+        <div class="tema-item">
+    <button id="topico-substrato" class="tema-pergunta" onclick="toggleTema(this)">Qual o melhor tipo de substrato? <span>+</span></button>
+    <div class="tema-conteudo">
+        <div class="video-container">Vídeo: Segredos do Substrato Ideal</div>
+        <div class="texto-dica">
+            <p style="margin-bottom: 12px;"><strong>1. A Regra Principal:</strong> O melhor substrato não é uma marca específica, mas sim aquele que <strong>não retém água</strong>. Ele deve ser leve e poroso para garantir uma drenagem perfeita, evitando a podridão das raízes.</p>
+            
+            <p style="margin-bottom: 12px;"><strong>2. O que adicionar para melhorar:</strong> Se o substrato que você comprou for muito fino, misture elementos que ajudem a "arejar": <strong>carvão triturado</strong> (limpo, novo e sem sal), <strong>fibra de coco</strong> (bem triturada) ou <strong>casca de arroz carbonizada</strong>. Use até 20% de cada um na mistura.</p>
+            
+            <p style="margin-bottom: 12px;"><strong>3. Opções de Receitas Práticas:</strong>
+                <br>• <strong>Opção 1:</strong> 1 medida de carvão (bem triturado) + 2 de casca de arroz carbonizada + 1/2 de substrato para Rosa do Deserto.
+                <br>• <strong>Opção 2:</strong> 1 medida de areia grossa + 1 de carvão + 2 de casca de arroz carbonizada + 1/2 de substrato para Rosa do Deserto.
+                <br>• <strong>Opção 3 (Para Crescimento):</strong> 1 medida de areia + 1 de carvão + 1 de substrato de floricultura + 1 de esterco de gado (bem curtido).
+                <br>• <strong>Opção 4 (A que utilizamos):</strong> 1 medida de serrapilheira (pau de mata) + 1 de carvão (bem triturado) + 1 de substrato para Rosa do Deserto + 1 de fibra de coco (bem cortada).
+            </p>
+            
+            <p style="margin-bottom: 12px; color: #d9534f;"><strong>⚠️ ALERTA: Cuidado com a Areia Grossa!</strong> Use apenas areia grossa de rio ou de construção devidamente limpa. <strong>Nunca use areia de praia</strong> (devido ao sal) ou areia de rua, pois podem conter argila (que compacta o <a href="#topico-vaso" style="color: var(--accent); text-decoration: underline;">vaso</a>), pragas ou contaminação por fezes de animais.</p>
+
+            <p><strong>Dica de Ouro:</strong> O segredo do sucesso no cultivo é a simplicidade e a observação. Se a água passar direto pelo vaso ao regar, seu substrato está no caminho certo!</p>
+        </div>
+    </div>
+</div>
+       <div class="tema-item">
+    <button id="como-regar-corretamente" class="tema-pergunta" onclick="toggleTema(this)">Como regar corretamente? <span>+</span></button>
+    <div class="tema-conteudo">
+        <div class="video-container">Vídeo: O Segredo da Rega Ideal</div>
+        <div class="texto-dica">
+            <p style="margin-bottom: 12px;"><strong>1. Esqueça o calendário fixo:</strong> Não existe uma regra de dias exatos (como "regar a cada 2 dias"). A necessidade de água depende do sol e do vento. O segredo é sempre <strong>observar o substrato</strong> antes de molhar.</p>
+            
+            <p style="margin-bottom: 12px;"><strong>2. O Teste do Dedo (Dedômetro):</strong> Este é o seu guia mais seguro. Antes de regar, enfie o dedo cerca de 2cm no substrato:
+                <br>• <strong>Dedo saiu sujo ou úmido:</strong> A planta ainda tem reserva. Não regue.
+                <br>• <strong>Dedo saiu limpo e seco:</strong> É o sinal de que ela precisa de água.
+            </p>
+            
+            <p style="margin-bottom: 12px;"><strong>3. Rega Abundante (O Banho):</strong> Rosa do Deserto gosta de <strong>muita água</strong>. Molhe até que a água saia generosamente pelos furos de baixo. Isso garante que todas as raízes sejam hidratadas e limpa o excesso de sais da adubação.</p>
+            
+            <p style="margin-bottom: 12px; background-color: #eef9f1; padding: 10px; border-radius: 5px; border-left: 5px solid #28a745;">
+                <strong>✅ Regra do Substrato Drenante:</strong> Se você seguiu nossa dica e usa um <a href="#topico-substrato" style="color: var(--accent); text-decoration: underline;">substrato bem poroso</a>, ele vai secar rapidamente. Nesses casos, especialmente em dias de sol e calor, a <strong>rega deverá ser diária</strong> para que a planta se desenvolva e engorde o caudex.
+            </p>
+            
+            <p style="margin-bottom: 12px;"><strong>4. O Melhor Horário:</strong> Prefira regar nos horários mais quentes (entre 10h e 14h). Nesse período, a planta absorve melhor a água e o sol seca o excesso rapidamente, evitando fungos e o apodrecimento noturno.</p>
+            
+            <p style="margin-bottom: 12px; background-color: #fcf8e3; padding: 10px; border-radius: 5px; border-left: 5px solid #8a6d3b;">
+                <strong>💡 Dica de Ouro: Lavagem das Folhas</strong>
+                <br>Uma vez por semana, lave as folhas e o caudex com a mangueira. Isso remove a poeira e ajuda a prevenir pragas como ácaros e pulgões. <em>Apenas evite focar o jato de água nas flores abertas.</em>
+            </p>
+
+            <p style="margin-bottom: 12px; color: #d9534f;"><strong>⚠️ Atenção com Mudinhas:</strong> As mudinhas bebês nunca devem ficar com o substrato totalmente seco. Elas precisam de umidade constante para não desidratarem e morrerem.</p>
+
+            <p><strong>Lembre-se:</strong> O equilíbrio é tudo. Substrato que não segura água + rega abundante diária = Rosa do Deserto saudável e gordinha!</p>
+        </div>
+    </div>
+</div>
+    
+<div class="tema-item">
+    <button id="quanto-de-sol" class="tema-pergunta" onclick="toggleTema(this)">Quanto de sol a RD precisa? <span>+</span></button>
+    <div class="tema-conteudo">
+        <div class="video-container">Vídeo: Luz Solar e Floração</div>
+        <div class="texto-dica">
+            <p style="margin-bottom: 12px;"><strong>1. Ela ama o sol:</strong> A Rosa do Deserto é uma planta de sol pleno. No seu habitat natural, ela chega a pegar 12 horas de luz direta. Para que ela floresça e tenha um caudex gordinho, o mínimo recomendado são <strong>4 a 6 horas de sol direto</strong> por dia.</p>
+            
+            <p style="margin-bottom: 12px;"><strong>2. O perigo da sombra:</strong> Se a sua planta fica apenas na sombra ou pega pouco sol (menos de 3 horas):
+                <br>• Ela vai "estiolar" (crescer apenas para cima, ficando fina e comprida como um palito).
+                <br>• O caudex não engorda.
+                <br>• Ela dificilmente produzirá flores.
+            </p>
+            
+            <p style="margin-bottom: 12px; background-color: #fcf8e3; padding: 10px; border-radius: 5px; border-left: 5px solid #8a6d3b;">
+                <strong>⚠️ Cuidado com a aclimatação:</strong> Nunca mude uma planta que estava na sombra diretamente para o sol o dia todo. Ela pode sofrer queimaduras graves no caudex. Aumente a exposição ao sol aos poucos, 1 hora por dia, ao longo de duas semanas.
+            </p>
+
+            <p style="margin-bottom: 12px;"><strong>3. Sol do Norte/Nordeste vs. Sul/Sudeste do Brasil:</strong> Em regiões de calor extremo (como o Nordeste), o sol de meio-dia pode ser forte demais e queimar o tronco. Nesses casos, o uso de um <strong>sombrite 50%</strong> ou garantir o sol apenas até o meio-dia é o ideal. Já em regiões mais frias, ela pode e deve ficar no sol pleno o dia inteiro.</p>
+            
+            <p style="margin-bottom: 12px;"><strong>4. Como identificar o excesso de sol:</strong> Se o caudex começar a ficar amarelado ou com manchas escuras de um lado só, ou se as folhas estiverem sempre amareladas e pequenas, ela pode estar sofrendo com o calor excessivo. Uma copa bem formada (com muitas folhas) ajuda a fazer sombra no próprio caudex, protegendo a planta.</p>
+
+            <p><strong>Dica de Ouro:</strong> Rosa do Deserto sem sol é apenas uma planta verde. Se você quer flores vibrantes, o sol é o seu melhor adubo natural!</p>
+        </div>
+    </div>
+</div>
+
+        <div class="tema-item">
+    <button id="local-ventilado" class="tema-pergunta" onclick="toggleTema(this)">O local precisa ser ventilado? <span>+</span></button>
+    <div class="tema-conteudo">
+        <div class="video-container">Vídeo: Vento e Saúde das Plantas</div>
+        <div class="texto-dica">
+            <p style="margin-bottom: 12px;"><strong>1. Rosa do Deserto ama o vento:</strong> Diferente de muitas plantas ornamentais que sofrem com correntes de ar, a Rosa do Deserto precisa de um local onde o ar circule livremente. O vento não é um problema, mas sim um aliado!</p>
+            
+            <p style="margin-bottom: 12px;"><strong>2. O perigo de locais abafados:</strong> Cultivar sua planta em locais fechados, corredores sem ventilação ou estufas totalmente lacradas cria um "microclima" úmido e quente que é o paraíso para as pragas.</p>
+            
+            <p style="margin-bottom: 12px; background-color: #eef9f1; padding: 10px; border-radius: 5px; border-left: 5px solid #28a745;">
+                <strong>✅ Controle Natural de Pragas:</strong> A boa circulação de ar é o melhor preventivo natural contra <strong>ácaros, pulgões e cochonilhas</strong>. Em locais bem ventilados, essas pragas têm muito mais dificuldade de se instalar e proliferar nas suas plantas.
+            </p>
+            
+            <p style="margin-bottom: 12px;"><strong>3. Menos doenças e fungos:</strong> O vento ajuda a secar rapidamente as folhas após uma chuva ou rega, além de evitar que o <a href="#como-regar-corretamente" style="color: var(--accent); text-decoration: underline;">excesso de umidade</a> fique parado no substrato. Isso previne o surgimento de fungos que causam o apodrecimento do caudex.</p>
+            
+            <p style="margin-bottom: 12px; background-color: #fcf8e3; padding: 10px; border-radius: 5px; border-left: 5px solid #8a6d3b;">
+                <strong>💡 Dica Prática:</strong> Se você cultiva em varandas de apartamento ou áreas gourmet, certifique-se de que a planta não esteja em um "canto morto" onde o ar não chega. Quanto mais aberto e arejado for o local, mais forte e saudável sua Rosa do Deserto será.
+            </p>
+
+            <p><strong>Resumo:</strong> Sol pleno, substrato drenante e <strong>muito vento</strong>. Siga esse trio e sua planta terá muito menos doenças e muito mais flores!</p>
+        </div>
+    </div>
+</div>
+
+  <div class="tema-item">
+    <button id="pode-chuva" class="tema-pergunta" onclick="toggleTema(this)">Posso deixar a Rosa do Deserto na chuva? <span>+</span></button>
+    <div class="tema-conteudo">
+        <div class="video-container">Vídeo: Cuidados com a Chuva</div>
+        <div class="texto-dica">
+            <p style="margin-bottom: 12px;"><strong>1. Sim, ela ama a chuva!</strong> A água da chuva traz um "boom" de nitrogênio. É nessa época que a planta mais cresce e o caudex engorda de verdade. Você verá estrias claras no tronco — não se assuste, é sinal de que ela está se expandindo!</p>
+            
+            <p style="margin-bottom: 12px; background-color: #f2dede; padding: 10px; border-radius: 5px; border-left: 5px solid #a94442;">
+                <strong>⚠️ O Risco Real:</strong> A chuva só é segura se o seu <strong><a href="#topico-substrato" style="color: var(--accent); text-decoration: underline;">substrato for super drenante</a></strong>. Se a água empossar, a raiz apodrece rápido. Use vasos tipo "bacia" (mais rasos), que drenam melhor que vasos profundos.
+            </p>
+            
+            <p style="margin-bottom: 12px;"><strong>2. O que acontece com a planta:</strong> 
+                <br>• <strong>Menos flores:</strong> É normal a floração diminuir. A planta foca a energia em crescer raízes e galhos.
+                <br>• <strong>Folhas amareladas:</strong> O excesso de umidade ou mudanças bruscas de temperatura podem fazer as folhas caírem. É um mecanismo de defesa; logo nascerão folhas novas e mais verdes.
+                <br>• <strong>Manchas nas flores:</strong> A água da chuva "queima" as pétalas, deixando manchas marrons. Se quiser manter a beleza das flores, proteja a planta durante o temporal.
+            </p>
+            
+            <p style="margin-bottom: 12px; background-color: #eef9f1; padding: 10px; border-radius: 5px; border-left: 5px solid #28a745;">
+                <strong>✅ Inspeção Diária:</strong> Na época de chuva, olhe suas plantas todo dia. Aperte o caudex e os galhos; se notar qualquer parte mole ou escura, corte o galho imediatamente para a podridão não espalhar.
+            </p>
+
+            <p style="margin-bottom: 12px; background-color: #fcf8e3; padding: 10px; border-radius: 5px; border-left: 5px solid #8a6d3b;">
+                <strong>💡 Dica de Ouro: Nada de podas!</strong> Nunca faça podas radicais em dias chuvosos, a menos que possa manter a planta em local coberto e seco. O ferimento aberto na umidade é o caminho certo para fungos e infecções.
+            </p>
+
+            <p><strong>Dica Final:</strong> Se você tem poucas plantas, abrigá-las permite controle total da rega. Se tem muitas, invista pesado na drenagem do substrato!</p>
+        </div>
+    </div>
+</div>
+
+        <div class="tema-item">
+    <button id="ganhei-rd" class="tema-pergunta" onclick="toggleTema(this)">Ganhei/Comprei uma Rosa do Deserto já plantada, e agora? <span>+</span></button>
+    <div class="tema-conteudo">
+        <div class="video-container">Vídeo: Primeiros Passos com sua RD</div>
+        <div class="texto-dica">
+            <p style="margin-bottom: 12px;"><strong>1. Quarentena e Inspeção:</strong> Antes de colocar sua nova planta junto com as outras, deixe-a "em observação" por 15 a 30 dias. Verifique se há sinais de pragas como cochonilhas de raiz ou ácaros. Isso evita que uma planta doente contamine todo o seu jardim.</p>
+            
+            <p style="margin-bottom: 12px; background-color: #fcf8e3; padding: 10px; border-radius: 5px; border-left: 5px solid #8a6d3b;">
+                <strong>☀️ Adaptação ao Sol (Importante!):</strong> Nunca coloque sua planta direto no sol forte se ela veio de um mercado ou floricultura. Ela provavelmente estava em ambiente com ar-condicionado ou sombra. 
+                <br>• <strong>1ª Semana:</strong> Apenas o solzinho da manhã (até às 8h ou 9h).
+                <br>• <strong>2ª Semana em diante:</strong> Vá aumentando o tempo de exposição gradualmente até ela aguentar 5+ horas de sol.
+            </p>
+
+            <p style="margin-bottom: 12px;"><strong>2. Preciso mudar de vaso agora?</strong> 
+                <br>Se ela veio com flores e você quer aproveitá-las, pode esperar a floração acabar. Mas se o vaso estiver muito apertado ou as raízes estiverem saindo por baixo, o replante é urgente.
+            </p>
+
+            <p style="margin-bottom: 12px; background-color: #eef9f1; padding: 10px; border-radius: 5px; border-left: 5px solid #28a745;">
+                <strong>🌱 O Segredo do "Torrão":</strong> Para a planta não sentir a mudança e nem derrubar as flores, retire-a do vaso antigo mantendo o bloco de terra (torrão) inteiro. Coloque esse bloco no vaso novo e apenas complete as laterais com substrato novo e drenante.
+            </p>
+
+            <p style="margin-bottom: 12px;"><strong>3. Nutrição de Chegada:</strong> Ao replantar, você pode enriquecer o novo substrato com:
+                <br>• <strong>Farinha de osso e casca de ovo:</strong> Ótimas para fortalecer a planta e preparar a próxima floração.
+                <br>• <strong>Adubos de liberação lenta (tipo Osmocote):</strong> Coloque algumas bolinhas para garantir nutrientes constantes sem risco de queimar as raízes.
+            </p>
+
+            <p style="margin-bottom: 12px; border-top: 1px solid #ddd; pt: 10px;">
+                <strong>⚠️ Dica de Ouro:</strong> Se ao tirar do vaso você notar cochonilhas (pontinhos brancos tipo algodão nas raízes), lave tudo com água corrente e sabão neutro (ou água sanitária bem diluída), aplique canela nos ferimentos e deixe secar bem antes de plantar em substrato totalmente novo.
+            </p>
+        </div>
+    </div>
+</div>
+
 
         <div class="categoria-bloco">
             <div class="categoria-titulo">
-                <svg viewBox="0 0 24 24"><path d="M12,3L4,11H9V17H15V11H20L12,3Z" /></svg>
-                Sol e Rega
+                <svg viewBox="0 0 24 24"><path d="M2,21H22V19H2V21M12,3L4,11H9V17H15V11H20L12,3Z" /></svg>
+                Água e Comida
             </div>
             <div class="lista-temas">
                 <div class="tema-item">
-                    <button class="tema-pergunta" onclick="toggleTema(this)">Quanto de sol ela precisa? <span>+</span></button>
+                    <button class="tema-pergunta" onclick="toggleTema(this)">O Substrato Mágico <span>+</span></button>
                     <div class="tema-conteudo">
-                        <div class="imagem-guia"><img src="imagens/sol.jpg" alt="Sol pleno"></div>
-                        <div class="texto-dica">Mínimo de 4 a 6 horas de sol direto. Sem sol, ela não floresce e o caudex fica fino.</div>
-                    </div>
-                </div>
-                <div class="tema-item">
-                    <button class="tema-pergunta" onclick="toggleTema(this)">Como regar corretamente? <span>+</span></button>
-                    <div class="tema-conteudo">
-                        <div class="imagem-guia"><img src="imagens/rega.jpg" alt="Rega"></div>
-                        <div class="texto-dica">Use o "dedômetro". Se o dedo sair seco, regue abundantemente até sair água por baixo.</div>
+                        <div class="video-container">Vídeo em breve</div>
+                        <div class="texto-dica">A terra ideal não pode ser "barrenta". Aprenda a mistura que faz a água passar direto e as raízes respirarem.</div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="fase-indicador">🔬 Nível Especialista</div>
-    
+    <div class="fase-indicador">🔬 Para os Curiosos e Aventureiros</div>
     <div class="guia-grid">
         <div class="categoria-bloco">
             <div class="categoria-titulo">
-                <svg viewBox="0 0 24 24"><path d="M19,3H5C3.89,3 3,3.9 3,5V19C3,20.1 3.89,21 5,21H19C20.11,21 21,20.1 21,19V5C21,3.9 20.11,3 19,3M19,19H5V5H19V19M17,11H13V7H11V11H7V13H11V17H13V13H17V11Z" /></svg>
-                Técnicas Avançadas
+                <svg viewBox="0 0 24 24"><path d="M12,2L4.5,20.29L5.21,21L12,18L18.79,21L19.5,20.29L12,2Z" /></svg>
+                Criando Novas Cores
             </div>
             <div class="lista-temas">
                 <div class="tema-item">
-                    <button class="tema-pergunta" onclick="toggleTema(this)">Polinização Manual <span>+</span></button>
+                    <button class="tema-pergunta" onclick="toggleTema(this)">Brincando de Abelha <span>+</span></button>
                     <div class="tema-conteudo">
-                        <div class="texto-dica">Aprenda a "brincar de abelha" para criar suas próprias sementes e cores exclusivas.</div>
+                        <div class="video-container">Vídeo em breve</div>
+                        <div class="texto-dica">Aprenda a fazer a polinização manual. É mágico ver o nascimento de uma vagem que você mesmo criou!</div>
+                    </div>
+                </div>
+                <div class="tema-item">
+                    <button class="tema-pergunta" onclick="toggleTema(this)">O Mistério das Sementes <span>+</span></button>
+                    <div class="tema-conteudo">
+                        <div class="video-container">Vídeo em breve</div>
+                        <div class="texto-dica">Como colher as sementes antes que elas voem e o jeito certo de plantar para ver o "palitinho" brotar.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="categoria-bloco">
+            <div class="categoria-titulo">
+                <svg viewBox="0 0 24 24"><path d="M19,3H5C3.89,3 3,3.9 3,5V19C3,20.1 3.89,21 5,21H19C20.11,21 21,20.1 21,19V5C21,3.9 20.11,3 19,3M19,19H5V5H19V19M17,11H13V7H11V11H7V13H11V17H13V13H17V11Z" /></svg>
+                Cirurgias e Curativos
+            </div>
+            <div class="lista-temas">
+                <div class="tema-item">
+                    <button class="tema-pergunta" onclick="toggleTema(this)">Socorro! Meu Caudex murchou <span>+</span></button>
+                    <div class="tema-conteudo">
+                        <div class="video-container">Vídeo em breve</div>
+                        <div class="texto-dica">Não entre em pânico. Aprenda a identificar se é sede ou podridão e como salvar sua planta a tempo.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="fase-indicador">🏆 Nível Especialista</div>
+    <div class="guia-grid">
+        <div class="categoria-bloco">
+            <div class="categoria-titulo">
+                <svg viewBox="0 0 24 24"><path d="M12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4M12,12.5A1.5,1.5 0 0,1 10.5,11A1.5,1.5 0 0,1 12,9.5A1.5,1.5 0 0,1 13.5,11A1.5,1.5 0 0,1 12,12.5Z" /></svg>
+                A Arte da Enxertia
+            </div>
+            <div class="lista-temas">
+                <div class="tema-item">
+                    <button class="tema-pergunta" onclick="toggleTema(this)">Multiplicando ID's raras <span>+</span></button>
+                    <div class="tema-conteudo">
+                        <div class="video-container">Vídeo em breve</div>
+                        <div class="texto-dica">O passo a passo do enxerto de pressão: como fazer uma planta comum carregar flores de cores luxuosas.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="categoria-bloco">
+            <div class="categoria-titulo">
+                <svg viewBox="0 0 24 24"><path d="M12,18L13.13,15.54L15.63,14.4L13.13,13.27L12,10.77L10.88,13.27L8.38,14.4L10.88,15.54L12,18M21,11.39V12.5C21,17.46 17.58,22 12.5,22C7.42,22 4,17.46 4,12.5V6.3L12.5,3.15L21,6.3V8.21C20.37,8.08 19.69,8 19,8C15.13,8 12,11.13 12,15C12,16.03 12.23,17 12.63,17.87C11,18.62 9,18.06 9,15.5" /></svg>
+                Escultura Viva
+            </div>
+            <div class="lista-temas">
+                <div class="tema-item">
+                    <button class="tema-pergunta" onclick="toggleTema(this)">Modelando o Caudex <span>+</span></button>
+                    <div class="tema-conteudo">
+                        <div class="video-container">Vídeo em breve</div>
+                        <div class="texto-dica">Dicas de levantamento e podas para transformar sua Rosa do Deserto em uma verdadeira obra de arte.</div>
                     </div>
                 </div>
             </div>
@@ -190,34 +420,40 @@
     </div>
 
 </div>
-
 <footer>
-    <div class="footer-stripe-white">
-        <img src="logo.png" class="footer-logo">
-    </div>
+    <div class="footer-stripe-white"><img src="logo.png" class="footer-logo"></div>
     <div class="footer-content">
-        &copy; 2026 Gravatá RD - Todos os direitos reservados.
+       <p><strong>Gravatá RD</strong> - Rosas do Deserto</p>
+        <p style="margin-top: 15px; font-size: 10px; opacity: 0.5;">&copy; 2026 TODOS OS DIREITOS RESERVADOS.</p>
     </div>
 </footer>
 
 <script>
+function toggleMenu() { 
+    const nav = document.getElementById("nav-links");
+    nav.classList.toggle("active"); 
+}
+
 function toggleTema(btn) {
     const conteudo = btn.nextElementSibling;
     const span = btn.querySelector('span');
+    const todosConteudos = document.querySelectorAll('.tema-conteudo');
+    const todosSpans = document.querySelectorAll('.tema-pergunta span');
     
+    todosConteudos.forEach((c, idx) => {
+        if (c !== conteudo) {
+            c.style.maxHeight = "0px";
+            todosSpans[idx].textContent = "+";
+        }
+    });
+
     if (conteudo.style.maxHeight && conteudo.style.maxHeight !== "0px") {
         conteudo.style.maxHeight = "0px";
         span.textContent = "+";
-        span.style.transform = "rotate(0deg)";
     } else {
         conteudo.style.maxHeight = conteudo.scrollHeight + "px";
         span.textContent = "-";
-        span.style.transform = "rotate(180deg)";
     }
-}
-
-function toggleMenu() {
-    document.getElementById('nav-links').classList.toggle('active');
 }
 </script>
 
