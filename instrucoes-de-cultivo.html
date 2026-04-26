@@ -572,6 +572,21 @@ function toggleTema(btn) {
         }, 300);
     }
 }
+
+// Função para abrir o tópico automaticamente se houver um ID na URL
+window.addEventListener('DOMContentLoaded', () => {
+    const hash = window.location.hash;
+    if (hash) {
+        const targetBtn = document.querySelector(hash);
+        if (targetBtn) {
+            // Pequeno delay para garantir que tudo carregou
+            setTimeout(() => {
+                toggleTema(targetBtn);
+            }, 500);
+        }
+    }
+});
+    
 </script>
 
 </body>
