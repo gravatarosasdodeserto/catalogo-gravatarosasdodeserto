@@ -545,6 +545,7 @@ function toggleTema(btn) {
     const todosConteudos = document.querySelectorAll('.tema-conteudo');
     const todosSpans = document.querySelectorAll('.tema-pergunta span');
     
+    // 1. Fecha todos os outros e reseta os sinais de +
     todosConteudos.forEach((c, idx) => {
         if (c !== conteudo) {
             c.style.maxHeight = "0px";
@@ -552,12 +553,23 @@ function toggleTema(btn) {
         }
     });
 
+    // 2. Abre ou fecha o item clicado
     if (conteudo.style.maxHeight && conteudo.style.maxHeight !== "0px") {
         conteudo.style.maxHeight = "0px";
         span.textContent = "+";
     } else {
         conteudo.style.maxHeight = conteudo.scrollHeight + "px";
         span.textContent = "-";
+
+        // 3. O SEGREDO: Aguarda um instante para o fechamento dos outros terminar 
+        // e centraliza o botão clicado na tela.
+        setTimeout(() => {
+            btn.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            
+            // Ajuste fino: Como sua barra (nav) é fixa, o scroll "start" pode cobrir o título.
+            // Vamos compensar os 60px da sua barra superior:
+            window.scrollBy(0, -70); 
+        }, 300);
     }
 }
 </script>
