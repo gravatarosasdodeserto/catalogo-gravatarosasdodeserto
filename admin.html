@@ -126,18 +126,19 @@
     justify-content: center;
     width: 40px;
     height: 40px;
-    padding: 0 !important; /* Remove o padding padrão dos outros btn-top */
-    border-radius: 50% !important; /* Deixa redondo */
+    padding: 0 !important; /* Remove padding padrão */
+    border-radius: 50% !important; /* Circular */
     background: rgba(255, 255, 255, 0.1) !important; /* Fundo sutil */
     transition: 0.3s;
+    border: 1px solid rgba(255,255,255,0.2) !important;
 }
 
 .btn-logout:hover {
-    background: #e74c3c !important; /* Fica vermelho ao passar o mouse para indicar saída */
-    transform: scale(1.1);
+    background: var(--premium-grad) !important; /* Fundo dourado/accent ao passar o mouse */
+    transform: scale(1.05);
+    border-color: transparent !important;
 }
-        
-    </style>
+</style>
 </head>
 <body>
 
@@ -155,16 +156,15 @@
 
 <div id="admin-content">
 
-    <div class="top-action-bar">
-    <a href="index.html" class="btn-top btn-logout" title="Sair do Painel">
+<div class="top-action-bar">
+    <a href="index.html" class="btn-top btn-logout" title="Voltar ao Catálogo">
         <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M11 17l-5-5 5-5M6 12h12M15 21H5a2 2 0 01-2-2V5a2 2 0 012-2h10" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
     </a>
     <button class="btn-top btn-new-id" onclick="novoItem()">+ NOVA ID</button>
 </div>
-
-
+    
     <div class="controls-area">
         <div class="search-container">
             <input type="text" id="search" class="search-box" placeholder="Pesquisar ID na lista..." oninput="filtrar()">
