@@ -119,6 +119,24 @@
         z-index: 5;
         pointer-events: none; /* Garante que o clique passe direto para o card */
     }
+
+        .btn-logout {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    padding: 0 !important; /* Remove o padding padrão dos outros btn-top */
+    border-radius: 50% !important; /* Deixa redondo */
+    background: rgba(255, 255, 255, 0.1) !important; /* Fundo sutil */
+    transition: 0.3s;
+}
+
+.btn-logout:hover {
+    background: #e74c3c !important; /* Fica vermelho ao passar o mouse para indicar saída */
+    transform: scale(1.1);
+}
+        
     </style>
 </head>
 <body>
@@ -138,9 +156,14 @@
 <div id="admin-content">
 
     <div class="top-action-bar">
-    <a href="index.html" class="btn-top">VOLTAR AO CATÁLOGO</a>
+    <a href="index.html" class="btn-top btn-logout" title="Sair do Painel">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+    </a>
     <button class="btn-top btn-new-id" onclick="novoItem()">+ NOVA ID</button>
 </div>
+
 
     <div class="controls-area">
         <div class="search-container">
