@@ -119,6 +119,36 @@
     align-items: center; 
 }
 
+        #btn-voltar-topo {
+    position: fixed;
+    right: 20px;
+    bottom: 25px; /* Posição padrão */
+    width: 45px;
+    height: 45px;
+    background: white;
+    color: #2e2a15;
+    border: 1px solid #eceae4;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 4500;
+    display: none; /* JS controla a visibilidade */
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+#btn-voltar-topo:hover {
+    background: #fcfbf7;
+    transform: translateY(-5px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+}
+
+/* Classe que o JS vai aplicar se houver plantas selecionadas */
+#btn-voltar-topo.subir-pelo-whats {
+    bottom: 85px; /* Fica exatamente acima da barra marrom */
+}
+
     .seta-animada { font-size: 22px; padding: 0 15px; animation: pulsarSeta 1.5s infinite ease-in-out; }
     .seta-animada.inverter { display: inline-block; transform: scaleX(-1); animation: pulsarSetaInvertida 1.5s infinite ease-in-out; }
     @keyframes pulsarSeta { 0%, 100% { transform: scale(1); opacity: 0.4; } 50% { transform: scale(1.3); opacity: 1; text-shadow: 0 0 10px white; } }
@@ -214,6 +244,12 @@
 
     <span class="seta-animada inverter" style="width: 50px; text-align: center;">»</span>
 </a>
+
+    <button id="btn-voltar-topo" onclick="scrollToTop()" title="Voltar ao início">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M18 15l-6-6-6 6"/>
+    </svg>
+</button>
 
 <footer>
     <div class="footer-stripe-white"><img src="logo.png" class="footer-logo"></div>
@@ -428,7 +464,28 @@
             }
         }
     }
+    
+function scrollToTop() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
 
+window.addEventListener('scroll', function() {
+    const topoBtn = document.getElementById('btn-voltar-topo');
+    
+    // Aparece só depois que o usuário desce 600px (já passou do cabeçalho)
+    if (window.scrollY > 600) {
+        topoBtn.style.display = 'flex';
+    } else {
+        topoBtn.style.display = 'none';
+    }
+
+    // Se houver itens selecionados, o botão do topo sobe para não cobrir o Whats
+    if (SELECIONADOS.size > 0) {
+        topoBtn.classList.add('subir-pelo-whats');
+    } else {
+        topoBtn.classList.remove('subir-pelo-whats');
+    }
+});
     document.getElementById('year').textContent = new Date().getFullYear();
     carregar();
 </script>
