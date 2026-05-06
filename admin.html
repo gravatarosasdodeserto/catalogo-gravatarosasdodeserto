@@ -138,12 +138,34 @@
     transform: scale(1.05);
     border-color: transparent !important;
 }
+
+        /* Botão de fechar dentro da login-box */
+.login-box { position: relative; } /* Garante que o ícone se alinhe a ela */
+
+.close-login {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    text-decoration: none;
+    color: var(--text-secondary);
+    font-size: 20px;
+    line-height: 1;
+    transition: 0.2s;
+}
+
+.close-login:hover {
+    color: #e74c3c;
+    transform: scale(1.1);
+}
+
 </style>
 </head>
 <body>
 
 <div id="login-overlay">
     <div class="login-box">
+        <a href="index.html" class="close-login" title="Voltar ao catálogo">&times;</a>
+        
         <img src="logo.png">
         <p style="font-size: 12px; color: var(--text-secondary); margin-bottom: 10px;">ACESSO RESTRITO</p>
         <div class="password-container">
